@@ -1,6 +1,5 @@
-export function genComponent(className, elem = 'div', innerHTML = '', id = '', attributes = {}, children = []) {
+function genComponent(className, elem = 'div', innerHTML = '', id = '', attributes = {}, children = []) {
     const component = document.createElement(elem);
-    option.setAttribute('onclick', 'selectOption(this.innerHTML)')
     if (className) {
         component.className = className
     }
@@ -26,12 +25,12 @@ export function genComponent(className, elem = 'div', innerHTML = '', id = '', a
     return component
 }
 
-export function removeComponent(parent, child) {
+function removeComponent(parent, child) {
     parent.removeChild(child);
     return parent;
 }
 
-export function replaceComponent(parent, prevChild, nextChild) {
+function replaceComponent(parent, prevChild, nextChild) {
     if (prevChild) {
         parent.removeChild(prevChild);
     }

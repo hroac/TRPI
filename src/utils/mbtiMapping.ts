@@ -20,6 +20,32 @@ const MBTIProfiles = [
   { name: 'INFP', traits: { openness: 0.95, conscientiousness: 0.5, extraversion: 0.3, agreeableness: 0.8, neuroticism: 0.55 }, mode: 'Flight' }
 ];
 
+export const normalizeProfile = (profile: { [trait: string]: number }) => {
+  const traits = Object.keys(profile);
+
+  // Find global min and max across all traits
+  const min = Math.min(...traits.map(key => profile[key]));
+  const max = Math.max(...traits.map(key => profile[key]));
+
+  // Edge case: Avoid division by zero if max equals min
+  if (max === min) {
+    return traits.reduce((normalized, key) => {
+      normalized[key] = 0.5; // Set all traits to a midpoint if no variance exists
+      return normalized;
+    }, {} as { [trait: string]: number });
+  }
+
+  console.log("Before normalization:", profile);
+
+  // Normalize each trait within a 0-1 range
+  const normalizedProfile = traits.reduce((normalized, key) => {
+    normalized[key] = (profile[key] - min) / (max - min);
+    return normalized;
+  }, {} as { [trait: string]: number });
+
+  console.log("After normalization:", normalizedProfile);
+  return normalizedProfile;
+};
 
 export const matchMBTIType = (profile: any, primary4F: any) => {
   const candidates = MBTIProfiles.filter(p => p.mode === primary4F);
@@ -28,6 +54,7 @@ export const matchMBTIType = (profile: any, primary4F: any) => {
 
   candidates.forEach(candidate => {
     const distance = weightedEuclideanDistance(profile, candidate.traits, profile);
+    console.log("Distance:", distance, 'Type: ', candidate.name);
     if (distance < closestDistance) {
       closestDistance = distance;
       closestType = candidate.name;

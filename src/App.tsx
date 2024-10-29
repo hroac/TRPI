@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import BigFiveQuestionnaire from './components/BigFiveQuestionnaire';
 import ResultPage from './components/ResultPage';
-import TRPIExplanationPage from './components/TRPIExplanationPage';
+import TRPIExplanationPage from './components/TRPIExplanation';
 import { matchMBTIType } from './utils/mbtiMapping';
 import { determinePrimary4FType } from './utils/scoring';
 

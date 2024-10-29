@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { Box, Typography, Slider, Button, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { determinePrimary4FType } from '../utils/scoring';
+import { matchMBTIType, normalizeProfile } from '../utils/mbtiMapping'; //
+
 
 // Questions with multiple questions per trait category
 const questions = [
@@ -27,6 +30,15 @@ const questions = [
   { text: 'I value my independence and prefer to work on tasks alone.', trait: 'neuroticism' }
 ];
 
+interface Profile {
+ [trait: string]: number,
+  openness: number;
+  conscientiousness: number;
+  extraversion: number;
+  agreeableness: number;
+  neuroticism: number;
+}
+
 const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> = ({ onComplete }) => {
   const navigate = useNavigate();
 
@@ -47,13 +59,24 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   };
 
   const handleSubmit = () => {
-    const averagedScores = Object.keys(responses).reduce((acc, trait) => {
+    const averagedScores: Profile = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait];
-      acc[trait] = traitScores.reduce((sum, score) => sum + score, 0) / traitScores.length || 50;
+      acc[trait as keyof Profile] = traitScores.reduce((sum, score) => sum + score, 0) / traitScores.length;
       return acc;
-    }, {} as { [trait: string]: number });
+    }, {} as Profile);
 
-    onComplete(averagedScores);
+    console.log("Averaged Scores:", averagedScores);
+
+    const normalizedProfile = normalizeProfile(averagedScores);
+    console.log("Normalized Profile:", normalizedProfile);
+
+    const primary4F = determinePrimary4FType(normalizedProfile);
+    console.log("Primary 4F Type:", primary4F);
+
+    const mbtiType = matchMBTIType(normalizedProfile, primary4F);
+    console.log("Matching MBTI Type:", mbtiType);
+
+    onComplete({ primary4F, mbtiType });
     navigate('/result'); // Navigate to the results page
   };
 

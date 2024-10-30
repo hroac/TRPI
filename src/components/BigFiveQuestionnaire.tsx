@@ -1,10 +1,8 @@
-// src/components/BigFiveQuestionnaire.tsx
-
 import React, { useState } from 'react';
-import { Box, Typography, Slider, Button, Paper } from '@mui/material';
+import { Box, Typography, Slider, Button, Paper, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { determinePrimary4FType } from '../utils/scoring';
-import { matchMBTIType, normalizeProfile } from '../utils/mbtiMapping'; //
+import { matchMBTIType, normalizeProfile, MBTIProfiles } from '../utils/mbtiMapping'; //
 
 
 // Questions with multiple questions per trait category
@@ -37,7 +35,7 @@ interface Profile {
   extraversion: number;
   agreeableness: number;
   neuroticism: number;
-}
+};
 
 const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> = ({ onComplete }) => {
   const navigate = useNavigate();
@@ -49,6 +47,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   }, {} as { [trait: string]: number[] });
 
   const [responses, setResponses] = useState(initialResponses);
+  const [selectedType, setSelectedType] = useState("");
 
   const handleSliderChange = (trait: string, index: number) => (event: Event, value: number | number[]) => {
     setResponses((prev) => {
@@ -58,38 +57,45 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     });
   };
 
+  const handleTypeSelection = (event: SelectChangeEvent<string>) => {
+    const selected = event.target.value as string;
+    setSelectedType(selected);
+
+    const profile = MBTIProfiles.find((p: any) => p.name === selected)?.traits;
+    if (profile) {
+      const updatedResponses = { ...responses };
+      Object.keys(updatedResponses).forEach((trait) => {
+        updatedResponses[trait] = updatedResponses[trait].map(() => profile[trait as keyof typeof profile] * 100);
+      });
+      setResponses(updatedResponses);
+    }
+  };
+
   const handleSubmit = () => {
-    const averagedScores: Profile = Object.keys(responses).reduce((acc, trait) => {
+    const averagedScores = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait];
-      acc[trait as keyof Profile] = traitScores.reduce((sum, score) => sum + score, 0) / traitScores.length;
+      acc[trait] = traitScores.reduce((sum, score) => sum + score, 0) / traitScores.length;
       return acc;
-    }, {} as Profile);
+    }, {} as { [trait: string]: number });
 
-    console.log("Averaged Scores:", averagedScores);
-
-    const normalizedProfile = normalizeProfile(averagedScores);
-    console.log("Normalized Profile:", normalizedProfile);
-
-    const primary4F = determinePrimary4FType(normalizedProfile);
-    console.log("Primary 4F Type:", primary4F);
-
-    const mbtiType = matchMBTIType(normalizedProfile, primary4F);
-    console.log("Matching MBTI Type:", mbtiType);
-
-    onComplete({ primary4F, mbtiType });
-    navigate('/result'); // Navigate to the results page
+    onComplete(averagedScores);
+    navigate('/result');
   };
 
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
-      <Typography variant="h5" gutterBottom>
-        Personality Assessment
-      </Typography>
+      <Typography variant="h5" gutterBottom>Personality Assessment</Typography>
+      <FormControl fullWidth style={{ marginBottom: 20 }}>
+        <InputLabel>Select a 4F Mode</InputLabel>
+        <Select value={selectedType} onChange={handleTypeSelection}>
+          {['Fight', 'Flight', 'Freeze', 'Fawn'].map((mode) => (
+            <MenuItem key={mode} value={mode}>{mode}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       {questions.map((q, index) => (
         <Box key={`${q.trait}-${index}`} my={3}>
-          <Typography variant="subtitle1" gutterBottom>
-            {q.text}
-          </Typography>
+          <Typography variant="subtitle1" gutterBottom>{q.text}</Typography>
           <Slider
             value={responses[q.trait][index]}
             onChange={handleSliderChange(q.trait, index)}
@@ -100,9 +106,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           />
         </Box>
       ))}
-      <Button onClick={handleSubmit} variant="contained" color="primary" fullWidth style={{ marginTop: 20 }}>
-        Submit
-      </Button>
+      <Button onClick={handleSubmit} variant="contained" color="primary" fullWidth style={{ marginTop: 20 }}>Submit</Button>
     </Paper>
   );
 };

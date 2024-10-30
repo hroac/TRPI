@@ -36,12 +36,13 @@ const theme = createTheme({
 
 function App() {
   const [mbtiType, setMbtiType] = useState<string>('');
+  const [fourFMode, set4FMode] = useState<string>('');
+
 
   const handleComplete = (responses: any) => {
     console.log(responses)
-    const primary4F = determinePrimary4FType(responses);
-    const mbti = matchMBTIType(responses, primary4F);
-    setMbtiType(mbti);
+    set4FMode(responses.primary4F)
+    setMbtiType(responses.mbtiType);
   };
 
   return (

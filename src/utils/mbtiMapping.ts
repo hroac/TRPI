@@ -1,9 +1,9 @@
 
 import { weightedEuclideanDistance } from './scoring';
 
-const MBTIProfiles = [
-  { name: 'ENTP', traits: { openness: 0.85, conscientiousness: 0.55, extraversion: 0.8, agreeableness: 0.35, neuroticism: 0.25 }, mode: 'Fight' },
-  { name: 'ESTP', traits: { openness: 0.65, conscientiousness: 0.6, extraversion: 0.85, agreeableness: 0.4, neuroticism: 0.3 }, mode: 'Fight' },
+export const MBTIProfiles = [
+  { name: 'ENTP', traits: { openness: 0.85, conscientiousness: 0.55, extraversion: 0.8, agreeableness: 0.5, neuroticism: 0.4 }, mode: 'Fight' },
+  { name: 'ESTP', traits: { openness: 0.65, conscientiousness: 0.6, extraversion: 0.85, agreeableness: 0.4, neuroticism: 0.5 }, mode: 'Fight' },
   { name: 'INTP', traits: { openness: 0.75, conscientiousness: 0.6, extraversion: 0.35, agreeableness: 0.3, neuroticism: 0.5 }, mode: 'Fight' },
   { name: 'ISTP', traits: { openness: 0.7, conscientiousness: 0.65, extraversion: 0.4, agreeableness: 0.35, neuroticism: 0.45 }, mode: 'Fight' },
   { name: 'ENTJ', traits: { openness: 0.8, conscientiousness: 0.9, extraversion: 0.75, agreeableness: 0.35, neuroticism: 0.25 }, mode: 'Freeze' },

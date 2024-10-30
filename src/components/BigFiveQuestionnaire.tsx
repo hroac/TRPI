@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { Box, Typography, Slider, Button, Paper, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
+import { Grid, Box, Typography, Slider, Button, Paper, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { determinePrimary4FType } from '../utils/scoring';
-import { matchMBTIType, normalizeProfile, MBTIProfiles } from '../utils/mbtiMapping'; //
+import { determinePrimary4FType, matchMBTIType, normalizeProfile, MBTIProfiles } from '../utils/mbtiMapping'; // Import necessary utilities
 
-
-// Questions with multiple questions per trait category
 const questions = [
   { text: 'I enjoy exploring new ideas and perspectives.', trait: 'openness' },
   { text: 'I am comfortable with change and easily adapt to new situations.', trait: 'openness' },
@@ -29,45 +26,63 @@ const questions = [
 ];
 
 interface Profile {
- [trait: string]: number,
+  [trait: string]: number,
   openness: number;
   conscientiousness: number;
   extraversion: number;
   agreeableness: number;
   neuroticism: number;
-};
+}
 
 const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> = ({ onComplete }) => {
   const navigate = useNavigate();
 
   const initialResponses = questions.reduce((acc, q) => {
     if (!acc[q.trait]) acc[q.trait] = [];
-    acc[q.trait].push(50); // Initializing each question slider to 50
+    acc[q.trait].push(0.5);
     return acc;
   }, {} as { [trait: string]: number[] });
 
   const [responses, setResponses] = useState(initialResponses);
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedTypes, setSelectedTypes] = useState<{ [key: string]: string }>({
+    Fight: "",
+    Flight: "",
+    Freeze: "",
+    Fawn: ""
+  });
+  const [primary4FType, setPrimary4FType] = useState<string | null>(null);
+  const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
 
-  const handleSliderChange = (trait: string, index: number) => (event: Event, value: number | number[]) => {
-    setResponses((prev) => {
-      const updatedResponses = { ...prev };
-      updatedResponses[trait][index] = value as number;
-      return updatedResponses;
+  const handleTypeSelection = (mode: string) => (event: SelectChangeEvent<string>) => {
+    const selectedType = event.target.value;
+    
+    // Clear all selections except the current mode
+    setSelectedTypes({
+      Fight: mode === "Fight" ? selectedType : "",
+      Flight: mode === "Flight" ? selectedType : "",
+      Freeze: mode === "Freeze" ? selectedType : "",
+      Fawn: mode === "Fawn" ? selectedType : "",
     });
-  };
 
-  const handleTypeSelection = (event: SelectChangeEvent<string>) => {
-    const selected = event.target.value as string;
-    setSelectedType(selected);
-
-    const profile = MBTIProfiles.find((p: any) => p.name === selected)?.traits;
+    // Find profile and set responses based on the selected type
+    const profile = MBTIProfiles.find((p) => p.name === selectedType)?.traits;
     if (profile) {
       const updatedResponses = { ...responses };
+      console.log(profile, Object.keys(updatedResponses), Object.values(updatedResponses));
+
       Object.keys(updatedResponses).forEach((trait) => {
-        updatedResponses[trait] = updatedResponses[trait].map(() => profile[trait as keyof typeof profile] * 100);
+        updatedResponses[trait] = updatedResponses[trait].map(() => profile[trait as keyof typeof profile]);
       });
+      console.log(updatedResponses);
       setResponses(updatedResponses);
+
+      // Set the primary 4F type and matched MBTI type
+     // const normalizedProfile = normalizeProfile(profile);
+      const primary4F = determinePrimary4FType(profile);
+      const mbtiType = matchMBTIType(profile, primary4F);
+      
+      setPrimary4FType(primary4F);
+      setMatchedMBTIType(mbtiType);
     }
   };
 
@@ -78,34 +93,91 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       return acc;
     }, {} as { [trait: string]: number });
 
-    onComplete(averagedScores);
+    const normalizedProfile = normalizeProfile(averagedScores);
+      const primary4F = determinePrimary4FType(averagedScores);
+      const mbtiType = matchMBTIType(averagedScores, primary4F);
+      
+      setPrimary4FType(primary4F);
+      setMatchedMBTIType(mbtiType);
+    onComplete({primary4F, mbtiType});
     navigate('/result');
   };
 
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
       <Typography variant="h5" gutterBottom>Personality Assessment</Typography>
-      <FormControl fullWidth style={{ marginBottom: 20 }}>
-        <InputLabel>Select a 4F Mode</InputLabel>
-        <Select value={selectedType} onChange={handleTypeSelection}>
-          {['Fight', 'Flight', 'Freeze', 'Fawn'].map((mode) => (
-            <MenuItem key={mode} value={mode}>{mode}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      
+      <Grid container spacing={2}>
+        {['Fight', 'Flight', 'Freeze', 'Fawn'].map((mode) => (
+          <Grid item xs={3} key={mode}>
+            <FormControl fullWidth>
+              <InputLabel>{mode}</InputLabel>
+              <Select
+                value={selectedTypes[mode]}
+                onChange={handleTypeSelection(mode)}
+                size="small"
+              >
+                {MBTIProfiles.filter((profile) => profile.mode === mode).map((profile) => (
+                  <MenuItem key={profile.name} value={profile.name}>
+                    {profile.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        ))}
+      </Grid>
+
+      {/* Display determined 4F type and MBTI type */}
+      <Grid container spacing={2} >
+        <Box>
+        {primary4FType && (
+        <Typography variant="subtitle1" style={{ marginTop: 30, marginRight: 15 }}>
+          Primary 4F Type: {primary4FType}
+        </Typography>
+      )}
+        </Box>
+        <Box> 
+        {matchedMBTIType && (
+        <Typography variant="subtitle1" style={{ marginTop: 30 }}>
+          Matched MBTI Type: {matchedMBTIType}
+        </Typography>
+      )}
+        </Box>
+      </Grid>
+      
+
       {questions.map((q, index) => (
-        <Box key={`${q.trait}-${index}`} my={3}>
+        <Box key={`${q.trait}-${index % Object.keys(responses).length}`} my={3}>
           <Typography variant="subtitle1" gutterBottom>{q.text}</Typography>
           <Slider
-            value={responses[q.trait][index]}
-            onChange={handleSliderChange(q.trait, index)}
+            value={responses[q.trait][index% Object.values(responses[q.trait]).length]}
+            onChange={(event, value) => setResponses((prev) => {
+              const updatedResponses = { ...prev };
+              updatedResponses[q.trait][index % Object.values(responses[q.trait]).length] = value as number;
+              console.log(q.trait, index, (index % Object.values(responses[q.trait]).length), Object.values(responses[q.trait]).length);
+              const averagedScores = Object.keys(updatedResponses).reduce((acc, trait) => {
+                const traitScores = updatedResponses[trait];
+                acc[trait] = traitScores.reduce((sum, score) => sum + score, 0) / traitScores.length;
+                return acc;
+              }, {} as { [trait: string]: number });
+          
+              //const normalizedProfile = normalizeProfile(averagedScores);
+                const primary4F = determinePrimary4FType(averagedScores);
+                const mbtiType = matchMBTIType(averagedScores, primary4F);
+                
+                setPrimary4FType(primary4F);
+                setMatchedMBTIType(mbtiType);
+              return updatedResponses;
+            })}
             aria-labelledby="continuous-slider"
             min={0}
-            max={100}
-            step={1}
+            max={1}
+            step={0.01}
           />
         </Box>
       ))}
+
       <Button onClick={handleSubmit} variant="contained" color="primary" fullWidth style={{ marginTop: 20 }}>Submit</Button>
     </Paper>
   );

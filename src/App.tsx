@@ -41,7 +41,7 @@ function App() {
 
   const handleComplete = (responses: any) => {
     console.log(responses)
-    saveResultsToJsonBin({type: mbtiType, primary4FType: responses.primary4F, bigFiveResponses: responses.profile})
+    saveResultsToJsonBin({type: responses.mbtiType, primary4FType: responses.primary4F, bigFiveResponses: responses.profile})
     set4FMode(responses.primary4F)
     setMbtiType(responses.mbtiType);
     setProfile(responses.profile)

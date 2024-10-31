@@ -149,7 +149,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
       {questions.map((q, index) => (
         <Box key={`${q.trait}-${index % Object.keys(responses).length}`} my={3}>
-          <Typography variant="subtitle1" gutterBottom>{q.text}</Typography>
+          <Typography variant="subtitle1" gutterBottom>{q.text} - ({responses[q.trait][index% Object.values(responses[q.trait]).length]})</Typography>
           <Slider
             value={responses[q.trait][index% Object.values(responses[q.trait]).length]}
             onChange={(event, value) => setResponses((prev) => {

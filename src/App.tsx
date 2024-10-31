@@ -7,6 +7,7 @@ import ResultPage from './components/ResultPage';
 import TRPIExplanationPage from './components/TRPIExplanation';
 
 import { Button, Box, Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { saveResultsToJsonBin } from './utils/saveResults';
 
 const theme = createTheme({
   palette: {
@@ -35,12 +36,15 @@ const theme = createTheme({
 function App() {
   const [mbtiType, setMbtiType] = useState<string>('');
   const [fourFMode, set4FMode] = useState<string>('');
+  const [profile, setProfile] = useState<{ [trait: string]: number }>({});
 
 
   const handleComplete = (responses: any) => {
     console.log(responses)
+    saveResultsToJsonBin({type: mbtiType, primary4FType: responses.primary4F, bigFiveResponses: responses.profile})
     set4FMode(responses.primary4F)
     setMbtiType(responses.mbtiType);
+    setProfile(responses.profile)
   };
 
   return (
@@ -50,7 +54,7 @@ function App() {
         <Container maxWidth="md">
           <Box my={4}>
             <Box display="flex" justifyContent="space-around" mb={2}>
-              <Button component={Link} to="/" variant="contained" color="primary">
+              <Button component={Link} to="/TRPI" variant="contained" color="primary">
                 Start Test
               </Button>
               <Button component={Link} to="/trpi-explanation" variant="contained" color="secondary">
@@ -62,9 +66,9 @@ function App() {
             </Box>
 
             <Routes>
-              <Route path="/" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />
+              <Route path="/TRPI" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />
               <Route path="/trpi-explanation" element={<TRPIExplanationPage />} />
-              <Route path="/result" element={<ResultPage mbtiType={mbtiType} />} />
+              <Route path="/result" element={<ResultPage mbtiType={mbtiType} primary4FType={fourFMode} bigFiveScores={profile} />} />
             </Routes>
           </Box>
         </Container>

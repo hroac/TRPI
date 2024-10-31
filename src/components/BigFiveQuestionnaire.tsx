@@ -99,7 +99,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       
       setPrimary4FType(primary4F);
       setMatchedMBTIType(mbtiType);
-    onComplete({primary4F, mbtiType});
+    onComplete({primary4F, mbtiType, profile: averagedScores});
     navigate('/result');
   };
 

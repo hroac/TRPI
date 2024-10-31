@@ -136,11 +136,11 @@ export const MBTIProfiles = [
   {
     name: 'ESFP',
     traits: {
-      openness: 0.75,
+      openness: 0.65,
       conscientiousness: 0.5,
-      extraversion: 0.9,
+      extraversion: 0.7,
       agreeableness: 0.7,
-      neuroticism: 0.4
+      neuroticism: 0.8
     },
     mode: 'Flight'
   },
@@ -149,9 +149,9 @@ export const MBTIProfiles = [
     traits: {
       openness: 0.9,
       conscientiousness: 0.55,
-      extraversion: 0.85,
+      extraversion: 0.75,
       agreeableness: 0.75,
-      neuroticism: 0.45
+      neuroticism: 0.85
     },
     mode: 'Flight'
   },
@@ -159,10 +159,10 @@ export const MBTIProfiles = [
     name: 'ISFP',
     traits: {
       openness: 0.65,
-      conscientiousness: 0.6,
+      conscientiousness: 0.4,
       extraversion: 0.35,
-      agreeableness: 0.7,
-      neuroticism: 0.5
+      agreeableness: 0.5,
+      neuroticism: 0.7
     },
     mode: 'Flight'
   },
@@ -193,7 +193,7 @@ const weights: Record<string, Record<string, number>> = {
     conscientiousness: 0.5,   // Moderate conscientiousness
     extraversion: 0.8,        // High extraversion for resourcefulness
     agreeableness: 1,         // High agreeableness for social alignment
-    neuroticism: 1            // High neuroticism for awareness of risks
+    neuroticism: 2            // High neuroticism for awareness of risks
   },
   Freeze: {
     openness: 0.5,            // Lower openness, indicating caution

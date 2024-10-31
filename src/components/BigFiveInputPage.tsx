@@ -12,8 +12,8 @@ const BigFiveInputPage: React.FC = () => {
   const [mbtiType, setMbtiType] = useState<string | null>(null);
 
   const calculateType = () => {
-    const bigFiveData = { openness, conscientiousness, extraversion, agreeableness, neuroticism };
-    const fourF = determinePrimary4FType(bigFiveData);
+    const bigFiveData = { openness: openness / 100, conscientiousness: conscientiousness / 100, extraversion: extraversion /100, agreeableness: agreeableness / 100, neuroticism: neuroticism / 100} 
+    const fourF = determinePrimary4FType(bigFiveData)
     const type = calculateMbtiType(bigFiveData, fourF);
     setMbtiType(type);
   };

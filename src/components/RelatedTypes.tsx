@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { typesData } from './typesData';
+import RelatedTypesBox from './RelatedTypesBox';
 
 interface RelatedTypesProps {
   type: string;
@@ -16,6 +17,11 @@ const RelatedTypes: React.FC<RelatedTypesProps> = ({ type }) => {
 
   const { bronze, silver, gold, copper } = typeInfo;
 
+  return (
+    <Grid container spacing={4}>
+
+    </Grid>
+  )
   return (
     <div style={{ marginTop: '20px' }}>
       <h3>Related Types</h3>

@@ -6,6 +6,7 @@ import ResultPage from './components/ResultPage';
 import TRPIExplanationPage from './components/TRPIExplanation';
 import Header from './components/Header';
 import AboutPage from './components/AboutPage';
+import Matrix from './components/Matrix';
 import BigFiveInputPage from './components/BigFiveInputPage';
 
 import { Button, Box, Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
@@ -14,13 +15,13 @@ import { saveResultsToJsonBin } from './utils/saveResults';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2', // Deep blue
+      main: '#3f51b5',  // Indigo
     },
     secondary: {
-      main: '#ff4081', // Pink accent
+      main: '#ff4081',  // Pink accent
     },
     background: {
-      default: '#f5f5f5',
+      default: '#f5f5f5',  // Light grey for background
     },
   },
   typography: {
@@ -52,7 +53,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Header mbtiType={mbtiType} /> {/* Header added with MBTI type display */}
+        <Header mbtiType={mbtiType} />
         <Container maxWidth="md">
           <Box my={4}>
             <Box display="flex" justifyContent="space-around" mb={2}>
@@ -65,7 +66,6 @@ function App() {
               <Button component={Link} to="/result" variant="contained" color="primary">
                 View Result
               </Button>
-              {/* New Links for additional pages */}
               <Button component={Link} to="/bigfiveinput" variant="contained" color="secondary">
                 Enter Big Five Scores
               </Button>
@@ -75,7 +75,6 @@ function App() {
               <Route path="/TRPI" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />
               <Route path="/trpi-explanation" element={<TRPIExplanationPage />} />
               <Route path="/result" element={<ResultPage mbtiType={mbtiType} primary4FType={fourFMode} bigFiveScores={profile} />} />
-              {/* New Routes for additional pages */}
               <Route path="/bigfiveinput" element={<BigFiveInputPage />} />
               <Route path="/about/:type" element={<AboutPage />} />
             </Routes>

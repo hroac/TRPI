@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Box } from '@mui/material';
-
+import { Box, Typography } from '@mui/material';
+import { typesData } from './typesData';
 const types = [
   { type: 'INTJ', label: 'INTJ' },
   { type: 'ENTJ', label: 'ENTJ' },
@@ -25,19 +25,19 @@ const types = [
 const Matrix: React.FC = () => {
   return (
     <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2} mt={4}>
-      {types.map(({ type, label }) => (
+      {typesData.map((type) => (
         <Box
-          key={type}
+          key={type.type}
           component={Link}
-          to={`/about/${type}`}
-          bgcolor="primary.main"
+          to={`/about/${type.type}`}
+          bgcolor={type.bgColor}
           color="white"
           p={2}
           textAlign="center"
           borderRadius={2}
           style={{ textDecoration: 'none' }}
         >
-          {label}
+          <Typography variant="h6">{type.type}</Typography>
         </Box>
       ))}
     </Box>

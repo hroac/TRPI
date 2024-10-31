@@ -8,7 +8,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ mbtiType }) => {
   return (
     <header style={{ padding: '10px', backgroundColor: '#282c34', color: 'white', textAlign: 'center', position: 'fixed', top: 0, width: '100%', zIndex: 1000 }}>
-      <h1>TRPI Personality Test</h1>
       {mbtiType && <h2>Your Type: {mbtiType}</h2>}
     </header>
   );

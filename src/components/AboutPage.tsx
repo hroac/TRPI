@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { typesData } from './typesData';
 import RelatedTypes from './RelatedTypes';
+import RelatedTypesBox from './RelatedTypesBox';
 
 const AboutPage: React.FC = () => {
   const { type } = useParams<{ type: string }>();
@@ -29,7 +30,7 @@ const AboutPage: React.FC = () => {
         ))}
       </ul>
       {/* Including Related Types section */}
-      <RelatedTypes type={(type as unknown as any).toString()} />
+      <RelatedTypesBox type={(type as unknown as any).toString()} />
     </div>
   );
 };

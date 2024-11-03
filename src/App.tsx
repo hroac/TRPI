@@ -18,7 +18,7 @@ const theme = createTheme({
       main: '#3f51b5',  // Indigo
     },
     secondary: {
-      main: '#ff4081',  // Pink accent
+      main: '#b93838',  // Red accent
     },
     background: {
       default: '#f5f5f5',  // Light grey for background

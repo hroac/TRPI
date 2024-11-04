@@ -2,7 +2,7 @@
     "name": "personality-test-app",
     "version": "1.0.0",
     "private": true,
-    "homepage": "https://hroac.github.io/",
+    "homepage": "https://hroac.github.io/TRPI",
     "dependencies": {
         "@emotion/react": "^11.13.3",
         "@emotion/styled": "^11.13.0",

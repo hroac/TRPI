@@ -7,7 +7,7 @@ export const typesData: any[] =  [ { type: 'ENTP', functions: ['Ne Ti', 'Ni Fe']
   strengths: ['Adaptable', 'Creative', 'Confident', 'Good communicators', 'Objective'],
   weaknesses: ['Can be argumentative', 'Struggle with follow-through', 'Insensitive at times', 'Overly competitive']
 },
-{ type: 'ESTP', functions: ['Se Ti', 'Si Te'], mode: 'Fight', bgColor: '#ff0000', bronze: 'INFJ', silver: 'ISTJ', gold: 'ISFP', copper: 'ENFP',
+{ type: 'ESTP', functions: ['Se Ti', 'Si Te'], mode: 'Fight', bgColor: '#ff0000', bronze: 'INFJ', silver: 'ISTJ', gold: 'ISFJ', copper: 'ENFP',
   description: `ESTPs are action-oriented, adaptable, and enthusiastic, preferring hands-on approaches and quick thinking.
   Known for their energetic nature, they engage directly with the present moment, making quick decisions and thriving in dynamic environments.
   However, their impulsive tendencies can sometimes lead them to overlook long-term consequences.`,

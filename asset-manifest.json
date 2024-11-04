@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/TRPI/static/js/main.eecc9da3.js",
-    "index.html": "/TRPI/index.html",
-    "main.eecc9da3.js.map": "/TRPI/static/js/main.eecc9da3.js.map"
+    "main.js": "/static/js/main.eecc9da3.js",
+    "index.html": "/index.html",
+    "main.eecc9da3.js.map": "/static/js/main.eecc9da3.js.map"
   },
   "entrypoints": [
     "static/js/main.eecc9da3.js"

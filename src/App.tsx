@@ -60,25 +60,22 @@ function App() {
               <Button component={Link} to="/TRPI" variant="contained" color="primary">
                 Start Test
               </Button>
-              <Button component={Link} to="/trpi-explanation" variant="contained" color="secondary">
-                TRPI Explanation
-              </Button>
-              <Button component={Link} to="/result" variant="contained" color="primary">
+              <Button component={Link} to="/result" variant="contained" color="secondary">
                 View Result
               </Button>
-              <Button component={Link} to="/bigfiveinput" variant="contained" color="secondary">
+              <Button component={Link} to="/bigfiveinput" variant="contained" color="primary">
                 Enter Big Five Scores
               </Button>
             </Box>
-
             <Routes>
               <Route path="/TRPI" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />
-              <Route path="/trpi-explanation" element={<TRPIExplanationPage />} />
               <Route path="/result" element={<ResultPage mbtiType={mbtiType} primary4FType={fourFMode} bigFiveScores={profile} />} />
               <Route path="/bigfiveinput" element={<BigFiveInputPage />} />
               <Route path="/about/:type" element={<AboutPage />} />
             </Routes>
           </Box>
+          <TRPIExplanationPage />
+
         </Container>
       </Router>
     </ThemeProvider>

@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/TRPI/static/js/main.420f8c2f.js",
+    "main.js": "/TRPI/static/js/main.dec85d7a.js",
     "index.html": "/TRPI/index.html",
-    "main.420f8c2f.js.map": "/TRPI/static/js/main.420f8c2f.js.map"
+    "main.dec85d7a.js.map": "/TRPI/static/js/main.dec85d7a.js.map"
   },
   "entrypoints": [
-    "static/js/main.420f8c2f.js"
+    "static/js/main.dec85d7a.js"
   ]
 }

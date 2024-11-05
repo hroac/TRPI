@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename='/TRPI'>
+    <BrowserRouter basename='https://hroac.github.io/TRPI'>
       <App />
     </BrowserRouter>
   </React.StrictMode>

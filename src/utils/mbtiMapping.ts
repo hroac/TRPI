@@ -15,8 +15,8 @@ export const MBTIProfiles = [
   {
     name: 'ESTP',
     traits: {
-      openness: 0.65,
-      conscientiousness: 0.6,
+      openness: 0.95,
+      conscientiousness: 0.45,
       extraversion: 0.85,
       agreeableness: 0.4,
       neuroticism: 0.5
@@ -26,7 +26,7 @@ export const MBTIProfiles = [
   {
     name: 'INTP',
     traits: {
-      openness: 0.75,
+      openness: 0.4,
       conscientiousness: 0.6,
       extraversion: 0.35,
       agreeableness: 0.3,
@@ -37,7 +37,7 @@ export const MBTIProfiles = [
   {
     name: 'ISTP',
     traits: {
-      openness: 0.7,
+      openness: 0.3,
       conscientiousness: 0.65,
       extraversion: 0.4,
       agreeableness: 0.35,
@@ -70,7 +70,7 @@ export const MBTIProfiles = [
   {
     name: 'ENTJ',
     traits: {
-      openness: 0.8,
+      openness: 0.4,
       conscientiousness: 0.9,
       extraversion: 0.75,
       agreeableness: 0.35,
@@ -81,7 +81,7 @@ export const MBTIProfiles = [
   {
     name: 'ESTJ',
     traits: {
-      openness: 0.6,
+      openness: 0.3,
       conscientiousness: 0.95,
       extraversion: 0.7,
       agreeableness: 0.35,
@@ -93,7 +93,7 @@ export const MBTIProfiles = [
     name: 'ISFJ',
     traits: {
       openness: 0.6,
-      conscientiousness: 0.8,
+      conscientiousness: 0.65,
       extraversion: 0.4,
       agreeableness: 0.85,
       neuroticism: 0.4
@@ -158,8 +158,8 @@ export const MBTIProfiles = [
   {
     name: 'ISFP',
     traits: {
-      openness: 0.65,
-      conscientiousness: 0.4,
+      openness: 0.45,
+      conscientiousness: 0.2,
       extraversion: 0.35,
       agreeableness: 0.5,
       neuroticism: 0.7
@@ -169,7 +169,7 @@ export const MBTIProfiles = [
   {
     name: 'INFP',
     traits: {
-      openness: 0.95,
+      openness: 0.45,
       conscientiousness: 0.5,
       extraversion: 0.3,
       agreeableness: 0.8,

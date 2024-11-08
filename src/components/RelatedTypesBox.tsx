@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { typesData } from './typesData';
+import { typesData } from '../utils/typesData';
 
 interface RelatedTypesProps {
   type: string;
 }
 
 const RelatedTypesBox: React.FC<RelatedTypesProps> = ({ type }) => {
-  const typeInfo = typesData.find(t => t.type === type);
+  const typeInfo = typesData.find((t: any) => t.type === type);
 
   if (!typeInfo) {
     return <div>Related types not available.</div>;

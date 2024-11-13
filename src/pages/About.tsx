@@ -3,13 +3,16 @@ import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
 import { MBTIProfiles } from '../utils/mbtiMapping';
-import { Box, Grid, List, ListItem, Typography, Card, CardContent } from '@mui/material';
+import { Box, Grid, List, ListItem, Typography, Card, CardContent, useMediaQuery, useTheme } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 
-const AboutPage: React.FC = () => {
+const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean }> = ({ mbtiType, showBigFive = true }) => {
   const { type } = useParams<{ type: string }>();
-  const typeInfo = typesData.find((t: any) => t.type === type);
-  const profile = MBTIProfiles.find((p: any) => p.name === type);
+  const typeInfo = typesData.find((t: any) => t.type === type || t.type === mbtiType);
+  const profile = MBTIProfiles.find((p: any) => p.name === type || p.name === mbtiType);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const data = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
@@ -60,25 +63,26 @@ const AboutPage: React.FC = () => {
   return (
     <Box paddingTop={8} paddingX={4}>
       <Typography variant="h3" component="h1" align="center" gutterBottom>
-        {type} Profile
+        {type || mbtiType} - {typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
       </Typography>
 
-<Grid spacing={2}>
-<Box display="flex" justifyContent="center" my={4}>
-        <Box width="60%">
-          <Bar data={data} options={options} />
+      <Grid spacing={2}>
+        <Box display="flex" justifyContent="center" my={4}>
+          {showBigFive && (
+            <Box width={isMobile ? '100%' : '60%'}>
+              <Bar data={data} options={options} />
+            </Box>
+          )}
         </Box>
-      </Box>
 
-      <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
-        <CardContent>
-          <Typography variant="body1" paragraph>
-            {typeInfo.description}
-          </Typography>
-        </CardContent>
-      </Card>
-</Grid>
-      
+        <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
+          <CardContent>
+            <Typography variant="body1" paragraph>
+              {typeInfo.description}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
 
       <Box my={5}>
         <Grid container spacing={4}>
@@ -106,7 +110,7 @@ const AboutPage: React.FC = () => {
       </Box>
 
       <Box marginTop={5}>
-        <RelatedTypesBox type={(type as unknown as any).toString()} />
+        <RelatedTypesBox type={type ? (type as unknown as any).toString() : mbtiType} />
       </Box>
     </Box>
   );

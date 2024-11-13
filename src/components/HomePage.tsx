@@ -29,7 +29,7 @@ const slides = [
 
 const Home = () => {
   return (
-    <Container>
+    <Container sx={{marginTop: '64px'}}>
       {/* Hero Section */}
       <Box 
         sx={{ 
@@ -37,8 +37,9 @@ const Home = () => {
           flexDirection: 'column', 
           alignItems: 'center', 
           py: 8, 
-          background: 'linear-gradient(to right, #f7f8fc, #e0eafc)',
-          textAlign: 'center'
+          //background: 'linear-gradient(to right, rgb(217 236 236), rgb(217 246 236))',
+          textAlign: 'center',
+          borderRadius: 3
         }}
       >
         <Typography 

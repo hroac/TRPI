@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { typesData } from './typesData';
+import { typesData } from '../utils/typesData';
 import RelatedTypesBox from './RelatedTypesBox';
 import { MBTIProfiles } from '../utils/mbtiMapping';
 import { Box, Grid, List, ListItem } from '@mui/material';

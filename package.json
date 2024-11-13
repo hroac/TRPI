@@ -2,7 +2,7 @@
     "name": "personality-test-app",
     "version": "1.0.0",
     "private": true,
-    "homepage": "https://traumaindicator.com",
+    "homepage": "https://traumaindicator.com/#",
     "dependencies": {
         "@emotion/react": "^11.13.3",
         "@emotion/styled": "^11.13.0",
@@ -11,6 +11,8 @@
         "axios": "^0.27.2",
         "chart.js": "^4.4.6",
         "gapi-script": "^1.2.0",
+        "gh-pages-fs": "^1.0.0",
+        "google-pay": "^0.0.1",
         "react": "^18.0.0",
         "react-chartjs-2": "^5.2.0",
         "react-dom": "^18.0.0",

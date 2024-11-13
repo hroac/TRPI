@@ -7,7 +7,6 @@ import {
   AccordionDetails,
   Card,
   CardContent,
-  Grid,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Matrix from './Matrix';
@@ -20,11 +19,10 @@ const TRPIExplanation: React.FC = () => {
       </Typography>
 
       <Typography variant="body1" paragraph>
-        The Trauma Response Personality Indicator (TRPI) is an advanced personality framework that combines elements
-        of the MBTI, Big Five personality traits, and the 4F trauma response system. It offers insights into personality
-        through the dynamics of brain hemispheres, trauma responses, and cognitive functions. TRPI is rooted in the idea
-        that the brain's response to stress and trauma plays a significant role in personality development, influencing
-        how we process information, interact with others, and cope with challenges.
+        The Trauma Response Personality Indicator (TRPI) combines elements of the MBTI, Big Five traits, and the 4F trauma
+        response system to provide insights into personality. It’s rooted in the idea that responses to stress and trauma
+        play a significant role in personality development, influencing our information processing, social interactions,
+        and coping mechanisms.
       </Typography>
 
       <Box sx={{ marginTop: '20px', marginBottom: '20px' }}>
@@ -37,71 +35,146 @@ const TRPIExplanation: React.FC = () => {
       <Card sx={{ marginBottom: '20px' }}>
         <CardContent>
           <Typography variant="h5" gutterBottom>
-            Core Concepts
+            4F Trauma Responses
           </Typography>
-          <Typography variant="body1" component="ul">
-            <li>
-              <strong>4F Trauma Responses:</strong> The four primary trauma responses—Fight, Flight, Freeze, and Fawn—
-              that influence personality adaptation.
-            </li>
-            <li>
-              <strong>MBTI Cognitive Functions:</strong> Builds on the MBTI’s 16 types, offering a dynamic view of
-              function pairings (dominant and auxiliary) that interact and adapt under stress.
-            </li>
-            <li>
-              <strong>Big Five Personality Traits:</strong> TRPI incorporates Openness, Conscientiousness, Extraversion,
-              Agreeableness, and Neuroticism, focusing on how these traits shape our responses.
-            </li>
+          <Typography variant="body1" paragraph>
+            The 4F trauma responses—Fight, Flight, Freeze, and Fawn—are fundamental to the TRPI framework, each associated
+            with specific personality types and approaches to managing stress:
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Fight:</strong> Types like ENTP and ESTP represent the Fight response, handling challenges through
+            confidence and adaptability. Known for quick decision-making, they confront obstacles head-on.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Flight:</strong> Types such as ENFP and ISFP align with Flight, using creativity and flexibility to
+            navigate stressful situations. These types may withdraw from conflict, focusing on values and exploration.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Freeze:</strong> Types like INTJ and ISTJ embody the Freeze response, prioritizing structure and careful
+            planning when under stress. They value stability and systematic thinking to manage uncertainty.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Fawn:</strong> Fawn types, including INFJ and ISFJ, prioritize harmony and empathy, adapting behavior
+            to support others and avoid conflict in high-stress situations.
           </Typography>
         </CardContent>
       </Card>
 
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Function Pairings and Type Pairings</Typography>
+          <Typography variant="h6">Function Pairings and the EIEI Rule</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body2" paragraph>
-            TRPI uses function pairings, rather than individual functions, to describe personality dynamics. Each type
-            has dominant and auxiliary pairings, creating dynamic interactions across four categories:
+            In TRPI, cognitive functions are grouped into **pairings** that emphasize dynamic relationships rather than
+            individual functions alone. This pairing structure allows for more nuanced personality profiles and
+            facilitates adaptability across situations.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Gold Pairing:</strong> Dominant function pairing with mirrored functions. Example: ENTP and INFJ
-            share an Ne-Ti/Fe-Ni combination, bringing complementary perspectives through opposite attitudes.
+            The **EIEI Rule** (Extraverted-Introverted-Extraverted-Introverted) is a foundational principle in TRPI for 
+            balancing extraverted and introverted functions within a personality type. This alternation between 
+            extraverted and introverted functions ensures a harmonious approach to internal and external experiences.
+            For example, ENTP’s primary **Ne-Ti** pairing (Extraverted Intuition and Introverted Thinking) enables 
+            both exploration and critical analysis. Their auxiliary pairing **Ni-Fe** (Introverted Intuition and 
+            Extraverted Feeling) provides a complementary approach, balancing insight with social awareness.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Silver Pairing:</strong> Functions with inverted attitudes, creating flexibility. Example: ENTP and
-            INTJ combine Ne-Ti with Ni-Te, allowing for adaptive thinking between exploration (Ne) and conceptual
-            precision (Ni).
+            Unlike the MBTI’s tertiary loop, where the tertiary function pairs with the dominant, TRPI’s auxiliary
+            pairing leverages an **inverted dominant function** with the tertiary to create a complementary and adaptable
+            pairing. The auxiliary pairing respects the EIEI structure and avoids cognitive imbalance. For ENTP, instead 
+            of relying on Ne looping with Fe, which could lead to superficial engagement, the Ni-Fe auxiliary pairing 
+            introduces depth and nuanced social awareness.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Bronze Pairing:</strong> Flipped functions, maintaining the same attitude. Example: ENTP and ESFP
-            share Ne-Ti and Se-Fi, balancing exploratory intuition with grounded sensation.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Copper Pairing:</strong> Both functions and attitudes flipped, creating least related pairings. Example:
-            ENTP and ISFJ pair Ne-Ti with Si-Fe, resulting in opposing perspectives on adaptability and detail orientation.
+            The tertiary loop in traditional MBTI is limited as it often encourages repetitive, less adaptive thinking by
+            reinforcing the dominant function. In contrast, the auxiliary pairing in TRPI uses the inverted attitude of
+            the dominant function, forming a more effective and balanced partnership with the tertiary. This enables the 
+            personality to engage with new perspectives and integrate diverse insights, making the auxiliary pairing a 
+            much more comprehensive solution for personality growth and adaptability.
           </Typography>
         </AccordionDetails>
       </Accordion>
 
-      <Card sx={{ marginBottom: '20px' }}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            How TRPI Works
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h6">Type Pairings and Examples</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body2" paragraph>
+            TRPI identifies four type pairings, each reflecting unique relationships and dynamics:
           </Typography>
-          <Typography variant="body1" paragraph>
-            TRPI assesses personality by focusing on dominant function pairings, how individuals use the 4F responses,
-            and tendencies among the Big Five personality traits. This approach provides insights not just on
-            personality preferences but also on real-world coping mechanisms and behavioral patterns.
+          <Typography variant="body2" paragraph>
+            <strong>Gold Pairing:</strong> Connects types with mirrored dominant functions, offering complementary yet
+            contrasting perspectives. For instance, ENTP (Ne-Ti) and INFJ (Ni-Fe) are Gold pairings, balancing
+            exploration and insight with empathetic understanding.
           </Typography>
-          <Typography variant="body1" paragraph>
-            For instance, someone with a high Fight response may exhibit the traits of types like ENTP or ESTP, favoring
-            assertive, action-oriented thinking (Ti dominance). In contrast, a Freeze response type, like INTJ or
-            ISTJ, might lean towards cautious planning (Te dominance).
+          <Typography variant="body2" paragraph>
+            <strong>Silver Pairing:</strong> Consists of types with inverted attitudes, fostering adaptability through
+            balancing exploration with strategic precision. An example is ENTP (Ne-Ti) paired with INTJ (Ni-Te).
           </Typography>
-        </CardContent>
-      </Card>
+          <Typography variant="body2" paragraph>
+            <strong>Bronze Pairing:</strong> Involves flipped functions but maintains the same attitudes. For instance,
+            ENTP (Ne-Ti) and ESFP (Se-Fi) represent Bronze pairings, contrasting abstract thinking with grounded, sensory engagement.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Copper Pairing:</strong> Both functions and attitudes are flipped, such as ENTP (Ne-Ti) and ISFJ (Si-Fe),
+            creating highly contrasting perspectives.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h6">Id, Ego, and Superego</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body2" paragraph>
+            TRPI uses the concepts of Id, Ego, and Superego to provide a multi-layered perspective of personality:
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Id:</strong> Represents natural tendencies and innate drives, associated with the **dominant functions**. For ENTP, this includes Se/Si and Ne/Ni, reflecting curiosity, exploration, and adaptability.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Ego:</strong> Balances internal and external needs, represented by the **auxiliary functions**. For ENTP, this is represented by Fi/Fe and Te/Ti, allowing flexibility in both logical thinking and empathetic engagement with the external world.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Superego:</strong> Associated with the **tertiary functions**, guiding self-regulation and value alignment. In the case of ENTP, this includes Ti/Te and Fi/Fe, which play a role in modulating responses through empathy and structured thinking, providing an ethical or value-oriented dimension to their interactions.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h6">Big Five Personality Traits</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body2" paragraph>
+            The Big Five traits—Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism—add an additional
+            layer of understanding to TRPI:
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Openness:</strong> Reflects creativity and curiosity. High Openness individuals, such as ENFPs, enjoy
+            exploring new ideas, while those with low Openness prefer routines and structure.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Conscientiousness:</strong> Indicates organization and dependability. Highly Conscientious types, like
+            ISTJs, prioritize structure, whereas low-Conscientiousness types are more spontaneous.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Extraversion:</strong> In TRPI, Extraversion focuses on assertiveness, highlighting individuals who take
+            initiative and engage actively with their environments. Extraverts, such as ENTPs, are energized by active
+            involvement in social and intellectual exchanges.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Agreeableness:</strong> Associated with empathy and cooperation. High Agreeableness types, like INFJs,
+            prioritize harmony, whereas low Agreeableness types are more independent.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>Neuroticism:</strong> Describes emotional sensitivity. High-Neuroticism types, like INFPs, may experience
+            heightened emotions, while low-Neuroticism types are more emotionally stable.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
 
       <Card sx={{ marginBottom: '20px' }}>
         <CardContent>

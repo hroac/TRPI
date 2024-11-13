@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, Typography } from '@mui/material';
 import { loadGapiInsideDOM } from 'gapi-script';
 
+
+interface google {
+  
+}
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [token, setToken] = useState<string | null>(null);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Container, Grid, Typography, IconButton, Link } from '@mui/material';
-import { Facebook, Twitter, Instagram, LinkedIn, GitHub } from '@mui/icons-material';
+import { Facebook, Twitter, Instagram, LinkedIn, GitHub, Launch } from '@mui/icons-material';
+import KickstarterIcon from '@mui/icons-material/Launch'; // Placeholder for Kickstarter
 
 const Footer: React.FC = () => {
   return (
@@ -11,7 +12,7 @@ const Footer: React.FC = () => {
             <Typography variant="h6" gutterBottom>
               About Us
             </Typography>
-            <Typography variant="body2" paragraph>
+            <Typography color="inherit" variant="body1" paragraph>
               We aim to provide the most insightful and accurate personality assessments. Our mission is to help you discover more about yourself and others.
             </Typography>
           </Grid>
@@ -20,10 +21,10 @@ const Footer: React.FC = () => {
               Quick Links
             </Typography>
             <Box display="flex" flexDirection="column">
-              <Link href="/about" color="inherit" underline="hover">About</Link>
-              <Link href="/services" color="inherit" underline="hover">Services</Link>
-              <Link href="/contact" color="inherit" underline="hover">Contact Us</Link>
-              <Link href="/privacy-policy" color="inherit" underline="hover">Privacy Policy</Link>
+              <Link href="/#/about" color="inherit" underline="hover">About</Link>
+              <Link href="/#/services" color="inherit" underline="hover">Services</Link>
+              <Link href="/#/contact" color="inherit" underline="hover">Contact Us</Link>
+              <Link href="/#/privacy-policy" color="inherit" underline="hover">Privacy Policy</Link>
             </Box>
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -31,7 +32,7 @@ const Footer: React.FC = () => {
               Follow Us
             </Typography>
             <Box display="flex" gap={2}>
-              <IconButton href="https://facebook.com" target="_blank" color="inherit">
+              <IconButton href="https://facebook.com/" target="_blank" color="inherit">
                 <Facebook />
               </IconButton>
               <IconButton href="https://twitter.com" target="_blank" color="inherit">
@@ -45,6 +46,9 @@ const Footer: React.FC = () => {
               </IconButton>
               <IconButton href="https://github.com" target="_blank" color="inherit">
                 <GitHub />
+              </IconButton>
+              <IconButton href="https://www.kickstarter.com/projects/2090755632/trpi-a-next-gen-alternative-to-mbti-with-deeper-insights" target="_blank" color="inherit">
+                <Launch />
               </IconButton>
             </Box>
           </Grid>

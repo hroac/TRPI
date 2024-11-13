@@ -2,6 +2,9 @@ import React from 'react';
 import { Paper, Typography, Box } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Link } from 'react-router-dom';
+import { typesData } from '../utils/typesData';
+import AboutPage from './About';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -12,6 +15,7 @@ interface ResultsPageProps {
 }
 
 const ResultsPage: React.FC<ResultsPageProps> = ({ mbtiType, bigFiveScores, primary4FType }) => {
+  const type = mbtiType && typesData.find((t: any) => t.type === mbtiType);
   const data = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
     datasets: [
@@ -54,13 +58,14 @@ const ResultsPage: React.FC<ResultsPageProps> = ({ mbtiType, bigFiveScores, prim
 
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
-      <Typography variant="h5" gutterBottom>Personality Test Results</Typography>
-      <Typography variant="subtitle1" gutterBottom>MBTI Type: {mbtiType}</Typography>
-      <Typography variant="subtitle2" gutterBottom>Primary 4F Mode: {primary4FType}</Typography>
-
+      <Typography variant="h5" gutterBottom>TRPI Test Results - {primary4FType} - {mbtiType}</Typography>
       <Box my={3}>
         <Bar data={data} options={options} />
       </Box>
+      {type && (
+      <AboutPage mbtiType={mbtiType} showBigFive={false}/>
+      )}
+      
     </Paper>
   );
 };

@@ -15,8 +15,8 @@ export const MBTIProfiles = [
   {
     name: 'ESTP',
     traits: {
-      openness: 0.95,
-      conscientiousness: 0.45,
+      openness: 0.65,
+      conscientiousness: 0.6,
       extraversion: 0.85,
       agreeableness: 0.4,
       neuroticism: 0.5
@@ -26,10 +26,10 @@ export const MBTIProfiles = [
   {
     name: 'INTP',
     traits: {
-      openness: 0.4,
-      conscientiousness: 0.6,
-      extraversion: 0.35,
-      agreeableness: 0.3,
+      openness: 0.45,
+      conscientiousness: 0.7,
+      extraversion: 0.65,
+      agreeableness: 0.4,
       neuroticism: 0.5
     },
     mode: 'Fight'
@@ -37,9 +37,9 @@ export const MBTIProfiles = [
   {
     name: 'ISTP',
     traits: {
-      openness: 0.3,
+      openness: 0.5,
       conscientiousness: 0.65,
-      extraversion: 0.4,
+      extraversion: 0.6,
       agreeableness: 0.35,
       neuroticism: 0.45
     },
@@ -81,7 +81,7 @@ export const MBTIProfiles = [
   {
     name: 'ESTJ',
     traits: {
-      openness: 0.3,
+      openness: 0.4,
       conscientiousness: 0.95,
       extraversion: 0.7,
       agreeableness: 0.35,
@@ -93,7 +93,7 @@ export const MBTIProfiles = [
     name: 'ISFJ',
     traits: {
       openness: 0.6,
-      conscientiousness: 0.65,
+      conscientiousness: 0.8,
       extraversion: 0.4,
       agreeableness: 0.85,
       neuroticism: 0.4
@@ -114,7 +114,7 @@ export const MBTIProfiles = [
   {
     name: 'ESFJ',
     traits: {
-      openness: 0.7,
+      openness: 0.35,
       conscientiousness: 0.8,
       extraversion: 0.6,
       agreeableness: 0.9,
@@ -125,10 +125,10 @@ export const MBTIProfiles = [
   {
     name: 'ENFJ',
     traits: {
-      openness: 0.8,
+      openness: 0.5,
       conscientiousness: 0.85,
       extraversion: 0.7,
-      agreeableness: 0.95,
+      agreeableness: 0.9,
       neuroticism: 0.3
     },
     mode: 'Fawn'
@@ -140,7 +140,7 @@ export const MBTIProfiles = [
       conscientiousness: 0.5,
       extraversion: 0.7,
       agreeableness: 0.7,
-      neuroticism: 0.8
+      neuroticism: 0.45
     },
     mode: 'Flight'
   },
@@ -150,16 +150,16 @@ export const MBTIProfiles = [
       openness: 0.9,
       conscientiousness: 0.55,
       extraversion: 0.75,
-      agreeableness: 0.75,
-      neuroticism: 0.85
+      agreeableness: 0.65,
+      neuroticism: 0.75
     },
     mode: 'Flight'
   },
   {
     name: 'ISFP',
     traits: {
-      openness: 0.45,
-      conscientiousness: 0.2,
+      openness: 0.5,
+      conscientiousness: 0.4,
       extraversion: 0.35,
       agreeableness: 0.5,
       neuroticism: 0.7
@@ -172,8 +172,8 @@ export const MBTIProfiles = [
       openness: 0.45,
       conscientiousness: 0.5,
       extraversion: 0.3,
-      agreeableness: 0.8,
-      neuroticism: 0.55
+      agreeableness: 0.6,
+      neuroticism: 0.85
     },
     mode: 'Flight'
   }
@@ -183,9 +183,9 @@ export const MBTIProfiles = [
 const weights: Record<string, Record<string, number>> = {
   Fight: {
     openness: 1.2,           // High openness is crucial for Fight
-    conscientiousness: 0.6,   // Lower conscientiousness to allow flexibility
-    extraversion: 1.2,        // High extraversion for assertiveness
-    agreeableness: 0.4,       // Lower agreeableness for competitiveness
+    conscientiousness: 1.1,   // Lower conscientiousness to allow flexibility
+    extraversion: 0.6,        // High extraversion for assertiveness
+    agreeableness: 0.8,       // Lower agreeableness for competitiveness
     neuroticism: 0.7          // Moderate neuroticism for adaptability
   },
   Flight: {
@@ -198,7 +198,7 @@ const weights: Record<string, Record<string, number>> = {
   Freeze: {
     openness: 0.5,            // Lower openness, indicating caution
     conscientiousness: 1.2,   // High conscientiousness for control and structure
-    extraversion: 0.5,        // Lower extraversion, favoring introspection
+    extraversion: 1.5,        // Lower extraversion, favoring introspection
     agreeableness: 0.4,       // Lower agreeableness, focusing on resilience
     neuroticism: 0.5          // Moderate neuroticism for stability
   },
@@ -209,6 +209,49 @@ const weights: Record<string, Record<string, number>> = {
     agreeableness: 1.5,       // High agreeableness, a core trait for Fawn
     neuroticism: 0.5          // Moderate neuroticism for emotional management
   }
+}
+export const determinePrimary4FType = (profile: any) => {
+  const fourFIdealProfiles = {
+    Fight: {
+      openness: 0.7375,
+      conscientiousness: 0.6,
+      extraversion: 0.8,
+      agreeableness: 0.3875,
+      neuroticism: 0.4625
+    },
+    Flight: {
+      openness: 0.8125,
+      conscientiousness: 0.5375,
+      extraversion: 0.6,
+      agreeableness: 0.7375,
+      neuroticism: 0.675
+    },
+    Freeze: {
+      openness: 0.6875,
+      conscientiousness: 0.8875,
+      extraversion: 0.5,
+      agreeableness: 0.3375,
+      neuroticism: 0.3
+    },
+    Fawn: {
+      openness: 0.7375,
+      conscientiousness: 0.8,
+      extraversion: 0.5125,
+      agreeableness: 0.9,
+      neuroticism: 0.375
+    }
+  }
+
+ // console.log(profile)
+
+  return Object.keys(fourFIdealProfiles).reduce((a, b) => {
+    const calcA = weightedEuclideanDistance(profile, (fourFIdealProfiles as any)[a], weights[a]) // Apply the specific weights for each mode ) 
+   const calcB = weightedEuclideanDistance(profile, (fourFIdealProfiles as any)[b], weights[b])
+  
+   //console.log(a, calcA,b,calcB)
+   return calcA < calcB ? a : b
+  }
+  )
 }
 
 export const normalizeProfile = (profile: { [trait: string]: number }) => {
@@ -249,7 +292,7 @@ export const matchMBTIType = (profile: any, primary4F: any) => {
       candidate.traits,
       profile
     )
-    console.log('Distance:', distance, 'Type: ', candidate.name)
+    //console.log('Distance:', distance, 'Type: ', candidate.name)
     if (distance < closestDistance) {
       closestDistance = distance
       closestType = candidate.name
@@ -259,48 +302,4 @@ export const matchMBTIType = (profile: any, primary4F: any) => {
   return closestType
 }
 
-export const determinePrimary4FType = (profile: any) => {
-  const fourFIdealProfiles = {
-    Fight: {
-      openness: 0.7375,
-      conscientiousness: 0.6,
-      extraversion: 0.8,
-      agreeableness: 0.3875,
-      neuroticism: 0.4625
-    },
-    Flight: {
-      openness: 0.8125,
-      conscientiousness: 0.5375,
-      extraversion: 0.6,
-      agreeableness: 0.7375,
-      neuroticism: 0.675
-    },
-    Freeze: {
-      openness: 0.6875,
-      conscientiousness: 0.8875,
-      extraversion: 0.5,
-      agreeableness: 0.3375,
-      neuroticism: 0.3
-    },
-    Fawn: {
-      openness: 0.7375,
-      conscientiousness: 0.8,
-      extraversion: 0.5125,
-      agreeableness: 0.9,
-      neuroticism: 0.375
-    }
-  }
 
-  console.log(profile)
-
-  return Object.keys(fourFIdealProfiles).reduce((a, b) =>
-    weightedEuclideanDistance(
-      profile,
-      (fourFIdealProfiles as any)[a],
-      weights[a] // Apply the specific weights for each mode
-    ) <
-    weightedEuclideanDistance(profile, (fourFIdealProfiles as any)[b], weights[b])
-      ? a
-      : b
-  )
-}

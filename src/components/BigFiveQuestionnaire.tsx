@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Grid,
+  IconButton,
   Box,
   Typography,
   Slider,
@@ -12,6 +13,9 @@ import {
   InputLabel,
   SelectChangeEvent,
   LinearProgress,
+  Modal,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -19,33 +23,30 @@ import {
   matchMBTIType,
   MBTIProfiles,
 } from '../utils/mbtiMapping';
+import Matrix from './Matrix';
+import { HelpOutline } from '@mui/icons-material';
 
 const statements = [
   { text: 'I am open to exploring new ideas and perspectives.', trait: 'openness', weight: 1.2 },
   { text: 'I often think about abstract concepts and like to ponder deep questions.', trait: 'openness', weight: 0.9 },
   { text: 'I am comfortable with change and easily adapt to new situations.', trait: 'openness', weight: 1.0 },
-
   { text: 'I prefer organized, planned activities over spontaneous events.', trait: 'conscientiousness', weight: 0.9 },
   { text: 'I often take charge in group settings and feel energized by social interactions.', trait: 'extraversion', weight: 1.0 },
   { text: 'I often prioritize harmony and avoid conflict in my relationships.', trait: 'agreeableness', weight: 1.0 },
   { text: 'I tend to feel anxious or worried in stressful situations.', trait: 'neuroticism', weight: 1.0 },
-
   { text: 'I feel a strong responsibility to meet my goals and commitments.', trait: 'conscientiousness', weight: 1.1 },
   { text: 'I enjoy discussing ideas and debating with others.', trait: 'extraversion', weight: 1.1 },
   { text: 'I strive to be understanding and supportive towards others.', trait: 'agreeableness', weight: 1.2 },
-  { text: 'I often feel uneasy or second-guess myself when making decisions.', trait: 'neuroticism', weight: 0.8 },
-
+  { text: 'I often feel uneasy or second-guess myself when making decisions.', trait: 'neuroticism', weight: 0.9 },
   { text: 'I tend to make decisions based on logic rather than emotions.', trait: 'conscientiousness', weight: 1.3 },
   { text: 'I tend to stay calm and assertive when solving challenges.', trait: 'extraversion', weight: 1.3 },
   { text: 'I’m sensitive to other people’s feelings and try to meet their needs.', trait: 'agreeableness', weight: 1.0 },
-  { text: 'I often dwell on past mistakes and worry about future outcomes.', trait: 'neuroticism', weight: 0.9 },
-
+  { text: 'I often dwell on past mistakes and worry about future outcomes.', trait: 'neuroticism', weight: 0.95 },
   { text: 'I am detail-oriented and take time to think through tasks carefully.', trait: 'conscientiousness', weight: 0.9 },
   { text: 'I’m known for being independent and bold in my approach to problems.', trait: 'extraversion', weight: 1.0 },
   { text: 'I prefer to work as part of a team and value cooperation.', trait: 'agreeableness', weight: 0.9 },
-  { text: 'I tend to overthink situations and feel uneasy about the unknown.', trait: 'neuroticism', weight: 1.0 }
+  { text: 'I tend to overthink situations and feel uneasy about the unknown.', trait: 'neuroticism', weight: 1.0 },
 ];
-
 
 // Group statements into stages
 const stages = [
@@ -61,7 +62,6 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 }) => {
   const navigate = useNavigate();
 
-  // Initialize responses for each trait
   const initialResponses = statements.reduce((acc, s) => {
     if (!acc[s.trait]) acc[s.trait] = [];
     acc[s.trait].push(0.5);
@@ -71,57 +71,11 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [responses, setResponses] = useState(initialResponses);
   const [currentStage, setCurrentStage] = useState(0);
 
-  // Initialize selected types
-  const [selectedTypes, setSelectedTypes] = useState<{ [key: string]: string }>({
-    Fight: '',
-    Flight: '',
-    Freeze: '',
-    Fawn: '',
-  });
-
   const [primary4FType, setPrimary4FType] = useState<string | null>(null);
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState(false);
 
-  // Handle selection for each 4F type
-  const handleTypeSelection =
-    (mode: string) => (event: SelectChangeEvent<string>) => {
-      const selectedType = event.target.value;
 
-      // Clear other selections
-      const updatedTypes = Object.keys(selectedTypes).reduce(
-        (acc, key) => {
-          acc[key] = key === mode ? selectedType : '';
-          return acc;
-        },
-        {} as { [key: string]: string }
-      );
-
-      setSelectedTypes(updatedTypes);
-
-      // Update responses and calculations if needed
-      const profile = MBTIProfiles.find((p) => p.name === selectedType)?.traits;
-      if (profile) {
-        const updatedResponses = { ...responses };
-        Object.keys(updatedResponses).forEach((trait) => {
-          updatedResponses[trait] = updatedResponses[trait].map(
-            () => profile[trait as keyof typeof profile]
-          );
-        });
-        setResponses(updatedResponses);
-
-        const primary4F = determinePrimary4FType(profile);
-        const mbtiType = matchMBTIType(profile, primary4F);
-
-        setPrimary4FType(primary4F);
-        setMatchedMBTIType(mbtiType);
-      } else {
-        // Clear calculations if no type is selected
-        setPrimary4FType(null);
-        setMatchedMBTIType(null);
-      }
-    };
-
-  // Handle slider changes
   const handleSliderChange =
     (trait: string, index: number) =>
     (event: Event, value: number | number[], activeThumb: number) => {
@@ -150,7 +104,6 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       });
     };
 
-  // Navigation functions
   const handleNext = () => {
     if (currentStage < stages.length - 1) setCurrentStage(currentStage + 1);
   };
@@ -159,7 +112,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     if (currentStage > 0) setCurrentStage(currentStage - 1);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const weightedScores = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait].map((score, i) => 
         score * (statements.find(s => s.trait === trait && statements.indexOf(s) === i)?.weight || 1)
@@ -171,45 +124,75 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const primary4F = determinePrimary4FType(weightedScores);
     const mbtiType = matchMBTIType(weightedScores, primary4F);
 
-    onComplete({ primary4F, mbtiType, profile: weightedScores });
-    navigate('/result');
+    const binId = await onComplete({ primary4F, mbtiType, profile: weightedScores });
+    navigate(`/result/${binId}`);
   };
 
   const progress = ((currentStage + 1) / stages.length) * 100;
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const handleMatrixSelect = (type: string) => {
+    console.log(type)
+    const profile = MBTIProfiles.find((p) => p.name === type)?.traits;
+    if (profile) {
+      console.log(profile)
+      const updatedResponses = { ...responses };
+      Object.keys(updatedResponses).forEach((trait) => {
+        updatedResponses[trait] = updatedResponses[trait].map(
+          () => profile[trait as keyof typeof profile]
+        );
+      });
+      setResponses(updatedResponses);
+
+      const primary4F = determinePrimary4FType(profile);
+      const mbtiType = matchMBTIType(profile, primary4F);
+
+      setPrimary4FType(primary4F);
+      setMatchedMBTIType(mbtiType);
+    } else {
+      setPrimary4FType(null);
+      setMatchedMBTIType(null);
+    }
+    handleCloseModal();
+  };
   return (
-    <Paper
-      elevation={3}
-      style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}
-    >
-      <Typography variant="h5" gutterBottom>
-        Personality Assessment
-      </Typography>
-
-      {/* 4F Type Dropdowns */}
-      <Grid container spacing={2}>
-        {['Fight', 'Flight', 'Freeze', 'Fawn'].map((mode) => (
-          <Grid item xs={3} key={mode}>
-            <FormControl fullWidth>
-              <InputLabel>{mode}</InputLabel>
-              <Select
-                value={selectedTypes[mode]}
-                onChange={handleTypeSelection(mode)}
-                size="small"
-              >
-                {MBTIProfiles.filter((profile) => profile.mode === mode).map(
-                  (profile) => (
-                    <MenuItem key={profile.name} value={profile.name}>
-                      {profile.name}
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-            </FormControl>
-          </Grid>
-        ))}
-      </Grid>
-
+    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h5" gutterBottom>
+          Personality Assessment Tool
+        </Typography>
+        <IconButton onClick={handleOpenModal} color="primary">
+          <HelpOutline />
+        </IconButton>
+      </Box>
+      {/* Modal for Matrix selection */}
+       <Modal open={openModal} onClose={handleCloseModal}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            outline: 'none',
+            width: { xs: '90%', sm: '60%' }
+            //width: isMobile ? '60%' : '80%'
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Select Your Type Here
+          </Typography>
+          <Typography variant="body2" gutterBottom>
+            use this as a preset if you already know your type!
+          </Typography>
+          <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '60%' : '90%'}/>
+        </Box>
+      </Modal>
       <Box my={3}>
         {primary4FType && (
           <Typography variant="subtitle1">
@@ -241,7 +224,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
       {/* Progress Bar */}
       <Box my={3}>
-        <LinearProgress variant="determinate" value={progress} />
+        <LinearProgress color="info" variant="determinate" value={progress} />
       </Box>
 
       {/* Navigation Buttons */}

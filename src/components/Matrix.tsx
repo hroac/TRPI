@@ -1,13 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Typography, Tooltip } from '@mui/material';
+import { Box, Typography, Tooltip, useMediaQuery, Theme } from '@mui/material';
 import { typesData } from '../utils/typesData';
+import { Link } from 'react-router-dom';
 
-const Matrix: React.FC = () => {
+interface MatrixProps {
+  onSelectType?: (type: string) => void;
+  width?: string;
+}
+
+const Matrix: React.FC<MatrixProps> = ({ onSelectType, width }) => {
+  // Define a media query for screens 600px or smaller
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
   return (
-    <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2} mt={4}>
+    <Box 
+      display="grid" 
+      gridTemplateColumns="repeat(4, 1fr)" 
+      gap={isMobile ? 1 : 2} // Reduce gap on mobile
+      mt={4} 
+      width={width}
+    >
       {typesData.map((type) => {
-        // Extracting the archetype description
         const archetypeDescription = type.description.slice(
           type.description.indexOf(',') + 2,
           type.description.indexOf(':')
@@ -23,24 +36,45 @@ const Matrix: React.FC = () => {
                 backgroundColor: type.bgColor,
                 color: 'white',
                 fontWeight: 'bold',
+                fontSize: isMobile ? '0.75rem' : '1rem', // Adjust font size for mobile
               },
               [`& .MuiTooltip-arrow`]: {
                 color: type.bgColor,
               },
             }}
           >
-            <Box
-              component={Link}
-              to={`/about/${type.type}`}
-              bgcolor={type.bgColor}
-              color="white"
-              p={2}
-              textAlign="center"
-              borderRadius={2}
-              style={{ textDecoration: 'none' }}
-            >
-              <Typography variant="h6">{type.type}</Typography>
-            </Box>
+            {typeof onSelectType === 'function' ? (
+              <Box
+                onClick={() => onSelectType(type.type)}
+                bgcolor={type.bgColor}
+                color="white"
+                p={isMobile ? 1 : 2} // Reduce padding for mobile
+                textAlign="center"
+                borderRadius={2}
+                sx={{
+                  cursor: 'pointer',
+                  fontSize: isMobile ? '0.75rem' : '1rem', // Adjust text size for mobile
+                }}
+              >
+                <Typography variant="subtitle1">{type.type}</Typography>
+              </Box>
+            ) : (
+              <Box
+                component={Link}
+                to={`/about/${type.type}`}
+                bgcolor={type.bgColor}
+                color="white"
+                p={isMobile ? 1 : 2} // Reduce padding for mobile
+                textAlign="center"
+                borderRadius={2}
+                style={{ textDecoration: 'none' }}
+                sx={{
+                  fontSize: isMobile ? '0.75rem' : '1rem', // Adjust text size for mobile
+                }}
+              >
+                <Typography variant="subtitle1">{type.type}</Typography>
+              </Box>
+            )}
           </Tooltip>
         );
       })}

@@ -27,7 +27,7 @@ const darkGreenTheme = createTheme({
       contrastText: '#000000',
     },
     info: {
-      main: '#6b9080', // muted teal
+      main: 'rgb(217 236 236)', // muted teal
       contrastText: '#ffffff',
     },
     success: {

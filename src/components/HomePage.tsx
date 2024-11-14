@@ -60,7 +60,7 @@ const Home = () => {
             maxWidth: 600 
           }}
         >
-          Discover your true personality with a unique approach. TRPI helps you explore deeper, correcting mistypes and understanding yourself fully.
+          Discover your true personality type with TRPI's unique approach. Dive deeper, correct mistypes, and gain a complete understanding of yourself.
         </Typography>
         <Button 
           variant='contained' 
@@ -79,7 +79,7 @@ const Home = () => {
           Start the Test
         </Button>
       </Box>
-
+      
       {/* Carousel Section */}
       <Box sx={{ mt: 8, width: '100%', py: 6 }}>
         <Typography 

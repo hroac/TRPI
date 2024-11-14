@@ -9,6 +9,12 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: 'Roboto', sans-serif;
   }
+  body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export default GlobalStyles;

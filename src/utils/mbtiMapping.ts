@@ -106,8 +106,8 @@ export const MBTIProfiles = [
       openness: 0.85,
       conscientiousness: 0.75,
       extraversion: 0.35,
-      agreeableness: 0.9,
-      neuroticism: 0.45
+      agreeableness: 0.8,
+      neuroticism: 0.5
     },
     mode: 'Fawn'
   },
@@ -224,7 +224,7 @@ export const determinePrimary4FType = (profile: any) => {
       conscientiousness: 0.5375,
       extraversion: 0.6,
       agreeableness: 0.7375,
-      neuroticism: 0.675
+      neuroticism: 0.775
     },
     Freeze: {
       openness: 0.6875,

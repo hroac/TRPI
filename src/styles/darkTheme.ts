@@ -24,15 +24,15 @@ const darkTheme = createTheme({
       contrastText: '#ffffff',
     },
     warning: {
-      main: '#f5c26b',
+      main: '#9b6bf5',
       contrastText: '#000000',
     },
     info: {
-      main: '#6b9080',
+      main: '#2e57e0',
       contrastText: '#ffffff',
     },
     success: {
-      main: '#89a889',
+      main: '#5cd15c',
       contrastText: '#ffffff',
     },
   },

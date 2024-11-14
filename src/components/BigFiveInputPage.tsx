@@ -16,6 +16,7 @@ import AgreeablenessIcon from '@mui/icons-material/Favorite';
 import NeuroticismIcon from '@mui/icons-material/MoodBad';
 
 import { matchMBTIType as calculateMbtiType, determinePrimary4FType } from '../utils/mbtiMapping';
+import { useNavigate } from 'react-router-dom';
 
 type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
 
@@ -32,6 +33,7 @@ const traitInfo: { label: Trait; icon: React.ReactNode; color: string }[] = [
 const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
   onComplete,
 }) => {
+  const navigate = useNavigate();
   const [traits, setTraits] = useState<Record<Trait, number>>({
     Openness: 50,
     Conscientiousness: 50,
@@ -43,10 +45,17 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
   const [mbtiType, setMbtiType] = useState<string | null>(null);
 
   const handleSliderChange = (trait: Trait) => (event: Event, newValue: number | number[]) => {
-    setTraits((prev) => ({ ...prev, [trait]: newValue as number }));
+    setTraits((prev) => {
+      const bigFiveData = ({ ...prev, [trait]: newValue as number });
+      const fourF = determinePrimary4FType(bigFiveData);
+    const type = calculateMbtiType(bigFiveData, fourF);
+    setMbtiType(type);
+      return bigFiveData
+    });
+    
   };
 
-  const calculateType = () => {
+  const calculateType = async () => {
     const bigFiveData = {
       openness: traits.Openness / 100,
       conscientiousness: traits.Conscientiousness / 100,
@@ -57,7 +66,8 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
     const fourF = determinePrimary4FType(bigFiveData);
     const type = calculateMbtiType(bigFiveData, fourF);
     setMbtiType(type);
-    onComplete({profile: bigFiveData, mbtiType: type, primary4F: fourF});
+    const binId = await onComplete({profile: bigFiveData, mbtiType: type, primary4F: fourF});
+    navigate(`/result/${binId}`);
   };
 
   return (

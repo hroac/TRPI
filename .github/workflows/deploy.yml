@@ -27,7 +27,8 @@ jobs:
       - name: Build the project with environment variable
         env:
           REACT_APP_GH_KEY: ${{ secrets.REACT_APP_GH_KEY }}
-        run: npm run build
+        run: CI=false npm run build
+        
 
       - name: Deploy to GitHub Pages
         run: npx gh-pages -d build

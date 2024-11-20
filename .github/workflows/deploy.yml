@@ -1,10 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-  workflow_dispatch: # Allows manual triggering
+  workflow_dispatch:
   push:
     paths:
-      - 'package.json' # Trigger when specific files are changed
+      - 'package.json'
       - 'src/**'
       - 'public/**'
 
@@ -24,13 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Inject environment secret
+      - name: Build the project with environment variable
         env:
           REACT_APP_GH_KEY: ${{ secrets.REACT_APP_GH_KEY }}
-        run: |
-          echo "REACT_APP_GH_KEY=${{ secrets.REACT_APP_GH_KEY }}" >> .env
-
-      - name: Build the project
         run: npm run build
 
       - name: Deploy to GitHub Pages

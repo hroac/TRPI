@@ -41,7 +41,8 @@ jobs:
         run: |
           echo "REACT_APP_GH_KEY=${{ secrets.REACT_APP_GH_KEY }}" > .env
           CI=false npm run build
-
+      - name: Add CNAME file for custom domain
+        run: echo "traumaindicator.com" > build/CNAME
       - name: Deploy to GitHub Pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

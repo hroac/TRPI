@@ -1,9 +1,10 @@
 // Enhanced Home.tsx with fancier UI elements
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Button, Grid, Box, Container } from '@mui/material';
 import Carousel from '../components/Carousel';
 import Matrix from './Matrix';
 import { Link } from 'react-router-dom';
+import JsonBinApi from '../utils/saveResults';
 const slides = [
     {
       title: "TRAUMA SHAPES YOU BUT IT DOES NOT DEFINE YOU.",
@@ -28,6 +29,16 @@ const slides = [
   ];
 
 const Home = () => {
+  const [total, setTotal] = useState<number>(0)
+  
+  const getTotal = async () => {
+    const collection = await JsonBinApi.getBinsInCollection();
+    return collection.length;
+  }
+
+  useEffect(() => {
+    getTotal().then((t) => setTotal(t));
+  })
   return (
     <Container sx={{marginTop: '64px'}}>
       {/* Hero Section */}
@@ -79,7 +90,13 @@ const Home = () => {
           Start the Test
         </Button>
       </Box>
-      
+      {/* <Typography variant='h4'  sx={{ 
+            fontWeight: '500', 
+            mb: 4, 
+            textAlign: 'center' 
+          }}>
+            {total} people have taken the test!
+          </Typography> */}
       {/* Carousel Section */}
       <Box sx={{ mt: 8, width: '100%', py: 6 }}>
         <Typography 

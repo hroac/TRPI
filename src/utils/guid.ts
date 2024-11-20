@@ -8,7 +8,7 @@ export function guid() {
     const cryptoObj = window.crypto || window.Crypto;
     if (!cryptoObj) {
       console.error('Crypto API not available');
-      return null;
+      return '';
     }
   
     const randomArray = new Uint8Array(16);

@@ -15,7 +15,7 @@ import {
   LinearProgress,
   Modal,
   useMediaQuery,
-  useTheme,
+  useTheme
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -24,12 +24,18 @@ import {
   MBTIProfiles,
 } from '../utils/mbtiMapping';
 import Matrix from './Matrix';
-import { HelpOutline } from '@mui/icons-material';
+import { 
+  HelpOutline,  
+  Close,
+  Check,
+  SwitchAccount,
+  ShuffleOn
+} from '@mui/icons-material';
 
 const statements = [
   { text: 'I am open to exploring new ideas and perspectives.', trait: 'openness', weight: 1.2 },
   { text: 'I often think about abstract concepts and like to ponder deep questions.', trait: 'openness', weight: 0.9 },
-  { text: 'I am comfortable with change and easily adapt to new situations.', trait: 'openness', weight: 1.0 },
+  { text: 'I am comfortable with change and easily adapt to new situations.', trait: 'openness', weight: 0.9 },
   { text: 'I prefer organized, planned activities over spontaneous events.', trait: 'conscientiousness', weight: 0.9 },
   { text: 'I often take charge in group settings and feel energized by social interactions.', trait: 'extraversion', weight: 1.0 },
   { text: 'I often prioritize harmony and avoid conflict in my relationships.', trait: 'agreeableness', weight: 1.0 },
@@ -73,8 +79,36 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
   const [primary4FType, setPrimary4FType] = useState<string | null>(null);
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
+  const [matchedType, setMatchedType] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
+
+  const setRandomly = () => {
+    const randomResponses = statements.reduce((acc, s) => {
+      if (!acc[s.trait]) acc[s.trait] = [];
+      acc[s.trait].push(Math.random());
+      return acc;
+    }, {} as { [trait: string]: number[] });
+    setResponses(randomResponses)
+
+    const weightedScores = Object.keys(randomResponses).reduce(
+      (acc, traitKey) => {
+        const traitScores = randomResponses[traitKey].map((score, i) => 
+          score * (statements.find(s => s.trait === traitKey && statements.indexOf(s) === i)?.weight || 1)
+        );
+        acc[traitKey] = traitScores.reduce((sum, score) => sum + score, 0) / traitScores.length;
+        return acc;
+      },
+      {} as { [trait: string]: number }
+    );
+    const primary4F = determinePrimary4FType(weightedScores);
+    const mbtiType = matchMBTIType(weightedScores, primary4F);
+    const type = matchMBTIType(weightedScores, primary4F, false);
+
+        setPrimary4FType(primary4F);
+        setMatchedMBTIType(mbtiType);
+        setMatchedType(type);
+  }
 
   const handleSliderChange =
     (trait: string, index: number) =>
@@ -96,9 +130,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
         const primary4F = determinePrimary4FType(weightedScores);
         const mbtiType = matchMBTIType(weightedScores, primary4F);
+        const type = matchMBTIType(weightedScores, primary4F,false);
+
 
         setPrimary4FType(primary4F);
         setMatchedMBTIType(mbtiType);
+        setMatchedType(type);
 
         return updatedResponses;
       });
@@ -149,24 +186,32 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
       const primary4F = determinePrimary4FType(profile);
       const mbtiType = matchMBTIType(profile, primary4F);
+      const type = matchMBTIType(profile, primary4F,false);
 
       setPrimary4FType(primary4F);
       setMatchedMBTIType(mbtiType);
+      setMatchedType(type)
     } else {
       setPrimary4FType(null);
       setMatchedMBTIType(null);
+      setMatchedType(null);
     }
     handleCloseModal();
   };
   return (
-    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
+    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 900, width: isMobile ? 300 : 750 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h5" gutterBottom>
           Personality Assessment Tool
         </Typography>
-        <IconButton onClick={handleOpenModal} color="primary">
-          <HelpOutline />
+        <Box>
+        <IconButton onClick={setRandomly} color="primary">
+          <ShuffleOn />
         </IconButton>
+        <IconButton onClick={handleOpenModal} color="primary">
+          <SwitchAccount />
+        </IconButton>
+        </Box>
       </Box>
       {/* Modal for Matrix selection */}
        <Modal open={openModal} onClose={handleCloseModal}>
@@ -204,22 +249,43 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
             Matched MBTI Type: {matchedMBTIType}
           </Typography>
         )}
+        {/* {matchedMBTIType && (
+          <Typography variant="subtitle1">
+            Matched MBTI Type without 4F: {matchedType}
+          </Typography>
+        )} */}
       </Box>
 
       {/* Display current stage statements */}
       {stages[currentStage].map((s, index) => (
         <Box key={`${s.trait}-${index}`} my={3}>
-          <Typography variant="subtitle1" gutterBottom>
-            {s.text}
-          </Typography>
-          <Slider
-            value={responses[s.trait][s.trait === 'openness' ? index : currentStage - 1]}
-            onChange={handleSliderChange(s.trait, s.trait === 'openness' ? index : currentStage - 1)}
-            min={0}
-            max={1}
-            step={0.01}
-          />
-        </Box>
+        <Typography variant="subtitle1" gutterBottom>
+          {s.text}
+        </Typography>
+        <Grid container spacing={3} alignItems="center">
+          <Grid item>
+            <Typography variant="subtitle2" gutterBottom>
+              <Close/>
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <Slider
+              value={responses[s.trait][s.trait === 'openness' ? index : currentStage - 1]}
+              onChange={handleSliderChange(s.trait, s.trait === 'openness' ? index : currentStage - 1
+              )}
+              min={0}
+              max={1}
+              step={0.01}
+            />
+          </Grid>
+          <Grid item>
+            <Typography variant="subtitle2" gutterBottom>
+              <Check/>
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
+      
       ))}
 
       {/* Progress Bar */}

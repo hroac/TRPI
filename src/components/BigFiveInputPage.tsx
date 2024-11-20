@@ -46,11 +46,18 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
 
   const handleSliderChange = (trait: Trait) => (event: Event, newValue: number | number[]) => {
     setTraits((prev) => {
-      const bigFiveData = ({ ...prev, [trait]: newValue as number });
+      const traits = ({ ...prev, [trait]: newValue as number });
+      const bigFiveData = {
+        openness: traits.Openness / 100,
+        conscientiousness: traits.Conscientiousness / 100,
+        extraversion: traits.Extraversion / 100,
+        agreeableness: traits.Agreeableness / 100,
+        neuroticism: traits.Neuroticism / 100,
+      };
       const fourF = determinePrimary4FType(bigFiveData);
-    const type = calculateMbtiType(bigFiveData, fourF);
-    setMbtiType(type);
-      return bigFiveData
+      const type = calculateMbtiType(bigFiveData, fourF);
+      setMbtiType(type);
+      return traits
     });
     
   };
@@ -112,6 +119,11 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
           ))}
         </Grid>
 
+        {mbtiType && (
+          <Typography variant="h5" sx={{ marginTop: '20px', fontWeight: 'bold', color: '#333' }}>
+            Your MBTI Type: {mbtiType}
+          </Typography>
+        )}
         <Button
           variant="contained"
           color="primary"
@@ -125,14 +137,9 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
           }}
         >
-          Calculate MBTI Type
+          Submit MBTI Type
         </Button>
 
-        {mbtiType && (
-          <Typography variant="h5" sx={{ marginTop: '20px', fontWeight: 'bold', color: '#333' }}>
-            Your MBTI Type: {mbtiType}
-          </Typography>
-        )}
       </Paper>
     </Container>
   );

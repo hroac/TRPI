@@ -2,6 +2,30 @@ import React from 'react';
 import { Box, Container, Grid, Typography, IconButton, Link } from '@mui/material';
 import { Facebook, Twitter, Instagram, LinkedIn, GitHub, Launch } from '@mui/icons-material';
 
+import { SvgIcon } from '@mui/material';
+
+
+function KickstarterIcon(props: any) {
+  return (
+    <img
+    src={`${process.env.PUBLIC_URL}/kickstarter.svg`}
+    alt="Kickstarter"
+    style={{ width: '18px', height: '18px' }}
+  />);
+}
+
+function DiscordIcon(props: any) {
+  return (
+    <img
+      src={`${process.env.PUBLIC_URL}/discord.svg`}
+      alt="Discord"
+      style={{ width: '18px', height: '18x' }}
+    />);
+}
+
+
+
+
 const Footer: React.FC = () => {
   return (
     <Box component="footer" bgcolor="primary.main" color="white" py={3} mt={4}>
@@ -37,7 +61,7 @@ const Footer: React.FC = () => {
               Follow Us
             </Typography>
             <Box display="flex" gap={1}>
-              <IconButton href="https://facebook.com/" target="_blank" color="inherit">
+              <IconButton href="https://www.facebook.com/profile.php?id=61564992932140" target="_blank" color="inherit">
                 <Facebook fontSize="small" />
               </IconButton>
               <IconButton href="https://twitter.com" target="_blank" color="inherit">
@@ -46,14 +70,14 @@ const Footer: React.FC = () => {
               <IconButton href="https://instagram.com" target="_blank" color="inherit">
                 <Instagram fontSize="small" />
               </IconButton>
-              <IconButton href="https://linkedin.com" target="_blank" color="inherit">
-                <LinkedIn fontSize="small" />
-              </IconButton>
-              <IconButton href="https://github.com" target="_blank" color="inherit">
+              <IconButton href="https://github.com/hroac/TRPI" target="_blank" color="inherit">
                 <GitHub fontSize="small" />
               </IconButton>
+              <IconButton href="https://discord.gg/rSHSrb75Nj" target="_blank" color="inherit">
+                <DiscordIcon fontSize="small" />
+              </IconButton>
               <IconButton href="https://www.kickstarter.com/projects/2090755632/trpi-a-next-gen-alternative-to-mbti-with-deeper-insights" target="_blank" color="inherit">
-                <Launch fontSize="small" />
+                <KickstarterIcon fontSize="small" />
               </IconButton>
             </Box>
           </Grid>

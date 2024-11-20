@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { guid } from './guid';
 
-const API_KEY = process.env.JSONBIN_API_KEY || '$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG';
+const API_KEY = '$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG';
 const COLLECTION_ID = '6666e443acd3cb34a8556706'; // Collection ID
 
 class JsonBinApi {
@@ -14,17 +14,16 @@ class JsonBinApi {
             const response = await axios.post(
                 url,
                 {
-                    collectionId: COLLECTION_ID, // Specify the collection ID
-                    data: {
-                        ...state,
-                        date: new Date().toISOString(),
-                        userId: userGuid,
-                    },
+                    ...state,
+                    date: new Date().toISOString(),
+                    userId: userGuid,
                 },
                 {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Master-Key': API_KEY,
+                        'X-Collection-Id': COLLECTION_ID,
+                        'X-Bin-Name': state.type,
                     },
                 }
             );

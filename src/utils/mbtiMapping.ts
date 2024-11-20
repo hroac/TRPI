@@ -7,18 +7,18 @@ export const MBTIProfiles = [
       openness: 0.85,
       conscientiousness: 0.55,
       extraversion: 0.8,
-      agreeableness: 0.5,
-      neuroticism: 0.4
+      agreeableness: 0.4,
+      neuroticism: 0.35
     },
     mode: 'Fight'
   },
   {
     name: 'ESTP',
     traits: {
-      openness: 0.65,
+      openness: 0.7,
       conscientiousness: 0.6,
       extraversion: 0.85,
-      agreeableness: 0.4,
+      agreeableness: 0.35,
       neuroticism: 0.5
     },
     mode: 'Fight'
@@ -26,18 +26,18 @@ export const MBTIProfiles = [
   {
     name: 'INTP',
     traits: {
-      openness: 0.45,
-      conscientiousness: 0.7,
+      openness: 0.4,
+      conscientiousness: 0.4,
       extraversion: 0.65,
-      agreeableness: 0.4,
-      neuroticism: 0.5
+      agreeableness: 0.35,
+      neuroticism: 0.3
     },
     mode: 'Fight'
   },
   {
     name: 'ISTP',
     traits: {
-      openness: 0.5,
+      openness: 0.45,
       conscientiousness: 0.65,
       extraversion: 0.6,
       agreeableness: 0.35,
@@ -48,9 +48,9 @@ export const MBTIProfiles = [
   {
     name: 'INTJ',
     traits: {
-      openness: 0.85,
+      openness: 0.65,
       conscientiousness: 0.8,
-      extraversion: 0.3,
+      extraversion: 0.4,
       agreeableness: 0.35,
       neuroticism: 0.4
     },
@@ -59,22 +59,22 @@ export const MBTIProfiles = [
   {
     name: 'ISTJ',
     traits: {
-      openness: 0.5,
-      conscientiousness: 0.9,
-      extraversion: 0.25,
-      agreeableness: 0.3,
-      neuroticism: 0.35
+      openness: 0.3,
+      conscientiousness: 0.65,
+      extraversion: 0.35,
+      agreeableness: 0.4,
+      neuroticism: 0.45
     },
     mode: 'Freeze'
   },
   {
     name: 'ENTJ',
     traits: {
-      openness: 0.4,
+      openness: 0.5,
       conscientiousness: 0.9,
-      extraversion: 0.75,
+      extraversion: 0.65,
       agreeableness: 0.35,
-      neuroticism: 0.25
+      neuroticism: 0.35
     },
     mode: 'Freeze'
   },
@@ -82,31 +82,31 @@ export const MBTIProfiles = [
     name: 'ESTJ',
     traits: {
       openness: 0.4,
-      conscientiousness: 0.95,
-      extraversion: 0.7,
+      conscientiousness: 0.8,
+      extraversion: 0.65,
       agreeableness: 0.35,
-      neuroticism: 0.2
+      neuroticism: 0.4
     },
     mode: 'Freeze'
   },
   {
     name: 'ISFJ',
     traits: {
-      openness: 0.6,
-      conscientiousness: 0.8,
-      extraversion: 0.4,
-      agreeableness: 0.85,
-      neuroticism: 0.4
+      openness: 0.4,
+      conscientiousness: 0.5,
+      extraversion: 0.35,
+      agreeableness: 0.75,
+      neuroticism: 0.45
     },
     mode: 'Fawn'
   },
   {
     name: 'INFJ',
     traits: {
-      openness: 0.85,
-      conscientiousness: 0.75,
-      extraversion: 0.35,
-      agreeableness: 0.8,
+      openness: 0.8,
+      conscientiousness: 0.6,
+      extraversion: 0.4,
+      agreeableness: 0.85,
       neuroticism: 0.5
     },
     mode: 'Fawn'
@@ -115,9 +115,9 @@ export const MBTIProfiles = [
     name: 'ESFJ',
     traits: {
       openness: 0.35,
-      conscientiousness: 0.8,
+      conscientiousness: 0.6,
       extraversion: 0.6,
-      agreeableness: 0.9,
+      agreeableness: 0.8,
       neuroticism: 0.35
     },
     mode: 'Fawn'
@@ -126,10 +126,10 @@ export const MBTIProfiles = [
     name: 'ENFJ',
     traits: {
       openness: 0.5,
-      conscientiousness: 0.85,
+      conscientiousness: 0.65,
       extraversion: 0.7,
       agreeableness: 0.9,
-      neuroticism: 0.3
+      neuroticism: 0.25
     },
     mode: 'Fawn'
   },
@@ -137,10 +137,10 @@ export const MBTIProfiles = [
     name: 'ESFP',
     traits: {
       openness: 0.65,
-      conscientiousness: 0.5,
-      extraversion: 0.7,
-      agreeableness: 0.7,
-      neuroticism: 0.45
+      conscientiousness: 0.55,
+      extraversion: 0.55,
+      agreeableness: 0.65,
+      neuroticism: 0.55
     },
     mode: 'Flight'
   },
@@ -149,9 +149,9 @@ export const MBTIProfiles = [
     traits: {
       openness: 0.9,
       conscientiousness: 0.55,
-      extraversion: 0.75,
-      agreeableness: 0.65,
-      neuroticism: 0.75
+      extraversion: 0.6,
+      agreeableness: 0.7,
+      neuroticism: 0.65
     },
     mode: 'Flight'
   },
@@ -170,10 +170,10 @@ export const MBTIProfiles = [
     name: 'INFP',
     traits: {
       openness: 0.45,
-      conscientiousness: 0.5,
+      conscientiousness: 0.35,
       extraversion: 0.3,
-      agreeableness: 0.6,
-      neuroticism: 0.85
+      agreeableness: 0.55,
+      neuroticism: 0.8
     },
     mode: 'Flight'
   }
@@ -184,7 +184,7 @@ const weights: Record<string, Record<string, number>> = {
   Fight: {
     openness: 1.2,           // High openness is crucial for Fight
     conscientiousness: 1.1,   // Lower conscientiousness to allow flexibility
-    extraversion: 0.6,        // High extraversion for assertiveness
+    extraversion: 1.6,        // High extraversion for assertiveness
     agreeableness: 0.8,       // Lower agreeableness for competitiveness
     neuroticism: 0.7          // Moderate neuroticism for adaptability
   },
@@ -193,11 +193,11 @@ const weights: Record<string, Record<string, number>> = {
     conscientiousness: 0.5,   // Moderate conscientiousness
     extraversion: 0.8,        // High extraversion for resourcefulness
     agreeableness: 1,         // High agreeableness for social alignment
-    neuroticism: 2            // High neuroticism for awareness of risks
+    neuroticism: 1.6           // High neuroticism for awareness of risks
   },
   Freeze: {
     openness: 0.5,            // Lower openness, indicating caution
-    conscientiousness: 1.2,   // High conscientiousness for control and structure
+    conscientiousness: 1.5,   // High conscientiousness for control and structure
     extraversion: 1.5,        // Lower extraversion, favoring introspection
     agreeableness: 0.4,       // Lower agreeableness, focusing on resilience
     neuroticism: 0.5          // Moderate neuroticism for stability
@@ -213,17 +213,17 @@ const weights: Record<string, Record<string, number>> = {
 export const determinePrimary4FType = (profile: any) => {
   const fourFIdealProfiles = {
     Fight: {
-      openness: 0.7375,
+      openness: 0.6375,
       conscientiousness: 0.6,
       extraversion: 0.8,
-      agreeableness: 0.3875,
-      neuroticism: 0.4625
+      agreeableness: 0.4875,
+      neuroticism: 0.3625
     },
     Flight: {
-      openness: 0.8125,
+      openness: 0.6125,
       conscientiousness: 0.5375,
-      extraversion: 0.6,
-      agreeableness: 0.7375,
+      extraversion: 0.65,
+      agreeableness: 0.6375,
       neuroticism: 0.775
     },
     Freeze: {
@@ -281,8 +281,11 @@ export const normalizeProfile = (profile: { [trait: string]: number }) => {
   return normalizedProfile
 }
 
-export const matchMBTIType = (profile: any, primary4F: any) => {
-  const candidates = MBTIProfiles.filter(p => p.mode === primary4F)
+export const matchMBTIType = (profile: any, primary4F: any, filter: boolean = true) => {
+  let candidates = MBTIProfiles
+  if(filter) {
+  candidates = candidates.filter(p => p.mode === primary4F)
+  }
   let closestType = ''
   let closestDistance = Infinity
 

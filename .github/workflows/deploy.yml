@@ -24,11 +24,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build the project with environment variable
+      - name: Set Git identity to your account
+        run: |
+          git config --global user.email "rsk.rook@gmail.com"
+          git config --global user.name "hroac"
+
+      - name: Build the project
         env:
           REACT_APP_GH_KEY: ${{ secrets.REACT_APP_GH_KEY }}
-        run: CI=false npm run build
-        
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         run: npx gh-pages -d build

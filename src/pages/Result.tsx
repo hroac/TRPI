@@ -26,16 +26,17 @@ const ResultsPage: React.FC = () => {
     const fetchBinData = async () => {
       try {
         const userId = params?.userId || guid();
-        const ghPages = new GhPagesFS({ owner: 'hroac',
-          repo: 'TRPI',
-          branch: 'gh-data',
-          token: process.env.REACT_APP_GH_KEY?.toString() || ''})
-
-      
+       
 
         if(userId) {
           const local = localStorage.getItem(userId) || '';
           if(!local) {
+            const ghPages = new GhPagesFS({ owner: 'hroac',
+              repo: 'TRPI',
+              branch: 'gh-data',
+              token: process.env.REACT_APP_GH_KEY?.toString() || ''})
+    
+          
             const data = await ghPages.readJson(`${userId}.json`)
             setBin(data)
 

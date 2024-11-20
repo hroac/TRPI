@@ -1,11 +1,11 @@
 {
-  "type": "INFJ",
-  "primary4FType": "Fawn",
+  "type": "INFP",
+  "primary4FType": "Flight",
   "bigFiveResponses": {
-    "openness": 0.7720000000000001,
-    "conscientiousness": 0.58925,
-    "extraversion": 0.6625,
-    "agreeableness": 0.9924999999999999,
-    "neuroticism": 0.38249999999999995
+    "openness": 0.45,
+    "conscientiousness": 0.56875,
+    "extraversion": 0.3775,
+    "agreeableness": 0.78,
+    "neuroticism": 0.7575000000000001
   }
 }

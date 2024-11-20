@@ -29,10 +29,20 @@ jobs:
           git config --global user.email "rsk.rook@gmail.com"
           git config --global user.name "hroac"
 
+      - name: Debug Git Configuration
+        run: cat .git/config
+
+      - name: Fix Remote URL
+        run: git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
       - name: Build the project
         env:
           REACT_APP_GH_KEY: ${{ secrets.REACT_APP_GH_KEY }}
-        run: CI=false npm run build
+        run: |
+          echo "REACT_APP_GH_KEY=${{ secrets.REACT_APP_GH_KEY }}" > .env
+          CI=false npm run build
 
       - name: Deploy to GitHub Pages
-        run: npx gh-pages -d build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx gh-pages -d build -r https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git

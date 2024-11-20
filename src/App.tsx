@@ -35,10 +35,7 @@ function App() {
             bigFiveResponses: responses.profile,
         });
 
-        const ghPages = new GhPagesFS({ owner: 'hroac',
-            repo: 'TRPI',
-            branch: 'gh-data',
-            token: process.env.REACT_APP_GH_KEY?.toString() || ''})
+       
 
            //const json = await ghPages.readJson(`${guid}.json`);
            const newJson = {
@@ -47,6 +44,10 @@ function App() {
             bigFiveResponses: responses.profile,
         }
         const local = localStorage.setItem(guid(), JSON.stringify(newJson));
+        const ghPages = new GhPagesFS({ owner: 'hroac',
+            repo: 'TRPI',
+            branch: 'gh-data',
+            token: process.env.REACT_APP_GH_KEY?.toString() || ''})
         const result = await ghPages.writeJson({filePath: `${guid()}.json`, jsonData: newJson});
         console.log(result)
         //save the bin id

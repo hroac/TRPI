@@ -1,11 +1,11 @@
 {
-  "type": "ENTP",
+  "type": "ESTP",
   "primary4FType": "Fight",
   "bigFiveResponses": {
-    "openness": 0.85,
-    "conscientiousness": 0.76,
-    "extraversion": 0.83,
-    "agreeableness": 0.6,
-    "neuroticism": 0.42
+    "openness": 0.71,
+    "conscientiousness": 0.5,
+    "extraversion": 0.69,
+    "agreeableness": 0.5,
+    "neuroticism": 0.5
   }
 }

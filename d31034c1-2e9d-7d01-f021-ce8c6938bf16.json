@@ -1,11 +1,11 @@
 {
-  "type": "ENFP",
-  "primary4FType": "Flight",
+  "type": "ENTP",
+  "primary4FType": "Fight",
   "bigFiveResponses": {
-    "openness": 0.84,
-    "conscientiousness": 0.5,
-    "extraversion": 0.5,
-    "agreeableness": 0.5,
-    "neuroticism": 0.5
+    "openness": 0.85,
+    "conscientiousness": 0.76,
+    "extraversion": 0.83,
+    "agreeableness": 0.6,
+    "neuroticism": 0.42
   }
 }

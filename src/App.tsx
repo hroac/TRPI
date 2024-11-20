@@ -43,7 +43,7 @@ function App() {
             primary4FType: responses.primary4F,
             bigFiveResponses: responses.profile,
         }
-        const local = localStorage.setItem(guid(), JSON.stringify(newJson));
+        //const local = localStorage.setItem(guid(), JSON.stringify(newJson));
         const ghPages = new GhPagesFS({ owner: 'hroac',
             repo: 'TRPI',
             branch: 'gh-data',

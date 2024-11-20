@@ -74,7 +74,12 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
     const fourF = determinePrimary4FType(bigFiveData);
     const type = calculateMbtiType(bigFiveData, fourF);
     setMbtiType(type);
-     
+    const newJson = {
+      type: type,
+      primary4FType: fourF,
+      bigFiveResponses: bigFiveData,
+  }
+  localStorage.setItem(guid(), JSON.stringify(newJson));
     navigate(`/result/${guid()}`);
     await onComplete({profile: bigFiveData, mbtiType: type, primary4F: fourF});
   };

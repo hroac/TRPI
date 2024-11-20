@@ -162,7 +162,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const primary4F = determinePrimary4FType(weightedScores);
     const mbtiType = matchMBTIType(weightedScores, primary4F);
 
-    
+    const newJson = {
+      type: mbtiType,
+      primary4FType: primary4F,
+      bigFiveResponses: weightedScores,
+  }
+  localStorage.setItem(guid(), JSON.stringify(newJson));
     navigate(`/result/${guid()}`);
     await onComplete({ primary4F, mbtiType, profile: weightedScores });
   };

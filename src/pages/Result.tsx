@@ -95,7 +95,7 @@ const ResultsPage: React.FC = () => {
   }
 
   const { type, bigFiveResponses, primary4FType } = bin;
-  const mbtiType = type && typesData.find((t: any) => t.type === type);
+  //const mbtiType = type && typesData.find((t: any) => t.type === type);
 
   const data = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],

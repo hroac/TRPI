@@ -42,6 +42,20 @@ export class GhPagesFS {
     this.headers = { Authorization: `Bearer ${this.token}`, 'Content-Type': 'application/json' };
   }
 
+   /**
+   * Generate a SHA-1 hash for the base64-encoded content.
+   * @param content - The file content (plain text).
+   * @returns A Promise resolving to the SHA-1 hash.
+   */
+   private async generateSha(content: string): Promise<string> {
+    const base64Content = btoa(unescape(encodeURIComponent(content)));
+    const encoder = new TextEncoder();
+    const data = encoder.encode(base64Content);
+    const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+    return Array.from(new Uint8Array(hashBuffer))
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
+  }
   /**
    * Reads a JSON file from the gh-pages branch.
    * If the file does not exist, creates it with an empty object.
@@ -74,39 +88,51 @@ export class GhPagesFS {
   public async writeJson(options: WriteJsonOptions): Promise<any> {
     const { filePath, jsonData, commitMessage = 'Update JSON file via gh-pages-fs' } = options;
     const contentEncoded = btoa(JSON.stringify(jsonData, null, 2));
-
-    let sha: string | null = null;
-    const fileUrl = `${this.apiBaseUrl}${filePath}?ref=${this.branch}`;
-
-    try {
-      const response: AxiosResponse = await axios.get(fileUrl, { headers: this.headers });
-      const data: GitHubFileContent = response.data;
-      sha = data.sha;
-    } catch (error: any) {
-      // If the file does not exist, GitHub will create it
-      if (!(error.response && error.response.status === 404)) {
-        throw new Error(`Error retrieving file SHA: ${error.message}`);
+    const url = `${this.apiBaseUrl}${filePath}`;
+    let retries = 3;
+  
+    while (retries > 0) {
+      let sha: string | null = null;
+  
+      // Fetch the latest SHA of the file if it exists
+      try {
+        const response: AxiosResponse = await axios.get(`${url}?ref=${this.branch}`, { headers: this.headers });
+        const data: GitHubFileContent = response.data;
+        sha = data.sha;
+      } catch (error: any) {
+        if (error.response && error.response.status !== 404) {
+          throw new Error(`Error fetching file metadata: ${error.message}`);
+        }
+      }
+  
+      const payload: any = {
+        message: commitMessage,
+        content: contentEncoded,
+        branch: this.branch,
+      };
+  
+      if (sha) {
+        payload.sha = sha;
+      }
+  
+      // Attempt to update the file
+      try {
+        const response: AxiosResponse = await axios.put(url, payload, { headers: this.headers });
+        return response.data;
+      } catch (error: any) {
+        // Handle 409 Conflict error
+        if (error.response && error.response.status === 409) {
+          console.warn(`SHA mismatch detected. Retrying... (${4 - retries}/3)`);
+          retries -= 1;
+          continue;
+        }
+        throw new Error(`Error writing file: ${error.message}`);
       }
     }
-
-    const payload: any = {
-      message: commitMessage,
-      content: contentEncoded,
-      branch: this.branch,
-    };
-
-    if (sha) {
-      payload.sha = sha;
-    }
-
-    try {
-      const url = `${this.apiBaseUrl}${filePath}`;
-      const response: AxiosResponse = await axios.put(url, payload, { headers: this.headers });
-      return response.data;
-    } catch (error: any) {
-      throw new Error(`Error writing file: ${error.message}`);
-    }
+  
+    throw new Error(`Failed to write file after multiple attempts due to SHA mismatch.`);
   }
+  
 }
 
 export default GhPagesFS;

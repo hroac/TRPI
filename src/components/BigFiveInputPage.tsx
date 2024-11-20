@@ -17,6 +17,7 @@ import NeuroticismIcon from '@mui/icons-material/MoodBad';
 
 import { matchMBTIType as calculateMbtiType, determinePrimary4FType } from '../utils/mbtiMapping';
 import { useNavigate } from 'react-router-dom';
+import { guid } from '../utils/guid';
 
 type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
 
@@ -73,8 +74,9 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
     const fourF = determinePrimary4FType(bigFiveData);
     const type = calculateMbtiType(bigFiveData, fourF);
     setMbtiType(type);
-    const binId = await onComplete({profile: bigFiveData, mbtiType: type, primary4F: fourF});
-    navigate(`/result/${binId}`);
+     
+    navigate(`/result/${guid()}`);
+    await onComplete({profile: bigFiveData, mbtiType: type, primary4F: fourF});
   };
 
   return (

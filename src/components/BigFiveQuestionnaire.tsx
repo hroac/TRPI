@@ -31,6 +31,7 @@ import {
   SwitchAccount,
   ShuffleOn
 } from '@mui/icons-material';
+import { guid } from '../utils/guid';
 
 const statements = [
   { text: 'I am open to exploring new ideas and perspectives.', trait: 'openness', weight: 1.2 },
@@ -161,8 +162,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const primary4F = determinePrimary4FType(weightedScores);
     const mbtiType = matchMBTIType(weightedScores, primary4F);
 
-    const binId = await onComplete({ primary4F, mbtiType, profile: weightedScores });
-    navigate(`/result/${binId}`);
+    
+    navigate(`/result/${guid()}`);
+    await onComplete({ primary4F, mbtiType, profile: weightedScores });
   };
 
   const progress = ((currentStage + 1) / stages.length) * 100;

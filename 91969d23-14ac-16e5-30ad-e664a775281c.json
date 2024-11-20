@@ -1,1 +1,11 @@
-{}
+{
+  "type": "INFJ",
+  "primary4FType": "Fawn",
+  "bigFiveResponses": {
+    "openness": 0.81,
+    "conscientiousness": 0.5,
+    "extraversion": 0.5,
+    "agreeableness": 0.77,
+    "neuroticism": 0.5
+  }
+}

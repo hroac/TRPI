@@ -1,10 +1,10 @@
 {
-  "type": "ENTP",
-  "primary4FType": "Fight",
+  "type": "ESFP",
+  "primary4FType": "Flight",
   "bigFiveResponses": {
-    "openness": 0.84,
+    "openness": 0.5,
     "conscientiousness": 0.5,
-    "extraversion": 0.84,
+    "extraversion": 0.5,
     "agreeableness": 0.5,
     "neuroticism": 0.5
   }

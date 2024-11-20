@@ -6,8 +6,6 @@ import JsonBinApi from '../utils/saveResults';
 import AboutPage from './About';
 import { typesData } from '../utils/typesData';
 import { useParams } from 'react-router-dom';
-import { guid } from '../utils/guid';
-import GhPagesFS from '../utils/GhPagesFS';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -25,21 +23,11 @@ const ResultsPage: React.FC = () => {
   useEffect(() => {
     const fetchBinData = async () => {
       try {
-        const binId = params?.userId || guid() || ''; // Fetch binId from localStorage
-        const userId = params?.userId || guid();
-        const ghPages = new GhPagesFS({ owner: 'hroac',
-          repo: 'TRPI',
-          branch: 'gh-data',
-          token: process.env.REACT_APP_GH_KEY?.toString() || ''})
+        const binId = params?.binId || localStorage.getItem('binId') || ''; // Fetch binId from localStorage
 
-       /*  if (binId) {
-          //const binData = await JsonBinApi.getBinById(binId); // Retrieve bin data by binId
-          //setBin(binData); // Set bin data to state
-        } */
-
-        if(userId) {
-          const data = await ghPages.readJson(`${guid()}.json`)
-          setBin(data)
+        if (binId) {
+          const binData = await JsonBinApi.getBinById(binId); // Retrieve bin data by binId
+          setBin(binData); // Set bin data to state
         }
       } catch (error) {
         console.error("Error fetching bin data:", error);

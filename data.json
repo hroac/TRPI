@@ -1,1 +1,13 @@
-{}
+{
+  "30e014de-55da-2bae-1da4-9bf12717b2cf": {
+    "type": "ESFP",
+    "primary4FType": "Flight",
+    "bigFiveResponses": {
+      "openness": 0.5,
+      "conscientiousness": 0.5,
+      "extraversion": 0.5,
+      "agreeableness": 0.5,
+      "neuroticism": 0.5
+    }
+  }
+}

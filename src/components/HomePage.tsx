@@ -76,7 +76,7 @@ const Home = () => {
         <Typography variant="h5" gutterBottom>
           TRPI Test Results - {bin.primary4FType} - {bin.type}
         </Typography>
-        <Box my={3}>
+        <Box  display="flex" justifyContent="center" my={3}>
           <Bar data={data} options={options} />
         </Box>
       </Box>

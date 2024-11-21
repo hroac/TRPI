@@ -10,99 +10,16 @@ import { Bar } from 'react-chartjs-2';
 
 const Home = () => {
   const [total, setTotal] = useState<number>(0)
-  const [bins, setBins] = useState<Array<any>>([])
   const [slides, setSlides] = useState<Array<any>>([]); // State for slides
-  
   
   const getBins = async () => {
     const collection = await JsonBinApi.getBinsInCollection();
-      const bins =  []
-      setTotal(collection.length);
-
-            for(const key of collection) { 
-               const bin = await JsonBinApi.getBinById(key.record);
-               bins.push(bin);
-               setBins(bins)
-
-            }
-  }
-
-  useEffect(() => {
-    if(!total) {
-    getBins();
-      
-    }
-
-   
-  })
-
-  useEffect(() => {
-    if (bins.length > 0) {
-      const generatedSlides = bins.map((bin: any) => {
-        const options = {
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: 'Big Five Personality Scores' },
-          },
-          scales: { y: { beginAtZero: true, max: 100 } },
-        };
-        const data = {
-          labels: [
-            'Openness',
-            'Conscientiousness',
-            'Extraversion',
-            'Agreeableness',
-            'Neuroticism',
-          ],
-          datasets: [
-            {
-              label: 'Big Five Scores',
-              data: [
-                bin.bigFiveResponses.openness * 100,
-                bin.bigFiveResponses.conscientiousness * 100,
-                bin.bigFiveResponses.extraversion * 100,
-                bin.bigFiveResponses.agreeableness * 100,
-                bin.bigFiveResponses.neuroticism * 100,
-              ],
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(54, 162, 235, 0.6)',
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(153, 102, 255, 0.6)',
-                'rgba(255, 99, 132, 0.6)',
-              ],
-              borderColor: [
-                'rgba(75, 192, 192, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 99, 132, 1)',
-              ],
-              borderWidth: 1,
-            },
-          ],
-        };
-        return {
-          content: (
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="h5" gutterBottom>
-                TRPI Test Results - {bin.primary4FType} - {bin.type}
-              </Typography>
-              <Box display="flex" justifyContent="center" my={3}>
-                <Bar data={data} options={options} />
-              </Box>
-            </Box>
-          ),
-        };
-      });
-
-      setSlides(generatedSlides); // Update slides state
-    }
-  }, [bins]);
-
-  if(total && !slides.length) {
-   bins.forEach((bin: any) => {
+    const bins: any[] = [];
+    setTotal(collection.length);
+  
+    for (const key of collection) {
+      const bin = await JsonBinApi.getBinById(key.record);
+  
       const options = {
         responsive: true,
         plugins: {
@@ -111,8 +28,15 @@ const Home = () => {
         },
         scales: { y: { beginAtZero: true, max: 100 } },
       };
+  
       const data = {
-        labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
+        labels: [
+          'Openness',
+          'Conscientiousness',
+          'Extraversion',
+          'Agreeableness',
+          'Neuroticism',
+        ],
         datasets: [
           {
             label: 'Big Five Scores',
@@ -141,18 +65,36 @@ const Home = () => {
           },
         ],
       };
-      slides.push({content:(
-        <Box sx={{textAlign: 'center'}}>
-          <Typography variant="h5" gutterBottom>
-            TRPI Test Results - {bin.primary4FType} - {bin.type}
-          </Typography>
-          <Box  display="flex" justifyContent="center" my={3}>
-            <Bar data={data} options={options} />
-          </Box>
-        </Box>
-      )})
-    })
-  }
+  
+      // Append the new slide content to the existing slides
+      setSlides((prevSlides: any[]) => [
+        ...prevSlides,
+        {
+          content: (
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography variant="h5" gutterBottom>
+                TRPI Test Results - {bin.primary4FType} - {bin.type}
+              </Typography>
+              <Box display="flex" justifyContent="center" my={3}>
+                <Bar data={data} options={options} />
+              </Box>
+            </Box>
+          ),
+        },
+      ]);
+    }
+  };
+  
+  useEffect(() => {
+    if(!total) {
+    getBins();
+      
+    }
+
+   
+  })
+
+ 
 
   return (
     <Container sx={{marginTop: '64px'}}>

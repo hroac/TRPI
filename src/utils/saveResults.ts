@@ -66,6 +66,7 @@ class JsonBinApi {
                 headers: {
                     'X-Master-Key': API_KEY,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
             });
 

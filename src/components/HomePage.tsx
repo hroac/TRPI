@@ -5,40 +5,84 @@ import Carousel from '../components/Carousel';
 import Matrix from './Matrix';
 import { Link } from 'react-router-dom';
 import JsonBinApi from '../utils/saveResults';
-const slides = [
-    {
-      title: "TRAUMA SHAPES YOU BUT IT DOES NOT DEFINE YOU.",
-      description: "Discover your strengths beyond past experiences with TRPI."
-    },
-    {
-      title: "THE JOURNEY TO SELF DISCOVERY BEGINS WITHIN.",
-      description: "TRPI helps you explore your true personality, free from mistypes."
-    },
-    {
-      title: "YOUR PERSONALITY IS YOUR FOUNDATION.",
-      description: "Uncover the layers of who you are, not just who you've become."
-    },
-    {
-      title: "HEALING IS NOT LINEAR.",
-      description: "Discover how the TRPI framework integrates the 4F trauma responses for clarity."
-    },
-    {
-      title: "KNOW YOURSELF AND FIND THE PATH FORWARD.",
-      description: "Let TRPI’s insights guide you toward a future defined by self-awareness."
-    }
-  ];
+import { Bar } from 'react-chartjs-2';
+
 
 const Home = () => {
   const [total, setTotal] = useState<number>(0)
+  const [bins, setBins] = useState<Array<any>>([])
   
-  const getTotal = async () => {
+  const getBins = async () => {
     const collection = await JsonBinApi.getBinsInCollection();
-    return collection.length;
+      const bins =  []
+      setTotal(collection.length);
+
+            for(const key of collection) { 
+               const bin = await JsonBinApi.getBinById(key.record);
+               bins.push(bin);
+               setBins(bins)
+
+            }
   }
 
   useEffect(() => {
-    getTotal().then((t) => setTotal(t));
+    if(!total) {
+    getBins();
+      
+    }
   })
+
+  const slides = total ? bins.map((bin: any) => {
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: 'Big Five Personality Scores' },
+      },
+      scales: { y: { beginAtZero: true, max: 100 } },
+    };
+    const data = {
+      labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
+      datasets: [
+        {
+          label: 'Big Five Scores',
+          data: [
+            bin.bigFiveResponses.openness * 100,
+            bin.bigFiveResponses.conscientiousness * 100,
+            bin.bigFiveResponses.extraversion * 100,
+            bin.bigFiveResponses.agreeableness * 100,
+            bin.bigFiveResponses.neuroticism * 100,
+          ],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 99, 132, 0.6)',
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 99, 132, 1)',
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+    return {content:(
+      <Box sx={{textAlign: 'center'}}>
+        <Typography variant="h5" gutterBottom>
+          TRPI Test Results - {bin.primary4FType} - {bin.type}
+        </Typography>
+        <Box my={3}>
+          <Bar data={data} options={options} />
+        </Box>
+      </Box>
+    )}
+  }) 
+  : [{content: (<div/>)}]
   return (
     <Container sx={{marginTop: '64px'}}>
       {/* Hero Section */}
@@ -112,6 +156,15 @@ const Home = () => {
         <Matrix/>
       </Box>
 
+      <Grid container spacing={1} sx={{ 
+          mt: 6, 
+          px: 3, 
+          justifyContent: 'center' 
+        }}>
+
+      <Carousel slides={slides}/>
+        
+      </Grid>
       {/* Benefits Section */}
       <Grid 
         container 

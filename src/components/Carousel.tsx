@@ -1,16 +1,15 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Box, Container, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import 'swiper/css';
 
 interface Slide {
-  title: string;
-  description: string;
+  content: React.ReactNode; // Allows passing any React component or JSX
 }
 
 interface CarouselProps {
   slides: Slide[];
-  settings?: any;  // Use `any` for flexibility; alternatively, define a strict type for settings
+  settings?: any; // Use `any` for flexibility; alternatively, define a strict type for settings
 }
 
 // Default Swiper settings
@@ -31,19 +30,7 @@ const Carousel: React.FC<CarouselProps> = ({ slides, settings = defaultSettings 
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             <Box sx={{ padding: '20px', backgroundColor: 'background', borderRadius: '8px' }}>
-            <Box>
-          <Box style={{ marginBottom: '100px' }} />
-            <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-              <Typography variant="h1" component="h2" gutterBottom>
-                  {slide.title}
-              </Typography>
-            </Container>
-            <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-              <Typography variant="h3" component="h2" gutterBottom>
-                  {slide.description}
-              </Typography>
-            </Container>
-          </Box>
+              {slide.content}
             </Box>
           </SwiperSlide>
         ))}

@@ -28,7 +28,7 @@ const Home: React.FC = () => {
   return (
     <Container sx={{ marginTop: '64px', padding: { xs: '10px', md: '20px' } }}>
       {/* Carousel */}
-      <Carousel slides={slides} />
+      
 
       {/* Main Content */}
       <Box>

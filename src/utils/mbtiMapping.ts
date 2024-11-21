@@ -140,7 +140,7 @@ export const MBTIProfiles = [
       conscientiousness: 0.55,
       extraversion: 0.55,
       agreeableness: 0.65,
-      neuroticism: 0.55
+      neuroticism: 0.525
     },
     mode: 'Flight'
   },
@@ -189,18 +189,18 @@ const weights: Record<string, Record<string, number>> = {
     neuroticism: 0.7          // Moderate neuroticism for adaptability
   },
   Flight: {
-    openness: 1,              // High openness for adaptability
+    openness: 0.9,              // High openness for adaptability
     conscientiousness: 0.5,   // Moderate conscientiousness
-    extraversion: 0.8,        // High extraversion for resourcefulness
-    agreeableness: 1,         // High agreeableness for social alignment
+    extraversion: 1.8,        // High extraversion for resourcefulness
+    agreeableness: 0.8,         // High agreeableness for social alignment
     neuroticism: 1.6           // High neuroticism for awareness of risks
   },
   Freeze: {
     openness: 0.5,            // Lower openness, indicating caution
     conscientiousness: 1.5,   // High conscientiousness for control and structure
-    extraversion: 1.5,        // Lower extraversion, favoring introspection
+    extraversion: 0.5,        // Lower extraversion, favoring introspection
     agreeableness: 0.4,       // Lower agreeableness, focusing on resilience
-    neuroticism: 0.5          // Moderate neuroticism for stability
+    neuroticism: 1.5          // Moderate neuroticism for stability
   },
   Fawn: {
     openness: 0.7,            // Moderate openness
@@ -282,10 +282,32 @@ export const normalizeProfile = (profile: { [trait: string]: number }) => {
 }
 
 export const matchMBTIType = (profile: any, primary4F: any, filter: boolean = true) => {
-  let candidates = MBTIProfiles
-  if(filter) {
-  candidates = candidates.filter(p => p.mode === primary4F)
+  let candidates = MBTIProfiles;
+
+  if (filter) {
+    candidates = candidates.filter(p => p.mode === primary4F);
   }
+/* 
+  // Apply a bias to the weights based on extraversion
+  candidates = candidates.map(candidate => {
+    const isIntroverted = candidate.name.startsWith('I');
+    const isExtraverted = candidate.name.startsWith('E');
+
+    // Dynamically adjust weight for extraversion bias
+    const extraversionBias = isIntroverted
+      ? 1 - profile.extraversion // Higher weight for introverted types if extraversion is low
+      : 1 + profile.extraversion; // Higher weight for extraverted types if extraversion is high
+
+    return {
+      ...candidate,
+      weightedTraits: {
+        ...candidate.traits,
+        extraversion: candidate.traits.extraversion * extraversionBias // Scale extraversion trait dynamically
+      }
+    };
+  });
+ */
+
   let closestType = ''
   let closestDistance = Infinity
 

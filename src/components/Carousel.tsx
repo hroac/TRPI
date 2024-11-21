@@ -2,7 +2,8 @@ import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Box } from '@mui/material';
 import 'swiper/css';
-
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 interface Slide {
   content: React.ReactNode; // Allows passing any React component or JSX
 }

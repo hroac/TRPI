@@ -1,1 +1,11 @@
-{}
+{
+  "type": "ENFP",
+  "primary4FType": "Flight",
+  "bigFiveResponses": {
+    "openness": 0.831,
+    "conscientiousness": 0.50225,
+    "extraversion": 0.6074999999999999,
+    "agreeableness": 0.4075,
+    "neuroticism": 0.8275
+  }
+}

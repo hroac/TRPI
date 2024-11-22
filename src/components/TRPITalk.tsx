@@ -1,16 +1,51 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Box, Typography, TextareaAutosize, Button, Paper } from "@mui/material";
+import { guid } from "../utils/guid";
+import GhPagesFS from "../utils/GhPagesFS";
 
 const TrpiTalk: React.FC = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const chatBoxRef = useRef<HTMLDivElement>(null);
+  const [bin, setBin] = useState<any>({}); // State to store bin data
+  
+  useEffect(() => {
+    const fetchBinData = async () => {
+      try {
+        const userId = guid();
+       
+
+        if(userId) {
+          const local = localStorage.getItem(userId) || '';
+          if(!local) {
+            const ghPages = new GhPagesFS({ owner: 'hroac',
+              repo: 'TRPI',
+              branch: 'gh-data'})
+    
+          
+            const data = await ghPages.readJson(`${userId}.json`)
+            setBin(data)
+
+          } else {
+            const parsed = JSON.parse(local)
+            setBin(parsed)
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching bin data:", error);
+      } 
+    };
+
+    fetchBinData();
+  }, []);
 
   const tokenParts = [
     "c2stcHJvai0wRmZva2tISklYTzFTTm5ncWl5dk9qWXVIbWI0Y2V0dlNZTXdUZ3BoVFhhNkp1V0NzMXVUYmRlMHpRbUVldUE0SHc0TE1ucQ==",
     "RmY5VDNCbGJrRkptaWFKaFdWRjZLdGsxOC1PVG9YVTdvcS1kYWc3LQ==",
     "MkZBdnhvRGliVjZPM1Z4Q29ZejU2dzJ1QUdPOExsUEJTOHVvRFFNQnl5cjRB"
+    
 ];
+const { type, bigFiveResponses, primary4FType } = bin;
   const getResp = async (input: string): Promise<string> => {
     try {
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -173,7 +208,14 @@ Identifies frozen functions and shows how to re-engage them.
 
 3. Typology Refinement:
 
-Resolves mistypes by explaining shifts between Id, Ego, and Superego, offering a dynamic alternative to static personality models.` },
+Resolves mistypes by explaining shifts between Id, Ego, and Superego, offering a dynamic alternative to static personality models.
+ ${
+  Object.keys(bin).length ? `
+4. user scores:
+
+the user scored the following big five scores ${JSON.stringify(bigFiveResponses)} the following mbti type was assigned to this profile ${type} - ${primary4FType}` : ''
+ }
+` },
             ...messages,
             { role: "user", content: input },
           ],
@@ -238,7 +280,7 @@ Resolves mistypes by explaining shifts between Id, Ego, and Superego, offering a
           fontFamily: "Roboto, sans-serif",
         }}
       >
-        TRPI Talk - Discover Your Personality
+        TRPI - Discover Your Personality
       </Typography>
       <Paper
         ref={chatBoxRef}
@@ -302,7 +344,7 @@ Resolves mistypes by explaining shifts between Id, Ego, and Superego, offering a
       <Button
         onClick={handleSubmit}
         sx={{
-          backgroundColor: "#4CAF50",
+          backgroundColor: "primary",
           color: "white",
           padding: "12px 24px",
           borderRadius: "10px",
@@ -311,10 +353,10 @@ Resolves mistypes by explaining shifts between Id, Ego, and Superego, offering a
           fontWeight: "bold",
           marginTop: 2,
           "&:hover": {
-            backgroundColor: "#45a049",
+            backgroundColor: "primary",
           },
           "&:active": {
-            backgroundColor: "#3e8e41",
+            backgroundColor: "secondary",
           },
         }}
       >

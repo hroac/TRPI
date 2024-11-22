@@ -80,8 +80,9 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
       bigFiveResponses: bigFiveData,
   }
   localStorage.setItem(guid(), JSON.stringify(newJson));
-    navigate(`/result/${guid()}`);
-    await onComplete({profile: bigFiveData, mbtiType: type, primary4F: fourF});
+    const binId = await onComplete({profile: bigFiveData, mbtiType: type, primary4F: fourF});
+    navigate(`/result/${binId}`);
+
   };
 
   return (

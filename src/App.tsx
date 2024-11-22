@@ -25,6 +25,7 @@ import TrpiTalk from './components/TRPITalk';
 function App() {
     console.log(process.env)
     // Load saved results and userId from local storage on app initialization
+    const [binId, setBinId] = useState<string>(localStorage.getItem('binId')?.toString() || '')
    const userId = guid();
     const handleComplete = async (responses: any) => {
         console.log(responses);
@@ -35,27 +36,26 @@ function App() {
             primary4FType: responses.primary4F,
             bigFiveResponses: responses.profile,
         });
-
-       
+        setBinId(binId)
 
            //const json = await ghPages.readJson(`${guid}.json`);
-           const newJson = {
+         /*   const newJson = {
             type: responses.mbtiType,
             primary4FType: responses.primary4F,
             bigFiveResponses: responses.profile,
-        }
+        } */
         //const local = localStorage.setItem(guid(), JSON.stringify(newJson));
-        const ghPages = new GhPagesFS({ owner: 'hroac',
+        /* const ghPages = new GhPagesFS({ owner: 'hroac',
             repo: 'TRPI',
             branch: 'gh-data',
             token: process.env.REACT_APP_GH_KEY?.toString() || ''})
         const result = await ghPages.writeJson({filePath: `${guid()}.json`, jsonData: newJson});
-        console.log(result)
+        console.log(result) */
         //save the bin id
        
-        //localStorage.setItem('binId', binId); // Store the bin ID under 'userId'
-        //console.log("Saved bin ID to local storage:", binId);
-    return userId;
+        localStorage.setItem('binId', binId); // Store the bin ID under 'userId'
+        console.log("Saved bin ID to local storage:", binId);
+    return binId;
 
     };
 
@@ -71,7 +71,7 @@ function App() {
                         { label: 'Home', path: '/' },
                         { label: 'About', path: '/about' },
                         { label: 'Take the test', path: '/test' },
-                        { label: 'Result', path: `/result/${userId || ''}` },
+                        { label: 'Result', path: `/result/${binId || ''}` },
                         { label: 'Big Five Input', path: '/input' },
                         {label:  'ChatGPT', path: '/talk'},
                         { label: 'Contact', path: '/contact' }
@@ -82,7 +82,7 @@ function App() {
                     <Routes>
                         <Route path='/' element={<Homepage />} />
                         <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />
-                        <Route path="/result/:userId" element={<ResultsPage />} />
+                        <Route path="/result/:binId" element={<ResultsPage binId={binId}/>} />
                         <Route path="/input" element={<BigFiveInputPage onComplete={handleComplete} />} />
                         <Route path="/about/:type" element={<AboutPage />} />
                         <Route path="/about" element={<TRPIExplanation />} />

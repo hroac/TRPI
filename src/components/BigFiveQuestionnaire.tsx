@@ -168,8 +168,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       bigFiveResponses: weightedScores,
   }
   localStorage.setItem(guid(), JSON.stringify(newJson));
-    navigate(`/result/${guid()}`);
-    await onComplete({ primary4F, mbtiType, profile: weightedScores });
+   const binId = await onComplete({ primary4F, mbtiType, profile: weightedScores });
+   navigate(`/result/${binId}`);
+
   };
 
   const progress = ((currentStage + 1) / stages.length) * 100;

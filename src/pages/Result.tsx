@@ -10,14 +10,17 @@ import { guid } from '../utils/guid';
 import GhPagesFS from '../utils/GhPagesFS';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
+/* 
 interface ResultsProps {
   mbtiType: string;
   bigFiveResponses: { [trait: string]: number };
   primary4FType: string;
-}
+} */
 
-const ResultsPage: React.FC = () => {
+interface ResultsProps {
+  binId: string;
+}
+const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
   const [bin, setBin] = useState<any>(null); // State to store bin data
   const [loading, setLoading] = useState(true); // State to manage loading status
   const params = useParams();
@@ -25,26 +28,30 @@ const ResultsPage: React.FC = () => {
   useEffect(() => {
     const fetchBinData = async () => {
       try {
-        const userId = params?.userId || guid();
-       
+        //const userId = params?.userId || guid();
+        const userId = guid();
+        const local = localStorage.getItem(userId) || '';
+        if(!local || params?.binId) {
+          const bin = params?.binId || binId || ''; // Fetch binId from localStorage
 
-        if(userId) {
-          const local = localStorage.getItem(userId) || '';
-          if(!local) {
-            const ghPages = new GhPagesFS({ owner: 'hroac',
-              repo: 'TRPI',
-              branch: 'gh-data',
-              token: process.env.REACT_APP_GH_KEY?.toString() || ''})
-    
-          
-            const data = await ghPages.readJson(`${userId}.json`)
-            setBin(data)
-
-          } else {
-            const parsed = JSON.parse(local)
-            setBin(parsed)
+          if (binId) {
+            const binData = await JsonBinApi.getBinById(binId); // Retrieve bin data by binId
+            setBin(binData); // Set bin data to state
           }
+          /* const ghPages = new GhPagesFS({ owner: 'hroac',
+            repo: 'TRPI',
+            branch: 'gh-data',
+            token: process.env.REACT_APP_GH_KEY?.toString() || ''})
+  
+        
+          const data = await ghPages.readJson(`${userId}.json`) */
+          //setBin(data)
+
+        } else {
+          const parsed = JSON.parse(local)
+          setBin(parsed)
         }
+      
       } catch (error) {
         console.error("Error fetching bin data:", error);
       } finally {

@@ -178,6 +178,10 @@ const Home = () => {
       <Carousel slides={slides}/>
         
       </Grid>
+      
+      <Grid container spacing={1} justifyContent={'center'}>
+        <iframe src="https://chatgpt.com/g/g-UeQJ2fywP-trpi-type-analyst"/>
+      </Grid>
       {/* Benefits Section */}
       <Grid 
         container 

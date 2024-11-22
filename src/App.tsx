@@ -20,6 +20,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import ScrollToTop from './utils/ScrollToTop';
 import { guid } from './utils/guid';
 import GhPagesFS from './utils/GhPagesFS';
+import TrpiTalk from './components/TRPITalk';
 
 function App() {
     console.log(process.env)
@@ -72,6 +73,7 @@ function App() {
                         { label: 'Take the test', path: '/test' },
                         { label: 'Result', path: `/result/${userId || ''}` },
                         { label: 'Big Five Input', path: '/input' },
+                        {label:  'ChatGPT', path: '/talk'},
                         { label: 'Contact', path: '/contact' }
                     ]}
                 />
@@ -87,6 +89,7 @@ function App() {
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/services" element={<Services />} />
                         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                        <Route path="/talk" element={<TrpiTalk/>} />
                     </Routes>
                     <Footer />
                 </Box>

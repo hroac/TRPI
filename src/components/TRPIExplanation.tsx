@@ -38,140 +38,216 @@ const TRPIExplanation: React.FC = () => {
             4F Trauma Responses
           </Typography>
           <Typography variant="body1" paragraph>
-            The 4F trauma responses—Fight, Flight, Freeze, and Fawn—are fundamental to the TRPI framework, each associated
-            with specific personality types and approaches to managing stress:
+            The 4F trauma responses—Fight, Flight, Freeze, and Fawn—are fundamental to the TRPI framework, each representing
+            different approaches to managing stress:
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Fight:</strong> Types like ENTP and ESTP represent the Fight response, handling challenges through
-            confidence and adaptability. Known for quick decision-making, they confront obstacles head-on.
+            <strong>Fight:</strong> Handling challenges through confidence and adaptability, confronting obstacles head-on.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Flight:</strong> Types such as ENFP and ISFP align with Flight, using creativity and flexibility to
-            navigate stressful situations. These types may withdraw from conflict, focusing on values and exploration.
+            <strong>Flight:</strong> Using creativity and flexibility to navigate stressful situations, possibly withdrawing
+            from conflict to focus on exploration and values.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Freeze:</strong> Types like INTJ and ISTJ embody the Freeze response, prioritizing structure and careful
-            planning when under stress. They value stability and systematic thinking to manage uncertainty.
+            <strong>Freeze:</strong> Prioritizing structure and careful planning when under stress, valuing stability and systematic thinking to manage uncertainty.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Fawn:</strong> Fawn types, including INFJ and ISFJ, prioritize harmony and empathy, adapting behavior
-            to support others and avoid conflict in high-stress situations.
+            <strong>Fawn:</strong> Prioritizing harmony and empathy, adapting behavior to support others and avoid conflict in high-stress situations.
           </Typography>
         </CardContent>
       </Card>
 
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Function Pairings and the EIEI Rule</Typography>
+          <Typography variant="h6">Id, Ego, and Superego in Cognitive Function Theory</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body2" paragraph>
-            In TRPI, cognitive functions are grouped into **pairings** that emphasize dynamic relationships rather than
-            individual functions alone. This pairing structure allows for more nuanced personality profiles and
-            facilitates adaptability across situations.
+            Reinterpreting classic psychological constructs, we map the Id, Ego, and Superego onto cognitive functions and their roles in perception, judgment, and defense mechanisms within personality psychology.
+          </Typography>
+
+          <Typography variant="body2" paragraph>
+            <strong>The Id: Instinctual Perception (Se, Si, Ne, Ni)</strong>
           </Typography>
           <Typography variant="body2" paragraph>
-            The **EIEI Rule** (Extraverted-Introverted-Extraverted-Introverted) is a foundational principle in TRPI for 
-            balancing extraverted and introverted functions within a personality type. This alternation between 
-            extraverted and introverted functions ensures a harmonious approach to internal and external experiences.
-            For example, ENTP’s primary **Ne-Ti** pairing (Extraverted Intuition and Introverted Thinking) enables 
-            both exploration and critical analysis. Their auxiliary pairing **Ni-Fe** (Introverted Intuition and 
-            Extraverted Feeling) provides a complementary approach, balancing insight with social awareness.
+            <em>Role:</em> The Id represents our instinctual way of taking in information and experiencing the world through perceiving functions.
           </Typography>
           <Typography variant="body2" paragraph>
-            Unlike the MBTI’s tertiary loop, where the tertiary function pairs with the dominant, TRPI’s auxiliary
-            pairing leverages an **inverted dominant function** with the tertiary to create a complementary and adaptable
-            pairing. The auxiliary pairing respects the EIEI structure and avoids cognitive imbalance. For ENTP, instead 
-            of relying on Ne looping with Fe, which could lead to superficial engagement, the Ni-Fe auxiliary pairing 
-            introduces depth and nuanced social awareness.
+            <em>Functions:</em>
+          </Typography>
+          <Box component="ul" sx={{ paddingLeft: '20px' }}>
+            <li>
+              <Typography variant="body2">
+                <strong>Se (Extraverted Sensing):</strong> Engages with the present moment and sensory experiences.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Si (Introverted Sensing):</strong> Relies on past experiences and memories.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Ne (Extraverted Intuition):</strong> Explores possibilities and generates ideas.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Ni (Introverted Intuition):</strong> Focuses on deep insights and future implications.
+              </Typography>
+            </li>
+          </Box>
+          <Typography variant="body2" paragraph>
+            <em>Trauma Effect:</em> If the Id is disrupted, perception may become distorted, causing stress on the individual's ability to process information effectively.
+          </Typography>
+
+          <Typography variant="body2" paragraph>
+            <strong>The Ego: Judging and Organizing (Te, Ti, Fe, Fi) for SF and NT Types</strong>
           </Typography>
           <Typography variant="body2" paragraph>
-            The tertiary loop in traditional MBTI is limited as it often encourages repetitive, less adaptive thinking by
-            reinforcing the dominant function. In contrast, the auxiliary pairing in TRPI uses the inverted attitude of
-            the dominant function, forming a more effective and balanced partnership with the tertiary. This enables the 
-            personality to engage with new perspectives and integrate diverse insights, making the auxiliary pairing a 
-            much more comprehensive solution for personality growth and adaptability.
+            <em>Role:</em> For SF (Sensing Feeling) and NT (Intuitive Thinking) types, the Ego consists of their judging functions, guiding decision-making and structuring perceptions.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <em>Functions:</em>
+          </Typography>
+          <Box component="ul" sx={{ paddingLeft: '20px' }}>
+            <li>
+              <Typography variant="body2">
+                <strong>Te (Extraverted Thinking):</strong> Organizes and structures the external world logically.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Ti (Introverted Thinking):</strong> Analyzes and categorizes concepts internally.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Fe (Extraverted Feeling):</strong> Seeks harmony and connection in external relationships.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Fi (Introverted Feeling):</strong> Assesses experiences based on internal values.
+              </Typography>
+            </li>
+          </Box>
+          <Typography variant="body2" paragraph>
+            <em>Trauma Effect:</em> When the Ego is overwhelmed, judgment functions may become rigid or unbalanced, leading to overreliance on external rules or withdrawal into internal logic or emotions.
+          </Typography>
+
+          <Typography variant="body2" paragraph>
+            <strong>The Superego: Defensive Mechanisms (Te, Ti, Fe, Fi) for ST and NF Types</strong>
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <em>Role:</em> For ST (Sensing Thinking) and NF (Intuitive Feeling) types, the Superego comprises their judging functions, activating defensive mechanisms under stress.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <em>Functions:</em>
+          </Typography>
+          <Box component="ul" sx={{ paddingLeft: '20px' }}>
+            <li>
+              <Typography variant="body2">
+                <strong>Te (Extraverted Thinking):</strong> May impose excessive control or rigidity.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Ti (Introverted Thinking):</strong> Can become overly analytical or self-critical.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Fe (Extraverted Feeling):</strong> Might seek approval excessively or over-adapt to others.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Fi (Introverted Feeling):</strong> Could withdraw deeply into personal values, becoming inflexible.
+              </Typography>
+            </li>
+          </Box>
+          <Typography variant="body2" paragraph>
+            <em>Trauma Effect:</em> The Superego reflects unresolved trauma, leading to exaggerated or maladaptive responses.
           </Typography>
         </AccordionDetails>
       </Accordion>
 
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Type Pairings and Examples</Typography>
+          <Typography variant="h6">TRPI Function Pairings</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body2" paragraph>
-            TRPI identifies four type pairings, each reflecting unique relationships and dynamics:
+            Understanding how trauma influences cognitive functions requires examining the shifts between dominant and auxiliary function pairings. This involves analyzing the dynamics across different personality types, incorporating the concepts of Id, Ego, and Superego.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Gold Pairing:</strong> Connects types with mirrored dominant functions, offering complementary yet
-            contrasting perspectives. For instance, ENTP (Ne-Ti) and INFJ (Ni-Fe) are Gold pairings, balancing
-            exploration and insight with empathetic understanding.
+            In this framework, cognitive functions are grouped into pairings that emphasize dynamic relationships rather than individual functions alone. This pairing structure allows for more nuanced personality profiles and facilitates adaptability across situations.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Silver Pairing:</strong> Consists of types with inverted attitudes, fostering adaptability through
-            balancing exploration with strategic precision. An example is ENTP (Ne-Ti) paired with INTJ (Ni-Te).
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Bronze Pairing:</strong> Involves flipped functions but maintains the same attitudes. For instance,
-            ENTP (Ne-Ti) and ESFP (Se-Fi) represent Bronze pairings, contrasting abstract thinking with grounded, sensory engagement.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Copper Pairing:</strong> Both functions and attitudes are flipped, such as ENTP (Ne-Ti) and ISFJ (Si-Fe),
-            creating highly contrasting perspectives.
+            The inversion of dominant functions under stress represents a shift from proactive engagement to a defensive stance. This can involve shifts in perception (Sensing ↔ Intuition) and judging functions (Thinking ↔ Feeling), leading to reliance on less effective cognitive processes.
           </Typography>
         </AccordionDetails>
       </Accordion>
 
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Id, Ego, and Superego</Typography>
+          <Typography variant="h6">Trauma, Brain Hemispheres, and Cognitive Shifts</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body2" paragraph>
-            TRPI uses the concepts of Id, Ego, and Superego to provide a multi-layered perspective of personality:
+            Trauma can significantly impact cognitive functions and processing within the brain:
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Id:</strong> Represents natural tendencies and innate drives, associated with the **dominant functions**. For ENTP, this includes Se/Si and Ne/Ni, reflecting curiosity, exploration, and adaptability.
+            <strong>Early Trauma and Hemispheric Switching</strong>
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Ego:</strong> Balances internal and external needs, represented by the **auxiliary functions**. For ENTP, this is represented by Fi/Fe and Te/Ti, allowing flexibility in both logical thinking and empathetic engagement with the external world.
+            When individuals experience trauma at a young age, significant shifts in brain processing can occur:
+          </Typography>
+          <Box component="ul" sx={{ paddingLeft: '20px' }}>
+            <li>
+              <Typography variant="body2">
+                <strong>Switching Hemispheres:</strong> The inability of sensing functions (Se, Si) to process traumatic experiences may lead to reliance on intuitive functions (Ne, Ni).
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2">
+                <strong>Driven by Feelings (Fi):</strong> This shift is often guided by internal feelings, seeking new ways to make sense of trauma.
+              </Typography>
+            </li>
+          </Box>
+          <Typography variant="body2" paragraph>
+            <strong>Impact on Empathy:</strong> Without utilizing sensing functions, individuals may struggle with empathy rooted in shared experiences. They might need to consciously engage intuitive functions to develop empathy, requiring active effort. Some may never fully engage these functions, leading to lifelong challenges with empathy.
+          </Typography>
+
+          <Typography variant="body2" paragraph>
+            <strong>Trauma and Personality Development</strong>
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Superego:</strong> Associated with the **tertiary functions**, guiding self-regulation and value alignment. In the case of ENTP, this includes Ti/Te and Fi/Fe, which play a role in modulating responses through empathy and structured thinking, providing an ethical or value-oriented dimension to their interactions.
+            Some individuals may close off from the world instead of processing trauma through their Superego. This avoidance can lead to a dominant reliance on judgment functions, focusing on structure and decision-making to maintain control.
           </Typography>
         </AccordionDetails>
       </Accordion>
 
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Big Five Personality Traits</Typography>
+          <Typography variant="h6">The Inversion of the Dominant Function Under Stress</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body2" paragraph>
-            The Big Five traits—Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism—add an additional
-            layer of understanding to TRPI:
+            Under stress or trauma, our natural way of interacting with the world can invert, causing reliance on less effective cognitive processes.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Openness:</strong> Reflects creativity and curiosity. High Openness individuals, such as ENFPs, enjoy
-            exploring new ideas, while those with low Openness prefer routines and structure.
+            <strong>Adaptive Mechanism:</strong> This inversion represents a shift from proactive engagement to a defensive stance.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Conscientiousness:</strong> Indicates organization and dependability. Highly Conscientious types, like
-            ISTJs, prioritize structure, whereas low-Conscientiousness types are more spontaneous.
+            <strong>Perception Shift:</strong> Involves shifts between Sensing and Intuition functions (Se ↔ Si, Ne ↔ Ni), altering how we perceive information.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Extraversion:</strong> In TRPI, Extraversion focuses on assertiveness, highlighting individuals who take
-            initiative and engage actively with their environments. Extraverts, such as ENTPs, are energized by active
-            involvement in social and intellectual exchanges.
+            <strong>Judging Shift:</strong> For certain types, there may be shifts between Thinking and Feeling functions (Te ↔ Ti, Fe ↔ Fi), affecting decision-making processes.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Agreeableness:</strong> Associated with empathy and cooperation. High Agreeableness types, like INFJs,
-            prioritize harmony, whereas low Agreeableness types are more independent.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Neuroticism:</strong> Describes emotional sensitivity. High-Neuroticism types, like INFPs, may experience
-            heightened emotions, while low-Neuroticism types are more emotionally stable.
+            In stress, individuals may shift from their dominant pairing to their auxiliary pairing, leading to rigid or maladaptive behaviors due to underdevelopment.
           </Typography>
         </AccordionDetails>
       </Accordion>

@@ -1,11 +1,11 @@
 {
-  "type": "ENTJ",
-  "primary4FType": "Freeze",
+  "type": "ENTP",
+  "primary4FType": "Fight",
   "bigFiveResponses": {
-    "openness": 1,
-    "conscientiousness": 1,
-    "extraversion": 1,
-    "agreeableness": 0,
-    "neuroticism": 0.5
+    "openness": 0.8330000000000001,
+    "conscientiousness": 0.54625,
+    "extraversion": 0.7975,
+    "agreeableness": 0.5674999999999999,
+    "neuroticism": 0.38499999999999995
   }
 }

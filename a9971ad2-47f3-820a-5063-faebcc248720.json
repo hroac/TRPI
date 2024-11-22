@@ -1,11 +1,11 @@
 {
-  "type": "INFJ",
-  "primary4FType": "Fawn",
+  "type": "ENTP",
+  "primary4FType": "Fight",
   "bigFiveResponses": {
-    "openness": 1,
-    "conscientiousness": 0.725,
-    "extraversion": 0.5,
-    "agreeableness": 0.75,
-    "neuroticism": 0.75
+    "openness": 0.7919999999999999,
+    "conscientiousness": 0.61025,
+    "extraversion": 0.75,
+    "agreeableness": 0.7424999999999999,
+    "neuroticism": 0.495
   }
 }

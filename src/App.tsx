@@ -75,7 +75,13 @@ function App() {
                         { label: 'Big Five Input', path: '/input' },
                         //{label:  'ChatGPT', path: '/talk'},
                         { label: 'Contact', path: '/contact' }
-                    ]}
+                    ].filter(item => {
+
+                        if(item.label === 'Result' && !binId) {
+                            return false
+                        }
+                        return true
+                    })}
                 />
 
                 <Box sx={{ marginTop: '64px', background: 'linear-gradient(0deg, rgb(247, 248, 252), rgb(217 236 236))', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>

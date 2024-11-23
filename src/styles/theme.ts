@@ -7,7 +7,7 @@ const darkGreenTheme = createTheme({
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#4a706e', // muted medium green
+      main: '#2a4545', // muted medium green
       contrastText: '#ffffff',
     },
     background: {

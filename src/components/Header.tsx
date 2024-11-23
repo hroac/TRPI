@@ -74,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
                 paddingY: 1.5,
                 borderBottom: '1px solid #e0e0e0',
                 '&:hover': {
-                  backgroundColor: 'primary.light',
+                  backgroundColor: 'secondary.light',
                   color: 'white',
                 },
                 transition: 'background-color 0.3s ease',

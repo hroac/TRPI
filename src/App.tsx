@@ -73,7 +73,7 @@ function App() {
                         { label: 'Take the test', path: '/test' },
                         { label: 'Result', path: `/result/${binId || ''}` },
                         { label: 'Big Five Input', path: '/input' },
-                        {label:  'ChatGPT', path: '/talk'},
+                        //{label:  'ChatGPT', path: '/talk'},
                         { label: 'Contact', path: '/contact' }
                     ]}
                 />

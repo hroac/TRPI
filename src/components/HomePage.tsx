@@ -132,7 +132,7 @@ const Home = () => {
         </Typography>
         <Button 
           variant='contained' 
-          color='primary' 
+          color='secondary' 
           size='large' 
           component={Link}
           to='/test'

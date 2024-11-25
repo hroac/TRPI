@@ -26,7 +26,7 @@ export const MBTIProfiles = [
   {
     name: 'INTP',
     traits: {
-      openness: 0.4,
+      openness: 0.5,
       conscientiousness: 0.4,
       extraversion: 0.65,
       agreeableness: 0.35,

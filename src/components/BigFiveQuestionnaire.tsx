@@ -15,7 +15,8 @@ import {
   LinearProgress,
   Modal,
   useMediaQuery,
-  useTheme
+  useTheme,
+  Tooltip
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -32,6 +33,7 @@ import {
   ShuffleOn
 } from '@mui/icons-material';
 import { guid } from '../utils/guid';
+import { typesData } from '../utils/typesData';
 
 const statements = [
   { text: 'I am open to exploring new ideas and perspectives.', trait: 'openness', weight: 1.2 },
@@ -82,6 +84,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
   const [matchedType, setMatchedType] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState(false);
+  const type = typesData.find(t => t.type === matchedMBTIType)
 
 
   const setRandomly = () => {
@@ -247,7 +250,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         </Box>
       </Modal>
       <Box my={3}>
-        {primary4FType && (
+        {/* {primary4FType && (
           <Typography variant="subtitle1">
             Primary 4F Type: {primary4FType}
           </Typography>
@@ -256,7 +259,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           <Typography variant="subtitle1">
             Matched MBTI Type: {matchedMBTIType}
           </Typography>
-        )}
+        )} */}
         {/* {matchedMBTIType && (
           <Typography variant="subtitle1">
             Matched MBTI Type without 4F: {matchedType}
@@ -306,6 +309,24 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         <Button onClick={handleBack} disabled={currentStage === 0}>
           Back
         </Button>
+        {matchedMBTIType && (
+          <Tooltip title={primary4FType}>
+
+          <Box
+          bgcolor={type.bgColor}
+          color="white"
+          p={isMobile ? 1 : 2} // Reduce padding for mobile
+          textAlign="center"
+          borderRadius={2}
+          style={{ textDecoration: 'none' }}
+          sx={{
+            fontSize: isMobile ? '0.75rem' : '1rem', // Adjust text size for mobile
+          }}
+        >
+          <Typography variant="subtitle1">{type.type}</Typography>
+        </Box>
+        </Tooltip>
+        )}
         {currentStage === stages.length - 1 ? (
           <Button onClick={handleSubmit} variant="contained" color="primary">
             Submit

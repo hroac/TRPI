@@ -7,11 +7,39 @@ import {
   AccordionDetails,
   Card,
   CardContent,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Matrix from './Matrix';
 
 const TRPIExplanation: React.FC = () => {
+  const functionPairings = [
+    { type: 'ENTP', f4: 'Fight', dominant: 'Ne + Ti (Id + Ego)', auxiliary: 'Ni + Fe (Id + Superego)' },
+    { type: 'INTJ', f4: 'Freeze', dominant: 'Ni + Te (Id + Ego)', auxiliary: 'Ne + Fi (Id + Superego)' },
+    { type: 'ISFJ', f4: 'Fawn', dominant: 'Si + Fe (Id + Ego)', auxiliary: 'Se + Ti (Id + Superego)' },
+    { type: 'ESFP', f4: 'Flight', dominant: 'Se + Fi (Id + Ego)', auxiliary: 'Si + Te (Id + Superego)' },
+
+    { type: 'ESTP', f4: 'Fight', dominant: 'Se + Ti (Id + Superego)', auxiliary: 'Si + Fe (Id + Ego)' },
+    { type: 'ISTJ', f4: 'Freeze', dominant: 'Si + Te (Id + Superego)', auxiliary: 'Se + Fi (Id + Ego)' },
+    { type: 'INFJ', f4: 'Fawn', dominant: 'Ni + Fe (Id + Superego)', auxiliary: 'Ne + Ti (Id + Ego)' },
+    { type: 'ENFP', f4: 'Flight', dominant: 'Ne + Fi (Id + Superego)', auxiliary: 'Ni + Te (Id + Ego)' },
+
+    { type: 'INTP', f4: 'Fight', dominant: 'Ti + Ne (Ego + Id)', auxiliary: 'Te + Si (Superego + Id)' },
+    { type: 'ENTJ', f4: 'Freeze', dominant: 'Te + Ni (Ego + Id)', auxiliary: 'Ti + Se (Superego + Id)' },
+    { type: 'ESFJ', f4: 'Fawn', dominant: 'Fe + Si (Ego + Id)', auxiliary: 'Fi + Ne (Superego + Id)' },
+    { type: 'ISFP', f4: 'Flight', dominant: 'Fi + Se (Ego + Id)', auxiliary: 'Fe + Ni (Superego + Id)' },
+    
+    { type: 'ISTP', f4: 'Fight', dominant: 'Ti + Se (SuperEgo + Id)', auxiliary: 'Te + Ni (Ego + Id)' },
+    { type: 'ESTJ', f4: 'Freeze', dominant: 'Te + Si (Superego + Id)', auxiliary: 'Ti + Ne (Ego + Id)' },
+    { type: 'ENFJ', f4: 'Fawn', dominant: 'Fe + Ni (Superego + Id)', auxiliary: 'Fi + Se (Ego + Id)' },
+    { type: 'INFP', f4: 'Flight', dominant: 'Fi + Ne (Superego + Id)', auxiliary: 'Fe + Si (Ego + Id)' },
+  ];
   return (
     <Box sx={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <Typography variant="h4" gutterBottom>
@@ -172,7 +200,6 @@ const TRPIExplanation: React.FC = () => {
           </Typography>
         </AccordionDetails>
       </Accordion>
-
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">TRPI Function Pairings</Typography>
@@ -187,6 +214,28 @@ const TRPIExplanation: React.FC = () => {
           <Typography variant="body2" paragraph>
             The inversion of dominant functions under stress represents a shift from proactive engagement to a defensive stance. This can involve shifts in perception (Sensing ↔ Intuition) and judging functions (Thinking ↔ Feeling), leading to reliance on less effective cognitive processes.
           </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell><strong>Type</strong></TableCell>
+                  <TableCell><strong>4F</strong></TableCell>
+                  <TableCell><strong>Dominant Pairing</strong></TableCell>
+                  <TableCell><strong>Auxiliary Pairing</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {functionPairings.map((pairing, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{pairing.type}</TableCell>
+                    <TableCell>{pairing.f4}</TableCell>
+                    <TableCell>{pairing.dominant}</TableCell>
+                    <TableCell>{pairing.auxiliary}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </AccordionDetails>
       </Accordion>
 

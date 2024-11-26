@@ -312,7 +312,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           Back
         </Button>
         {matchedMBTIType && (
-          <Tooltip title={primary4FType}>
+          <Tooltip title={type.mode}>
 
           <Box
           bgcolor={type.bgColor}

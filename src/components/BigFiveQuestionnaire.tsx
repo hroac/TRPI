@@ -84,7 +84,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
   const [matchedType, setMatchedType] = useState<string | null>(null);
   const [openModal, setOpenModal] = useState(false);
-  const type = typesData.find(t => t.type === matchedMBTIType)
+  const type = typesData.find(t => t.type === matchedType);
+ // const type2 = typesData.find(t => t.type === matchedType)
+
 
 
   const setRandomly = () => {

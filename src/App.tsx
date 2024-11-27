@@ -11,7 +11,6 @@ import BigFiveQuestionnaire from './components/BigFiveQuestionnaire';
 import ResultsPage from './pages/Result';
 import BigFiveInputPage from './components/BigFiveInputPage';
 import AboutPage from './pages/About';
-import TRPIExplanationPage from './components/TRPIExplanationPage';
 import TRPIExplanation from './components/TRPIExplanation';
 import Homepage from './components/HomePage';
 import Footer from './components/Footer';

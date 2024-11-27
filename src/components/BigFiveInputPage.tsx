@@ -56,7 +56,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
         neuroticism: traits.Neuroticism / 100,
       };
       const fourF = determinePrimary4FType(bigFiveData);
-      const type = calculateMbtiType(bigFiveData, fourF, false);
+      const type = calculateMbtiType(bigFiveData, fourF, true);
       setMbtiType(type);
       return traits
     });
@@ -72,7 +72,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
       neuroticism: traits.Neuroticism / 100,
     };
     const fourF = determinePrimary4FType(bigFiveData);
-    const type = calculateMbtiType(bigFiveData, fourF);
+    const type = calculateMbtiType(bigFiveData, fourF, true);
     setMbtiType(type);
     const newJson = {
       type: type,

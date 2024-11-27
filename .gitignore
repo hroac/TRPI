@@ -2,3 +2,10 @@
 build
 *.zip
 .env
+*.js
+backend/CommandHandlers/User/CreateAccountCommandHandler.js.map
+*.map
+*.json
+*.tsbuildinfo
+backend/logs
+backend

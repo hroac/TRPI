@@ -1,0 +1,18 @@
+
+CUSTOMER EVENTS
+CreateCustomerAccount
+CreateJob
+AddItemToJob (after creation)
+AddImageToItem (after creation)
+ChangeJobTime
+ChangeJobDescription
+ChangeJobLocation
+RateDriver / RateJob
+
+DRIVER EVENTS
+CreateDriverAccount
+AcceptJob
+CompleteJob
+RejectJob
+RequestJobTimeChange
+ChangeDriverStatus

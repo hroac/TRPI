@@ -1,5 +1,3 @@
-import { weightedEuclideanDistance } from './scoring'
-
 export const MBTIProfiles = [
   {
       "name": "ENTP",
@@ -245,149 +243,114 @@ export const MBTIProfiles = [
 // Define weights, emphasizing critical traits for each 4F mode
 const weights: Record<string, Record<string, number>> = {
   Fight: {
-    openness: 1.2,           // High openness is crucial for Fight
-    conscientiousness: 1.1,   // Lower conscientiousness to allow flexibility
-    extraversion: 1.6,        // High extraversion for assertiveness
-    agreeableness: 0.8,       // Lower agreeableness for competitiveness
-    neuroticism: 0.7          // Moderate neuroticism for adaptability
+    openness: 1.2,
+    conscientiousness: 1.1,
+    extraversion: 1.6,
+    agreeableness: 0.8,
+    neuroticism: 0.7,
   },
   Flight: {
-    openness: 0.9,              // High openness for adaptability
-    conscientiousness: 0.5,   // Moderate conscientiousness
-    extraversion: 1.8,        // High extraversion for resourcefulness
-    agreeableness: 0.8,         // High agreeableness for social alignment
-    neuroticism: 1.6           // High neuroticism for awareness of risks
+    openness: 0.9,
+    conscientiousness: 0.5,
+    extraversion: 1.8,
+    agreeableness: 0.8,
+    neuroticism: 1.6,
   },
   Freeze: {
-    openness: 0.5,            // Lower openness, indicating caution
-    conscientiousness: 1.5,   // High conscientiousness for control and structure
-    extraversion: 0.5,        // Lower extraversion, favoring introspection
-    agreeableness: 0.4,       // Lower agreeableness, focusing on resilience
-    neuroticism: 1.5          // Moderate neuroticism for stability
+    openness: 0.5,
+    conscientiousness: 1.5,
+    extraversion: 0.5,
+    agreeableness: 0.4,
+    neuroticism: 1.5,
   },
   Fawn: {
-    openness: 0.7,            // Moderate openness
-    conscientiousness: 0.7,   // Balanced conscientiousness
-    extraversion: 0.6,        // Balanced extraversion for social engagement
-    agreeableness: 1.5,       // High agreeableness, a core trait for Fawn
-    neuroticism: 0.5          // Moderate neuroticism for emotional management
-  }
-}
+    openness: 0.7,
+    conscientiousness: 0.7,
+    extraversion: 0.6,
+    agreeableness: 1.5,
+    neuroticism: 0.5,
+  },
+};
+
+// Trait-based exclusions for each mode
+const modeTraitExclusions: Record<string, (profile: any) => boolean> = {
+  Fight: profile => profile.extraversion >= 50,
+  Flight: profile => profile.neuroticism >= 50,
+  Freeze: profile => profile.conscientiousness >= 50,
+  Fawn: profile => profile.agreeableness >= 50,
+};
+
+// Weighted Euclidean distance calculation
+export const weightedEuclideanDistance = (profile: any, traits: any, weights: any = {}) => {
+  const epsilon = 1e-5; // Small value to prevent division or multiplication by 0
+
+  return Math.sqrt(
+    Object.keys(profile).reduce((sum, key) => {
+      const weight = weights[key] || 1;
+      const diff = profile[key] - traits[key];
+      const clampedDiff = Math.max(Math.abs(diff), epsilon); // Prevent extreme values
+      return sum + weight * Math.pow(clampedDiff, 2);
+    }, 0)
+  );
+};
+
+// Determine the primary 4F mode based on the profile
 export const determinePrimary4FType = (profile: any) => {
-  const fourFIdealProfiles = {
-    Fight: {
-      openness: 0.6375,
-      conscientiousness: 0.6,
-      extraversion: 0.8,
-      agreeableness: 0.4875,
-      neuroticism: 0.3625
-    },
-    Flight: {
-      openness: 0.6125,
-      conscientiousness: 0.5375,
-      extraversion: 0.65,
-      agreeableness: 0.6375,
-      neuroticism: 0.775
-    },
-    Freeze: {
-      openness: 0.6875,
-      conscientiousness: 0.8875,
-      extraversion: 0.5,
-      agreeableness: 0.3375,
-      neuroticism: 0.3
-    },
-    Fawn: {
-      openness: 0.7375,
-      conscientiousness: 0.8,
-      extraversion: 0.5125,
-      agreeableness: 0.9,
-      neuroticism: 0.375
-    }
+  // Filter MBTIProfiles by modeTraitExclusions
+  const validModes = Object.keys(weights).filter(mode =>
+    modeTraitExclusions[mode](profile)
+  );
+
+  if (validModes.length === 0) {
+    throw new Error('No valid 4F mode for the given profile.');
   }
 
- // console.log(profile)
+  // Calculate weighted distance to determine the closest mode
+  const closestMode = validModes.reduce((closest, current) => {
+    const currentDistance = MBTIProfiles.filter(p => p.mode === current)
+      .map(p => weightedEuclideanDistance(profile, p.traits, weights[current]))
+      .reduce((a, b) => a + b, 0);
 
-  return Object.keys(fourFIdealProfiles).reduce((a, b) => {
-    const calcA = weightedEuclideanDistance(profile, (fourFIdealProfiles as any)[a], weights[a]) // Apply the specific weights for each mode ) 
-   const calcB = weightedEuclideanDistance(profile, (fourFIdealProfiles as any)[b], weights[b])
-  
-   //console.log(a, calcA,b,calcB)
-   return calcA < calcB ? a : b
-  }
-  )
-}
+    const closestDistance = MBTIProfiles.filter(p => p.mode === closest)
+      .map(p => weightedEuclideanDistance(profile, p.traits, weights[closest]))
+      .reduce((a, b) => a + b, 0);
 
-export const normalizeProfile = (profile: { [trait: string]: number }) => {
-  const traits = Object.keys(profile)
+    return currentDistance < closestDistance ? current : closest;
+  });
 
-  // Find global min and max across all traits
-  const min = Math.min(...traits.map(key => profile[key]))
-  const max = Math.max(...traits.map(key => profile[key]))
+  return closestMode;
+};
 
-  // Edge case: Avoid division by zero if max equals min
-  if (max === min) {
-    return traits.reduce((normalized, key) => {
-      normalized[key] = 0.5 // Set all traits to a midpoint if no variance exists
-      return normalized
-    }, {} as { [trait: string]: number })
-  }
-
-  console.log('Before normalization:', profile)
-
-  // Normalize each trait within a 0-1 range
-  const normalizedProfile = traits.reduce((normalized, key) => {
-    normalized[key] = (profile[key] - min) / (max - min)
-    return normalized
-  }, {} as { [trait: string]: number })
-
-  console.log('After normalization:', normalizedProfile)
-  return normalizedProfile
-}
-
+// Match the closest MBTI type
 export const matchMBTIType = (profile: any, primary4F: any, filter: boolean = true) => {
   let candidates = MBTIProfiles;
 
   if (filter) {
     candidates = candidates.filter(p => p.mode === primary4F);
   }
-/* 
-  // Apply a bias to the weights based on extraversion
-  candidates = candidates.map(candidate => {
-    const isIntroverted = candidate.name.startsWith('I');
-    const isExtraverted = candidate.name.startsWith('E');
 
-    // Dynamically adjust weight for extraversion bias
-    const extraversionBias = isIntroverted
-      ? 1 - profile.extraversion // Higher weight for introverted types if extraversion is low
-      : 1 + profile.extraversion; // Higher weight for extraverted types if extraversion is high
+  console.log('Filtered Candidates:', candidates);
 
-    return {
-      ...candidate,
-      weightedTraits: {
-        ...candidate.traits,
-        extraversion: candidate.traits.extraversion * extraversionBias // Scale extraversion trait dynamically
-      }
-    };
-  });
- */
-
-  let closestType = ''
-  let closestDistance = Infinity
+  let closestType = '';
+  let closestDistance = Infinity;
 
   candidates.forEach(candidate => {
-    const distance = weightedEuclideanDistance(
-      profile,
-      candidate.traits,
-      profile
-    )
-    //console.log('Distance:', distance, 'Type: ', candidate.name)
+    const distance = weightedEuclideanDistance(profile, candidate.traits, weights[primary4F]);
+    console.log(`Candidate: ${candidate.name}, Distance: ${distance}`);
+
     if (distance < closestDistance) {
-      closestDistance = distance
-      closestType = candidate.name
+      closestDistance = distance;
+      closestType = candidate.name;
     }
-  })
+  });
 
-  return closestType
-}
+  console.log('Closest Type:', closestType, 'Distance:', closestDistance);
+  return closestType;
+};
 
-
+// Main function to process the profile
+export const processProfile = (profile: any) => {
+  const primary4F = determinePrimary4FType(profile);
+  const mbtiType = matchMBTIType(profile, primary4F, true);
+  return { primary4F, mbtiType };
+};

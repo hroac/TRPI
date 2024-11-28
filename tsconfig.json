@@ -14,9 +14,10 @@
       "sourceMap": true,
       "strictPropertyInitialization": false,
       "outDir": "./dist",
-      "rootDir": "./"
+      "rootDir": "./src"
       //"webpack": true
     },
+    "exclude": ["./backend"],
     "include": [ "**/*.ts", "**/*.tsx", "global.d.ts" ],
   
   }

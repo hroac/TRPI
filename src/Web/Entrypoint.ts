@@ -1,5 +1,3 @@
-import React from "react";
-import { createRoot, Root } from "react-dom/client";
 import 'stream/web'
 import "reflect-metadata";
 import { NestFactory } from '@nestjs/core';

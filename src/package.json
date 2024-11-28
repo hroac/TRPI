@@ -50,7 +50,7 @@
         "webpack-node-externals": "^3.0.0"
     },
     "engines": {
-        "node": "16"
+        "node": "18"
     },
     "author": "Your Name",
     "license": "MIT"

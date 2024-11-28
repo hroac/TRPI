@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-      "jsx": "react-jsx" /* IMPORTANT! - this allows our JSX to be transpiled correctly */,
       "target": "esnext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
       "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
       "allowSyntheticDefaultImports": true /* Need for Webpack config file */,
@@ -13,7 +12,9 @@
       "emitDecoratorMetadata": true,
       "lib": [ "esnext", "es2017.object" ],
       "sourceMap": true,
-      "strictPropertyInitialization": false
+      "strictPropertyInitialization": false,
+      "outDir": "./dist",
+      "rootDir": "./"
       //"webpack": true
     },
     "include": [ "**/*.ts", "**/*.tsx", "global.d.ts" ],

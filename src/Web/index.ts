@@ -1,7 +1,7 @@
 import { Entrypoint } from './Entrypoint'
 import * as dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config({ path: '/.env' });
 Entrypoint.set();
 Entrypoint.Instance.boot();
 

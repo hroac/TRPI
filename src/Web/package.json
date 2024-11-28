@@ -8,7 +8,8 @@
     "scripts": {
         "dev": "webpack serve",
         "build": "tsc --build --clean | tsc --build",
-        "clean": "tsc --build --clean"
+        "clean": "tsc --build --clean",
+        "start": "node dist/index"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.2.3",

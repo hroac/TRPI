@@ -2,6 +2,7 @@
     "name": "traumaindicator",
     "version": "1.0.0",
     "private": true,
+    "type": "module",
     "homepage": "https://traumaindicator.com/#",
     "dependencies": {
         "@emotion/react": "^11.13.3",

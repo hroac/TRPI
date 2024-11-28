@@ -1,7 +1,8 @@
 import { Entrypoint } from './Web/Entrypoint'
 import * as dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
+console.log("Loaded Environment Variables:", process.env);
 Entrypoint.set();
 Entrypoint.Instance.boot();
 

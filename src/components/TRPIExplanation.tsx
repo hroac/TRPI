@@ -66,31 +66,6 @@ const TRPIExplanation: React.FC = () => {
         <Matrix />
       </Box>
 
-      <Card sx={{ marginBottom: '20px' }}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            4F Trauma Responses
-          </Typography>
-          <Typography variant="body1" paragraph>
-            The 4F trauma responses—Fight, Flight, Freeze, and Fawn—are fundamental to the TRPI framework, each representing
-            different approaches to managing stress:
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Fight:</strong> Handling challenges through confidence and adaptability, confronting obstacles head-on.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Flight:</strong> Using creativity and flexibility to navigate stressful situations, possibly withdrawing
-            from conflict to focus on exploration and values.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Freeze:</strong> Prioritizing structure and careful planning when under stress, valuing stability and systematic thinking to manage uncertainty.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Fawn:</strong> Prioritizing harmony and empathy, adapting behavior to support others and avoid conflict in high-stress situations.
-          </Typography>
-        </CardContent>
-      </Card>
-
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Id, Ego, and Superego in Cognitive Function Theory</Typography>

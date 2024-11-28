@@ -2,3 +2,6 @@
 build
 *.zip
 .env
+backend
+*.log
+*.json

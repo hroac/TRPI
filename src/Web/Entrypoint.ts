@@ -58,7 +58,7 @@ export class Entrypoint {
         dotenv.config();
         const elastic = process.env.ELASTIC_URL ?? ''
         const chatGPT = process.env.OPENAI_KEY ?? ''
-        const port = parseInt(process.env.PORT ?? '') || 3001
+        const port = parseInt(process.env.PORT ?? '') || 8080
 
     
         console.log(process.env)

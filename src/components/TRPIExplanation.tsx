@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Matrix from './Matrix';
+import ModeSelector from './ModeSelector';
 
 const TRPIExplanation: React.FC = () => {
   const functionPairings = [
@@ -53,6 +54,11 @@ const TRPIExplanation: React.FC = () => {
         and coping mechanisms.
       </Typography>
 
+
+      <Box>
+        <ModeSelector/>
+      </Box>
+    
       <Box sx={{ marginTop: '20px', marginBottom: '20px' }}>
         <Typography variant="h5" gutterBottom>
           Personality Types Matrix

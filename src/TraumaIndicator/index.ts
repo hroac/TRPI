@@ -6,4 +6,3 @@ export {
 export {
     FileLogger
 } from './Utilities'
-export * from './Utilities';

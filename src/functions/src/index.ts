@@ -1,14 +1,13 @@
-import * as functions from 'firebase-functions';
+import {onRequest} from 'firebase-functions/v2/https';
 
 // Import the compiled NestJS app
-import { createNestServer } from '../../index';
+const { createNestServer } = require('../../dist/index');
 
 let cachedServer: any;
 
-export const api = (functions as any).region('europe-west1').https.onRequest(async (req: any, res: any) => {
+export const api = onRequest(async (req: any, res: any) => {
     if (!cachedServer) {
         cachedServer = await createNestServer();
     }
-
     return cachedServer(req, res);
 });

@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
-import { CommandHandlers } from '../../CommandHandlers'
-import { EventHandlers } from '../../EventHandlers/index'
-import { Repository } from '../../CommandHandlers/Framework'
-import { BaseModule } from './base.module';
-import { CqrsModule } from '@nestjs/cqrs'
-
+import { LandingPageController } from '../Controllers/LandingPageController';
+import { RebuildController } from '../Controllers/RebuildController';
+import { UserController } from '../Controllers/User/UserController';
+import { ApiKeyMiddleware } from './api-key.middleware';
 
 @Module({
-    imports: [BaseModule],
+    imports: [],
+    controllers: [
+        LandingPageController,
+        RebuildController,
+        UserController
+    ],
+    providers: [],
 })
-export class AppModule {
-
-}
-
+export class AppModule {}

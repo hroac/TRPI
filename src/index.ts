@@ -22,7 +22,7 @@ export const createNestServer = async () => {
                 'Origin, X-Requested-With, Content-Type, Accept, Authorization, api-key',
         });
 
-        const port = process.env.PORT || 8080;
+        const port = 8080;
         await app.listen(port);
         console.log(`NestJS server running on port ${port}`);
 

@@ -2,8 +2,8 @@
     "name": "firebase-nestjs-integration",
     "version": "1.0.0",
     "description": "NestJS project integrated with Firebase for serverless deployments.",
-    "main": "./dist/index.js",
-    "type": "commonjs",
+    "main": "./Web/index.ts",
+    "type": "module",
     "scripts": {
         "start": "ts-node index.ts",
         "build": "tsc",
@@ -27,7 +27,6 @@
         "class-validator": "^0.14.1",
         "deasync": "^0.1.29",
         "dotenv": "^16.3.1",
-        "firebase-admin": "^13.0.1",
         "firebase-functions": "^6.1.1",
         "guid-typescript": "^1.0.9",
         "hex2dec": "^1.1.2",

@@ -8,3 +8,4 @@ backend/CommandHandlers/User/CreateAccountCommandHandler.js.map
 *.tsbuildinfo
 backend/logs
 backend
+src/.firebase

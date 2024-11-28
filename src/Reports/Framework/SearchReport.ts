@@ -1,5 +1,6 @@
 ﻿import { Guid } from "guid-typescript";
 import { Report } from './Report'
+import { Field } from '@../../../TraumaIndicator/Utilities'
 
 
 export abstract class SearchReport extends Report {
@@ -9,6 +10,7 @@ export abstract class SearchReport extends Report {
         this.TypeName = this.constructor.name;
     }
 
+    @Field('text')
     public TypeName: string
 
     public abstract UpdateCalculatedProperties() : void

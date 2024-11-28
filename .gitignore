@@ -4,4 +4,4 @@ build
 .env
 backend
 *.log
-*.json
+

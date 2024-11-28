@@ -1,5 +1,5 @@
 //import 'stream/web'
-import "reflect-metadata";
+//import "reflect-metadata";
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './Framework/app.module';
 import { } from '../Watcher'

@@ -2,7 +2,7 @@
 FROM node:18
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /src
 
 # Copy only package.json and package-lock.json for dependency installation
 COPY src/package*.json ./

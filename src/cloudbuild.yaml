@@ -1,12 +1,23 @@
 steps:
-  - name: 'ubuntu-latest'
-    args: ['bash', '-c', 'apt-get update && apt-get install -y curl gnupg2 && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs']
-  - name: 'gcr.io/cloudbuild/docker'
-    args: ['build', '-t', 'traumaindicator-app:latest', '.']
-    images: ['traumaindicator-app:latest']
-    source:
-      repo: 'hroac/TRPI'
-      branch: 'gh-cloud'
+  - name: gcr.io/cloudbuild/docker
+    args:
+      - build
+      - '-t'
+      - 'traumaindicator-app:latest'
+      - .
+  - name: ubuntu-latest
+    args:
+      - bash
+      - '-c'
+      - >-
+        apt-get update && apt-get install -y curl gnupg2 && curl -fsSL
+        https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y
+        nodejs
+  - name: ubuntu-latest
+    args:
+      - bash
+      - '-c'
+      - npm install
   - name: gcr.io/k8s-skaffold/pack
     env:
       - GOOGLE_ENTRYPOINT=$_ENTRYPOINT
@@ -48,13 +59,13 @@ options:
   substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY
 substitutions:
-  _TRIGGER_ID: 6dce6c7a-4b54-4e94-9a44-ab5fa6f77fad
   _PLATFORM: managed
   _SERVICE_NAME: trauma-indicator
   _ENTRYPOINT: index.ts
   REPO_NAME: trpi
   _DEPLOY_REGION: europe-west4
   _AR_HOSTNAME: europe-west4-docker.pkg.dev
+  _TRIGGER_ID: 6dce6c7a-4b54-4e94-9a44-ab5fa6f77fad
 tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed

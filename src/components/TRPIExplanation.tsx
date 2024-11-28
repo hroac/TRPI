@@ -59,10 +59,7 @@ const TRPIExplanation: React.FC = () => {
         <ModeSelector/>
       </Box>
     
-      <Box sx={{ marginTop: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Personality Types Matrix
-        </Typography>
+      <Box justifyContent={'center'} sx={{ marginTop: '20px', marginBottom: '20px' }}>
         <Matrix />
       </Box>
 

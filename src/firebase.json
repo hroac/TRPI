@@ -23,6 +23,7 @@
     "functions": [{
         "source": "./",
         "codebase": "default",
+        "timeoutSeconds": 60,
         "ignore": [
             "node_modules",
             ".git",

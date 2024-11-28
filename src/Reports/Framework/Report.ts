@@ -1,6 +1,5 @@
 ﻿import { Guid } from "guid-typescript";
 import { IReport } from './IReport'
-import { Field, Primary } from '@../../../TraumaIndicator/Utilities'
 
 export abstract class Report implements IReport {
     constructor(id?: Guid) {
@@ -11,7 +10,5 @@ export abstract class Report implements IReport {
         }
     }
 
-    @Primary()
-    @Field('text')
     public Id: string
 }

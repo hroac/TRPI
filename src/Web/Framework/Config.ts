@@ -1,9 +1,10 @@
 ﻿import { DotenvParseOutput } from 'dotenv';
-import { Logger, dummyLogger } from "ts-log";
+import { FileLogger } from '../../TraumaIndicator/Utilities';
+
 
 export class Config {
     private static _config: DotenvParseOutput
-    private static readonly log: Logger = dummyLogger;
+    private static readonly log: FileLogger = new FileLogger();
 
     constructor() {
 

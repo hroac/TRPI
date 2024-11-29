@@ -1,12 +1,8 @@
-//import 'stream/web'
-//import "reflect-metadata";
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './Framework/app.module';
 import { } from '../Watcher'
 import { CommandBus, } from '@nestjs/cqrs'
 import { evt } from "../TraumaIndicator/Utilities";
-import * as dotenv from 'dotenv';
-dotenv.config();
 //import { ChatGPT } from './wwwroot/src/utilities/ChatGPT';
 
 
@@ -55,7 +51,6 @@ export class Entrypoint {
     }
 
     public boot() {
-        dotenv.config();
         const elastic = process.env.ELASTIC_URL ?? ''
         const chatGPT = process.env.OPENAI_KEY ?? ''
         const port = parseInt(process.env.PORT ?? '') || 8080

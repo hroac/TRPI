@@ -2,10 +2,10 @@
     "name": "firebase-nestjs-integration",
     "version": "1.0.0",
     "description": "NestJS project integrated with Firebase for serverless deployments.",
-    "main": ".src/index.ts",
+    "main": ".src/main.ts",
     "type": "commonjs",
     "scripts": {
-        "start": "node dist/index",
+        "start": "node dist/main",
         "build": "tsc",
         "serve": "firebase emulators:start --only functions",
         "deploy": "firebase deploy --only functions"

@@ -28,7 +28,7 @@ export class BaseModule implements NestModule, OnApplicationBootstrap {
     }
 
     public onApplicationBootstrap(): void {
-        this.log = new FileLogger(`info-${new Date().toISOString().split('T')[0]}-${this.constructor.name}.log`);
+        this.log = new FileLogger();
         this.log.info('TraumaIndicator module initiated', this);
     }
 }

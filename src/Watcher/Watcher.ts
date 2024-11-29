@@ -5,7 +5,7 @@ export abstract class Watcher {
 
     public constructor(commandBus?: CommandBus) {
         this.commandBus = commandBus
-        this.log = new FileLogger(`info-${new Date().toISOString().split('T')[0]}-${this.constructor.name}.log`)
+        this.log = new FileLogger()
     }
 
     public log: FileLogger;

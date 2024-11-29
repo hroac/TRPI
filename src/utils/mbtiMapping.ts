@@ -212,7 +212,7 @@ export const MBTIProfiles = [
   {
       "name": "ISFP",
       "traits": {
-          "openness": 0.45,
+          "openness": 0.4,
           "conscientiousness": 0.4,
           "extraversion": 0.35,
           "agreeableness": 0.5,
@@ -227,7 +227,7 @@ export const MBTIProfiles = [
   {
       "name": "INFP",
       "traits": {
-          "openness": 0.5,
+          "openness": 0.45,
           "conscientiousness": 0.35,
           "extraversion": 0.3,
           "agreeableness": 0.55,
@@ -243,11 +243,11 @@ export const MBTIProfiles = [
 // Define weights, emphasizing critical traits for each 4F mode
 const weights: Record<string, Record<string, number>> = {
   Fight: {
-    openness: 1.2,
-    conscientiousness: 1.1,
-    extraversion: 1.6,
-    agreeableness: 0.8,
-    neuroticism: 0.7,
+    openness: 1.0,
+    conscientiousness: 1.0,
+    extraversion: 1.0,
+    agreeableness: 1,
+    neuroticism: 1,
   },
   Flight: {
     openness: 0.9,
@@ -260,7 +260,7 @@ const weights: Record<string, Record<string, number>> = {
     openness: 0.5,
     conscientiousness: 1.5,
     extraversion: 0.5,
-    agreeableness: 0.4,
+    agreeableness: 1.2,
     neuroticism: 1.5,
   },
   Fawn: {
@@ -274,10 +274,10 @@ const weights: Record<string, Record<string, number>> = {
 
 // Trait-based exclusions for each mode
 const modeTraitExclusions: Record<string, (profile: any) => boolean> = {
-  Fight: profile => profile.extraversion >= 0.5,
-  Flight: profile => profile.neuroticism >= 0.5,
-  Freeze: profile => profile.conscientiousness >= 0.5,
-  Fawn: profile => profile.agreeableness >= 0.5,
+  Fight: profile =>  profile.extraversion >= ((profile.conscientiousness + profile.agreeableness, profile.neuroticism) /3),
+  Flight: profile => profile.neuroticism >= ((profile.conscientiousness + profile.agreeableness, profile.extraversion) /3),
+  Freeze: profile => profile.conscientiousness >= ((profile.extraversion + profile.agreeableness, profile.neuroticism) /3) && profile.agreeableness >= ((profile.extraversion + profile.conscientiousness, profile.neuroticism) /3),
+  Fawn: profile => profile.agreeableness >= ((profile.conscientiousness + profile.extraversion, profile.neuroticism) /3),
 };
 
 // Weighted Euclidean distance calculation

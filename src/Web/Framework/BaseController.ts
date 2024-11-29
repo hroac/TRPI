@@ -12,7 +12,6 @@ export class BaseController {
     public constructor(commandBus?: CommandBus) {
         this.commandBus = commandBus || {} as CommandBus;
         this.log = new FileLogger()
-        this.config = functions.config();
     }
 
     public log: FileLogger;

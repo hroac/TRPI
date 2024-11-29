@@ -1,5 +1,4 @@
-﻿import { Logger, dummyLogger } from "ts-log/build/src/index";
-import { FileLogger } from "../../TraumaIndicator/Utilities/FileLogger";
+﻿import { FileLogger } from "../../TraumaIndicator/Utilities/FileLogger";
 import { ConfigOptions } from 'elasticsearch';
 import { Controller, Param, Body, Get, Post, Put, Delete } from '@nestjs/common';
 import { CommandBus, CqrsModule } from '@nestjs/cqrs';

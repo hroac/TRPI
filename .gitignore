@@ -9,3 +9,4 @@ backend/CommandHandlers/User/CreateAccountCommandHandler.js.map
 backend/logs
 backend
 src/.firebase
+dist

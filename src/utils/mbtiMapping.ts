@@ -212,7 +212,7 @@ export const MBTIProfiles = [
   {
       "name": "ISFP",
       "traits": {
-          "openness": 0.5,
+          "openness": 0.45,
           "conscientiousness": 0.4,
           "extraversion": 0.35,
           "agreeableness": 0.5,
@@ -227,7 +227,7 @@ export const MBTIProfiles = [
   {
       "name": "INFP",
       "traits": {
-          "openness": 0.45,
+          "openness": 0.5,
           "conscientiousness": 0.35,
           "extraversion": 0.3,
           "agreeableness": 0.55,

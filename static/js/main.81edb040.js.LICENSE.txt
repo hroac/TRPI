@@ -1,7 +1,7 @@
 /*!
- * @kurkle/color v0.3.2
+ * @kurkle/color v0.3.4
  * https://github.com/kurkle/color#readme
- * (c) 2023 Jukka Kurkela
+ * (c) 2024 Jukka Kurkela
  * Released under the MIT License
  */
 
@@ -63,7 +63,7 @@
  */
 
 /**
- * @remix-run/router v1.20.0
+ * @remix-run/router v1.21.0
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -74,7 +74,7 @@
  */
 
 /**
- * React Router DOM v6.27.0
+ * React Router DOM v6.28.0
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -85,7 +85,7 @@
  */
 
 /**
- * React Router v6.27.0
+ * React Router v6.28.0
  *
  * Copyright (c) Remix Software Inc.
  *

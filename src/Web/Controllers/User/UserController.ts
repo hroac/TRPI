@@ -32,6 +32,7 @@ export class UserController extends BaseController {
     @Get('/users')
     public async Users(): Promise<UserKeyValueReport> {
         const users = await FirebaseRepository.GetMany<UserSearchReport>(UserSearchReport);
+        console.log(users)
         return {
             users: users.reduce((acc, user) => {
                 acc[user.Id] = user;

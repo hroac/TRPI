@@ -31,6 +31,7 @@ export class UserController extends BaseController {
 
     @Get('/users')
     public async Users(): Promise<UserKeyValueReport> {
+        console.log('users');
         const users = await FirebaseRepository.GetMany<UserSearchReport>(UserSearchReport);
         console.log(users)
         return {

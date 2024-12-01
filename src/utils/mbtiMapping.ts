@@ -5,7 +5,7 @@ export const MBTIProfiles = [
           "openness": 0.85,
           "conscientiousness": 0.55,
           "extraversion": 0.8,
-          "agreeableness": 0.4,
+          "agreeableness": 0.45,
           "neuroticism": 0.35
       },
       "mode": "Fight",
@@ -17,7 +17,7 @@ export const MBTIProfiles = [
   {
       "name": "ESTP",
       "traits": {
-          "openness": 0.7,
+          "openness": 0.65,
           "conscientiousness": 0.6,
           "extraversion": 0.85,
           "agreeableness": 0.35,
@@ -48,9 +48,9 @@ export const MBTIProfiles = [
       "name": "ISTP",
       "traits": {
           "openness": 0.45,
-          "conscientiousness": 0.65,
+          "conscientiousness": 0.45,
           "extraversion": 0.6,
-          "agreeableness": 0.35,
+          "agreeableness": 0.4,
           "neuroticism": 0.45
       },
       "mode": "Fight",
@@ -62,11 +62,11 @@ export const MBTIProfiles = [
   {
       "name": "INTJ",
       "traits": {
-          "openness": 0.65,
-          "conscientiousness": 0.8,
-          "extraversion": 0.4,
+          "openness": 0.75,
+          "conscientiousness": 0.75,
+          "extraversion": 0.5,
           "agreeableness": 0.35,
-          "neuroticism": 0.4
+          "neuroticism": 0.5
       },
       "mode": "Freeze",
       "gold": "ENFP",
@@ -77,10 +77,10 @@ export const MBTIProfiles = [
   {
       "name": "ISTJ",
       "traits": {
-          "openness": 0.3,
+          "openness": 0.35,
           "conscientiousness": 0.65,
-          "extraversion": 0.35,
-          "agreeableness": 0.4,
+          "extraversion": 0.4,
+          "agreeableness": 0.3,
           "neuroticism": 0.45
       },
       "mode": "Freeze",
@@ -110,8 +110,8 @@ export const MBTIProfiles = [
           "openness": 0.4,
           "conscientiousness": 0.8,
           "extraversion": 0.65,
-          "agreeableness": 0.35,
-          "neuroticism": 0.4
+          "agreeableness": 0.3,
+          "neuroticism": 0.45
       },
       "mode": "Freeze",
       "gold": "INTP",
@@ -122,11 +122,11 @@ export const MBTIProfiles = [
   {
       "name": "ISFJ",
       "traits": {
-          "openness": 0.4,
-          "conscientiousness": 0.5,
+          "openness": 0.45,
+          "conscientiousness": 0.6,
           "extraversion": 0.35,
           "agreeableness": 0.75,
-          "neuroticism": 0.45
+          "neuroticism": 0.65
       },
       "mode": "Fawn",
       "gold": "ESTP",
@@ -138,10 +138,10 @@ export const MBTIProfiles = [
       "name": "INFJ",
       "traits": {
           "openness": 0.8,
-          "conscientiousness": 0.6,
+          "conscientiousness": 0.65,
           "extraversion": 0.4,
-          "agreeableness": 0.85,
-          "neuroticism": 0.5
+          "agreeableness": 0.8,
+          "neuroticism": 0.65
       },
       "mode": "Fawn",
       "gold": "ENTP",
@@ -152,11 +152,11 @@ export const MBTIProfiles = [
   {
       "name": "ESFJ",
       "traits": {
-          "openness": 0.35,
+          "openness": 0.4,
           "conscientiousness": 0.6,
           "extraversion": 0.6,
           "agreeableness": 0.8,
-          "neuroticism": 0.35
+          "neuroticism": 0.4
       },
       "mode": "Fawn",
       "gold": "INFP",
@@ -168,10 +168,10 @@ export const MBTIProfiles = [
       "name": "ENFJ",
       "traits": {
           "openness": 0.5,
-          "conscientiousness": 0.65,
-          "extraversion": 0.7,
+          "conscientiousness": 0.75,
+          "extraversion": 0.85,
           "agreeableness": 0.9,
-          "neuroticism": 0.25
+          "neuroticism": 0.4
       },
       "mode": "Fawn",
       "gold": "ISFP",
@@ -182,11 +182,11 @@ export const MBTIProfiles = [
   {
       "name": "ESFP",
       "traits": {
-          "openness": 0.65,
+          "openness": 0.6,
           "conscientiousness": 0.55,
-          "extraversion": 0.55,
-          "agreeableness": 0.65,
-          "neuroticism": 0.525
+          "extraversion": 0.6,
+          "agreeableness": 0.6,
+          "neuroticism": 0.65
       },
       "mode": "Flight",
       "gold": "ISTJ",
@@ -200,8 +200,8 @@ export const MBTIProfiles = [
           "openness": 0.9,
           "conscientiousness": 0.55,
           "extraversion": 0.6,
-          "agreeableness": 0.7,
-          "neuroticism": 0.65
+          "agreeableness": 0.6,
+          "neuroticism": 0.8
       },
       "mode": "Flight",
       "gold": "INTJ",
@@ -212,9 +212,9 @@ export const MBTIProfiles = [
   {
       "name": "ISFP",
       "traits": {
-          "openness": 0.4,
-          "conscientiousness": 0.4,
-          "extraversion": 0.35,
+          "openness": 0.5,
+          "conscientiousness": 0.45,
+          "extraversion": 0.4,
           "agreeableness": 0.5,
           "neuroticism": 0.7
       },
@@ -228,10 +228,10 @@ export const MBTIProfiles = [
       "name": "INFP",
       "traits": {
           "openness": 0.45,
-          "conscientiousness": 0.35,
-          "extraversion": 0.3,
-          "agreeableness": 0.55,
-          "neuroticism": 0.8
+          "conscientiousness": 0.5,
+          "extraversion": 0.4,
+          "agreeableness": 0.6,
+          "neuroticism": 0.9
       },
       "mode": "Flight",
       "gold": "ESFJ",

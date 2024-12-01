@@ -55,14 +55,14 @@ const TRPIExplanation: React.FC = () => {
       </Typography>
 
 
-      <Box>
-        <ModeSelector/>
-      </Box>
+      
     
       <Box justifyContent={'center'} sx={{ marginTop: '20px', marginBottom: '20px' }}>
         <Matrix />
       </Box>
-
+      <Box justifyContent={'center'}>
+        <ModeSelector/>
+      </Box>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Id, Ego, and Superego in Cognitive Function Theory</Typography>

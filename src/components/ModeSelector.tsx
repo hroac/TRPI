@@ -33,10 +33,6 @@ const ModeSelector = () => {
 
   return (
     <Box sx={{ p: 4, textAlign: "center" }}>
-         <Typography variant="h4" sx={{ mb: 3, color: "#333", fontWeight: "bold" }}>
-
-            4F Trauma Responses
-          </Typography>
           <Typography variant="body1" paragraph>
             The 4F trauma responses are fundamental to the TRPI framework, each representing
             different approaches to managing stress:

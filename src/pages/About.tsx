@@ -6,6 +6,9 @@ import { MBTIProfiles } from '../utils/mbtiMapping';
 import { Box, Grid, List, ListItem, Typography, Card, CardContent, useMediaQuery, useTheme } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 
+
+
+
 const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean }> = ({ mbtiType, showBigFive = true }) => {
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t: any) => t.type === type || t.type === mbtiType);
@@ -74,7 +77,18 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean }> = ({ mbt
             </Box>
           )}
         </Box>
-
+<Box display="flex" justifyContent="center">
+<Typography
+        variant="h4"
+        sx={{
+          fontStyle: 'italic',
+          fontWeight: 'bold',
+          mb: 2,
+        }}
+      >
+        {`"${typeInfo.quote}"`}
+      </Typography>
+</Box>
         <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
           <CardContent>
             <Typography variant="body1" paragraph>
@@ -83,6 +97,8 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean }> = ({ mbt
           </CardContent>
         </Card>
       </Grid>
+
+    
 
       <Box my={5}>
         <Grid container spacing={4}>

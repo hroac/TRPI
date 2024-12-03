@@ -1,3 +1,4 @@
+
 export const typesData: any[] = [
   {
     type: "ENTP",
@@ -8,6 +9,7 @@ export const typesData: any[] = [
     silver: "INTJ",
     gold: "INFJ",
     bronze: "ESFP",
+    quote: "I throw ideas at the wall and see what sticks.",
     description: `ENTP (Ne > Ti) - Fight Mode, The Debater: ENTPs are dynamic and idea-oriented, thriving in environments where they can explore new concepts and challenge conventions. They have a quick wit and an innate ability to debate, often enjoying the process of breaking down arguments to uncover underlying truths. With a natural curiosity, they can dive deeply into abstract concepts, testing out theories and experimenting with different perspectives. While this makes them adaptable and innovative, ENTPs may sometimes struggle with finishing projects, as they can be easily sidetracked by novel interests. In "Fight" mode, ENTPs become even more assertive and focused, using their analytical abilities to tackle complex challenges head-on, often turning stressful situations into intellectual battles they are eager to win.`,
     strengths: [
       "Adaptable",
@@ -32,6 +34,7 @@ export const typesData: any[] = [
     silver: "ISTJ",
     gold: "ISFJ",
     bronze: "ENFP",
+    quote: "I jump into the race and calculate my moves on the fly.",
     description: `ESTP (Se > Ti) - Fight Mode, The Entrepreneur: ESTPs are energetic, action-oriented problem solvers who excel in high-stakes environments. Known for their quick decision-making and adaptability, they are skilled at thinking on their feet, often taking calculated risks to achieve immediate results. With a strong preference for hands-on experiences, ESTPs approach life with a "seize the moment" mentality, making them natural thrill-seekers and innovators in practical fields. However, their focus on the present can sometimes cause them to overlook long-term consequences. In "Fight" mode, ESTPs become even more attuned to the here and now, applying their decisive thinking and sharp observational skills to control and manage crises, taking charge of situations with ease and confidence.`,
     strengths: [
       "Energetic",
@@ -57,6 +60,7 @@ export const typesData: any[] = [
     silver: "ENTJ",
     gold: "ESTJ",
     bronze: "ISFP",
+    quote: "I build a wall and see what hits it.",
     description: `INTP (Ti > Ne) - Fight Mode, The Logician: INTPs are intellectual and introspective, driven by a deep curiosity to understand complex theories and systems. Known for their analytical thinking and inventive ideas, they enjoy dissecting problems to uncover underlying principles. INTPs often prefer the world of ideas over practical matters, excelling in fields where they can theorize and explore possibilities without immediate constraints. However, they may sometimes struggle with turning their abstract thoughts into concrete actions. In "Fight" mode, INTPs retreat inward, relying on their logical reasoning to assess situations calmly and objectively, often distancing themselves emotionally to think through problems and devise unconventional solutions.`,
     strengths: [
       "Analytical",
@@ -81,6 +85,7 @@ export const typesData: any[] = [
     silver: "ESTJ",
     gold: "ENTJ",
     bronze: "INFP",
+    quote: "I design the machine before testing it on the track.",
     description: `ISTP (Ti > Se) - Fight Mode, The Virtuoso: ISTPs are practical and resourceful, with a talent for hands-on problem-solving. Known for their mechanical and technical skills, they have a natural ability to understand how things work, often thriving in environments where they can apply their skills independently. ISTPs value efficiency and are quick to act, though they can appear detached due to their reserved nature. In "Fight" mode, ISTPs apply their logical and technical expertise to manage high-pressure situations, taking a calm and objective approach. They analyze situations critically, often relying on practical solutions and focusing intensely on resolving the issue at hand.`,
     strengths: [
       "Efficient",
@@ -106,6 +111,7 @@ export const typesData: any[] = [
     silver: "ENTP",
     gold: "ENFP",
     bronze: "ISFJ",
+    quote: "I see the destination and build the road to get there.",
     description: `INTJ (Ni > Te) - Freeze Mode, The Architect: INTJs are strategic and independent, driven by a desire to achieve long-term goals and understand complex patterns. Known for their insightful thinking and preference for planning, they are adept at setting ambitious objectives and pursuing them methodically. INTJs are often seen as visionary thinkers, with a strong ability to predict outcomes and devise effective strategies. However, their high standards and critical approach can make them seem aloof or overly perfectionistic. In "Freeze" mode, INTJs rely on their intuition and analytical skills to carefully plan and assess, often retreating into analysis to devise a comprehensive and risk-minimized strategy to address challenging situations.`,
     strengths: [
       "Strategic",
@@ -130,6 +136,7 @@ export const typesData: any[] = [
     silver: "ESTP",
     gold: "ESFP",
     bronze: "INFJ",
+    quote: "I reinforce old bridges to make them stronger for future crossings.",
     description: `ISTJ (Si > Te) - Freeze Mode, The Logistician: ISTJs are reliable, responsible individuals who prioritize structure, tradition, and attention to detail. Known for their methodical approach and dedication to duty, they excel in environments that require consistency and reliability. ISTJs appreciate established methods and tend to focus on the practical aspects of life, often taking on roles that align with their meticulous nature. However, their preference for predictability can sometimes make them resistant to change or overly cautious. In "Freeze" mode, ISTJs double down on their organized mindset, creating stability and relying on tried-and-true methods to navigate challenging situations, focusing on maintaining control and predictability.`,
     strengths: [
       "Reliable",
@@ -155,6 +162,7 @@ export const typesData: any[] = [
     silver: "INTP",
     gold: "ISTP",
     bronze: "ESFJ",
+    quote: "I build the road and let it reveal the destination.",
     description: `ENTJ (Te > Ni) - Freeze Mode, The Commander: ENTJs are strategic and assertive leaders who excel in organizing resources and driving forward long-term goals. With a keen eye for efficiency and a natural talent for planning, they can break down complex problems into actionable steps, motivating others to reach ambitious targets. ENTJs are known for their strong work ethic and determination, and they often find themselves in leadership roles due to their decisiveness and strategic foresight. However, their high standards and intense focus on results can sometimes come across as overly demanding or even intimidating to others. In "Freeze" mode, ENTJs double down on their logical approach, often pausing to assess situations carefully, strategically mapping out the best course of action with a calm, measured focus on minimizing risks.`,
     strengths: [
       "Efficient",
@@ -180,6 +188,7 @@ export const typesData: any[] = [
     silver: "ISTP",
     gold: "INTP",
     bronze: "ENFJ",
+    quote: "I build sturdy bridges using tried-and-true methods.",
     description: `ESTJ (Te > Si) - Freeze Mode, The Executive: ESTJs are disciplined, reliable individuals who value order, structure, and responsibility. They have a natural sense of duty and an unwavering commitment to practical results, often gravitating toward roles where they can manage resources and ensure stability. Known for their straightforward communication and traditional values, they are highly respected for their dependability and no-nonsense approach. However, their focus on structure can sometimes make them appear rigid or resistant to new ideas. In "Freeze" mode, ESTJs become steadfast problem solvers, applying their organizational skills and attention to detail to create structured solutions under stress, often taking on a protective role for those around them.`,
     strengths: [
       "Practical",
@@ -205,6 +214,7 @@ export const typesData: any[] = [
     silver: "ESFP",
     gold: "ESTP",
     bronze: "INTJ",
+    quote: "I preserve the home, so others always have a place to return to.",
     description: `ISFJ (Si > Fe) - Fawn Mode, The Defender: ISFJs are caring and attentive, with a strong sense of responsibility toward others' well-being. Known for their warm demeanor and commitment to helping, they often take on supportive roles within their communities. ISFJs value harmony and stability, making them highly dependable and attentive to others' needs. However, their preference for routine and concern for others can sometimes lead them to avoid conflict or neglect their own needs. In "Fawn" mode, ISFJs become even more attuned to creating a supportive and nurturing environment, often prioritizing others' comfort over their own, using their empathy to ease tensions and foster harmony.`,
     strengths: [
       "Caring",
@@ -230,6 +240,7 @@ export const typesData: any[] = [
     silver: "ENFP",
     gold: "ENTP",
     bronze: "ISTJ",
+    quote: "I see the destination ahead and light the way for others to follow.",
     description: `INFJ (Ni > Fe) - Fawn Mode, The Advocate: INFJs are compassionate, insightful individuals who possess a deep understanding of others' emotions and motivations. Known for their idealism and commitment to personal growth, they often pursue causes that align with their values. INFJs are skilled at forming deep, meaningful connections and are highly empathetic, making them natural counselors or mentors. However, their sensitivity to others' emotions can sometimes lead them to take on others' problems as their own. In "Fawn" mode, INFJs become highly focused on the needs of those around them, using their insights to offer support and encouragement, often putting others’ well-being before their own.`,
     strengths: [
       "Empathetic",
@@ -254,6 +265,7 @@ export const typesData: any[] = [
     silver: "ISFP",
     gold: "INFP",
     bronze: "ENTJ",
+    quote: "I host others in a familiar home, ensuring everyone feels welcome.",
     description: `ESFJ (Fe > Si) - Fawn Mode, The Consul: ESFJs are social, nurturing individuals who excel in creating harmony and building community. Known for their attentiveness and empathy, they often take on roles that allow them to care for and organize those around them. ESFJs value tradition and are deeply invested in maintaining strong social bonds. However, their desire to meet others' expectations can sometimes lead them to overextend themselves. In "Fawn" mode, ESFJs become even more focused on fostering connection and harmony, often putting others’ needs first to ensure everyone feels valued and included, working tirelessly to support the people around them.`,
     strengths: [
       "Friendly",
@@ -278,6 +290,7 @@ export const typesData: any[] = [
     silver: "INFP",
     gold: "ISFP",
     bronze: "ESTJ",
+    quote: "I light the way for others, helping them see the destination ahead.",
     description: `ENFJ (Fe > Ni) - Fawn Mode, The Protagonist: ENFJs are charismatic and empathetic, with a natural talent for inspiring and motivating others. Known for their enthusiasm and strong social skills, they often take on leadership roles where they can foster collaboration and bring people together. Driven by a desire to help others reach their potential, ENFJs are admired for their ability to empathize and connect on a deep level. However, their tendency to prioritize others can sometimes lead to burnout. In "Fawn" mode, ENFJs become especially attentive to others' needs, acting as peacemakers and offering support, often working tirelessly to ensure the well-being of their community.`,
     strengths: [
       "Charismatic",
@@ -302,6 +315,7 @@ export const typesData: any[] = [
     silver: "ISFJ",
     gold: "ISTJ",
     bronze: "ENTP",
+    quote: "I walk every road, letting my feelings guide the journey.",
     description: `ESFP (Se > Fi) - Flight Mode, The Entertainer: ESFPs are lively, spontaneous individuals who approach life with a sense of adventure and curiosity. Known for their adaptability and ability to bring fun into any situation, they are often the life of the party. ESFPs have a natural ability to entertain and engage with others, often making them the center of attention. While they are highly attuned to the present, they can sometimes struggle with planning for the future. In "Flight" mode, ESFPs become highly focused on immediate experiences, relying on their quick adaptability and desire for enjoyment to escape stressors, often seeking out activities or environments that provide relief from emotional pressures.`,
     strengths: ["Warm", "Enthusiastic", "Sociable", "Observant", "Practical"],
     weaknesses: [
@@ -320,6 +334,7 @@ export const typesData: any[] = [
     silver: "INFJ",
     gold: "INTJ",
     bronze: "ESTP",
+    quote: "I wander through uncharted lands, following what sparks my soul.",
     description: `ENFP (Ne > Fi) - Flight Mode, The Campaigner: ENFPs are imaginative and enthusiastic, with a zest for life and a strong sense of personal values. Known for their ability to inspire others, they thrive in environments that allow for creativity and exploration. ENFPs are often open-minded and enjoy exploring new possibilities, making them adaptable and curious. However, their constant pursuit of novelty can sometimes lead them to spread themselves too thin. In "Flight" mode, ENFPs use their creativity and adaptability to escape from stressful situations, focusing on new possibilities and ideation as a way to regain a sense of freedom and excitement.`,
     strengths: [
       "Enthusiastic",
@@ -344,6 +359,7 @@ export const typesData: any[] = [
     silver: "ESFJ",
     gold: "ENFJ",
     bronze: "INTP",
+    quote: "I walk the path my heart has chosen, shaping it with every step.",
     description: `ISFP (Fi > Se) - Flight Mode, The Adventurer: ISFPs are sensitive, artistic, and attuned to their surroundings. Known for their appreciation of beauty and their spontaneous nature, they often express themselves through artistic or physical actions rather than words. ISFPs value personal freedom and authenticity, preferring to follow their own path. Though they are kind and considerate, their preference for personal freedom can sometimes make them appear reserved or difficult to get to know. In "Flight" mode, ISFPs rely on their adaptability and creativity to navigate stress, often seeking solace in creative pursuits or in nature as a way to find inner peace.`,
     strengths: ["Loyal", "Compassionate", "Flexible", "Artistic", "Authentic"],
     weaknesses: [
@@ -362,6 +378,7 @@ export const typesData: any[] = [
     silver: "ENFJ",
     gold: "ESFJ",
     bronze: "ISTP",
+    quote: "I follow my inner spark through uncharted lands and beyond",
     description: `INFP (Fi > Ne) - Flight Mode, The Mediator: INFPs are idealistic, introspective, and driven by a strong sense of values. Known for their empathy and creative spirit, they are passionate about causes close to their heart and often strive to make a positive difference in the world. INFPs are deeply attuned to their emotions and seek authenticity in all they do. However, their focus on ideals can sometimes make it difficult for them to accept practical realities or communicate their feelings openly. In "Flight" mode, INFPs use their introspective and imaginative nature to escape stressful situations, often turning inward to reflect or to immerse themselves in creative pursuits as a form of solace.`,
     strengths: [
       "Empathetic",

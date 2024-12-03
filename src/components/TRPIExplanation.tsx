@@ -21,25 +21,39 @@ import ModeSelector from './ModeSelector';
 
 const TRPIExplanation: React.FC = () => {
   const functionPairings = [
-    { type: 'ENTP', f4: 'Fight', dominant: 'Ne + Ti (Id + Ego)', auxiliary: 'Ni + Fe (Id + Superego)' },
-    { type: 'INTJ', f4: 'Freeze', dominant: 'Ni + Te (Id + Ego)', auxiliary: 'Ne + Fi (Id + Superego)' },
-    { type: 'ISFJ', f4: 'Fawn', dominant: 'Si + Fe (Id + Ego)', auxiliary: 'Se + Ti (Id + Superego)' },
-    { type: 'ESFP', f4: 'Flight', dominant: 'Se + Fi (Id + Ego)', auxiliary: 'Si + Te (Id + Superego)' },
+    { type: 'ENTP', f4: 'Fight', stack: 'Ne > Ti > Fe > Si', dominant: 'Ne + Ti (Id + Ego)', auxiliary: 'Ni + Fe (Id + Superego)' },
 
-    { type: 'ESTP', f4: 'Fight', dominant: 'Se + Ti (Id + Superego)', auxiliary: 'Si + Fe (Id + Ego)' },
-    { type: 'ISTJ', f4: 'Freeze', dominant: 'Si + Te (Id + Superego)', auxiliary: 'Se + Fi (Id + Ego)' },
-    { type: 'INFJ', f4: 'Fawn', dominant: 'Ni + Fe (Id + Superego)', auxiliary: 'Ne + Ti (Id + Ego)' },
-    { type: 'ENFP', f4: 'Flight', dominant: 'Ne + Fi (Id + Superego)', auxiliary: 'Ni + Te (Id + Ego)' },
-
-    { type: 'INTP', f4: 'Fight', dominant: 'Ti + Ne (Ego + Id)', auxiliary: 'Te + Si (Superego + Id)' },
-    { type: 'ENTJ', f4: 'Freeze', dominant: 'Te + Ni (Ego + Id)', auxiliary: 'Ti + Se (Superego + Id)' },
-    { type: 'ESFJ', f4: 'Fawn', dominant: 'Fe + Si (Ego + Id)', auxiliary: 'Fi + Ne (Superego + Id)' },
-    { type: 'ISFP', f4: 'Flight', dominant: 'Fi + Se (Ego + Id)', auxiliary: 'Fe + Ni (Superego + Id)' },
+    { type: 'INTJ', f4: 'Freeze', stack: 'Ni > Te > Fi > Se', dominant: 'Ni + Te (Id + Ego)', auxiliary: 'Ne + Fi (Id + Superego)' },
     
-    { type: 'ISTP', f4: 'Fight', dominant: 'Ti + Se (SuperEgo + Id)', auxiliary: 'Te + Ni (Ego + Id)' },
-    { type: 'ESTJ', f4: 'Freeze', dominant: 'Te + Si (Superego + Id)', auxiliary: 'Ti + Ne (Ego + Id)' },
-    { type: 'ENFJ', f4: 'Fawn', dominant: 'Fe + Ni (Superego + Id)', auxiliary: 'Fi + Se (Ego + Id)' },
-    { type: 'INFP', f4: 'Flight', dominant: 'Fi + Ne (Superego + Id)', auxiliary: 'Fe + Si (Ego + Id)' },
+    { type: 'ISFJ', f4: 'Fawn', stack: 'Si > Fe > Ti > Ne', dominant: 'Si + Fe (Id + Ego)', auxiliary: 'Se + Ti (Id + Superego)' },
+    
+    { type: 'ESFP', f4: 'Flight', stack: 'Se > Fi > Te > Ni', dominant: 'Se + Fi (Id + Ego)', auxiliary: 'Si + Te (Id + Superego)' },
+    
+    
+    { type: 'ESTP', f4: 'Fight', stack: 'Se > Ti > Fe > Ni', dominant: 'Se + Ti (Id + Superego)', auxiliary: 'Si + Fe (Id + Ego)' },
+    
+    { type: 'ISTJ', f4: 'Freeze', stack: 'Si > Te > Fi > Ne', dominant: 'Si + Te (Id + Superego)', auxiliary: 'Se + Fi (Id + Ego)' },
+    
+    { type: 'INFJ', f4: 'Fawn', stack: 'Ni > Fe > Ti > Se', dominant: 'Ni + Fe (Id + Superego)', auxiliary: 'Ne + Ti (Id + Ego)' },
+    
+    { type: 'ENFP', f4: 'Flight', stack: 'Ne > Fi > Te > Si', dominant: 'Ne + Fi (Id + Superego)', auxiliary: 'Ni + Te (Id + Ego)' },
+    
+    
+    { type: 'INTP', f4: 'Fight', stack: 'Ti > Ne > Si > Fe', dominant: 'Ti + Ne (Ego + Id)', auxiliary: 'Te + Si (Superego + Id)' },
+    
+    { type: 'ENTJ', f4: 'Freeze', stack: 'Te > Ni > Se > Fi', dominant: 'Te + Ni (Ego + Id)', auxiliary: 'Ti + Se (Superego + Id)' },
+    
+    { type: 'ESFJ', f4: 'Fawn', stack: 'Fe > Si > Ne > Ti', dominant: 'Fe + Si (Ego + Id)', auxiliary: 'Fi + Ne (Superego + Id)' },
+    
+    { type: 'ISFP', f4: 'Flight', stack: 'Fi > Se > Ni > Te', dominant: 'Fi + Se (Ego + Id)', auxiliary: 'Fe + Ni (Superego + Id)' },
+    
+    { type: 'ISTP', f4: 'Fight', stack: 'Ti > Se > Ni > Fe', dominant: 'Ti + Se (SuperEgo + Id)', auxiliary: 'Te + Ni (Ego + Id)' },
+    
+    { type: 'ESTJ', f4: 'Freeze', stack: 'Te > Si > Ne > Fi', dominant: 'Te + Si (Superego + Id)', auxiliary: 'Ti + Ne (Ego + Id)' },
+    
+    { type: 'ENFJ', f4: 'Fawn', stack: 'Fe > Ni > Se > Ti', dominant: 'Fe + Ni (Superego + Id)', auxiliary: 'Fi + Se (Ego + Id)' },
+    
+    { type: 'INFP', f4: 'Flight', stack: 'Fi > Ne > Si > Te', dominant: 'Fi + Ne (Superego + Id)', auxiliary: 'Fe + Si (Ego + Id)' },
   ];
   return (
     <Box sx={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
@@ -198,6 +212,7 @@ const TRPIExplanation: React.FC = () => {
                 <TableRow>
                   <TableCell><strong>Type</strong></TableCell>
                   <TableCell><strong>4F</strong></TableCell>
+                  <TableCell><strong>Grant Stack</strong></TableCell>
                   <TableCell><strong>Dominant Pairing</strong></TableCell>
                   <TableCell><strong>Auxiliary Pairing</strong></TableCell>
                 </TableRow>
@@ -207,6 +222,7 @@ const TRPIExplanation: React.FC = () => {
                   <TableRow key={index}>
                     <TableCell>{pairing.type}</TableCell>
                     <TableCell>{pairing.f4}</TableCell>
+                    <TableCell>{pairing.stack}</TableCell>
                     <TableCell>{pairing.dominant}</TableCell>
                     <TableCell>{pairing.auxiliary}</TableCell>
                   </TableRow>

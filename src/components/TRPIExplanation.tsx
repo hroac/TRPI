@@ -192,47 +192,7 @@ const TRPIExplanation: React.FC = () => {
           </Typography>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">TRPI Function Pairings</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography variant="body2" paragraph>
-            Understanding how trauma influences cognitive functions requires examining the shifts between dominant and auxiliary function pairings. This involves analyzing the dynamics across different personality types, incorporating the concepts of Id, Ego, and Superego.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            In this framework, cognitive functions are grouped into pairings that emphasize dynamic relationships rather than individual functions alone. This pairing structure allows for more nuanced personality profiles and facilitates adaptability across situations.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            The inversion of dominant functions under stress represents a shift from proactive engagement to a defensive stance. This can involve shifts in perception (Sensing ↔ Intuition) and judging functions (Thinking ↔ Feeling), leading to reliance on less effective cognitive processes.
-          </Typography>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell><strong>Type</strong></TableCell>
-                  <TableCell><strong>4F</strong></TableCell>
-                  <TableCell><strong>Grant Stack</strong></TableCell>
-                  <TableCell><strong>Dominant Pairing</strong></TableCell>
-                  <TableCell><strong>Auxiliary Pairing</strong></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {functionPairings.map((pairing, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{pairing.type}</TableCell>
-                    <TableCell>{pairing.f4}</TableCell>
-                    <TableCell>{pairing.stack}</TableCell>
-                    <TableCell>{pairing.dominant}</TableCell>
-                    <TableCell>{pairing.auxiliary}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </AccordionDetails>
-      </Accordion>
-
+      
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Trauma, Brain Hemispheres, and Cognitive Shifts</Typography>
@@ -292,6 +252,47 @@ const TRPIExplanation: React.FC = () => {
           <Typography variant="body2" paragraph>
             In stress, individuals may shift from their dominant pairing to their auxiliary pairing, leading to rigid or maladaptive behaviors due to underdevelopment.
           </Typography>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h6">TRPI Function Pairings</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body2" paragraph>
+            Understanding how trauma influences cognitive functions requires examining the shifts between dominant and auxiliary function pairings. This involves analyzing the dynamics across different personality types, incorporating the concepts of Id, Ego, and Superego.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            In this framework, cognitive functions are grouped into pairings that emphasize dynamic relationships rather than individual functions alone. This pairing structure allows for more nuanced personality profiles and facilitates adaptability across situations.
+          </Typography>
+          <Typography variant="body2" paragraph>
+            The inversion of dominant functions under stress represents a shift from proactive engagement to a defensive stance. This can involve shifts in perception (Sensing ↔ Intuition) and judging functions (Thinking ↔ Feeling), leading to reliance on less effective cognitive processes.
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell><strong>Type</strong></TableCell>
+                  <TableCell><strong>4F</strong></TableCell>
+                  <TableCell><strong>Grant Stack</strong></TableCell>
+                  <TableCell><strong>Dominant Pairing</strong></TableCell>
+                  <TableCell><strong>Auxiliary Pairing</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {functionPairings.map((pairing, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{pairing.type}</TableCell>
+                    <TableCell>{pairing.f4}</TableCell>
+                    <TableCell>{pairing.stack}</TableCell>
+                    <TableCell>{pairing.dominant}</TableCell>
+                    <TableCell>{pairing.auxiliary}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </AccordionDetails>
       </Accordion>
 

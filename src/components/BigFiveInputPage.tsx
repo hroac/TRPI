@@ -8,6 +8,8 @@ import {
   Paper,
   Grid,
   Tooltip,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import OpennessIcon from '@mui/icons-material/EmojiObjects';
 import ConscientiousnessIcon from '@mui/icons-material/CheckCircle';
@@ -18,6 +20,7 @@ import NeuroticismIcon from '@mui/icons-material/MoodBad';
 import { matchMBTIType as calculateMbtiType, determinePrimary4FType } from '../utils/mbtiMapping';
 import { useNavigate } from 'react-router-dom';
 import { guid } from '../utils/guid';
+import { typesData } from './typesData';
 
 type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
 
@@ -44,6 +47,9 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
   });
 
   const [mbtiType, setMbtiType] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const type = typesData.find(t => t.type === mbtiType);
 
   const handleSliderChange = (trait: Trait) => (event: Event, newValue: number | number[]) => {
     setTraits((prev) => {
@@ -128,9 +134,22 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
         </Grid>
 
         {mbtiType && (
-          <Typography variant="h5" sx={{ marginTop: '20px', fontWeight: 'bold', color: '#333' }}>
-            Your MBTI Type: {mbtiType}
-          </Typography>
+          <Grid container spacing={1} justifyContent={'center'} marginTop={5}>
+            <Box
+          bgcolor={type.bgColor}
+          color="white"
+          p={isMobile ? 1 : 2} // Reduce padding for mobile
+          textAlign="center"
+          borderRadius={2}
+          style={{ textDecoration: 'none' }}
+          sx={{
+            width: 75,
+            fontSize: isMobile ? '0.75rem' : '1rem', // Adjust text size for mobile
+          }}
+        >
+          <Typography variant="subtitle1">{type.type}</Typography>
+        </Box>
+          </Grid>
         )}
         <Button
           variant="contained"

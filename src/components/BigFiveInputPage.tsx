@@ -60,6 +60,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
   });
 
   const [mbtiType, setMbtiType] = useState<string | null>(null);
+  const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -126,9 +127,11 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
   // Handle selection from matrix modal
   const handleMatrixSelect = (selected: string) => {
     console.log('Selected Type:', selected);
+    setSelectedMbtiType(selected);
+
     if (selected === 'XXXX') {
       // User doesn't know their type
-      setMbtiType('XXXX');
+      //setMbtiType('XXXX');
       handleCloseModal();
       return;
     }
@@ -174,6 +177,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
 
     const binId = await onComplete({
       profile: bigFiveData,
+      selectedMbtiType: selectedMbtiType,
       mbtiType: calculatedType,
       primary4F,
     });
@@ -278,7 +282,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       </Paper>
 
       {/* Modal for Matrix selection */}
-      <Modal open={openModal} onClose={handleCloseModal}>
+      <Modal sx={{position: 'relative', top: '50px', left: '50px'}} open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{
             position: 'absolute',

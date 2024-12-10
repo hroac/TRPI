@@ -184,9 +184,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     console.log('Selected Type:', type)
     if (type === 'XXXX') {
       // If the user doesn't know their type, we can just log it or set states accordingly
-      setPrimary4FType(null);
-      setMatchedMBTIType('XXXX');
-      setMatchedType('XXXX');
+     // setPrimary4FType(null);
+      //setMatchedMBTIType('XXXX');
+      //setMatchedType('XXXX');
       handleCloseModal();
       return;
     }
@@ -263,7 +263,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '60%' : '90%'}/>
     <Box sx={{position:'relative', right:'50px'}} mt={2} display="flex" justifyContent="center">
       <Button variant="contained" color="secondary" onClick={() => handleMatrixSelect('XXXX')}>
-        I don't know my type!
+        I (don't) know my type!
       </Button>
     </Box>
     </Box>

@@ -83,11 +83,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [primary4FType, setPrimary4FType] = useState<string | null>(null);
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
   const [matchedType, setMatchedType] = useState<string | null>(null);
-  const [openModal, setOpenModal] = useState(false);
+  const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState(true); // Modal is pre-opened by default
   const type = typesData.find(t => t.type === matchedMBTIType);
- // const type2 = typesData.find(t => t.type === matchedType)
-
-
 
   const setRandomly = () => {
     const randomResponses = statements.reduce((acc, s) => {
@@ -111,9 +109,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const mbtiType = matchMBTIType(weightedScores, primary4F);
     const type = matchMBTIType(weightedScores, primary4F, false);
 
-        setPrimary4FType(primary4F);
-        setMatchedMBTIType(mbtiType);
-        setMatchedType(type);
+    setPrimary4FType(primary4F);
+    setMatchedMBTIType(mbtiType);
+    setMatchedType(type);
   }
 
   const handleSliderChange =
@@ -137,7 +135,6 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         const primary4F = determinePrimary4FType(weightedScores);
         const mbtiType = matchMBTIType(weightedScores, primary4F);
         const type = matchMBTIType(weightedScores, primary4F,false);
-
 
         setPrimary4FType(primary4F);
         setMatchedMBTIType(mbtiType);
@@ -171,11 +168,10 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       type: mbtiType,
       primary4FType: primary4F,
       bigFiveResponses: weightedScores,
-  }
-  localStorage.setItem(guid(), JSON.stringify(newJson));
-   const binId = await onComplete({ primary4F, mbtiType, profile: weightedScores });
-   navigate(`/result/${binId}`);
-
+    }
+    localStorage.setItem(guid(), JSON.stringify(newJson));
+    const binId = await onComplete({ primary4F, mbtiType, selectedMbtiType, profile: weightedScores });
+    navigate(`/result/${binId}`);
   };
 
   const progress = ((currentStage + 1) / stages.length) * 100;
@@ -185,8 +181,18 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleMatrixSelect = (type: string) => {
-    console.log(type)
+    console.log('Selected Type:', type)
+    if (type === 'XXXX') {
+      // If the user doesn't know their type, we can just log it or set states accordingly
+      setPrimary4FType(null);
+      setMatchedMBTIType('XXXX');
+      setMatchedType('XXXX');
+      handleCloseModal();
+      return;
+    }
+
     const profile = MBTIProfiles.find((p) => p.name === type)?.traits;
+    setSelectedMbtiType(type);
     if (profile) {
       console.log(profile)
       const updatedResponses = { ...responses };
@@ -199,11 +205,11 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
       const primary4F = determinePrimary4FType(profile);
       const mbtiType = matchMBTIType(profile, primary4F);
-      const type = matchMBTIType(profile, primary4F,false);
+      const typeNo4F = matchMBTIType(profile, primary4F,false);
 
       setPrimary4FType(primary4F);
       setMatchedMBTIType(mbtiType);
-      setMatchedType(type)
+      setMatchedType(typeNo4F);
     } else {
       setPrimary4FType(null);
       setMatchedMBTIType(null);
@@ -211,94 +217,93 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     }
     handleCloseModal();
   };
+
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 900, width: isMobile ? 300 : 750 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h5" gutterBottom>
-          Personality Assessment Tool
+          TRPI Assessment Tool
         </Typography>
         <Box>
-        <IconButton onClick={setRandomly} color="primary">
-          <ShuffleOn />
-        </IconButton>
-        <IconButton onClick={handleOpenModal} color="primary">
-          <SwitchAccount />
-        </IconButton>
+          <IconButton onClick={setRandomly} color="primary">
+            <ShuffleOn />
+          </IconButton>
+          <IconButton onClick={handleOpenModal} color="primary">
+            <SwitchAccount />
+          </IconButton>
         </Box>
       </Box>
       {/* Modal for Matrix selection */}
-       <Modal open={openModal} onClose={handleCloseModal}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            outline: 'none',
-            width: { xs: '90%', sm: '60%' }
-            //width: isMobile ? '60%' : '80%'
-          }}
-        >
-          <Typography variant="h6" gutterBottom>
-            Select Your Type Here
-          </Typography>
-          <Typography variant="body2" gutterBottom>
-            use this as a preset if you already know your type!
-          </Typography>
-          <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '60%' : '90%'}/>
-        </Box>
-      </Modal>
+      <Modal open={openModal} onClose={handleCloseModal}>
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      bgcolor: 'background.paper',
+      boxShadow: 24,
+      outline: 'none',
+      width: { xs: '90%', sm: '60%' },
+      borderRadius: '8px',
+    }}
+  >
+    <Box sx={{
+      marginLeft: '10%',
+      marginTop: '5%',
+      marginBottom: '5%',
+      marginRight: '5%',
+    }}>
+    <Typography sx={{marginRight:"50px"}} variant="h6" gutterBottom>
+      Select Your Type Here
+    </Typography>
+    <Typography variant="body2" gutterBottom>
+      Use this as a preset if you already know your type!
+    </Typography>
+    <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '60%' : '90%'}/>
+    <Box sx={{position:'relative', right:'50px'}} mt={2} display="flex" justifyContent="center">
+      <Button variant="contained" color="secondary" onClick={() => handleMatrixSelect('XXXX')}>
+        I don't know my type!
+      </Button>
+    </Box>
+    </Box>
+  </Box>
+</Modal>
+
       <Box my={3}>
-        {/* {primary4FType && (
-          <Typography variant="subtitle1">
-            Primary 4F Type: {primary4FType}
-          </Typography>
-        )}
-        {matchedMBTIType && (
-          <Typography variant="subtitle1">
-            Matched MBTI Type: {matchedMBTIType}
-          </Typography>
-        )} */}
-        {/* {matchedMBTIType && (
-          <Typography variant="subtitle1">
-            Matched MBTI Type without 4F: {matchedType}
-          </Typography>
-        )} */}
+        {/* Display matched MBTI type or anything else as needed */}
       </Box>
 
       {/* Display current stage statements */}
       {stages[currentStage].map((s, index) => (
         <Box key={`${s.trait}-${index}`} my={3}>
-        <Typography variant="subtitle1" gutterBottom>
-          {s.text}
-        </Typography>
-        <Grid container spacing={3} alignItems="center">
-          <Grid item>
-            <Typography variant="subtitle2" gutterBottom>
-              <Close/>
-            </Typography>
+          <Typography variant="subtitle1" gutterBottom>
+            {s.text}
+          </Typography>
+          <Grid container spacing={3} alignItems="center">
+            <Grid item>
+              <Typography variant="subtitle2" gutterBottom>
+                <Close/>
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              {/* The index mapping here depends on how you originally mapped sliders. 
+                  If you notice any indexing issues, adjust accordingly. */}
+              <Slider
+                value={responses[s.trait][statements.indexOf(s)]}
+                onChange={handleSliderChange(s.trait, statements.indexOf(s))}
+                min={0}
+                max={1}
+                step={0.01}
+              />
+            </Grid>
+            <Grid item>
+              <Typography variant="subtitle2" gutterBottom>
+                <Check/>
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs>
-            <Slider
-              value={responses[s.trait][s.trait === 'openness' ? index : currentStage - 1]}
-              onChange={handleSliderChange(s.trait, s.trait === 'openness' ? index : currentStage - 1
-              )}
-              min={0}
-              max={1}
-              step={0.01}
-            />
-          </Grid>
-          <Grid item>
-            <Typography variant="subtitle2" gutterBottom>
-              <Check/>
-            </Typography>
-          </Grid>
-        </Grid>
-      </Box>
-      
+        </Box>
       ))}
 
       {/* Progress Bar */}
@@ -311,23 +316,20 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         <Button onClick={handleBack} disabled={currentStage === 0}>
           Back
         </Button>
-        {matchedMBTIType && (
+        {matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
           <Tooltip title={type.mode}>
-
-          <Box
-          bgcolor={type.bgColor}
-          color="white"
-          p={isMobile ? 1 : 2} // Reduce padding for mobile
-          textAlign="center"
-          borderRadius={2}
-          style={{ textDecoration: 'none' }}
-          sx={{
-            fontSize: isMobile ? '0.75rem' : '1rem', // Adjust text size for mobile
-          }}
-        >
-          <Typography variant="subtitle1">{type.type}</Typography>
-        </Box>
-        </Tooltip>
+            <Box
+              bgcolor={type.bgColor}
+              color="white"
+              p={isMobile ? 1 : 2}
+              textAlign="center"
+              borderRadius={2}
+              style={{ textDecoration: 'none' }}
+              sx={{ fontSize: isMobile ? '0.75rem' : '1rem' }}
+            >
+              <Typography variant="subtitle1">{type.type}</Typography>
+            </Box>
+          </Tooltip>
         )}
         {currentStage === stages.length - 1 ? (
           <Button onClick={handleSubmit} variant="contained" color="primary">

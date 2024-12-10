@@ -10,34 +10,47 @@ import {
   Tooltip,
   useMediaQuery,
   useTheme,
+  Modal,
+  IconButton
 } from '@mui/material';
-import OpennessIcon from '@mui/icons-material/EmojiObjects';
-import ConscientiousnessIcon from '@mui/icons-material/CheckCircle';
-import ExtraversionIcon from '@mui/icons-material/People';
-import AgreeablenessIcon from '@mui/icons-material/Favorite';
-import NeuroticismIcon from '@mui/icons-material/MoodBad';
+import {
+  ShuffleOn,
+  SwitchAccount
+} from '@mui/icons-material';
+import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PeopleIcon from '@mui/icons-material/People';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import MoodBadIcon from '@mui/icons-material/MoodBad';
 
-import { matchMBTIType as calculateMbtiType, determinePrimary4FType } from '../utils/mbtiMapping';
+import { matchMBTIType as calculateMbtiType, determinePrimary4FType, MBTIProfiles } from '../utils/mbtiMapping';
 import { useNavigate } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import { typesData } from './typesData';
+import Matrix from './Matrix';
 
 type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
 
 const traitInfo: { label: Trait; icon: React.ReactNode; color: string }[] = [
-  { label: 'Openness', icon: <OpennessIcon />, color: '#1E90FF' },
-  { label: 'Conscientiousness', icon: <ConscientiousnessIcon />, color: '#32CD32' },
-  { label: 'Extraversion', icon: <ExtraversionIcon />, color: '#FF8C00' },
-  { label: 'Agreeableness', icon: <AgreeablenessIcon />, color: '#FF69B4' },
-  { label: 'Neuroticism', icon: <NeuroticismIcon />, color: '#DC143C' },
+  { label: 'Openness', icon: <EmojiObjectsIcon />, color: '#1E90FF' },
+  { label: 'Conscientiousness', icon: <CheckCircleIcon />, color: '#32CD32' },
+  { label: 'Extraversion', icon: <PeopleIcon />, color: '#FF8C00' },
+  { label: 'Agreeableness', icon: <FavoriteIcon />, color: '#FF69B4' },
+  { label: 'Neuroticism', icon: <MoodBadIcon />, color: '#DC143C' },
 ];
 
+interface BigFiveValues {
+  openness: number;
+  conscientiousness: number;
+  extraversion: number;
+  agreeableness: number;
+  neuroticism: number;
+}
 
-
-const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
-  onComplete,
-}) => {
+const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ onComplete }) => {
   const navigate = useNavigate();
+
+  // State to store the slider values as percentages (0-100)
   const [traits, setTraits] = useState<Record<Trait, number>>({
     Openness: 50,
     Conscientiousness: 50,
@@ -47,56 +60,149 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
   });
 
   const [mbtiType, setMbtiType] = useState<string | null>(null);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const type = typesData.find(t => t.type === mbtiType);
 
-  const handleSliderChange = (trait: Trait) => (event: Event, newValue: number | number[]) => {
+  // Modal state
+  const [openModal, setOpenModal] = useState(false);
+  
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
+  // Helper function to convert the current trait values into the bigFive object (0.0 - 1.0)
+  const getBigFiveData = (): BigFiveValues => ({
+    openness: traits.Openness / 100,
+    conscientiousness: traits.Conscientiousness / 100,
+    extraversion: traits.Extraversion / 100,
+    agreeableness: traits.Agreeableness / 100,
+    neuroticism: traits.Neuroticism / 100,
+  });
+
+  // Recalculate MBTI type when a trait changes
+  const handleSliderChange = (trait: Trait) => (_event: Event, newValue: number | number[]) => {
+    const value = newValue as number;
     setTraits((prev) => {
-      const traits = ({ ...prev, [trait]: newValue as number });
+      const updatedTraits = { ...prev, [trait]: value };
       const bigFiveData = {
-        openness: traits.Openness / 100,
-        conscientiousness: traits.Conscientiousness / 100,
-        extraversion: traits.Extraversion / 100,
-        agreeableness: traits.Agreeableness / 100,
-        neuroticism: traits.Neuroticism / 100,
+        openness: updatedTraits.Openness / 100,
+        conscientiousness: updatedTraits.Conscientiousness / 100,
+        extraversion: updatedTraits.Extraversion / 100,
+        agreeableness: updatedTraits.Agreeableness / 100,
+        neuroticism: updatedTraits.Neuroticism / 100,
       };
-      const fourF = determinePrimary4FType(bigFiveData);
-      const type = calculateMbtiType(bigFiveData, fourF, false);
-      setMbtiType(type);
-      return traits
+
+      const primary4F = determinePrimary4FType(bigFiveData);
+      const calculatedType = calculateMbtiType(bigFiveData, primary4F, false);
+      setMbtiType(calculatedType);
+      return updatedTraits;
     });
-    
   };
 
-  const calculateType = async () => {
-    const bigFiveData = {
-      openness: traits.Openness / 100,
-      conscientiousness: traits.Conscientiousness / 100,
-      extraversion: traits.Extraversion / 100,
-      agreeableness: traits.Agreeableness / 100,
-      neuroticism: traits.Neuroticism / 100,
+  // Set random trait values
+  const setRandomly = () => {
+    const randomTraits: Record<Trait, number> = {
+      Openness: Math.floor(Math.random() * 101),
+      Conscientiousness: Math.floor(Math.random() * 101),
+      Extraversion: Math.floor(Math.random() * 101),
+      Agreeableness: Math.floor(Math.random() * 101),
+      Neuroticism: Math.floor(Math.random() * 101),
     };
-    const fourF = determinePrimary4FType(bigFiveData);
-    const type = calculateMbtiType(bigFiveData, fourF, false);
-    setMbtiType(type);
-    const newJson = {
-      type: type,
-      primary4FType: fourF,
-      bigFiveResponses: bigFiveData,
-  }
-  localStorage.setItem(guid(), JSON.stringify(newJson));
-    const binId = await onComplete({profile: bigFiveData, mbtiType: type, primary4F: fourF});
-    navigate(`/result/${binId}`);
+    setTraits(randomTraits);
 
+    // Recalculate MBTI based on random traits
+    const bigFiveData = {
+      openness: randomTraits.Openness / 100,
+      conscientiousness: randomTraits.Conscientiousness / 100,
+      extraversion: randomTraits.Extraversion / 100,
+      agreeableness: randomTraits.Agreeableness / 100,
+      neuroticism: randomTraits.Neuroticism / 100,
+    };
+    const primary4F = determinePrimary4FType(bigFiveData);
+    const calculatedType = calculateMbtiType(bigFiveData, primary4F, false);
+    setMbtiType(calculatedType);
   };
+
+  // Handle selection from matrix modal
+  const handleMatrixSelect = (selected: string) => {
+    console.log('Selected Type:', selected);
+    if (selected === 'XXXX') {
+      // User doesn't know their type
+      setMbtiType('XXXX');
+      handleCloseModal();
+      return;
+    }
+
+    // If user selected a known type, load its profile and adjust traits
+    const profile = MBTIProfiles.find((p) => p.name === selected)?.traits;
+    if (profile) {
+      // Convert profile traits (0.0-1.0) to percentage and update sliders
+      const updatedTraits: Record<Trait, number> = {
+        Openness: Math.round(profile.openness * 100),
+        Conscientiousness: Math.round(profile.conscientiousness * 100),
+        Extraversion: Math.round(profile.extraversion * 100),
+        Agreeableness: Math.round(profile.agreeableness * 100),
+        Neuroticism: Math.round(profile.neuroticism * 100),
+      };
+
+      setTraits(updatedTraits);
+
+      const primary4F = determinePrimary4FType(profile);
+      const calculatedType = calculateMbtiType(profile, primary4F, false);
+      setMbtiType(calculatedType);
+    } else {
+      setMbtiType(null);
+    }
+
+    handleCloseModal();
+  };
+
+  // On submit, persist data and navigate to the result page
+  const calculateType = async () => {
+    const bigFiveData = getBigFiveData();
+    const primary4F = determinePrimary4FType(bigFiveData);
+    const calculatedType = calculateMbtiType(bigFiveData, primary4F, false);
+    setMbtiType(calculatedType);
+
+    const newJson = {
+      type: calculatedType,
+      primary4FType: primary4F,
+      bigFiveResponses: bigFiveData,
+    };
+
+    localStorage.setItem(guid(), JSON.stringify(newJson));
+
+    const binId = await onComplete({
+      profile: bigFiveData,
+      mbtiType: calculatedType,
+      primary4F,
+    });
+    navigate(`/result/${binId}`);
+  };
+
+  // Find the type data for styling the MBTI preview
+  const currentTypeData = mbtiType ? typesData.find((t) => t.type === mbtiType) : null;
 
   return (
     <Container maxWidth="sm" sx={{ marginTop: '40px', textAlign: 'center' }}>
       <Paper elevation={4} sx={{ padding: '30px', borderRadius: '15px' }}>
-        <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
-          Enter Your Big Five Values
-        </Typography>
+        
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box>
+          <IconButton onClick={setRandomly} color="primary" sx={{ marginRight: 1 }}>
+              <ShuffleOn />
+            </IconButton>
+          </Box>
+          <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
+            Enter Your Big Five Values
+          </Typography>
+          <Box>
+            <IconButton onClick={handleOpenModal} color="primary">
+              <SwitchAccount />
+            </IconButton>
+          </Box>
+        </Box>
+
         <Typography variant="body1" sx={{ marginBottom: '30px', color: 'text.secondary' }}>
           Adjust the sliders to reflect your personality on each Big Five trait. These values help us determine your unique MBTI profile.
         </Typography>
@@ -133,41 +239,80 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({
           ))}
         </Grid>
 
-        {mbtiType && (
+        {/* Display the currently matched MBTI type, if available */}
+        {mbtiType && currentTypeData && (
           <Grid container spacing={1} justifyContent={'center'} marginTop={5}>
             <Box
-          bgcolor={type.bgColor}
-          color="white"
-          p={isMobile ? 1 : 2} // Reduce padding for mobile
-          textAlign="center"
-          borderRadius={2}
-          style={{ textDecoration: 'none' }}
-          sx={{
-            width: 75,
-            fontSize: isMobile ? '0.75rem' : '1rem', // Adjust text size for mobile
-          }}
-        >
-          <Typography variant="subtitle1">{type.type}</Typography>
-        </Box>
+              bgcolor={currentTypeData.bgColor}
+              color="white"
+              p={isMobile ? 1 : 2}
+              textAlign="center"
+              borderRadius={2}
+              sx={{
+                width: 75,
+                fontSize: isMobile ? '0.75rem' : '1rem',
+              }}
+            >
+              <Typography variant="subtitle1">{currentTypeData.type}</Typography>
+            </Box>
           </Grid>
         )}
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={calculateType}
+
+        <Box mt={3}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={calculateType}
+            sx={{
+              marginTop: { xs: '20px', sm: '0px' },
+              padding: '10px 30px',
+              borderRadius: '20px',
+              fontWeight: 'bold',
+              boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+            }}
+          >
+            Submit
+          </Button>
+        </Box>
+      </Paper>
+
+      {/* Modal for Matrix selection */}
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <Box
           sx={{
-            marginTop: '30px',
-            padding: '10px 30px',
-            borderRadius: '20px',
-            fontWeight: 'bold',
-            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            outline: 'none',
+            width: { xs: '90%', sm: '60%' },
+            borderRadius: '8px',
           }}
         >
-          Submit MBTI Type
-        </Button>
-
-      </Paper>
+          <Box sx={{
+            marginLeft: '10%',
+            marginTop: '5%',
+            marginBottom: '5%',
+            marginRight: '5%',
+          }}>
+            <Typography variant="h6" gutterBottom>
+              Select Your Type Here
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Use this as a preset if you already know your type, or choose "I don't know" if unsure!
+            </Typography>
+            <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '60%' : '90%'}/>
+            <Box mt={2} display="flex" justifyContent="center">
+              <Button variant="contained" color="secondary" onClick={() => handleMatrixSelect('XXXX')}>
+                I don't know my type!
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
     </Container>
   );
 };

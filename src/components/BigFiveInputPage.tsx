@@ -282,7 +282,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       </Paper>
 
       {/* Modal for Matrix selection */}
-      <Modal sx={{position: 'relative', top: '50px', left: '50px'}} open={openModal} onClose={handleCloseModal}>
+      <Modal /*sx={{position: 'relative', top: '50px', left: '50px'}}*/ open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{
             position: 'absolute',
@@ -309,8 +309,8 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
               Use this as a preset if you already know your type, or choose "I don't know" if unsure!
             </Typography>
             <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '60%' : '90%'}/>
-            <Box mt={2} display="flex" justifyContent="center">
-              <Button variant="contained" color="secondary" onClick={() => handleMatrixSelect('XXXX')}>
+            <Box sx={{position:'relative', right:'50px'}} mt={2} display="flex" justifyContent="center">
+            <Button variant="contained" color="secondary" onClick={() => handleMatrixSelect('XXXX')}>
                 I don't know my type!
               </Button>
             </Box>

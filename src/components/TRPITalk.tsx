@@ -1,52 +1,55 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Box, Typography, TextareaAutosize, Button, Paper } from "@mui/material";
-import { guid } from "../utils/guid";
-import GhPagesFS from "../utils/GhPagesFS";
+
+const statements = [
+  { text: 'I am open to exploring new ideas and perspectives.', trait: 'openness', weight: 1.2 },
+  { text: 'I often think about abstract concepts and like to ponder deep questions.', trait: 'openness', weight: 0.9 },
+  { text: 'I am comfortable with change and easily adapt to new situations.', trait: 'openness', weight: 0.9 },
+  { text: 'I prefer organized, planned activities over spontaneous events.', trait: 'conscientiousness', weight: 0.9 },
+  { text: 'I often take charge in group settings and feel energized by social interactions.', trait: 'extraversion', weight: 1.0 },
+  { text: 'I often prioritize harmony and avoid conflict in my relationships.', trait: 'agreeableness', weight: 1.0 },
+  { text: 'I tend to feel anxious or worried in stressful situations.', trait: 'neuroticism', weight: 1.0 },
+  { text: 'I feel a strong responsibility to meet my goals and commitments.', trait: 'conscientiousness', weight: 1.1 },
+  { text: 'I enjoy discussing ideas and debating with others.', trait: 'extraversion', weight: 1.1 },
+  { text: 'I strive to be understanding and supportive towards others.', trait: 'agreeableness', weight: 1.2 },
+  { text: 'I often feel uneasy or second-guess myself when making decisions.', trait: 'neuroticism', weight: 0.9 },
+  { text: 'I tend to make decisions based on logic rather than emotions.', trait: 'conscientiousness', weight: 1.3 },
+  { text: 'I tend to stay calm and assertive when solving challenges.', trait: 'extraversion', weight: 1.3 },
+  { text: 'I’m sensitive to other people’s feelings and try to meet their needs.', trait: 'agreeableness', weight: 1.0 },
+  { text: 'I often dwell on past mistakes and worry about future outcomes.', trait: 'neuroticism', weight: 0.95 },
+  { text: 'I am detail-oriented and take time to think through tasks carefully.', trait: 'conscientiousness', weight: 0.9 },
+  { text: 'I’m known for being independent and bold in my approach to problems.', trait: 'extraversion', weight: 1.0 },
+  { text: 'I prefer to work as part of a team and value cooperation.', trait: 'agreeableness', weight: 0.9 },
+  { text: 'I tend to overthink situations and feel uneasy about the unknown.', trait: 'neuroticism', weight: 1.0 },
+];
+
+const stages = [
+  statements.slice(0, 3),   // Stage 0
+  statements.slice(3, 7),   // Stage 1
+  statements.slice(7, 11),  // Stage 2
+  statements.slice(11, 15), // Stage 3
+  statements.slice(15, 19), // Stage 4
+];
 
 const TrpiTalk: React.FC = () => {
-  const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
+  const [bin, setBin] = useState<any>({});
+
   const chatBoxRef = useRef<HTMLDivElement>(null);
-  const [bin, setBin] = useState<any>({}); // State to store bin data
+
+  // Tracking the stage and responses
+  const [currentStage, setCurrentStage] = useState(-1); 
+  // Store responses as arrays corresponding to each stage
+  const [stageResponses, setStageResponses] = useState<number[][]>([]);
   
-  useEffect(() => {
-    const fetchBinData = async () => {
-      try {
-        const userId = guid();
-       
-
-        if(userId) {
-          const local = localStorage.getItem(userId) || '';
-          if(!local) {
-            const ghPages = new GhPagesFS({ owner: 'hroac',
-              repo: 'TRPI',
-              branch: 'gh-data'})
-    
-          
-            const data = await ghPages.readJson(`${userId}.json`)
-            setBin(data)
-
-          } else {
-            const parsed = JSON.parse(local)
-            setBin(parsed)
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching bin data:", error);
-      } 
-    };
-
-    fetchBinData();
-  }, []);
-
   const tokenParts = [
     "c2stcHJvai0wRmZva2tISklYTzFTTm5ncWl5dk9qWXVIbWI0Y2V0dlNZTXdUZ3BoVFhhNkp1V0NzMXVUYmRlMHpRbUVldUE0SHc0TE1ucQ==",
     "RmY5VDNCbGJrRkptaWFKaFdWRjZLdGsxOC1PVG9YVTdvcS1kYWc3LQ==",
     "MkZBdnhvRGliVjZPM1Z4Q29ZejU2dzJ1QUdPOExsUEJTOHVvRFFNQnl5cjRB"
-    
-];
-const { type, bigFiveResponses, primary4FType } = bin;
+  ];
+
   const getResp = async (input: string): Promise<string> => {
+    const { type, bigFiveResponses, primary4FType } = bin || {};
     try {
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
@@ -55,9 +58,11 @@ const { type, bigFiveResponses, primary4FType } = bin;
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-4-turbo", // Specify the model
+          model: "gpt-4-turbo",
           messages: [
-            { role: "system", content: `This GPT is a highly specialized assistant designed to type individuals using the Trauma Response Personality Indicator (TRPI) framework, guide them in developing personalized development plans, and provide education on TRPI concepts. The assistant uses an empathetic, non-judgmental tone to support users in exploring their unique personality dynamics, identifying trauma influences, and working towards cognitive and emotional balance.
+            { 
+              role: "system", 
+              content: `This GPT is a highly specialized assistant designed to type individuals using the Trauma Response Personality Indicator (TRPI) framework, guide them in developing personalized development plans, and provide education on TRPI concepts. The assistant uses an empathetic, non-judgmental tone to support users in exploring their unique personality dynamics, identifying trauma influences, and working towards cognitive and emotional balance.
 
 1. **Understanding the User’s Personality**:
    - The assistant encourages users to take the TRPI test at traumaindicator.com to assess their cognitive functions. It explains the test's importance and provides insights based on the results shared by the user.
@@ -315,13 +320,13 @@ Identifies frozen functions and shows how to re-engage them.
 3. Typology Refinement:
 
 Resolves mistypes by explaining shifts between Id, Ego, and Superego, offering a dynamic alternative to static personality models.
- ${
-  Object.keys(bin).length ? `
-4. user scores:
-
-the user scored the following big five scores ${JSON.stringify(bigFiveResponses)} the following mbti type was assigned to this profile ${type} - ${primary4FType}` : ''
- }
-` },
+ 
+${
+  bin && bin.bigFiveResponses && bin.type && bin.primary4FType
+    ? `the user scored the following big five scores ${JSON.stringify(bin.bigFiveResponses)} the following mbti type was assigned to this profile ${bin.type} - ${bin.primary4FType}`
+    : ''
+}`
+            },
             ...messages,
             { role: "user", content: input },
           ],
@@ -332,29 +337,147 @@ the user scored the following big five scores ${JSON.stringify(bigFiveResponses)
       const result = await response.json();
       return result.choices?.[0]?.message?.content || "I'm sorry, I couldn't understand that.";
     } catch (error) {
-      console.error("Error fetching response from OpenAI:", error);
+      console.error("Error:", error);
       return "Error communicating with OpenAI.";
     }
   };
 
-  const handleSubmit = async () => {
-    if (!input.trim()) return;
+  const addMessage = (role: string, content: string) => {
+    setMessages((prev) => [...prev, { role, content }]);
+    setTimeout(() => {
+      if (chatBoxRef.current) {
+        chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+      }
+    }, 100);
+  };
 
-    // Append user message to chat
-    setMessages((prevMessages) => [...prevMessages, { role: "user", content: input }]);
+  const startStage = (stageIndex: number) => {
+    if (stageIndex < stages.length) {
+      const currentStageQuestions = stages[stageIndex];
+      addMessage("assistant", `Stage ${stageIndex + 1} of ${stages.length}. You can respond in two ways:\n1. Just provide ${currentStageQuestions.length} numbers (1-5) separated by spaces. e.g. "3 5 2"\n2. Provide ${currentStageQuestions.length} lines, each starting with a number (1-5) followed by a period, and optionally followed by a sentence. e.g.\n"3. I prefer structured environments."\n"5. I adapt well to changes."`);
+      addMessage("assistant", "Here are your statements:");
+      currentStageQuestions.forEach((q, i) => {
+        addMessage("assistant", `${i+1}. ${q.text}`);
+      });
+    } else {
+      // All stages completed
+      addMessage("assistant", "Thank you for completing the questionnaire. One moment while I process your results...");
 
-    // Get ChatGPT's response
-    setInput("");
+      // Flatten all responses
+      const allResponses = stageResponses.flat();
+      // Calculate Big Five scores using the scaled values (0 to 1)
+      const scores: any = {
+        openness: 0,
+        conscientiousness: 0,
+        extraversion: 0,
+        agreeableness: 0,
+        neuroticism: 0,
+      };
 
-    const response = await getResp(input);
+      statements.forEach((statement, i) => {
+        // Convert the 1-5 rating to 0-1 scale
+        const rawRating = allResponses[i]; 
+        const transformedValue = (rawRating - 1) / 4; // 1->0.0, 5->1.0
+        scores[statement.trait] += transformedValue * statement.weight;
+      });
 
-    // Append ChatGPT's response to chat
-    setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: response }]);
+      // Assign a type and primary4FType (example)
+      const updatedBin = {
+        ...bin,
+        bigFiveResponses: scores,
+        type: 'INTJ',         // Example assigned type
+        primary4FType: 'Freeze'
+      };
+      setBin(updatedBin);
 
-    // Scroll to bottom
-    if (chatBoxRef.current) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+      // Indicate questionnaire done
+      setCurrentStage(-1);
+
+      addMessage("assistant", "Your Big Five results have been recorded. You can now ask me about your TRPI type and development strategies.");
     }
+  };
+
+  const parseUserResponse = (input: string, expectedCount: number): number[] | null => {
+    const lines = input.trim().split('\n').map(line => line.trim()).filter(line => line);
+
+    // Try line-by-line parsing
+    // Each line should start with a number (1-5) and a period for this method
+    if (lines.length === expectedCount) {
+      const answers: number[] = [];
+      let lineBasedSuccess = true;
+      for (let line of lines) {
+        const match = /^([1-5])(\.|$)/.exec(line);
+        if (!match) {
+          lineBasedSuccess = false;
+          break;
+        }
+        answers.push(parseInt(match[1], 10));
+      }
+      if (lineBasedSuccess) {
+        return answers;
+      }
+    }
+
+    // If line-based parsing didn't work, try just numbers separated by space in a single line
+    // Combine everything into a single line and parse just numbers
+    const singleLine = input.trim().replace(/\n+/g, ' ');
+    const numberMatches = singleLine.split(/\s+/).map(v => parseInt(v,10)).filter(n => !isNaN(n));
+    if (numberMatches.length === expectedCount && numberMatches.every(n => n >= 1 && n <= 5)) {
+      return numberMatches;
+    }
+
+    // If both methods fail, return null
+    return null;
+  };
+
+  const handleUserInput = async (input: string) => {
+    // If no bigFiveResults and not started questionnaire
+    if (currentStage === -1 && !bin.bigFiveResponses) {
+      // If user wants to begin, start stage 0
+      addMessage("assistant", "Great, let's begin the Big Five assessment in stages.");
+      setCurrentStage(0);
+      startStage(0);
+      return;
+    }
+
+    // If we are in the questionnaire (currentStage between 0 and stages.length)
+    if (currentStage >= 0 && currentStage < stages.length && !bin.bigFiveResponses) {
+      const currentStageQuestions = stages[currentStage];
+      const answers = parseUserResponse(input, currentStageQuestions.length);
+      if (!answers) {
+        addMessage("assistant", `Please provide exactly ${currentStageQuestions.length} responses, either all numbers separated by space or lines starting with a number 1-5 followed by a period.`);
+        return;
+      }
+
+      // If we got valid answers for all lines
+      setStageResponses((prev) => [...prev, answers]);
+      const nextStage = currentStage + 1;
+      setCurrentStage(nextStage);
+      startStage(nextStage);
+      return;
+    }
+
+    // If bigFiveResults are set, we are now in Q&A mode
+    if (bin.bigFiveResponses) {
+      const response = await getResp(input);
+      addMessage("assistant", response);
+      return;
+    }
+
+    // Fallback if user says something unexpected before starting
+    if (!bin.bigFiveResponses && currentStage === -1) {
+      addMessage("assistant", "Would you like to begin the Big Five assessment?");
+    }
+  };
+
+  const [input, setInput] = useState("");
+
+  const handleSubmit = () => {
+    if (!input.trim()) return;
+    const userMessage = input.trim();
+    addMessage("user", userMessage);
+    setInput("");
+    handleUserInput(userMessage);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -363,6 +486,12 @@ the user scored the following big five scores ${JSON.stringify(bigFiveResponses)
       handleSubmit();
     }
   };
+
+  useEffect(() => {
+    if (messages.length === 0) {
+     // addMessage("assistant", "Welcome to the TRPI Chat! Would you like to begin the Big Five assessment?");
+    }
+  }, [messages.length]);
 
   return (
     <Box
@@ -433,7 +562,7 @@ the user scored the following big five scores ${JSON.stringify(bigFiveResponses)
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyPress={handleKeyPress}
-        placeholder="Ask something about TRPI..."
+        placeholder="Type your response here..."
         minRows={3}
         style={{
           width: "100%",

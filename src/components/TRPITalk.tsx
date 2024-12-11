@@ -42,7 +42,7 @@ const stages = [
 
 const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
-  const [binId, setBinId] = useState<string | null>(null);
+  const [binId, setBinId] = useState<string | null>(localStorage.getItem('binId'));
   const chatBoxRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -552,7 +552,7 @@ and just return them in a json format like above, this is VERY important so plea
       addMessage("assistant", description);
 
       // Create a shareable link
-      const shareURL = `${window.location.origin}/#/results/${savedBinId}`;
+      const shareURL = `${window.location.origin}/#/result/${savedBinId}`;
       setShareLink(shareURL);
       addMessage("assistant", "If you'd like to share your results, click the 'Share Your Results' button below.");
       console.log("Shareable URL:", shareURL);

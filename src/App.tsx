@@ -35,6 +35,7 @@ function App() {
             primary4FType: responses.primary4F,
             bigFiveResponses: responses.profile,
             description: responses.description || '',
+            allResponses: responses.allResponses || [],
         });
         setBinId(binId);
         localStorage.setItem('binId', binId); // Store the bin ID under 'userId'

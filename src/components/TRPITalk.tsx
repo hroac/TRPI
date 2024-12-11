@@ -803,7 +803,8 @@ and just return them in a json format like above, this is VERY important so plea
           sx={{
             backgroundColor: "#4ade80",
             color: "white",
-            padding: "12px 24px",
+            padding: "16px 32px",
+            margin: "28px 24px",
             borderRadius: "10px",
             cursor: "pointer",
             fontSize: "1rem",

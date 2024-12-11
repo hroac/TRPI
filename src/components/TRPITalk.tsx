@@ -758,26 +758,6 @@ and just return them in a json format like above, this is VERY important so plea
           </Box>
         )}
       </Paper>
-      {shareLink && (
-        <Button
-          onClick={handleShareClick}
-          sx={{
-            backgroundColor: "#4ade80",
-            color: "white",
-            padding: "12px 24px",
-            borderRadius: "10px",
-            cursor: "pointer",
-            fontSize: "1rem",
-            fontWeight: "bold",
-            marginBottom: 2,
-            "&:hover": {
-              backgroundColor: "#22c55e",
-            }
-          }}
-        >
-          Share Your Results
-        </Button>
-      )}
       <TextareaAutosize
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -817,6 +797,26 @@ and just return them in a json format like above, this is VERY important so plea
       >
         Send
       </Button>
+      {shareLink && (
+        <Button
+          onClick={handleShareClick}
+          sx={{
+            backgroundColor: "#4ade80",
+            color: "white",
+            padding: "12px 24px",
+            borderRadius: "10px",
+            cursor: "pointer",
+            fontSize: "1rem",
+            fontWeight: "bold",
+            marginBottom: 2,
+            "&:hover": {
+              backgroundColor: "#22c55e",
+            }
+          }}
+        >
+          Share Your Results
+        </Button>
+      )}
     </Box>
   );
 };

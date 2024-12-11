@@ -66,7 +66,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
   return (
     <Box paddingTop={8} paddingX={4}>
       <Typography variant="h3" component="h1" align="center" gutterBottom>
-        {type || mbtiType} - {description + '\n' + typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
+        {type || mbtiType} - {typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
       </Typography>
 
       <Grid spacing={2}>
@@ -92,7 +92,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
         <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
           <CardContent>
             <Typography variant="body1" paragraph>
-              {typeInfo.description}
+              {description + '\n'  + typeInfo.description}
             </Typography>
           </CardContent>
         </Card>

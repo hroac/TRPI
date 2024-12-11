@@ -170,7 +170,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       bigFiveResponses: weightedScores,
     }
     localStorage.setItem(guid(), JSON.stringify(newJson));
-    const binId = await onComplete({ primary4F, mbtiType, selectedMbtiType, profile: weightedScores, description: profile.description});
+    const binId = await onComplete({ primary4F, mbtiType, selectedMbtiType, profile: weightedScores, description: ''});
     navigate(`/result/${binId}`);
   };
 

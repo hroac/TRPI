@@ -34,24 +34,9 @@ function App() {
             type: responses.mbtiType,
             primary4FType: responses.primary4F,
             bigFiveResponses: responses.profile,
+            description: responses.description || '',
         });
-        setBinId(binId)
-
-           //const json = await ghPages.readJson(`${guid}.json`);
-         /*   const newJson = {
-            type: responses.mbtiType,
-            primary4FType: responses.primary4F,
-            bigFiveResponses: responses.profile,
-        } */
-        //const local = localStorage.setItem(guid(), JSON.stringify(newJson));
-        /* const ghPages = new GhPagesFS({ owner: 'hroac',
-            repo: 'TRPI',
-            branch: 'gh-data',
-            token: process.env.REACT_APP_GH_KEY?.toString() || ''})
-        const result = await ghPages.writeJson({filePath: `${guid()}.json`, jsonData: newJson});
-        console.log(result) */
-        //save the bin id
-       
+        setBinId(binId);
         localStorage.setItem('binId', binId); // Store the bin ID under 'userId'
         console.log("Saved bin ID to local storage:", binId);
     return binId;
@@ -87,14 +72,14 @@ function App() {
                     <Routes>
                         <Route path='/' element={<Homepage />} />
                         <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />
-                        <Route path="/result/:binId" element={<ResultsPage binId={binId}/>} />
+                        <Route path="/result/:binId" element={<ResultsPage binId={binId}/>} />"
                         <Route path="/input" element={<BigFiveInputPage onComplete={handleComplete} />} />
                         <Route path="/about/:type" element={<AboutPage />} />
                         <Route path="/about" element={<TRPIExplanation />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/services" element={<Services />} />
                         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                        <Route path="/talk" element={<TrpiTalk/>} />
+                        <Route path="/talk" element={<TrpiTalk onComplete={handleComplete}/>} />
                     </Routes>
                     <Footer />
                 </Box>

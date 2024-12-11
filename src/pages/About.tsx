@@ -9,7 +9,7 @@ import { Bar } from 'react-chartjs-2';
 
 
 
-const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean }> = ({ mbtiType, showBigFive = true }) => {
+const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; description?: string; }> = ({ mbtiType, showBigFive = true, description = '' }) => {
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t: any) => t.type === type || t.type === mbtiType);
   const profile = MBTIProfiles.find((p: any) => p.name === type || p.name === mbtiType);
@@ -66,7 +66,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean }> = ({ mbt
   return (
     <Box paddingTop={8} paddingX={4}>
       <Typography variant="h3" component="h1" align="center" gutterBottom>
-        {type || mbtiType} - {typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
+        {type || mbtiType} - {description || typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
       </Typography>
 
       <Grid spacing={2}>

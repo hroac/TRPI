@@ -135,7 +135,6 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         const primary4F = determinePrimary4FType(weightedScores);
         const mbtiType = matchMBTIType(weightedScores, primary4F);
         const type = matchMBTIType(weightedScores, primary4F,false);
-
         setPrimary4FType(primary4F);
         setMatchedMBTIType(mbtiType);
         setMatchedType(type);
@@ -163,6 +162,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
     const primary4F = determinePrimary4FType(weightedScores);
     const mbtiType = matchMBTIType(weightedScores, primary4F);
+    const profile = typesData.find(t => t.type === mbtiType);
 
     const newJson = {
       type: mbtiType,
@@ -170,7 +170,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       bigFiveResponses: weightedScores,
     }
     localStorage.setItem(guid(), JSON.stringify(newJson));
-    const binId = await onComplete({ primary4F, mbtiType, selectedMbtiType, profile: weightedScores });
+    const binId = await onComplete({ primary4F, mbtiType, selectedMbtiType, profile: weightedScores, description: profile.description});
     navigate(`/result/${binId}`);
   };
 

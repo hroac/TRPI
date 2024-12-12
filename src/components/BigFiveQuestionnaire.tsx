@@ -290,9 +290,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
               {/* The index mapping here depends on how you originally mapped sliders. 
                   If you notice any indexing issues, adjust accordingly. */}
               <Slider
-                value={responses[s.trait][statements.indexOf(s)]}
-                onChange={handleSliderChange(s.trait, statements.indexOf(s))}
-                min={0}
+               value={responses[s.trait][s.trait === 'openness' ? index : currentStage - 1]}
+               onChange={handleSliderChange(s.trait, s.trait === 'openness' ? index : currentStage - 1)}
                 max={1}
                 step={0.01}
               />

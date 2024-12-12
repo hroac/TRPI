@@ -1,1 +1,0 @@
-export { ChatGPT } from './ChatGPT'

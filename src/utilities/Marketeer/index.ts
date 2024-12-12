@@ -1,2 +1,0 @@
-export { Marketeer } from './Service'
-

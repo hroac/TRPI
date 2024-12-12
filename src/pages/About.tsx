@@ -92,7 +92,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
         <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
           <CardContent>
             <Typography variant="body1" paragraph>
-              {typeInfo.description}
+              {description + '\n' + typeInfo.description}
             </Typography>
           </CardContent>
         </Card>

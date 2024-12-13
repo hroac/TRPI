@@ -34,8 +34,8 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
         if(!local || params?.binId) {
           const bin = params?.binId || binId || ''; // Fetch binId from localStorage
 
-          if (binId) {
-            const binData = await JsonBinApi.getBinById(binId); // Retrieve bin data by binId
+          if (bin) {
+            const binData = await JsonBinApi.getBinById(bin); // Retrieve bin data by binId
             setBin(binData); // Set bin data to state
           }
           /* const ghPages = new GhPagesFS({ owner: 'hroac',

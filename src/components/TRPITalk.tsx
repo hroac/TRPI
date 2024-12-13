@@ -102,7 +102,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-4o-2024-11-20",
+          model: "ft:gpt-4o-2024-08-06:smersh::Ae8H9Yf7",
           messages: [
             { 
               role: "system", 

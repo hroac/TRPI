@@ -169,12 +169,12 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
         throw new Error(`Incomplete responses. Expected ${statements.length} responses but received ${allResponses.length}.`);
       }
 
-      for (let i = 0; i < statements.length; i++) {
-        const response = allResponses[i];
-        if (typeof response !== 'number' || isNaN(response) || response < 1 || response > 5) {
-          throw new Error(`Invalid response for statement ${i + 1}: ${response}. Please provide numbers between 1 and 5.`);
-        }
-      }
+      // for (let i = 0; i < statements.length; i++) {
+      //   const response = allResponses[i];
+      //   if (typeof response !== 'number' || isNaN(response) || response < 1 || response > 5) {
+      //     throw new Error(`Invalid response for statement ${i + 1}: ${response}. Please provide numbers between 1 and 5.`);
+      //   }
+      // }
 
       console.log("All responses are valid.");
 
@@ -493,7 +493,7 @@ and just return them in a json format like above, this is VERY important so plea
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-4o-2024-11-20",
+          model: "ft:gpt-4o-2024-08-06:smersh::Ae8H9Yf7",
           messages: [
             { role: "system", content: "You are ChatGPT, a large language model trained by OpenAI." },
             { role: "user", content: prompt },

@@ -11,14 +11,14 @@ const ModeSelector = () => {
       description: "You are assertive and proactive, often facing challenges head-on. This mode is characterized by a readiness to take action, a strong drive to overcome obstacles, and confidence in leadership roles."
     },
     {
-      name: "Freeze",
-      color: "#3b82f6",
-      description: "You are analytical and observant, preferring to take a step back and evaluate situations before acting. This mode often involves processing information carefully, maintaining a calm demeanor, and excelling in logical problem-solving."
-    },
-    {
       name: "Fawn",
       color: "#a855f7",
       description: "You are empathetic and accommodating, often striving to maintain harmony in relationships. This mode emphasizes collaboration, emotional connection, and finding ways to support others while navigating challenges together."
+    },
+    {
+      name: "Freeze",
+      color: "#3b82f6",
+      description: "You are analytical and observant, preferring to take a step back and evaluate situations before acting. This mode often involves processing information carefully, maintaining a calm demeanor, and excelling in logical problem-solving."
     },
     {
       name: "Flight",

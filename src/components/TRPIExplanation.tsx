@@ -14,6 +14,7 @@ import {
   TableCell,
   TableBody,
   Paper,
+  Container,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Matrix from './Matrix';
@@ -56,7 +57,8 @@ const TRPIExplanation: React.FC = () => {
     { type: 'INFP', f4: 'Flight', stack: 'Fi > Ne > Si > Te', dominant: 'Fi + Ne (Superego + Id)', auxiliary: 'Fe + Si (Ego + Id)' },
   ];
   return (
-    <Box sx={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+    <Container sx={{marginTop: '64px'}}>
+    <Box sx={{maxWidth: '800px', margin: '0 auto' }}>
       <Typography variant="h4" gutterBottom>
         Trauma Response Personality Indicator (TRPI)
       </Typography>
@@ -309,6 +311,8 @@ const TRPIExplanation: React.FC = () => {
         </CardContent>
       </Card>
     </Box>
+    </Container>
+
   );
 };
 

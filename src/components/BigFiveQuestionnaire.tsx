@@ -471,10 +471,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
   const handleNext = () => {
     if (currentStage < stages.length - 1) setCurrentStage(currentStage + 1);
+    setSelectedStatement(null)
   };
 
   const handleBack = () => {
     if (currentStage > 0) setCurrentStage(currentStage - 1);
+    setSelectedStatement(null)
   };
 
   const handleSubmit = async () => {

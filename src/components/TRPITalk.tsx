@@ -1,216 +1,109 @@
-// TrpiTalk.tsx
-import React, { useState, useRef, useEffect } from "react";
-import { Box, Typography, TextareaAutosize, Button, Paper, CircularProgress } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
-import JsonBinApi from '../utils/saveResults'; // Ensure this utility is correctly implemented
+import React, { useState, useEffect } from "react";
+import { Box, Typography, TextareaAutosize, Button, Paper, CircularProgress, TextField } from "@mui/material";
 
 interface TrpiTalkProps {
   onComplete: (responses: any) => Promise<string>; // onComplete returns a binId
 }
 
-// Define your statements without weights since ChatGPT will handle calculations
-const statements = [
-  { text: 'I am open to exploring new ideas and perspectives.', trait: 'openness' },
-  { text: 'I often think about abstract concepts and like to ponder deep questions.', trait: 'openness' },
-  { text: 'I am comfortable with change and easily adapt to new situations.', trait: 'openness' },
-  { text: 'I prefer organized, planned activities over spontaneous events.', trait: 'conscientiousness' },
-  { text: 'I often take charge in group settings and feel energized by social interactions.', trait: 'extraversion' },
-  { text: 'I often prioritize harmony and avoid conflict in my relationships.', trait: 'agreeableness' },
-  { text: 'I tend to feel anxious or worried in stressful situations.', trait: 'neuroticism' },
-  { text: 'I feel a strong responsibility to meet my goals and commitments.', trait: 'conscientiousness' },
-  { text: 'I enjoy discussing ideas and debating with others.', trait: 'extraversion' },
-  { text: 'I strive to be understanding and supportive towards others.', trait: 'agreeableness' },
-  { text: 'I often feel uneasy or second-guess myself when making decisions.', trait: 'neuroticism' },
-  { text: 'I tend to make decisions based on logic rather than emotions.', trait: 'conscientiousness' },
-  { text: 'I tend to stay calm and assertive when solving challenges.', trait: 'extraversion' },
-  { text: 'I’m sensitive to other people’s feelings and try to meet their needs.', trait: 'agreeableness' },
-  { text: 'I often dwell on past mistakes and worry about future outcomes.', trait: 'neuroticism' },
-  { text: 'I am detail-oriented and take time to think through tasks carefully.', trait: 'conscientiousness' },
-  { text: 'I’m known for being independent and bold in my approach to problems.', trait: 'extraversion' },
-  { text: 'I prefer to work as part of a team and value cooperation.', trait: 'agreeableness' },
-  { text: 'I tend to overthink situations and feel uneasy about the unknown.', trait: 'neuroticism' },
+const tokenParts = [
+  "c2stcHJvai0wRmZva2tISklYTzFTTm5ncWl5dk9qWXVIbWI0Y2V0dlNZTXdUZ3BoVFhhNkp1V0NzMXVUYmRlMHpRbUVldUE0SHc0TE1ucQ==",
+  "RmY5VDNCbGJrRkptaWFKaFdWRjZLdGsxOC1PVG9YVTdvcS1kYWc3LQ==",
+  "MkZBdnhvRGliVjZPM1Z4Q29ZejU2dzJ1QUdPOExsUEJTOHVvRFFNQnl5cjRB",
 ];
 
-// Define stages based on the number of statements per stage
+const statements = [
+  { text: "I am open to exploring new ideas and perspectives.", trait: "openness" },
+  { text: "I often think about abstract concepts and like to ponder deep questions.", trait: "openness" },
+  { text: "I am comfortable with change and easily adapt to new situations.", trait: "openness" },
+  { text: "I prefer organized, planned activities over spontaneous events.", trait: "conscientiousness" },
+  { text: "I often take charge in group settings and feel energized by social interactions.", trait: "extraversion" },
+  { text: "I often prioritize harmony and avoid conflict in my relationships.", trait: "agreeableness" },
+  { text: "I tend to feel anxious or worried in stressful situations.", trait: "neuroticism" },
+  { text: "I feel a strong responsibility to meet my goals and commitments.", trait: "conscientiousness" },
+  { text: "I enjoy discussing ideas and debating with others.", trait: "extraversion" },
+  { text: "I strive to be understanding and supportive towards others.", trait: "agreeableness" },
+  { text: "I often feel uneasy or second-guess myself when making decisions.", trait: "neuroticism" },
+  { text: "I tend to make decisions based on logic rather than emotions.", trait: "conscientiousness" },
+  { text: "I tend to stay calm and assertive when solving challenges.", trait: "extraversion" },
+  { text: "I’m sensitive to other people’s feelings and try to meet their needs.", trait: "agreeableness" },
+  { text: "I often dwell on past mistakes and worry about future outcomes.", trait: "neuroticism" },
+  { text: "I am detail-oriented and take time to think through tasks carefully.", trait: "conscientiousness" },
+  { text: "I’m known for being independent and bold in my approach to problems.", trait: "extraversion" },
+  { text: "I prefer to work as part of a team and value cooperation.", trait: "agreeableness" },
+  { text: "I tend to overthink situations and feel uneasy about the unknown.", trait: "neuroticism" },
+];
+
 const stages = [
-  statements.slice(0, 3),   // Stage 0: 4 questions
-  statements.slice(3, 7),   // Stage 1: 4 questions
-  statements.slice(7, 11),  // Stage 2: 4 questions
-  statements.slice(11, 15), // Stage 3: 4 questions
-  statements.slice(15, 19), // Stage 4: 3 questions
+  statements.slice(0, 3),
+  statements.slice(3, 7),
+  statements.slice(7, 11),
+  statements.slice(11, 15),
+  statements.slice(15, 19),
 ];
 
 const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
-  const [binId, setBinId] = useState<string | null>(localStorage.getItem('binId'));
-  const chatBoxRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
-
-  // Tracking the stage and responses
-  const [currentStage, setCurrentStage] = useState<number>(-1); 
-  // Store responses as arrays corresponding to each stage
-  const [stageResponses, setStageResponses] = useState<number[][]>([]);
-
-  // Shareable link state
-  const [shareLink, setShareLink] = useState<string>("");
-
-  // Loading state for asynchronous operations
+  const [currentStage, setCurrentStage] = useState<number>(-1);
+  const [stageResponses, setStageResponses] = useState<{ rating: number; explanation: string }[][]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [currentResponses, setCurrentResponses] = useState<{ rating: number; explanation: string }[]>([]);
+  const [isQuestionnaireComplete, setIsQuestionnaireComplete] = useState(false);
 
-  // OpenAI API tokens split into parts for security (ensure these are set correctly)
-  const tokenParts = [
-    "c2stcHJvai0wRmZva2tISklYTzFTTm5ncWl5dk9qWXVIbWI0Y2V0dlNZTXdUZ3BoVFhhNkp1V0NzMXVUYmRlMHpRbUVldUE0SHc0TE1ucQ==",
-    "RmY5VDNCbGJrRkptaWFKaFdWRjZLdGsxOC1PVG9YVTdvcS1kYWc3LQ==",
-    "MkZBdnhvRGliVjZPM1Z4Q29ZejU2dzJ1QUdPOExsUEJTOHVvRFFNQnl5cjRB"
-  ];
-
-  // Function to call OpenAI API for general responses
-  const getResp = async (input: string): Promise<string> => {
-    console.log("getResp called with input:", input);
-    // Fetch bin data if binId exists
-    let binData = {};
-    if (binId) {
-      try {
-        console.log("Fetching bin data for binId:", binId);
-        binData = await JsonBinApi.getBinById(binId);
-        console.log("Fetched bin data:", binData);
-      } catch (error) {
-        console.error("Error fetching bin data:", error);
-        addMessage("assistant", "Error retrieving your profile data.");
-        return "I'm sorry, I couldn't retrieve your profile data.";
-      }
+  useEffect(() => {
+    if (currentStage >= 0) {
+      setCurrentResponses(stages[currentStage].map(() => ({ rating: 0, explanation: "" })));
     }
-    const { type, bigFiveScores, primary4F, description } = (binData || {}) as any;
-    console.log("Extracted data from bin:", { type, bigFiveScores, primary4F, description });
+  }, [currentStage]);
 
-    try {
-      const systemContent = `You are a highly specialized assistant designed to type individuals using the Trauma Response Personality Indicator (TRPI) framework, guide them in developing personalized development plans, and provide education on TRPI concepts. The assistant uses an empathetic, non-judgmental tone to support users in exploring their unique personality dynamics, identifying trauma influences, and working towards cognitive and emotional balance.
-      
-      ${
-        bigFiveScores && type && primary4F && description
-          ? `The user has the following Big Five scores (each between 0 and 1): Openness - ${bigFiveScores.openness.toFixed(2)}, Conscientiousness - ${bigFiveScores.conscientiousness.toFixed(2)}, Extraversion - ${bigFiveScores.extraversion.toFixed(2)}, Agreeableness - ${bigFiveScores.agreeableness.toFixed(2)}, Neuroticism - ${bigFiveScores.neuroticism.toFixed(2)}. The TRPI type assigned is ${type} (${primary4F}). Description: ${description}.`
-          : ''
-      }
-      `;
-
-      console.log("System content for OpenAI:", systemContent);
-
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${tokenParts.map(t => atob(t)).join('')}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "ft:gpt-4o-2024-08-06:smersh::Ae8H9Yf7",
-          messages: [
-            { 
-              role: "system", 
-              content: systemContent 
-            },
-            ...messages,
-            { role: "user", content: input },
-          ],
-          max_tokens: 250,
-        }),
-      });
-
-      console.log("OpenAI response status:", response.status);
-      const result = await response.json();
-      console.log("OpenAI response data:", result);
-
-      return result.choices?.[0]?.message?.content || "I'm sorry, I couldn't understand that.";
-    } catch (error) {
-      console.error("Error fetching response from OpenAI:", error);
-      return "Error communicating with OpenAI.";
-    }
-  };
-
-  // Function to add messages to the chat
-  const addMessage = (role: string, content: string) => {
-    console.log(`Adding message - Role: ${role}, Content: ${content}`);
-    setMessages((prev) => [...prev, { role, content }]);
-    // Scroll to bottom
-    setTimeout(() => {
-      if (chatBoxRef.current) {
-        chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-        console.log("Scrolled chat box to bottom.");
-      }
-    }, 100);
-  };
-
-  // Function to start a questionnaire stage
   const startStage = (stageIndex: number) => {
-    console.log("Starting stage:", stageIndex);
-    if (stageIndex < stages.length) {
-      const currentStageQuestions = stages[stageIndex];
-      addMessage("assistant", `Stage ${stageIndex + 1} of ${stages.length}. Please answer the following questions on a scale of 1 to 5, where 1 means "Strongly Disagree" and 5 means "Strongly Agree". You can respond in two ways:\n1. Just provide numbers (e.g., "3 5 2 4")\n2. Provide each response starting with a number and a period (e.g., "3. I prefer structured environments.")`);
-      addMessage("assistant", "Here are your statements:");
-      currentStageQuestions.forEach((q, i) => {
-        addMessage("assistant", `${i + 1}. ${q.text}`);
-      });
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "assistant",
+        content: `Stage ${stageIndex + 1} of ${stages.length}. Please rate and explain your response for each question.`,
+      },
+    ]);
+    setCurrentStage(stageIndex);
+  };
+
+  const handleStageSubmit = (responses: { rating: number; explanation: string }[]) => {
+    setStageResponses((prev) => [...prev, responses]);
+
+    const nextStage = currentStage + 1;
+    if (nextStage < stages.length) {
+      startStage(nextStage);
     } else {
-      // All stages completed
-      addMessage("assistant", "Thank you for completing the questionnaire. One moment while I process your results...");
-      const allResponses = stageResponses.flat();
-      processResponses(allResponses);
+      setIsQuestionnaireComplete(true);
+      processResponses(stageResponses.flat());
     }
   };
 
-  // Function to process all responses and generate type and description using ChatGPT
-  const processResponses = async (allResponses: number[]) => {
-    console.log("Processing responses...");
+  const processResponses = async (responses: { rating: number; explanation: string }[]) => {
     setLoading(true);
     try {
-      console.log("All collected responses:", allResponses);
-
-      // Validate all responses are numbers between 1 and 5
-      if (allResponses.length !== statements.length) {
-        throw new Error(`Incomplete responses. Expected ${statements.length} responses but received ${allResponses.length}.`);
-      }
-
-      // for (let i = 0; i < statements.length; i++) {
-      //   const response = allResponses[i];
-      //   if (typeof response !== 'number' || isNaN(response) || response < 1 || response > 5) {
-      //     throw new Error(`Invalid response for statement ${i + 1}: ${response}. Please provide numbers between 1 and 5.`);
-      //   }
-      // }
-
-      console.log("All responses are valid.");
-
-      // Prepare the responses in a format suitable for ChatGPT
-      const formattedResponses = allResponses.map((response, index) => ({
-        question: statements[index].text,
-        response,
-      }));
-
-      console.log("Formatted responses for ChatGPT:", formattedResponses);
-
-      // Generate a prompt for ChatGPT to calculate scores and determine types
       const prompt = `
 You are an expert in personality assessments using the Big Five Personality Traits and the Trauma Response Personality Indicator (TRPI) framework.
 
-The user has answered the following 19 statements on a scale of 1 to 5, where 1 means "Strongly Disagree" and 5 means "Strongly Agree":
+The user has provided the following responses for ${responses.length} statements. Each response consists of a numerical rating (1 to 5) and an explanation:
 
-${formattedResponses.map((item, index) => `${index + 1}. ${item.question} - ${item.response}`).join('\n')}
+${responses
+  .map(
+    (r, index) =>
+      `${index + 1}. ${statements[index].text} - Rating: ${r.rating}, Explanation: ${r.explanation}`
+  )
+  .join("\n")}
 
 Please perform the following tasks:
 
 1. Calculate the Big Five scores for the user based on their responses. Use the following mapping for each trait:
-take the user input on each question into account both seperately and as a whole for each trait to further deduce their score between 0-1 
-(eg if the user inputs an answer related to the trait it should be considered with a weight/importance based on how alike to the trait it is)
    - **Openness**: Average of responses related to openness.
    - **Conscientiousness**: Average of responses related to conscientiousness.
    - **Extraversion**: Average of responses related to extraversion.
    - **Agreeableness**: Average of responses related to agreeableness.
    - **Neuroticism**: Average of responses related to neuroticism.
 
-  
-   After calculating the average, normalize each score to a range between 0 and 1 using the formula:
-   \[
-   \text{Normalized Score} = \frac{\text{Average Response} - 1}{4}
-   \]
-
+   Normalize each score to a range between 0 and 1 using the formula:
+   \[\text{Normalized Score} = \frac{\text{Average Response} - 1}{4}\]
 
 2. Determine the user's primary TRPI type based on their normalized Big Five scores using these criteria:
    - **Fight**: High extraversion (≥ 0.75).
@@ -218,7 +111,9 @@ take the user input on each question into account both seperately and as a whole
    - **Freeze**: High conscientiousness (≥ 0.75).
    - **Fawn**: High agreeableness (≥ 0.75).
 
-   [
+3. Match the user's TRPI type to the closest MBTI type.
+
+[
   {
       "name": "ENTP",
       "traits": {
@@ -461,12 +356,10 @@ take the user input on each question into account both seperately and as a whole
   }
 ]
 
-3. Match the user's TRPI type to the closest MBTI type using the provided MBTIProfiles array.
 
-4. Generate a custom description (10-15 sentences) explaining the TRPI type.
+4. Generate a custom description (10-15 sentences) explaining the TRPI type and how it relates to the user's personality traits and responses.
 
-Return the results in the following JSON format:
-
+Return the results in JSON format with the following structure:
 {
   "bigFiveScores": {
     "openness": <number>,
@@ -478,213 +371,39 @@ Return the results in the following JSON format:
   "primary4F": "<TRPI Type>",
   "mbtiType": "<MBTI Type>",
   "description": "<Custom Description>"
-}
-
+  
 and just return them in a json format like above, this is VERY important so please do it thank you.
 `;
 
-      console.log("Prompt for ChatGPT:", prompt);
-
-      // Call OpenAI's API to process the responses
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${tokenParts.map(t => atob(t)).join('')}`,
           "Content-Type": "application/json",
+          Authorization: `Bearer ${tokenParts.map((t) => atob(t)).join("")}`,
         },
         body: JSON.stringify({
           model: "ft:gpt-4o-2024-08-06:smersh::Ae8H9Yf7",
-          messages: [
-            { role: "system", content: "You are ChatGPT, a large language model trained by OpenAI." },
-            { role: "user", content: prompt },
-          ],
+          messages: [{ role: "user", content: prompt }],
           max_tokens: 500,
           temperature: 0.5,
         }),
       });
 
-      console.log("ChatGPT response status:", response.status);
-      const result = await response.json();
-      console.log("ChatGPT response data:", result);
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content || "No data received.";
 
-      // Parse the JSON response from ChatGPT
-      const content = result.choices?.[0]?.message?.content || "";
-      const substring = "```json"
-      let parsedData;
-
-      console.log("ChatGPT content:", content);
-
-      if(content.startsWith(substring)) {
-      parsedData = content.substring(content.indexOf(substring) + substring.length, content.length - 4)
-      }
-      try {
-        parsedData = JSON.parse(parsedData ?? content);
-        console.log("Parsed data from ChatGPT:", parsedData);
-      } catch (parseError) {
-        console.error("Error parsing ChatGPT response:", parseError);
-        console.error("ChatGPT response content:", content);
-        throw new Error("Failed to parse the response from ChatGPT.");
-      }
-
-      const { bigFiveScores, primary4F, mbtiType, description } = parsedData;
-
-      if (!bigFiveScores || !primary4F || !mbtiType || !description) {
-        throw new Error("Incomplete data received from ChatGPT.");
-      }
-
-      // Prepare data to save
-      const resultData = {
-        mbtiType: mbtiType,
-        primary4F: primary4F,
-        profile: bigFiveScores,
-        description,
-        responses: allResponses,
-      };
-      console.log("Result Data to be saved:", resultData);
-
-      // Use onComplete to save results and get binId
-      const savedBinId = await onComplete(resultData);
-      console.log("Saved bin ID:", savedBinId);
-      setBinId(savedBinId);
-      localStorage.setItem('binId', savedBinId); // Store the bin ID under 'binId'
-
-      addMessage("assistant", "Your Big Five results have been recorded. You can now ask me about your TRPI type and development strategies.");
-      addMessage("assistant", description);
-
-      // Create a shareable link
-      const shareURL = `${window.location.origin}/#/result/${savedBinId}`;
-      setShareLink(shareURL);
-      addMessage("assistant", "If you'd like to share your results, click the 'Share Your Results' button below.");
-      console.log("Shareable URL:", shareURL);
-    } catch (error: any) {
-      console.error("Error processing responses:", error);
-      addMessage("assistant", `Error: ${error.message}`);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Here is your Big Five profile and analysis:" },
+        { role: "assistant", content },
+      ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "An error occurred while processing your responses." },
+      ]);
     } finally {
       setLoading(false);
-      console.log("Finished processing responses.");
-    }
-  };
-
-  // Function to parse user responses
-  const parseUserResponse = (input: string, expectedCount: number): number[] | null => {
-    console.log("Parsing user input:", input);
-    const lines = input.trim().split('\n').map(line => line.trim()).filter(line => line);
-
-    // Try line-by-line parsing first
-    if (lines.length === expectedCount) {
-      const answers: number[] = [];
-      let lineBasedSuccess = true;
-      for (let line of lines) {
-        const match = /^([1-5])(\.|$)/.exec(line);
-        if (!match) {
-          lineBasedSuccess = false;
-          console.log("Line parsing failed for:", line);
-          break;
-        }
-        answers.push(parseInt(match[1], 10));
-      }
-      if (lineBasedSuccess) {
-        console.log("Successfully parsed responses line-by-line:", answers);
-        return answers;
-      }
-    }
-
-    // Try just numbers separated by space
-    const singleLine = input.trim().replace(/\n+/g, ' ');
-    const numberMatches = singleLine.split(/\s+/).map(v => parseInt(v,10)).filter(n => !isNaN(n));
-    if (numberMatches.length === expectedCount && numberMatches.every(n => n >= 1 && n <= 5)) {
-      console.log("Successfully parsed responses space-separated:", numberMatches);
-      return numberMatches;
-    }
-
-    console.log("Failed to parse user responses.");
-    return null;
-  };
-
-  // Handle user input
-  const handleUserInput = async (input: string) => {
-    console.log("Handling user input:", input);
-    if (currentStage === -1 && !binId) {
-      // Start questionnaire
-      addMessage("assistant", "Great, let's begin the Big Five assessment in stages.");
-      setCurrentStage(0);
-      startStage(0);
-      return;
-    }
-
-    if (currentStage >= 0 && currentStage < stages.length && !binId) {
-      const currentStageQuestions = stages[currentStage];
-      const answers = parseUserResponse(input, currentStageQuestions.length);
-      if (!answers) {
-        addMessage("assistant", `Please provide exactly ${currentStageQuestions.length} responses, either all numbers separated by space or lines starting with a number 1-5 followed by a period.`);
-        console.log("User provided invalid responses.");
-        return;
-      }
-
-      console.log(`User provided valid responses for stage ${currentStage}:`, answers);
-      const newStageResponses = [...stageResponses, answers];
-      setStageResponses(newStageResponses);
-
-      const nextStage = currentStage + 1;
-      setCurrentStage(nextStage);
-
-      if (nextStage < stages.length) {
-        startStage(nextStage);
-      } else {
-        // All stages completed, process responses
-        console.log("All stages completed. Processing responses.");
-        const allResponses = newStageResponses.flat();
-        processResponses(allResponses);
-      }
-      return;
-    }
-
-    if (binId) {
-      // Normal TRPI Q&A mode
-      console.log("Entering TRPI Q&A mode.");
-      setLoading(true);
-      const response = await getResp(input);
-      addMessage("assistant", response);
-      setLoading(false);
-      return;
-    }
-
-    console.log("Unhandled input state.");
-  };
-
-  // Handle share button click
-  const handleShareClick = async () => {
-    console.log("Share button clicked. Share link:", shareLink);
-    if (shareLink) {
-      try {
-        await navigator.clipboard.writeText(shareLink);
-        addMessage("assistant", "Your results link has been copied to the clipboard! Share it with others.");
-        console.log("Share link copied to clipboard.");
-      } catch {
-        addMessage("assistant", `Unable to copy automatically. Please copy this link: ${shareLink}`);
-        console.log("Failed to copy share link to clipboard.");
-      }
-    }
-  };
-
-  const [input, setInput] = useState("");
-
-  const handleSubmit = () => {
-    if (!input.trim()) {
-      console.log("Empty input submitted. Ignoring.");
-      return;
-    }
-    const userMessage = input.trim();
-    addMessage("user", userMessage);
-    setInput("");
-    handleUserInput(userMessage);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      console.log("Enter key pressed without Shift. Submitting input.");
-      handleSubmit();
     }
   };
 
@@ -699,124 +418,93 @@ and just return them in a json format like above, this is VERY important so plea
         boxShadow: "0 8px 16px rgba(0, 0, 0, 0.15)",
       }}
     >
-      <Typography
-        variant="h2"
-        sx={{
-          textAlign: "center",
-          color: "#2c3e50",
-          marginBottom: 3,
-          fontSize: "2rem",
-          fontWeight: 600,
-          fontFamily: "Roboto, sans-serif",
-        }}
-      >
+      <Typography variant="h2" sx={{ textAlign: "center", marginBottom: 3 }}>
         TRPI - Discover Your Personality
       </Typography>
-      <Paper
-        ref={chatBoxRef}
-        sx={{
-          border: "1px solid #e0e0e0",
-          borderRadius: 2,
-          padding: 2,
-          marginBottom: 3,
-          backgroundColor: "#fff",
-          height: 400,
-          overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-        }}
-      >
-        {messages.map((message, index) => (
-          <Box
-            key={index}
-            sx={{
-              display: "flex",
-              justifyContent: message.role === "user" ? "flex-end" : "flex-start",
-              alignItems: "center",
-            }}
+
+      {!isQuestionnaireComplete ? (
+        currentStage === -1 ? (
+          <Button
+            variant="contained"
+            onClick={() => startStage(0)}
+            sx={{ display: "block", margin: "0 auto" }}
           >
+            Start Assessment
+          </Button>
+        ) : (
+          <Box>
+            {stages[currentStage].map((statement, index) => (
+              <Paper key={index} sx={{ padding: 2, marginBottom: 2 }}>
+                <Typography>{statement.text}</Typography>
+                <TextField
+                  type="number"
+                  inputProps={{ min: 1, max: 5 }}
+                  label="Rating (1-5)"
+                  value={currentResponses[index]?.rating || ""}
+                  onChange={(e) => {
+                    const newResponses = [...currentResponses];
+                    newResponses[index].rating = parseInt(e.target.value, 10);
+                    setCurrentResponses(newResponses);
+                  }}
+                  fullWidth
+                  margin="normal"
+                />
+                <TextareaAutosize
+                  placeholder="Explain your response"
+                  value={currentResponses[index]?.explanation || ""}
+                  onChange={(e) => {
+                    const newResponses = [...currentResponses];
+                    newResponses[index].explanation = e.target.value;
+                    setCurrentResponses(newResponses);
+                  }}
+                  minRows={3}
+                  style={{ width: "100%", marginTop: 10, padding: 10 }}
+                />
+              </Paper>
+            ))}
+            <Button
+              variant="contained"
+              onClick={() => handleStageSubmit(currentResponses)}
+              disabled={currentResponses.some(
+                (response) => response.rating === 0 || response.explanation.trim() === ""
+              )}
+              sx={{ display: "block", margin: "0 auto", marginTop: 2 }}
+            >
+              Submit Responses
+            </Button>
+          </Box>
+        )
+      ) : (
+        <Paper sx={{ padding: 2, marginTop: 3, maxHeight: 300, overflow: "auto" }}>
+          {messages.map((message, index) => (
             <Box
+              key={index}
               sx={{
-                padding: 2,
-                borderRadius: 2,
-                maxWidth: "70%",
-                lineHeight: 1.5,
-                whiteSpace: "pre-wrap",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                backgroundColor: message.role === "user" ? "#e7f7fe" : "#f0f0f0",
-                color: "#2c3e50",
+                display: "flex",
+                justifyContent: message.role === "user" ? "flex-end" : "flex-start",
+                marginBottom: 2,
               }}
             >
-              {message.content}
+              <Box
+                sx={{
+                  maxWidth: "70%",
+                  padding: 2,
+                  borderRadius: 2,
+                  backgroundColor: message.role === "user" ? "#e0f7fa" : "#f1f8e9",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                {message.content}
+              </Box>
             </Box>
-          </Box>
-        ))}
-        {loading && (
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-            <CircularProgress />
-          </Box>
-        )}
-      </Paper>
-      <TextareaAutosize
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyPress={handleKeyPress}
-        placeholder="Type your response here..."
-        minRows={3}
-        style={{
-          width: "100%",
-          padding: "15px",
-          border: "1px solid #d0d0d0",
-          borderRadius: "10px",
-          fontSize: "1rem",
-          fontFamily: "Roboto, sans-serif",
-          lineHeight: 1.5,
-          resize: "none",
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
-        }}
-      />
-      <Button
-        onClick={handleSubmit}
-        sx={{
-          backgroundColor: "primary.main",
-          color: "white",
-          padding: "12px 24px",
-          borderRadius: "10px",
-          cursor: "pointer",
-          fontSize: "1rem",
-          fontWeight: "bold",
-          marginTop: 2,
-          "&:hover": {
-            backgroundColor: "primary.dark",
-          },
-          "&:active": {
-            backgroundColor: "secondary.main",
-          },
-        }}
-      >
-        Send
-      </Button>
-      {shareLink && (
-        <Button
-          onClick={handleShareClick}
-          sx={{
-            backgroundColor: "#4ade80",
-            color: "white",
-            padding: "16px 32px",
-            margin: "28px 24px",
-            borderRadius: "10px",
-            cursor: "pointer",
-            fontSize: "1rem",
-            fontWeight: "bold",
-            marginBottom: 2,
-            "&:hover": {
-              backgroundColor: "#22c55e",
-            }
-          }}
-        >
-          Share Your Results
-        </Button>
+          ))}
+        </Paper>
+      )}
+
+      {loading && (
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}>
+          <CircularProgress />
+        </Box>
       )}
     </Box>
   );

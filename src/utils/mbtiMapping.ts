@@ -77,7 +77,7 @@ export const MBTIProfiles = [
   {
       "name": "ISTJ",
       "traits": {
-          "openness": 0.5,
+          "openness": 0.4,
           "conscientiousness": 0.65,
           "extraversion": 0.4,
           "agreeableness": 0.3,
@@ -122,7 +122,7 @@ export const MBTIProfiles = [
   {
       "name": "ISFJ",
       "traits": {
-          "openness": 0.55,
+          "openness": 0.45,
           "conscientiousness": 0.6,
           "extraversion": 0.35,
           "agreeableness": 0.75,
@@ -184,7 +184,7 @@ export const MBTIProfiles = [
       "traits": {
           "openness": 0.6,
           "conscientiousness": 0.55,
-          "extraversion": 0.6,
+          "extraversion": 0.75,
           "agreeableness": 0.6,
           "neuroticism": 0.65
       },

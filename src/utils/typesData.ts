@@ -212,7 +212,7 @@ export const typesData: any[] = [
     silver: "ENTP",
     gold: "ENFP",
     bronze: "ISFJ",
-    quote: "I see the destination and build the road to get there.",
+    quote: "I build the road and let it reveal the destination.",
     description: `INTJ (Ni > Te) - Freeze Mode, The Architect: INTJs are strategic and independent, driven by a desire to achieve long-term goals and understand complex patterns. Known for their insightful thinking and preference for planning, they are adept at setting ambitious objectives and pursuing them methodically. INTJs are often seen as visionary thinkers, with a strong ability to predict outcomes and devise effective strategies. However, their high standards and critical approach can make them seem aloof or overly perfectionistic. In "Freeze" mode, INTJs rely on their intuition and analytical skills to carefully plan and assess, often retreating into analysis to devise a comprehensive and risk-minimized strategy to address challenging situations.`,
     strengths: [
       "Strategic",
@@ -263,7 +263,7 @@ export const typesData: any[] = [
     silver: "INTP",
     gold: "ISTP",
     bronze: "ESFJ",
-    quote: "I build the road and let it reveal the destination.",
+    quote: "I see the destination and build the road to get there.",
     description: `ENTJ (Te > Ni) - Freeze Mode, The Commander: ENTJs are strategic and assertive leaders who excel in organizing resources and driving forward long-term goals. With a keen eye for efficiency and a natural talent for planning, they can break down complex problems into actionable steps, motivating others to reach ambitious targets. ENTJs are known for their strong work ethic and determination, and they often find themselves in leadership roles due to their decisiveness and strategic foresight. However, their high standards and intense focus on results can sometimes come across as overly demanding or even intimidating to others. In "Freeze" mode, ENTJs double down on their logical approach, often pausing to assess situations carefully, strategically mapping out the best course of action with a calm, measured focus on minimizing risks.`,
     strengths: [
       "Efficient",

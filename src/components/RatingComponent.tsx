@@ -52,7 +52,7 @@ const RatingComponent: React.FC<RatingProps> = ({ bin, userId, onRatingSaved }) 
   };
 
   return (
-    <Box sx={{position: 'relative', left: 360, bottom: 28}}>
+    <Box sx={{position: 'relative', left: 365, bottom: 29 }}>
         <Tooltip title={saving ? "Saving your rating..." : "Accuracy"}>
       <StyledRating
         name="accuracy-rating"

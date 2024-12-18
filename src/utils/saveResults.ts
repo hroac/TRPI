@@ -6,6 +6,37 @@ const COLLECTION_ID = '6666e443acd3cb34a8556706'; // Collection ID
 
 class JsonBinApi {
     // Method to save results to JSONBin and add to the specified collection, returning the bin ID
+    static async updateResultsInJsonBin(state: any) {
+        const userGuid = guid();
+        const url = `https://api.jsonbin.io/v3/b/${state.binId}`;
+
+        try {
+            const response = await axios.put(
+                url,
+                {
+                    ...state,
+                    date: new Date().toISOString(),
+                    userId: userGuid,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY,
+                        'X-Collection-Id': COLLECTION_ID,
+                        'X-Bin-Name': state.type,
+                    },
+                }
+            );
+
+            const binId = response.data.metadata.id; // Extract the bin ID
+            console.log('Results saved successfully, Bin ID:', binId);
+            return binId; // Return only the bin ID
+        } catch (error) {
+            console.error('Error saving results:', error);
+            throw error;
+        }
+    }
+
     static async saveResultsToJsonBin(state: any) {
         const userGuid = guid();
         const url = `https://api.jsonbin.io/v3/b`;

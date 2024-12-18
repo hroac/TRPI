@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Typography, Box } from '@mui/material';
+import { Paper, Typography, Box, Grid } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import JsonBinApi from '../utils/saveResults';
@@ -8,6 +8,7 @@ import { typesData } from '../utils/typesData';
 import { useParams } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import GhPagesFS from '../utils/GhPagesFS';
+import RatingComponent from '../components/RatingComponent';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 /* 
@@ -35,7 +36,8 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
           const bin = params?.binId || binId || ''; // Fetch binId from localStorage
 
           if (bin) {
-            const binData = await JsonBinApi.getBinById(bin); // Retrieve bin data by binId
+            const binData = await JsonBinApi.getBinById(bin);
+            binData.binId = bin; // Retrieve bin data by binId
             setBin(binData); // Set bin data to state
           }
           /* const ghPages = new GhPagesFS({ owner: 'hroac',
@@ -141,9 +143,15 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
 
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
+      <Box mt={3}>
       <Typography variant="h5" gutterBottom>
-        TRPI Test Results - {primary4FType} - {type}
+        TRPI Test Results - {primary4FType} - {type} -   <RatingComponent 
+        bin={bin} 
+        userId={guid()}
+        onRatingSaved={(updatedBin: any) => JsonBinApi.updateResultsInJsonBin(updatedBin)} 
+      />
       </Typography>
+      </Box>
       <Box my={3}>
         <Bar data={data} options={options} />
       </Box>

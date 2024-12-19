@@ -19,7 +19,34 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Matrix from './Matrix';
 import ModeSelector from './ModeSelector';
+import { Helmet } from 'react-helmet-async';
 
+const TRPIHelmet: React.FC = () => (
+  <Helmet>
+    <title>Understanding Personality with TRPI</title>
+    <meta
+      name="description"
+      content="The Trauma Response Personality Indicator (TRPI) combines the MBTI, Big Five traits, and 4F trauma responses to help you understand how personality and trauma interact. Explore your unique personality profile today on TraumaIndicator.com!"
+    />
+    <meta
+      property="og:title"
+      content="Understanding Personality with TRPI"
+    />
+    <meta
+      property="og:description"
+      content="Learn how trauma shapes personality with the TRPI framework. Integrating MBTI, Big Five traits, and 4F responses, TRPI provides unique insights into personality development. Visit TraumaIndicator.com to explore."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://traumaindicator.com/#/explanation"
+    />
+    <meta
+      property="og:image"
+      content="https://traumaindicator.com/logo.png"
+    />
+  </Helmet>
+);
 const TRPIExplanation: React.FC = () => {
   const functionPairings = [
     { type: 'ENTP', f4: 'Fight', stack: 'Ne > Ti > Fe > Si', dominant: 'Ne + Ti (Id + Ego)', auxiliary: 'Ni + Fe (Id + Superego)' },
@@ -58,6 +85,7 @@ const TRPIExplanation: React.FC = () => {
   ];
   return (
     <Container sx={{marginTop: '64px'}}>
+      <TRPIHelmet/>
     <Box sx={{maxWidth: '800px', margin: '0 auto' }}>
       <Typography variant="h4" gutterBottom>
         Trauma Response Personality Indicator (TRPI)

@@ -34,6 +34,35 @@ import {
 } from '@mui/icons-material';
 import { guid } from '../utils/guid';
 import { typesData } from '../utils/typesData';
+import { Helmet } from 'react-helmet-async';
+
+const BigFiveQuestionnaireHelmet: React.FC = () => (
+  <Helmet>
+    <title>Discover Your Personality with the TRPI Test</title>
+    <meta
+      name="description"
+      content="Take the TRPI Assessment Tool to uncover your personality type, explore Big Five traits, and learn how trauma responses shape your personality. Start your journey today on TraumaIndicator.com!"
+    />
+    <meta
+      property="og:title"
+      content="Discover Your Personality with the TRPI Test"
+    />
+    <meta
+      property="og:description"
+      content="Uncover your true self with the TRPI Test. Analyze your Big Five traits and discover how your personality aligns with 4F trauma responses. Take the test now on TraumaIndicator.com!"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://traumaindicator.com/#/test"
+    />
+    <meta
+      property="og:image"
+      content="https://traumaindicator.com/logo.png"
+    />
+  </Helmet>
+);
+
 
 const statements = [
   {
@@ -548,6 +577,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 900, width: isMobile ? 300 : 750 }}>
+     <BigFiveQuestionnaireHelmet/>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h5" gutterBottom>
           TRPI Assessment Tool

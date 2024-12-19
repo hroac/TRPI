@@ -9,6 +9,54 @@ import { useParams } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import GhPagesFS from '../utils/GhPagesFS';
 import RatingComponent from '../components/RatingComponent';
+import { Helmet } from 'react-helmet-async';
+
+const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number } }> = ({
+  type,
+  primary4FType,
+  bigFiveResponses,
+}) => {
+  // Generate a sideways ASCII bar chart
+  const generateAsciiBarChart = (scores: { [trait: string]: number }): string => {
+    const traits = ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'];
+    return traits
+      .map((trait) => {
+        const score = Math.round(scores[trait.toLowerCase()] * 100);
+        const bar = `${'█'.repeat(Math.round(score / 10))}`;
+        return `${trait.padEnd(15)} | ${bar.padEnd(10)} ${score}%`;
+      })
+      .join('\n');
+  };
+
+  const asciiChart = generateAsciiBarChart(bigFiveResponses);
+
+  return (
+    <Helmet>
+      <title>{`Your TRPI Results: ${type} - ${primary4FType}`}</title>
+      <meta
+        name="description"
+        content={`Discover your TRPI results. Type: ${type}, 4F Mode: ${primary4FType}\nBig Five Personality Traits:\n${asciiChart}`}
+      />
+      <meta
+        property="og:title"
+        content={`Your TRPI Results: ${type} - ${primary4FType}`}
+      />
+      <meta
+        property="og:description"
+        content={`Explore your TRPI results and understand your personality. Type: ${type}, 4F Mode: ${primary4FType}. Big Five Traits:\n${asciiChart}`}
+      />
+      <meta property="og:type" content="website" />
+      <meta
+        property="og:url"
+        content="https://traumaindicator.com/#/result"
+      />
+      <meta
+        property="og:image"
+        content="https://traumaindicator.com/logo.png"
+      />
+    </Helmet>
+  );
+};
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 /* 
@@ -143,6 +191,11 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
 
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
+      <ResultHelmet
+       type={type}
+       primary4FType={primary4FType}
+       bigFiveResponses={bigFiveResponses}
+      />
       <Box mt={3}>
       <Typography variant="h5" gutterBottom>
         TRPI Test Results - {primary4FType} - {type} - <RatingComponent 

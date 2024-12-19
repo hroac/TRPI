@@ -20,7 +20,33 @@ import ScrollToTop from './utils/ScrollToTop';
 import { guid } from './utils/guid';
 import GhPagesFS from './utils/GhPagesFS';
 import TrpiTalk from './components/TRPITalk';
-import { HelmetProvider } from 'react-helmet-async';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+
+const AppHelmet: React.FC = () => (
+  <Helmet>
+    <title>Understanding Personality with TRPI</title>
+    <meta name="title" content="Trauma Indicator - Find your MBTI type based on the Big Five!"/>
+    <meta name="description" content="Explore the Trauma Response Personality Indicator (TRPI) model, a unique approach that integrates MBTI, the Big Five, and the 4F responses. Discover how past experiences shape personality and use this insight for personal growth and resilience."/>
+    
+    <meta
+      property="og:title"
+      content="Understanding Personality with TRPI"
+    />
+    <meta
+      property="og:description"
+      content="Learn how trauma shapes personality with the TRPI framework. Integrating MBTI, Big Five traits, and 4F responses, TRPI provides unique insights into personality development. Visit TraumaIndicator.com to explore."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://traumaindicator.com/#/explanation"
+    />
+    <meta
+      property="og:image"
+      content="https://traumaindicator.com/logo.png"
+    />
+  </Helmet>
+);
 
 function App() {
     console.log(process.env)
@@ -48,6 +74,7 @@ function App() {
     return (
         <ThemeProvider theme={pastelTheme}>
             <HelmetProvider>
+                <AppHelmet/>
                 <HashRouter>
                     <ScrollToTop/>
                     {/* Header with routing-aware menu items */}

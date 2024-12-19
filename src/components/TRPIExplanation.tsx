@@ -26,7 +26,7 @@ const TRPIHelmet: React.FC = () => (
     <title>Understanding Personality with TRPI</title>
     <meta
       name="description"
-      content="The Trauma Response Personality Indicator (TRPI) combines the MBTI, Big Five traits, and 4F trauma responses to help you understand how personality and trauma interact. Explore your unique personality profile today on TraumaIndicator.com!"
+      content="The Trauma Response Personality Indicator (TRPI) combines the MBTI, Big Five traits, and 4F trauma responses to help you understand how personality and trauma interact. Explore your unique personality profile today on traumaindicator.com!"
     />
     <meta
       property="og:title"

@@ -32,14 +32,14 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
 
   return (
     <Helmet>
-      <title>{`Your TRPI Results: ${type} - ${primary4FType}`}</title>
+      <title>{`TRPI - ${type} - ${primary4FType}`}</title>
       <meta
         name="description"
         content={`Discover your TRPI results. Type: ${type}, 4F Mode: ${primary4FType}\nBig Five Personality Traits:\n${asciiChart}`}
       />
       <meta
         property="og:title"
-        content={`Your TRPI Results: ${type} - ${primary4FType}`}
+        content={`TRPI - ${type} - ${primary4FType}`}
       />
       <meta
         property="og:description"

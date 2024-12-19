@@ -23,7 +23,7 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
       .map((trait) => {
         const score = Math.round(scores[trait.toLowerCase()] * 100);
         const bar = `${'█'.repeat(Math.round(score / 10))}`;
-        return `${trait.padEnd(15)} | ${bar.padEnd(10)} ${score}%`;
+        return `${trait.padEnd(15)} ${bar.padEnd(10)} ${score}%`;
       })
       .join('\n');
   };

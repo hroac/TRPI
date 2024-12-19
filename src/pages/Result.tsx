@@ -198,11 +198,11 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
       />
       <Box mt={3}>
       <Typography variant="h5" gutterBottom>
-        TRPI Test Results - {primary4FType} - {type} - <RatingComponent 
+        TRPI Test Results - {primary4FType} - {type} {bin.rating || guid() === bin.userId && "-"} {bin.rating || guid() === bin.userId && (<RatingComponent 
         bin={bin} 
         userId={guid()}
         onRatingSaved={(updatedBin: any) => JsonBinApi.updateResultsInJsonBin(updatedBin)} 
-      />    
+      />)}    
       </Typography>
       </Box>
       <Box my={3}>

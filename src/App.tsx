@@ -20,6 +20,7 @@ import ScrollToTop from './utils/ScrollToTop';
 import { guid } from './utils/guid';
 import GhPagesFS from './utils/GhPagesFS';
 import TrpiTalk from './components/TRPITalk';
+import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
     console.log(process.env)
@@ -46,45 +47,47 @@ function App() {
 
     return (
         <ThemeProvider theme={pastelTheme}>
-            <HashRouter>
-                <ScrollToTop/>
-                {/* Header with routing-aware menu items */}
-                <Header
-                    logo='./logo192.png'
-                    brand="Trauma Indicator"
-                    menuItems={[
-                        { label: 'Home', path: '/' },
-                        { label: 'About', path: '/about' },
-                        { label: 'Take the test', path: '/test' },
-                        { label: 'Result', path: `/result/${binId || ''}` },
-                        { label: 'Big Five Input', path: '/input' },
-                        //{label:  'ChatGPT', path: '/talk'},
-                        { label: 'Contact', path: '/contact' }
-                    ].filter(item => {
+            <HelmetProvider>
+                <HashRouter>
+                    <ScrollToTop/>
+                    {/* Header with routing-aware menu items */}
+                    <Header
+                        logo='./logo192.png'
+                        brand="Trauma Indicator"
+                        menuItems={[
+                            { label: 'Home', path: '/' },
+                            { label: 'About', path: '/about' },
+                            { label: 'Take the test', path: '/test' },
+                            { label: 'Result', path: `/result/${binId || ''}` },
+                            { label: 'Big Five Input', path: '/input' },
+                            //{label:  'ChatGPT', path: '/talk'},
+                            { label: 'Contact', path: '/contact' }
+                        ].filter(item => {
 
-                        if(item.label === 'Result' && !binId) {
-                            return false
-                        }
-                        return true
-                    })}
-                />
+                            if(item.label === 'Result' && !binId) {
+                                return false
+                            }
+                            return true
+                        })}
+                    />
 
-                <Box sx={{ marginTop: '64px', background: 'linear-gradient(0deg, rgb(247, 248, 252), rgb(217 236 236))', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
-                    <Routes>
-                        <Route path='/' element={<Homepage />} />
-                        <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />
-                        <Route path="/result/:binId" element={<ResultsPage binId={binId}/>} />"
-                        <Route path="/input" element={<BigFiveInputPage onComplete={handleComplete} />} />
-                        <Route path="/about/:type" element={<AboutPage />} />
-                        <Route path="/about" element={<TRPIExplanation />} />
-                        <Route path="/contact" element={<Contact />} />
-                        <Route path="/services" element={<Services />} />
-                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                        <Route path="/talk" element={<TrpiTalk onComplete={handleComplete}/>} />
-                    </Routes>
-                    <Footer />
-                </Box>
-            </HashRouter>
+                    <Box sx={{ marginTop: '64px', background: 'linear-gradient(0deg, rgb(247, 248, 252), rgb(217 236 236))', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
+                        <Routes>
+                            <Route path='/' element={<Homepage />} />
+                            <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />
+                            <Route path="/result/:binId" element={<ResultsPage binId={binId}/>} />"
+                            <Route path="/input" element={<BigFiveInputPage onComplete={handleComplete} />} />
+                            <Route path="/about/:type" element={<AboutPage />} />
+                            <Route path="/about" element={<TRPIExplanation />} />
+                            <Route path="/contact" element={<Contact />} />
+                            <Route path="/services" element={<Services />} />
+                            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                            <Route path="/talk" element={<TrpiTalk onComplete={handleComplete}/>} />
+                        </Routes>
+                        <Footer />
+                    </Box>
+                </HashRouter>
+            </HelmetProvider>
         </ThemeProvider>
     );
 }

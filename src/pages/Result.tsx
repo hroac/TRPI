@@ -11,10 +11,11 @@ import GhPagesFS from '../utils/GhPagesFS';
 import RatingComponent from '../components/RatingComponent';
 import { Helmet } from 'react-helmet-async';
 
-const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number } }> = ({
+const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number }, binId: string }> = ({
   type,
   primary4FType,
   bigFiveResponses,
+  binId,
 }) => {
   // Generate a sideways ASCII bar chart
   const generateAsciiBarChart = (scores: { [trait: string]: number }): string => {
@@ -48,7 +49,7 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
       <meta property="og:type" content="website" />
       <meta
         property="og:url"
-        content="https://traumaindicator.com/#/result"
+        content={`https://traumaindicator.com/#/result/${binId}`}
       />
       <meta
         property="og:image"
@@ -195,6 +196,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
        type={type}
        primary4FType={primary4FType}
        bigFiveResponses={bigFiveResponses}
+       binId={binId}
       />
       <Box mt={3}>
       <Typography variant="h5" gutterBottom>

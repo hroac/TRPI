@@ -409,11 +409,16 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 }) => {
   const navigate = useNavigate();
 
-  const initialResponses = statements.reduce((acc, s) => {
+  const initialResponses = () => {
+    if(localStorage.getItem('responses')) {
+      return JSON.parse(localStorage.getItem('responses')  || '')
+    }
+    return statements.reduce((acc, s) => {
     if (!acc[s.trait]) acc[s.trait] = [];
     acc[s.trait].push(0.5);
     return acc;
-  }, {} as { [trait: string]: number[] });
+  }, {} as { [trait: string]: number[] })
+};
 
   const [responses, setResponses] = useState(initialResponses);
   const [currentStage, setCurrentStage] = useState(0);
@@ -425,6 +430,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
   const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
   const type = typesData.find(t => t.type === matchedMBTIType);
+
 
   const setRandomly = () => {
     const randomResponses = statements.reduce((acc, s) => {
@@ -469,16 +475,17 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const handleSliderChange =
     (trait: string, index: number) =>
     (event: Event, value: number | number[], activeThumb: number) => {
-      setResponses((prev) => {
+      setResponses((prev: any) => {
         const updatedResponses = { ...prev };
         updatedResponses[trait][index] = value as number;
 
+        
         const weightedScores = Object.keys(updatedResponses).reduce(
           (acc, traitKey) => {
-            const traitScores = updatedResponses[traitKey].map((score, i) => 
+            const traitScores = updatedResponses[traitKey].map((score: any, i: any) => 
               score * (statements.find(s => s.trait === traitKey && statements.indexOf(s) === i)?.weight || 1)
             );
-            acc[traitKey] = traitScores.reduce((sum, score) => sum + score, 0) / traitScores.length;
+            acc[traitKey] = traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
             return acc;
           },
           {} as { [trait: string]: number }
@@ -494,6 +501,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         setMatchedMBTIType(mbtiType);
         setMatchedType(type);
 
+        localStorage.setItem('responses', JSON.stringify(updatedResponses))
         return updatedResponses;
       });
     };
@@ -510,10 +518,10 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
   const handleSubmit = async () => {
     const weightedScores = Object.keys(responses).reduce((acc, trait) => {
-      const traitScores = responses[trait].map((score, i) => 
+      const traitScores = responses[trait].map((score: any, i: any) => 
         score * (statements.find(s => s.trait === trait && statements.indexOf(s) === i)?.weight || 1)
       );
-      acc[trait] = traitScores.reduce((sum, score) => sum + score, 0) / traitScores.length;
+      acc[trait] = traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
       return acc;
     }, {} as { [trait: string]: number });
 
@@ -527,6 +535,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       bigFiveResponses: weightedScores,
     }
     localStorage.setItem(guid(), JSON.stringify(newJson));
+    localStorage.removeItem('responses')
     const binId = await onComplete({ primary4F, mbtiType, selectedMbtiType, profile: weightedScores, description: ''});
     navigate(`/result/${binId}`);
   };

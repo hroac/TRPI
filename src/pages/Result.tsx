@@ -30,7 +30,7 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
   };
 
   const asciiChart = generateAsciiBarChart(bigFiveResponses);
-
+  const url = `https://traumaindicator.com/#/result/${binId}`
   return (
     <Helmet>
       <title>{`TRPI - ${type} - ${primary4FType}`}</title>
@@ -49,7 +49,7 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
       <meta property="og:type" content="website" />
       <meta
         property="og:url"
-        content={`https://traumaindicator.com/#/result/${binId}`}
+        content={url}
       />
       <meta
         property="og:image"

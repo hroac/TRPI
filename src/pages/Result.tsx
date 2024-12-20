@@ -35,7 +35,7 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
       <title>{`TRPI - ${type} - ${primary4FType}`}</title>
       <meta
         name="description"
-        content={`Discover your TRPI results. Type: ${type}, 4F Mode: ${primary4FType}\nBig Five Personality Traits:\n${asciiChart}`}
+        content={`\n${asciiChart}`}
       />
       <meta
         property="og:title"
@@ -43,7 +43,7 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
       />
       <meta
         property="og:description"
-        content={`Explore your TRPI results and understand your personality. Type: ${type}, 4F Mode: ${primary4FType}. Big Five Traits:\n${asciiChart}`}
+        content={`\n${asciiChart}`}
       />
       <meta property="og:type" content="website" />
       <meta

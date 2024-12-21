@@ -38,23 +38,6 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
         name="description"
         content={`\n${asciiChart}`}
       />
-      <meta
-        property="og:title"
-        content={`TRPI - ${type} - ${primary4FType}`}
-      />
-      <meta
-        property="og:description"
-        content={`\n${asciiChart}`}
-      />
-      <meta property="og:type" content="website" />
-      <meta
-        property="og:url"
-        content={url}
-      />
-      <meta
-        property="og:image"
-        content="https://traumaindicator.com/logo.png"
-      />
     </Helmet>
   );
 };

@@ -1,5 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { Box, Typography, TextareaAutosize, Button, Paper, CircularProgress, TextField } from "@mui/material";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Box,
+  Typography,
+  TextareaAutosize,
+  Button,
+  Paper,
+  CircularProgress,
+  TextField,
+  IconButton,
+} from "@mui/material";
+import MicIcon from "@mui/icons-material/Mic";
+import StopIcon from "@mui/icons-material/Stop";
+import axios from "axios";
+import LanguageDetect from "languagedetect";
+
+// Utility for decoding token parts
+const decodeToken = (tokenParts: string[]) =>
+  tokenParts.map((t) => atob(t)).join("");
 
 interface TrpiTalkProps {
   onComplete: (responses: any) => Promise<string>; // onComplete returns a binId
@@ -33,6 +50,7 @@ const statements = [
   { text: "I tend to overthink situations and feel uneasy about the unknown.", trait: "neuroticism" },
 ];
 
+
 const stages = [
   statements.slice(0, 3),
   statements.slice(3, 7),
@@ -42,16 +60,33 @@ const stages = [
 ];
 
 const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
-  const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>(
+    []
+  );
   const [currentStage, setCurrentStage] = useState<number>(-1);
-  const [stageResponses, setStageResponses] = useState<{ rating: number; explanation: string }[][]>([]);
+  const [stageResponses, setStageResponses] = useState<
+    { rating: number; explanation: string }[][]
+  >([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [currentResponses, setCurrentResponses] = useState<{ rating: number; explanation: string }[]>([]);
+  const [currentResponses, setCurrentResponses] = useState<
+    { rating: number; explanation: string }[]
+  >([]);
   const [isQuestionnaireComplete, setIsQuestionnaireComplete] = useState(false);
+
+  // Voice-related states
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [transcript, setTranscript] = useState<string>("");
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const langDetect = useRef(new LanguageDetect());
+  const synth = useRef(window.speechSynthesis);
+  const conversationHistory = useRef<{ role: string; content: string }[]>([]);
 
   useEffect(() => {
     if (currentStage >= 0) {
-      setCurrentResponses(stages[currentStage].map(() => ({ rating: 0, explanation: "" })));
+      setCurrentResponses(
+        stages[currentStage].map(() => ({ rating: 0, explanation: "" }))
+      );
     }
   }, [currentStage]);
 
@@ -64,9 +99,14 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
       },
     ]);
     setCurrentStage(stageIndex);
+    speakText(
+      `You are now starting stage ${stageIndex + 1} of ${stages.length}. Please provide your ratings and explanations for each question.`
+    );
   };
 
-  const handleStageSubmit = (responses: { rating: number; explanation: string }[]) => {
+  const handleStageSubmit = async (
+    responses: { rating: number; explanation: string }[]
+  ) => {
     setStageResponses((prev) => [...prev, responses]);
 
     const nextStage = currentStage + 1;
@@ -74,11 +114,13 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
       startStage(nextStage);
     } else {
       setIsQuestionnaireComplete(true);
-      processResponses(stageResponses.flat());
+      await processResponses(stageResponses.flat());
     }
   };
 
-  const processResponses = async (responses: { rating: number; explanation: string }[]) => {
+  const processResponses = async (
+    responses: { rating: number; explanation: string }[]
+  ) => {
     setLoading(true);
     try {
       const prompt = `
@@ -112,7 +154,6 @@ Please perform the following tasks:
    - **Fawn**: High agreeableness (≥ 0.75).
 
 3. Match the user's TRPI type to the closest MBTI type.
-
 [
   {
       "name": "ENTP",
@@ -355,8 +396,6 @@ Please perform the following tasks:
       "copper": "ESTJ"
   }
 ]
-
-
 4. Generate a custom description (10-15 sentences) explaining the TRPI type and how it relates to the user's personality traits and responses.
 
 Return the results in JSON format with the following structure:
@@ -371,7 +410,8 @@ Return the results in JSON format with the following structure:
   "primary4F": "<TRPI Type>",
   "mbtiType": "<MBTI Type>",
   "description": "<Custom Description>"
-  
+}
+
 and just return them in a json format like above, this is VERY important so please do it thank you.
 `;
 
@@ -379,7 +419,7 @@ and just return them in a json format like above, this is VERY important so plea
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${tokenParts.map((t) => atob(t)).join("")}`,
+          Authorization: `Bearer ${decodeToken(tokenParts)}`,
         },
         body: JSON.stringify({
           model: "ft:gpt-4o-2024-08-06:smersh::Ae8H9Yf7",
@@ -397,14 +437,127 @@ and just return them in a json format like above, this is VERY important so plea
         { role: "assistant", content: "Here is your Big Five profile and analysis:" },
         { role: "assistant", content },
       ]);
+
+      speakText("Your assessment is complete. Here are your results.");
     } catch (error) {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "An error occurred while processing your responses." },
+        {
+          role: "assistant",
+          content: "An error occurred while processing your responses.",
+        },
       ]);
+      speakText("An error occurred while processing your responses.");
     } finally {
       setLoading(false);
     }
+  };
+
+  // Voice Functions
+  const startRecording = async () => {
+    if (isRecording) return;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/flac" });
+        const transcription = await transcribeAudio(audioBlob);
+        setTranscript(transcription);
+        populateResponses(transcription);
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+      speakText("Recording started. Please speak your response.");
+    } catch (error) {
+      console.error("Error accessing microphone", error);
+    }
+  };
+
+  const stopRecording = () => {
+    if (!isRecording || !mediaRecorderRef.current) return;
+    mediaRecorderRef.current.stop();
+    setIsRecording(false);
+    speakText("Recording stopped.");
+  };
+
+  const transcribeAudio = async (audioBlob: Blob): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", audioBlob, "audio.flac");
+    formData.append("model", "whisper-1");
+
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/audio/transcriptions",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${decodeToken(tokenParts)}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data.text.trim();
+    } catch (error: any) {
+      console.error("Error transcribing audio with Whisper:", error.response ? error.response.data : error.message);
+      return "";
+    }
+  };
+
+  const populateResponses = (transcription: string) => {
+    // Simple parsing logic assuming the user speaks "Rating X explanation Y"
+    const ratingMatch = transcription.match(/rating\s+(\d)/i);
+    const explanationMatch = transcription.match(/explanation\s+(.+)/i);
+
+    const rating = ratingMatch ? parseInt(ratingMatch[1], 10) : 0;
+    const explanation = explanationMatch ? explanationMatch[1].trim() : "";
+
+    // Update the currentResponses with the transcribed data
+    const updatedResponses = [...currentResponses];
+    // Find the first response that hasn't been filled
+    const index = updatedResponses.findIndex(
+      (resp) => resp.rating === 0 || resp.explanation === ""
+    );
+    if (index !== -1) {
+      updatedResponses[index].rating = rating;
+      updatedResponses[index].explanation = explanation;
+      setCurrentResponses(updatedResponses);
+      speakText(`Recorded your response for question ${index + 1}.`);
+    }
+  };
+
+  const speakText = (text: string) => {
+    if (!synth.current) return;
+    const detectedLanguages = langDetect.current.detect(text, 1);
+    const languageCode = getLanguageCode(detectedLanguages[0][0] || "english");
+
+    const voices = synth.current.getVoices();
+    const selectedVoice = voices.find((voice) =>
+      voice.lang.startsWith(languageCode)
+    );
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = languageCode;
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+    synth.current.speak(utterance);
+  };
+
+  const getLanguageCode = (language: string): string => {
+    const languageMap: { [key: string]: string } = {
+      // ... [Your existing language map]
+      english: "en-US",
+      // Add more languages as needed
+    };
+    return languageMap[language.toLowerCase()] || "en-US";
   };
 
   return (
@@ -436,26 +589,43 @@ and just return them in a json format like above, this is VERY important so plea
             {stages[currentStage].map((statement, index) => (
               <Paper key={index} sx={{ padding: 2, marginBottom: 2 }}>
                 <Typography>{statement.text}</Typography>
-                <TextField
-                  type="number"
-                  inputProps={{ min: 1, max: 5 }}
-                  label="Rating (1-5)"
-                  value={currentResponses[index]?.rating || ""}
-                  onChange={(e) => {
-                    const newResponses = [...currentResponses];
-                    newResponses[index].rating = parseInt(e.target.value, 10);
-                    setCurrentResponses(newResponses);
-                  }}
-                  fullWidth
-                  margin="normal"
-                />
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <TextField
+                    type="number"
+                    inputProps={{ min: 1, max: 5 }}
+                    label="Rating (1-5)"
+                    value={currentResponses[index]?.rating || ""}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10);
+                      setCurrentResponses((prev) => {
+                        const updated = [...prev];
+                        updated[index].rating = isNaN(value) ? 0 : value;
+                        return updated;
+                      });
+                    }}
+                    fullWidth
+                    margin="normal"
+                  />
+                  <IconButton
+                    color={isRecording ? "secondary" : "primary"}
+                    onClick={
+                      isRecording ? stopRecording : startRecording
+                    }
+                    sx={{ marginLeft: 1, marginTop: 2 }}
+                  >
+                    {isRecording ? <StopIcon /> : <MicIcon />}
+                  </IconButton>
+                </Box>
                 <TextareaAutosize
                   placeholder="Explain your response"
                   value={currentResponses[index]?.explanation || ""}
                   onChange={(e) => {
-                    const newResponses = [...currentResponses];
-                    newResponses[index].explanation = e.target.value;
-                    setCurrentResponses(newResponses);
+                    const value = e.target.value;
+                    setCurrentResponses((prev) => {
+                      const updated = [...prev];
+                      updated[index].explanation = value;
+                      return updated;
+                    });
                   }}
                   minRows={3}
                   style={{ width: "100%", marginTop: 10, padding: 10 }}
@@ -466,7 +636,8 @@ and just return them in a json format like above, this is VERY important so plea
               variant="contained"
               onClick={() => handleStageSubmit(currentResponses)}
               disabled={currentResponses.some(
-                (response) => response.rating === 0 || response.explanation.trim() === ""
+                (response) =>
+                  response.rating === 0 || response.explanation.trim() === ""
               )}
               sx={{ display: "block", margin: "0 auto", marginTop: 2 }}
             >
@@ -475,13 +646,16 @@ and just return them in a json format like above, this is VERY important so plea
           </Box>
         )
       ) : (
-        <Paper sx={{ padding: 2, marginTop: 3, maxHeight: 300, overflow: "auto" }}>
+        <Paper
+          sx={{ padding: 2, marginTop: 3, maxHeight: 300, overflow: "auto" }}
+        >
           {messages.map((message, index) => (
             <Box
               key={index}
               sx={{
                 display: "flex",
-                justifyContent: message.role === "user" ? "flex-end" : "flex-start",
+                justifyContent:
+                  message.role === "user" ? "flex-end" : "flex-start",
                 marginBottom: 2,
               }}
             >
@@ -490,7 +664,8 @@ and just return them in a json format like above, this is VERY important so plea
                   maxWidth: "70%",
                   padding: 2,
                   borderRadius: 2,
-                  backgroundColor: message.role === "user" ? "#e0f7fa" : "#f1f8e9",
+                  backgroundColor:
+                    message.role === "user" ? "#e0f7fa" : "#f1f8e9",
                   boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 }}
               >

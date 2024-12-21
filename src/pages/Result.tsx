@@ -198,14 +198,18 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
        bigFiveResponses={bigFiveResponses}
        binId={binId}
       />
+
       <Box mt={3}>
       <Typography variant="h5" gutterBottom>
-        TRPI Test Results - {primary4FType} - {type} {bin.rating || guid() === bin.userId && "-"} {bin.rating || guid() === bin.userId && (<RatingComponent 
+        TRPI Test Results - {primary4FType} - {type}  
+      </Typography>
+      </Box>
+    <Box position={'relative'} sx={{position: 'relative', left: 170, bottom: 10}}>
+      <RatingComponent 
         bin={bin} 
         userId={guid()}
         onRatingSaved={(updatedBin: any) => JsonBinApi.updateResultsInJsonBin(updatedBin)} 
-      />)}    
-      </Typography>
+      />
       </Box>
       <Box my={3}>
         <Bar data={data} options={options} />

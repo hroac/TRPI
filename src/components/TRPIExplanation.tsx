@@ -19,7 +19,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Matrix from './Matrix';
 import ModeSelector from './ModeSelector';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 
 const TRPIHelmet: React.FC = () => (
   <Helmet>

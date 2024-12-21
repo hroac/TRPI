@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import GhPagesFS from '../utils/GhPagesFS';
 import RatingComponent from '../components/RatingComponent';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 
 const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number }, binId: string }> = ({
   type,

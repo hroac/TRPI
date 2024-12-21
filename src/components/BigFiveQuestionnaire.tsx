@@ -34,7 +34,7 @@ import {
 } from '@mui/icons-material';
 import { guid } from '../utils/guid';
 import { typesData } from '../utils/typesData';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 
 const BigFiveQuestionnaireHelmet: React.FC = () => (
   <Helmet>

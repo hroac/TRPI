@@ -20,7 +20,7 @@ import ScrollToTop from './utils/ScrollToTop';
 import { guid } from './utils/guid';
 import GhPagesFS from './utils/GhPagesFS';
 import TrpiTalk from './components/TRPITalk';
-import { Helmet, HelmetProvider } from 'react-helmet';
+import { Helmet } from 'react-helmet';
 
 const AppHelmet: React.FC = () => (
   <Helmet>
@@ -73,7 +73,6 @@ function App() {
 
     return (
         <ThemeProvider theme={pastelTheme}>
-            <HelmetProvider>
                 <AppHelmet/>
                 <HashRouter>
                     <ScrollToTop/>
@@ -114,7 +113,6 @@ function App() {
                         <Footer />
                     </Box>
                 </HashRouter>
-            </HelmetProvider>
         </ThemeProvider>
     );
 }

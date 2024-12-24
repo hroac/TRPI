@@ -168,19 +168,19 @@ const statements = [
     }
   },
   {
-    "text": "I often feel overwhelmed when dealing with multiple responsibilities.",
+    "text": "I often feel overwhelmed when dealing with multiple responsibilities at once.",
     "trait": "neuroticism",
     "weight": 1.1,
     "subtext": {
-      "0-10": { "text": "I rarely feel overwhelmed by responsibilities.", "weight": 0.1 },
+      "0-10": { "text": "I rarely feel overwhelmed by multiple responsibilities at once.", "weight": 0.1 },
       "10-20": { "text": "I occasionally feel overwhelmed but manage well.", "weight": 0.2 },
-      "20-30": { "text": "I sometimes feel overwhelmed with responsibilities.", "weight": 0.3 },
+      "20-30": { "text": "I sometimes feel overwhelmed with multiple responsibilities.", "weight": 0.3 },
       "30-40": { "text": "I moderately feel overwhelmed under pressure.", "weight": 0.4 },
-      "40-50": { "text": "I fairly often feel overwhelmed by responsibilities.", "weight": 0.5 },
+      "40-50": { "text": "I fairly often feel overwhelmed by multiple responsibilities.", "weight": 0.5 },
       "50-60": { "text": "I frequently feel overwhelmed when managing tasks.", "weight": 0.6 },
-      "60-70": { "text": "I regularly feel overwhelmed with multiple responsibilities.", "weight": 0.7 },
+      "60-70": { "text": "I regularly feel overwhelmed with multiple responsibilities at once.", "weight": 0.7 },
       "70-80": { "text": "I strongly feel overwhelmed when under pressure.", "weight": 0.8 },
-      "80-90": { "text": "I am highly prone to feeling overwhelmed by responsibilities.", "weight": 0.9 },
+      "80-90": { "text": "I am highly prone to feeling overwhelmed by multiple responsibilities at once.", "weight": 0.9 },
       "90-100": { "text": "I always feel deeply overwhelmed when managing many tasks.", "weight": 1.0 }
     }
   },    

@@ -116,7 +116,74 @@ const statements = [
       '90-100': { text: 'I thrive on change and effortlessly adapt to new situations.', weight: 1.0 },
     }
   },
-  
+  {
+    "text": "I set clear priorities and focus on achieving my long-term goals.",
+    "trait": "conscientiousness",
+    "weight": 1.2,
+    "subtraits": {
+      "0-10": { "text": "I rarely set clear priorities or focus on long-term goals.", "weight": 0.1 },
+      "10-20": { "text": "I occasionally set goals but struggle to prioritize.", "weight": 0.2 },
+      "20-30": { "text": "I sometimes focus on setting and achieving long-term goals.", "weight": 0.3 },
+      "30-40": { "text": "I moderately set priorities and work towards my goals.", "weight": 0.4 },
+      "40-50": { "text": "I fairly often focus on achieving long-term goals.", "weight": 0.5 },
+      "50-60": { "text": "I frequently set clear priorities and focus on goals.", "weight": 0.6 },
+      "60-70": { "text": "I regularly focus on achieving my long-term goals.", "weight": 0.7 },
+      "70-80": { "text": "I strongly set and achieve long-term priorities.", "weight": 0.8 },
+      "80-90": { "text": "I am highly focused on setting and achieving priorities.", "weight": 0.9 },
+      "90-100": { "text": "I always set clear priorities and achieve my long-term goals with focus.", "weight": 1.0 }
+    }
+  },
+  {
+    "text": "I feel energized by engaging with new people and building connections.",
+    "trait": "extraversion",
+    "weight": 1.1,
+    "subtraits": {
+      "0-10": { "text": "I rarely feel energized by meeting new people.", "weight": 0.1 },
+      "10-20": { "text": "I occasionally enjoy meeting new people but prefer to keep to myself.", "weight": 0.2 },
+      "20-30": { "text": "I sometimes feel energized by engaging with new people.", "weight": 0.3 },
+      "30-40": { "text": "I moderately enjoy meeting new people and making connections.", "weight": 0.4 },
+      "40-50": { "text": "I fairly often feel energized by social interactions.", "weight": 0.5 },
+      "50-60": { "text": "I frequently enjoy meeting new people and forming connections.", "weight": 0.6 },
+      "60-70": { "text": "I regularly feel energized by engaging with new people.", "weight": 0.7 },
+      "70-80": { "text": "I strongly enjoy building connections with new people.", "weight": 0.8 },
+      "80-90": { "text": "I am highly energized by meeting and connecting with others.", "weight": 0.9 },
+      "90-100": { "text": "I always feel invigorated by engaging with new people and building connections.", "weight": 1.0 }
+    }
+  },
+  {
+    "text": "I enjoy supporting my friends and helping them succeed.",
+    "trait": "agreeableness",
+    "weight": 1.1,
+    "subtraits": {
+      "0-10": { "text": "I rarely enjoy helping or supporting my friends.", "weight": 0.1 },
+      "10-20": { "text": "I occasionally help friends but don’t enjoy it much.", "weight": 0.2 },
+      "20-30": { "text": "I sometimes support my friends and their goals.", "weight": 0.3 },
+      "30-40": { "text": "I moderately enjoy supporting and helping friends.", "weight": 0.4 },
+      "40-50": { "text": "I fairly often support my friends and enjoy their success.", "weight": 0.5 },
+      "50-60": { "text": "I frequently enjoy helping my friends succeed.", "weight": 0.6 },
+      "60-70": { "text": "I regularly support and enjoy helping my friends.", "weight": 0.7 },
+      "70-80": { "text": "I strongly enjoy supporting and encouraging friends.", "weight": 0.8 },
+      "80-90": { "text": "I am highly focused on supporting my friends and their goals.", "weight": 0.9 },
+      "90-100": { "text": "I always prioritize supporting my friends and celebrating their successes.", "weight": 1.0 }
+    }
+  },
+  {
+    "text": "I often feel overwhelmed when dealing with multiple responsibilities.",
+    "trait": "neuroticism",
+    "weight": 1.1,
+    "subtraits": {
+      "0-10": { "text": "I rarely feel overwhelmed by responsibilities.", "weight": 0.1 },
+      "10-20": { "text": "I occasionally feel overwhelmed but manage well.", "weight": 0.2 },
+      "20-30": { "text": "I sometimes feel overwhelmed with responsibilities.", "weight": 0.3 },
+      "30-40": { "text": "I moderately feel overwhelmed under pressure.", "weight": 0.4 },
+      "40-50": { "text": "I fairly often feel overwhelmed by responsibilities.", "weight": 0.5 },
+      "50-60": { "text": "I frequently feel overwhelmed when managing tasks.", "weight": 0.6 },
+      "60-70": { "text": "I regularly feel overwhelmed with multiple responsibilities.", "weight": 0.7 },
+      "70-80": { "text": "I strongly feel overwhelmed when under pressure.", "weight": 0.8 },
+      "80-90": { "text": "I am highly prone to feeling overwhelmed by responsibilities.", "weight": 0.9 },
+      "90-100": { "text": "I always feel deeply overwhelmed when managing many tasks.", "weight": 1.0 }
+    }
+  },    
   {
     text: 'I prefer organized, planned activities over spontaneous events.',
     trait: 'conscientiousness',

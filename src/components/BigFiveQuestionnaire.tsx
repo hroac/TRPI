@@ -469,6 +469,7 @@ const stages = [
   statements.slice(7, 11), // Stage 2
   statements.slice(11, 15), // Stage 3
   statements.slice(15, 19), // Stage 4
+  statements.slice(19, 23), // Stage 5
 ];
 
 const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> = ({

@@ -202,22 +202,22 @@ const statements = [
     }
   },
   {
-    text: 'I often take charge in group settings and feel energized by social interactions.',
-    trait: 'extraversion',
-    weight: 1.0,
-    subtraits: {
-      '0-10': { text: 'I rarely take charge in groups and avoid social settings.', weight: 0.1 },
-      '10-20': { text: 'I occasionally take charge but prefer to observe in social settings.', weight: 0.2 },
-      '20-30': { text: 'I sometimes feel energized by group interactions.', weight: 0.3 },
-      '30-40': { text: 'I moderately enjoy taking charge in group settings.', weight: 0.4 },
-      '40-50': { text: 'I fairly often feel energized by socializing.', weight: 0.5 },
-      '50-60': { text: 'I frequently take charge and enjoy social interactions.', weight: 0.6 },
-      '60-70': { text: 'I regularly feel energized and confident in group settings.', weight: 0.7 },
-      '70-80': { text: 'I strongly enjoy leading and socializing in group settings.', weight: 0.8 },
-      '80-90': { text: 'I am highly energized by taking charge in social interactions.', weight: 0.9 },
-      '90-100': { text: 'I thrive on leading groups and am fully energized by social interactions.', weight: 1.0 },
+    "text": "I often take charge in group settings and feel confident in leadership roles.",
+    "trait": "extraversion",
+    "weight": 1.0,
+    "subtraits": {
+      "0-10": { "text": "I rarely take charge in groups and avoid leadership roles.", "weight": 0.1 },
+      "10-20": { "text": "I occasionally take charge but prefer to follow in group settings.", "weight": 0.2 },
+      "20-30": { "text": "I sometimes feel comfortable taking charge in group settings.", "weight": 0.3 },
+      "30-40": { "text": "I moderately enjoy taking charge and leading in group settings.", "weight": 0.4 },
+      "40-50": { "text": "I fairly often feel confident leading in group settings.", "weight": 0.5 },
+      "50-60": { "text": "I frequently take charge and feel comfortable leading.", "weight": 0.6 },
+      "60-70": { "text": "I regularly feel confident and effective in leadership roles.", "weight": 0.7 },
+      "70-80": { "text": "I strongly enjoy leading and taking charge in group settings.", "weight": 0.8 },
+      "80-90": { "text": "I am highly confident and capable in leadership roles.", "weight": 0.9 },
+      "90-100": { "text": "I thrive on taking charge and feel fully confident in leadership roles.", "weight": 1.0 }
     }
-  },
+  },  
   {
     text: 'I often prioritize harmony and avoid conflict in my relationships.',
     trait: 'agreeableness',

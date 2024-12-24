@@ -69,7 +69,7 @@ const statements = [
     text: 'I am open to exploring new ideas and perspectives.',
     trait: 'openness',
     weight: 1.2,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I am slightly open to new ideas.', weight: 0.1 },
       '10-20': { text: 'I have a mild interest in exploring new perspectives.', weight: 0.2 },
       '20-30': { text: 'I sometimes consider new ideas.', weight: 0.3 },
@@ -86,7 +86,7 @@ const statements = [
     text: 'I often think about abstract concepts and like to ponder deep questions.',
     trait: 'openness',
     weight: 0.9,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely think about abstract concepts.', weight: 0.1 },
       '10-20': { text: 'I occasionally consider simple abstract ideas.', weight: 0.2 },
       '20-30': { text: 'I sometimes think about abstract questions.', weight: 0.3 },
@@ -103,7 +103,7 @@ const statements = [
     text: 'I am comfortable with change and easily adapt to new situations.',
     trait: 'openness',
     weight: 0.9,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I struggle with change and prefer stability.', weight: 0.1 },
       '10-20': { text: 'I occasionally adapt to small changes.', weight: 0.2 },
       '20-30': { text: 'I sometimes embrace change with some hesitation.', weight: 0.3 },
@@ -117,27 +117,27 @@ const statements = [
     }
   },
   {
-    "text": "I set clear priorities and focus on achieving my long-term goals.",
+    "text": "I stay focused and organized when managing multiple tasks.",
     "trait": "conscientiousness",
-    "weight": 1.2,
-    "subtraits": {
-      "0-10": { "text": "I rarely set clear priorities or focus on long-term goals.", "weight": 0.1 },
-      "10-20": { "text": "I occasionally set goals but struggle to prioritize.", "weight": 0.2 },
-      "20-30": { "text": "I sometimes focus on setting and achieving long-term goals.", "weight": 0.3 },
-      "30-40": { "text": "I moderately set priorities and work towards my goals.", "weight": 0.4 },
-      "40-50": { "text": "I fairly often focus on achieving long-term goals.", "weight": 0.5 },
-      "50-60": { "text": "I frequently set clear priorities and focus on goals.", "weight": 0.6 },
-      "60-70": { "text": "I regularly focus on achieving my long-term goals.", "weight": 0.7 },
-      "70-80": { "text": "I strongly set and achieve long-term priorities.", "weight": 0.8 },
-      "80-90": { "text": "I am highly focused on setting and achieving priorities.", "weight": 0.9 },
-      "90-100": { "text": "I always set clear priorities and achieve my long-term goals with focus.", "weight": 1.0 }
+    "weight": 1.0,
+    "subtext": {
+      "0-10": { "text": "I rarely stay focused or organized when handling tasks.", "weight": 0.1 },
+      "10-20": { "text": "I occasionally try to stay organized but struggle to maintain focus.", "weight": 0.2 },
+      "20-30": { "text": "I sometimes stay organized when managing tasks.", "weight": 0.3 },
+      "30-40": { "text": "I moderately focus on staying organized and managing tasks effectively.", "weight": 0.4 },
+      "40-50": { "text": "I fairly often stay organized and focused while managing tasks.", "weight": 0.5 },
+      "50-60": { "text": "I frequently stay on top of tasks through focus and organization.", "weight": 0.6 },
+      "60-70": { "text": "I regularly stay focused and manage tasks in an organized manner.", "weight": 0.7 },
+      "70-80": { "text": "I strongly focus on staying organized when handling multiple tasks.", "weight": 0.8 },
+      "80-90": { "text": "I am highly organized and focused when managing multiple priorities.", "weight": 0.9 },
+      "90-100": { "text": "I always stay focused and highly organized when managing tasks.", "weight": 1.0 }
     }
   },
   {
     "text": "I feel energized by engaging with new people and building connections.",
     "trait": "extraversion",
     "weight": 1.1,
-    "subtraits": {
+    "subtext": {
       "0-10": { "text": "I rarely feel energized by meeting new people.", "weight": 0.1 },
       "10-20": { "text": "I occasionally enjoy meeting new people but prefer to keep to myself.", "weight": 0.2 },
       "20-30": { "text": "I sometimes feel energized by engaging with new people.", "weight": 0.3 },
@@ -154,7 +154,7 @@ const statements = [
     "text": "I enjoy supporting my friends and helping them succeed.",
     "trait": "agreeableness",
     "weight": 1.1,
-    "subtraits": {
+    "subtext": {
       "0-10": { "text": "I rarely enjoy helping or supporting my friends.", "weight": 0.1 },
       "10-20": { "text": "I occasionally help friends but don’t enjoy it much.", "weight": 0.2 },
       "20-30": { "text": "I sometimes support my friends and their goals.", "weight": 0.3 },
@@ -171,7 +171,7 @@ const statements = [
     "text": "I often feel overwhelmed when dealing with multiple responsibilities.",
     "trait": "neuroticism",
     "weight": 1.1,
-    "subtraits": {
+    "subtext": {
       "0-10": { "text": "I rarely feel overwhelmed by responsibilities.", "weight": 0.1 },
       "10-20": { "text": "I occasionally feel overwhelmed but manage well.", "weight": 0.2 },
       "20-30": { "text": "I sometimes feel overwhelmed with responsibilities.", "weight": 0.3 },
@@ -188,7 +188,7 @@ const statements = [
     text: 'I prefer organized, planned activities over spontaneous events.',
     trait: 'conscientiousness',
     weight: 0.9,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely prefer organized activities and enjoy spontaneity.', weight: 0.1 },
       '10-20': { text: 'I occasionally enjoy planned activities but like being spontaneous.', weight: 0.2 },
       '20-30': { text: 'I sometimes prefer organized activities over spontaneous ones.', weight: 0.3 },
@@ -205,7 +205,7 @@ const statements = [
     "text": "I often take charge in group settings and feel confident in leadership roles.",
     "trait": "extraversion",
     "weight": 1.0,
-    "subtraits": {
+    "subtext": {
       "0-10": { "text": "I rarely take charge in groups and avoid leadership roles.", "weight": 0.1 },
       "10-20": { "text": "I occasionally take charge but prefer to follow in group settings.", "weight": 0.2 },
       "20-30": { "text": "I sometimes feel comfortable taking charge in group settings.", "weight": 0.3 },
@@ -222,7 +222,7 @@ const statements = [
     text: 'I often prioritize harmony and avoid conflict in my relationships.',
     trait: 'agreeableness',
     weight: 1.0,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely prioritize harmony and may engage in conflicts.', weight: 0.1 },
       '10-20': { text: 'I occasionally try to avoid conflict but don’t always prioritize harmony.', weight: 0.2 },
       '20-30': { text: 'I sometimes try to maintain harmony in my relationships.', weight: 0.3 },
@@ -239,7 +239,7 @@ const statements = [
     text: 'I tend to feel anxious or worried in stressful situations.',
     trait: 'neuroticism',
     weight: 1.0,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely feel anxious or worried, even in stressful situations.', weight: 0.1 },
       '10-20': { text: 'I occasionally feel mild anxiety in stress-inducing situations.', weight: 0.2 },
       '20-30': { text: 'I sometimes feel worried or anxious under stress.', weight: 0.3 },
@@ -257,7 +257,7 @@ const statements = [
     text: 'I feel a strong responsibility to meet my goals and commitments.',
     trait: 'conscientiousness',
     weight: 1.1,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely feel responsible for meeting my goals or commitments.', weight: 0.1 },
       '10-20': { text: 'I occasionally take responsibility for meeting my goals.', weight: 0.2 },
       '20-30': { text: 'I sometimes feel committed to fulfilling my goals.', weight: 0.3 },
@@ -274,7 +274,7 @@ const statements = [
     text: 'I enjoy discussing ideas and debating with others.',
     trait: 'extraversion',
     weight: 1.1,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely enjoy discussing ideas or debating with others.', weight: 0.1 },
       '10-20': { text: 'I occasionally engage in discussions but avoid debates.', weight: 0.2 },
       '20-30': { text: 'I sometimes enjoy discussing ideas with others.', weight: 0.3 },
@@ -291,7 +291,7 @@ const statements = [
     text: 'I strive to be understanding and supportive towards others.',
     trait: 'agreeableness',
     weight: 1.2,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely try to understand or support others.', weight: 0.1 },
       '10-20': { text: 'I occasionally make an effort to be supportive.', weight: 0.2 },
       '20-30': { text: 'I sometimes try to understand and support others.', weight: 0.3 },
@@ -308,7 +308,7 @@ const statements = [
     text: 'I often feel uneasy or second-guess myself when making decisions.',
     trait: 'neuroticism',
     weight: 0.9,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely feel uneasy or second-guess my decisions.', weight: 0.1 },
       '10-20': { text: 'I occasionally second-guess myself when deciding.', weight: 0.2 },
       '20-30': { text: 'I sometimes feel unsure when making decisions.', weight: 0.3 },
@@ -326,7 +326,7 @@ const statements = [
     text: 'I tend to make decisions based on logic rather than emotions.',
     trait: 'conscientiousness',
     weight: 1.3,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely rely on logic when making decisions.', weight: 0.1 },
       '10-20': { text: 'I occasionally make logical decisions but often consider emotions.', weight: 0.2 },
       '20-30': { text: 'I sometimes prioritize logic over emotions in decisions.', weight: 0.3 },
@@ -344,7 +344,7 @@ const statements = [
     text: 'I tend to stay calm and assertive when solving challenges.',
     trait: 'extraversion',
     weight: 1.3,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely stay calm or assertive when facing challenges.', weight: 0.1 },
       '10-20': { text: 'I occasionally remain calm but struggle with assertiveness.', weight: 0.2 },
       '20-30': { text: 'I sometimes stay calm and assertive in difficult situations.', weight: 0.3 },
@@ -361,7 +361,7 @@ const statements = [
     text: 'I’m sensitive to other people’s feelings and try to meet their needs.',
     trait: 'agreeableness',
     weight: 1.0,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely notice or care about others’ feelings.', weight: 0.1 },
       '10-20': { text: 'I occasionally pay attention to others’ feelings.', weight: 0.2 },
       '20-30': { text: 'I sometimes try to be sensitive to others’ needs.', weight: 0.3 },
@@ -378,7 +378,7 @@ const statements = [
     text: 'I often dwell on past mistakes and worry about future outcomes.',
     trait: 'neuroticism',
     weight: 0.95,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely think about past mistakes or worry about the future.', weight: 0.1 },
       '10-20': { text: 'I occasionally reflect on past mistakes and consider future risks.', weight: 0.2 },
       '20-30': { text: 'I sometimes dwell on mistakes and worry about outcomes.', weight: 0.3 },
@@ -395,7 +395,7 @@ const statements = [
     text: 'I am detail-oriented and take time to think through tasks carefully.',
     trait: 'conscientiousness',
     weight: 0.9,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely pay attention to details or think through tasks.', weight: 0.1 },
       '10-20': { text: 'I occasionally take time to think about tasks in detail.', weight: 0.2 },
       '20-30': { text: 'I sometimes focus on details when completing tasks.', weight: 0.3 },
@@ -412,7 +412,7 @@ const statements = [
     text: 'I’m known for being independent and bold in my approach to problems.',
     trait: 'extraversion',
     weight: 1.0,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely act independently or boldly when solving problems.', weight: 0.1 },
       '10-20': { text: 'I occasionally act independently but rarely take bold steps.', weight: 0.2 },
       '20-30': { text: 'I sometimes approach problems boldly and independently.', weight: 0.3 },
@@ -429,7 +429,7 @@ const statements = [
     text: 'I prefer to work as part of a team and value cooperation.',
     trait: 'agreeableness',
     weight: 0.9,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely value cooperation or enjoy working in a team.', weight: 0.1 },
       '10-20': { text: 'I occasionally work in teams but don’t always value cooperation.', weight: 0.2 },
       '20-30': { text: 'I sometimes prefer working as part of a team.', weight: 0.3 },
@@ -446,7 +446,7 @@ const statements = [
     text: 'I tend to overthink situations and feel uneasy about the unknown.',
     trait: 'neuroticism',
     weight: 1.0,
-    subtraits: {
+    subtext: {
       '0-10': { text: 'I rarely overthink or feel uneasy about the unknown.', weight: 0.1 },
       '10-20': { text: 'I occasionally feel uneasy when faced with the unknown.', weight: 0.2 },
       '20-30': { text: 'I sometimes overthink and feel uneasy about uncertainty.', weight: 0.3 },
@@ -532,12 +532,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     if (!statement) return null;
 
     const percentage = Math.round(value * 100);
-    const range = Object.keys(statement.subtraits).find((key) => {
+    const range = Object.keys(statement.subtext).find((key) => {
       const [min, max] = key.split('-').map(Number);
       return percentage >= min && percentage <= max;
     });
 
-    return range ? (statement.subtraits as any)[range]?.text : null;
+    return range ? (statement.subtext as any)[range]?.text : null;
   };
 
   const handleSliderChange =

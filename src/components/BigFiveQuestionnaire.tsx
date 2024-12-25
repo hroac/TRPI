@@ -377,11 +377,11 @@ const statements = [
     }
   },
   {
-    text: 'I often dwell on past mistakes and worry about future outcomes.',
+    text: 'I often dwell on past mistakes and think about possible outcomes.',
     trait: 'neuroticism',
     weight: 0.95,
     subtext: {
-      '0-10': { text: 'I rarely think about past mistakes or worry about the future.', weight: 0.1 },
+      '0-10': { text: 'I rarely think about past mistakes or think about the future.', weight: 0.1 },
       '10-20': { text: 'I occasionally reflect on past mistakes and consider future risks.', weight: 0.2 },
       '20-30': { text: 'I sometimes dwell on mistakes and worry about outcomes.', weight: 0.3 },
       '30-40': { text: 'I moderately worry about past and future outcomes.', weight: 0.4 },

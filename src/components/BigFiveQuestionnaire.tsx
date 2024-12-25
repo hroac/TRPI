@@ -30,7 +30,9 @@ import {
   Close,
   Check,
   SwitchAccount,
-  ShuffleOn
+  ShuffleOn,
+  RestartAlt,
+  RestartAltOutlined
 } from '@mui/icons-material';
 import { guid } from '../utils/guid';
 import { typesData } from '../utils/typesData';
@@ -488,9 +490,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   }, {} as { [trait: string]: number[] })
 };
 
-  const [responses, setResponses] = useState(initialResponses);
-  const [currentStage, setCurrentStage] = useState(0);
-
+  const [responses, setResponses] = useState(initialResponses)
+  const [currentStage, setCurrentStage] = useState(parseInt(localStorage.getItem('stage') || "0"));
+  const [lastStage, setLastStage] = useState(parseInt(localStorage.getItem('stage')|| "0"))
   const [primary4FType, setPrimary4FType] = useState<string | null>(null);
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
   const [matchedType, setMatchedType] = useState<string | null>(null);
@@ -500,6 +502,17 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const type = typesData.find(t => t.type === matchedMBTIType);
 
 
+  const reset = () => {
+   setLastStage(0)
+   setCurrentStage(0)
+   setResponses(statements.reduce((acc, s) => {
+    if (!acc[s.trait]) acc[s.trait] = [];
+    acc[s.trait].push(0.5);
+    return acc;
+  }, {} as { [trait: string]: number[] }));
+  }
+
+
   const setRandomly = () => {
     const randomResponses = statements.reduce((acc, s) => {
       if (!acc[s.trait]) acc[s.trait] = [];
@@ -507,6 +520,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       return acc;
     }, {} as { [trait: string]: number[] });
     setResponses(randomResponses)
+    setLastStage(0)
 
     const weightedScores = Object.keys(randomResponses).reduce(
       (acc, traitKey) => {
@@ -543,6 +557,13 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const handleSliderChange =
     (trait: string, index: number) =>
     (event: Event, value: number | number[], activeThumb: number) => {
+      console.log('handleSliderChange',  currentStage, lastStage)
+      if(currentStage !== lastStage) {
+        const sub = getSubtrait(trait, index, responses[trait][index] as number);
+
+        setSelectedStatement(sub)
+        return;
+      }
       setResponses((prev: any) => {
         const updatedResponses = { ...prev };
         updatedResponses[trait][index] = value as number;
@@ -575,12 +596,25 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     };
 
   const handleNext = () => {
-    if (currentStage < stages.length - 1) setCurrentStage(currentStage + 1);
+    console.log('current stage first: ', currentStage )
+    console.log('isCurrentStage: ', currentStage, lastStage);
+    if (currentStage < stages.length - 1) {
+      setCurrentStage(currentStage + 1);
+      if(currentStage + 1 > lastStage) {
+        setLastStage(currentStage + 1);
+        localStorage.setItem('stage', (currentStage + 1).toString());
+      }
+      console.log('current stage first: ', currentStage + 1)
+
+    }
     setSelectedStatement(null)
   };
 
   const handleBack = () => {
-    if (currentStage > 0) setCurrentStage(currentStage - 1);
+    if (currentStage > 0) {
+      setCurrentStage(currentStage - 1);
+      //localStorage.setItem('stage', (currentStage - 1).toString());
+    }
     setSelectedStatement(null)
   };
 
@@ -604,6 +638,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     }
     localStorage.setItem(guid(), JSON.stringify(newJson));
     localStorage.removeItem('responses')
+    localStorage.removeItem('stage')
     const binId = await onComplete({ primary4F, mbtiType, selectedMbtiType, profile: weightedScores, description: ''});
     navigate(`/result/${binId}`);
   };
@@ -636,6 +671,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         );
       });
       setResponses(updatedResponses);
+      setLastStage(0)
 
       const primary4F = determinePrimary4FType(profile);
       const mbtiType = matchMBTIType(profile, primary4F);
@@ -660,6 +696,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           TRPI Assessment Tool
         </Typography>
         <Box>
+          <IconButton onClick={(reset)} color='primary'>
+            <RestartAltOutlined/>
+          </IconButton>
           <IconButton onClick={setRandomly} color="primary">
             <ShuffleOn />
           </IconButton>
@@ -727,6 +766,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
                onChange={handleSliderChange(s.trait, s.trait === 'openness' ? index : currentStage - 1)}
                 max={1}
                 step={0.01}
+                color={`${currentStage !== lastStage ? 'error' : 'primary'}`}
+                sx={{color: `${currentStage !== lastStage ? '#7705cc' : 'primary'}`}}
               />
             </Grid>
             <Grid item>

@@ -16,7 +16,8 @@ import {
   Modal,
   useMediaQuery,
   useTheme,
-  Tooltip
+  Tooltip,
+  Stack
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -34,6 +35,7 @@ import {
   RestartAlt,
   RestartAltOutlined
 } from '@mui/icons-material';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { guid } from '../utils/guid';
 import { typesData } from '../utils/typesData';
 import { Helmet } from 'react-helmet';
@@ -557,7 +559,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const handleSliderChange =
     (trait: string, index: number) =>
     (event: Event, value: number | number[], activeThumb: number) => {
-      console.log('handleSliderChange',  currentStage, lastStage)
+     // console.log('handleSliderChange',  currentStage, lastStage)
       if(currentStage !== lastStage) {
         const sub = getSubtrait(trait, index, responses[trait][index] as number);
 
@@ -695,9 +697,10 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         <Typography variant="h5" gutterBottom>
           TRPI Assessment Tool
         </Typography>
-        <Box>
-          <IconButton onClick={(reset)} color='primary'>
-            <RestartAltOutlined/>
+        {isMobile ? (
+          <Stack>
+            <IconButton onClick={(reset)} color='primary'>
+            <LockOpenIcon/>
           </IconButton>
           <IconButton onClick={setRandomly} color="primary">
             <ShuffleOn />
@@ -705,7 +708,21 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
           </IconButton>
-        </Box>
+        </Stack>
+        ) : (
+          <Grid spacing={3}>
+            <IconButton onClick={(reset)} color='primary'>
+            <LockOpenIcon/>
+          </IconButton>
+          <IconButton onClick={setRandomly} color="primary">
+            <ShuffleOn />
+          </IconButton>
+          <IconButton onClick={handleOpenModal} color="primary">
+            <SwitchAccount />
+          </IconButton>
+        </Grid>
+        )
+      }
       </Box>
       {/* Modal for Matrix selection */}
       <Modal open={openModal} onClose={handleCloseModal}>

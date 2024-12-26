@@ -6,8 +6,10 @@
     "dependencies": {
         "@emotion/react": "^11.13.3",
         "@emotion/styled": "^11.13.0",
+        "@google-pay/button-react": "^3.1.0",
         "@mui/icons-material": "^5.4.4",
         "@mui/material": "^5.4.4",
+        "@stripe/stripe-js": "^5.4.0",
         "@types/annyang": "^2.6.5",
         "annyang": "^2.6.1",
         "axios": "^0.27.2",

@@ -20,7 +20,7 @@ const Contact: React.FC = () => {
         callback: handleCredentialResponse,
       });
 
-      tokenClient = google.accounts.oauth2.initTokenClient({
+      tokenClient = (google as any).accounts.oauth2.initTokenClient({
         client_id: '1038743380423-nqp44dfrru1l118rluin4507jmjlecpv.apps.googleusercontent.com',
         scope: 'https://www.googleapis.com/auth/gmail.send',
         callback: (tokenResponse: any) => {

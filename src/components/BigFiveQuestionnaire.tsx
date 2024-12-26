@@ -39,6 +39,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { guid } from '../utils/guid';
 import { typesData } from '../utils/typesData';
 import { Helmet } from 'react-helmet';
+import PremiumModal from './PremiumModal';
 
 const BigFiveQuestionnaireHelmet: React.FC = () => (
   <Helmet>
@@ -500,6 +501,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [matchedType, setMatchedType] = useState<string | null>(null);
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
+  const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
   const type = typesData.find(t => t.type === matchedMBTIType);
 
@@ -648,6 +650,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const progress = ((currentStage + 1) / stages.length) * 100;
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+  const handleOpenPremiumModal = () => SetPremiumModalOpen(true)
+  const handleClosePremiumModal = () => SetPremiumModalOpen(false)
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -699,7 +703,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         </Typography>
         {isMobile ? (
           <Stack>
-            <IconButton onClick={(reset)} color='primary'>
+            <IconButton onClick={handleOpenPremiumModal} color='primary'>
             <LockOpenIcon/>
           </IconButton>
           <IconButton onClick={setRandomly} color="primary">
@@ -711,7 +715,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         </Stack>
         ) : (
           <Grid spacing={3}>
-            <IconButton onClick={(reset)} color='primary'>
+            <IconButton onClick={(handleOpenPremiumModal)} color='primary'>
             <LockOpenIcon/>
           </IconButton>
           <IconButton onClick={setRandomly} color="primary">
@@ -725,6 +729,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       }
       </Box>
       {/* Modal for Matrix selection */}
+      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={reset}/>
+
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{

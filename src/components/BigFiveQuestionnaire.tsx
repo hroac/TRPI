@@ -384,16 +384,16 @@ const statements = [
     trait: 'neuroticism',
     weight: 0.95,
     subtext: {
-      '0-10': { text: 'I rarely think about past mistakes or think about the future.', weight: 0.1 },
-      '10-20': { text: 'I occasionally reflect on past mistakes and consider future risks.', weight: 0.2 },
+      '0-10': { text: 'I rarely think about past mistakes or think about the possible outcomes.', weight: 0.1 },
+      '10-20': { text: 'I occasionally reflect on past mistakes and consider possible outcomes.', weight: 0.2 },
       '20-30': { text: 'I sometimes dwell on mistakes and worry about outcomes.', weight: 0.3 },
-      '30-40': { text: 'I moderately worry about past and future outcomes.', weight: 0.4 },
+      '30-40': { text: 'I moderately worry about past and possible outcomes.', weight: 0.4 },
       '40-50': { text: 'I fairly often dwell on past mistakes and outcomes.', weight: 0.5 },
       '50-60': { text: 'I frequently reflect on past mistakes and worry about outcomes.', weight: 0.6 },
-      '60-70': { text: 'I regularly dwell on mistakes and stress about the future.', weight: 0.7 },
-      '70-80': { text: 'I strongly focus on past mistakes and worry about future risks.', weight: 0.8 },
-      '80-90': { text: 'I am highly prone to dwelling on past mistakes and future worries.', weight: 0.9 },
-      '90-100': { text: 'I almost always dwell on the past and stress about the future.', weight: 1.0 },
+      '60-70': { text: 'I regularly dwell on mistakes and stress about what could have happened.', weight: 0.7 },
+      '70-80': { text: 'I strongly focus on past mistakes and worry about what could have happened.', weight: 0.8 },
+      '80-90': { text: 'I am highly prone to dwelling on past mistakes and worries.', weight: 0.9 },
+      '90-100': { text: 'I almost always dwell on the past and stress about what could have happened.', weight: 1.0 },
     }
   },
   {

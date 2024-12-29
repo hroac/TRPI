@@ -72,11 +72,11 @@ interface ResultProps {
 const ResultDisplay: React.FC<ResultProps> = ({ selectedMode }) => {
   const modeDetails: Record<string, { mbti: string[]; description: string }> = {
     Fight: {
-      mbti: ["ENTP", "ESTP", "ENTJ", "ESTJ"],
+      mbti: ["ENTP", "ESTP", "INTP", "ISTP"],
       description: "The Fight mode signifies a proactive and assertive approach to challenges. You likely excel in taking charge, solving problems, and pushing through adversity. You thrive in high-energy situations and value decisive action to overcome obstacles effectively."
     },
     Freeze: {
-      mbti: ["INTP", "ISTP", "INTJ", "ISTJ"],
+      mbti: ["INTJ", "ISTJ", "ENTJ", "ESTJ"],
       description: "The Freeze mode highlights a calm and analytical response to challenges. You excel at observing, gathering detailed information, and making well-thought-out decisions. This mode reflects your ability to stay composed and logical under pressure."
     },
     Fawn: {

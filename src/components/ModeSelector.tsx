@@ -70,20 +70,24 @@ interface ResultProps {
 }
 
 const ResultDisplay: React.FC<ResultProps> = ({ selectedMode }) => {
-  const modeDetails: Record<string, { mbti: string[]; description: string }> = {
+  const modeDetails: Record<string, { functions: string, mbti: string[]; description: string }> = {
     Fight: {
+      functions: "Se/Ne + Ti",
       mbti: ["ENTP", "ESTP", "INTP", "ISTP"],
       description: "The Fight mode signifies a proactive and assertive approach to challenges. You likely excel in taking charge, solving problems, and pushing through adversity. You thrive in high-energy situations and value decisive action to overcome obstacles effectively."
     },
     Freeze: {
+      functions: "Si/Ni + Te",
       mbti: ["INTJ", "ISTJ", "ENTJ", "ESTJ"],
       description: "The Freeze mode highlights a calm and analytical response to challenges. You excel at observing, gathering detailed information, and making well-thought-out decisions. This mode reflects your ability to stay composed and logical under pressure."
     },
     Fawn: {
+      functions: "Si/Ni + Te",
       mbti: ["ISFJ", "INFJ", "ESFJ", "ENFJ"],
       description: "The Fawn mode emphasizes empathy and collaboration. You excel in creating harmony and nurturing relationships. This mode showcases your natural ability to build trust, support others, and foster cooperation in challenging situations."
     },
     Flight: {
+      functions: "Se/Ne + Fi",
       mbti: ["ESFP", "ENFP", "ISFP", "INFP"],
       description: "The Flight mode represents creativity and adaptability. You excel in thinking outside the box and exploring innovative solutions. This mode highlights your resilience, flexibility, and ability to transform challenges into opportunities for growth."
     },
@@ -109,8 +113,12 @@ const ResultDisplay: React.FC<ResultProps> = ({ selectedMode }) => {
         {details.description}
       </Typography>
       <Typography sx={{ mt: 2, fontStyle: "italic", color: "#888" }}>
+        Linked functions: {details.functions}
+      </Typography>
+      <Typography sx={{ mt: 2, fontStyle: "italic", color: "#888" }}>
         Linked MBTI Types: {details.mbti.join(", ")}
       </Typography>
+
     </Card>
   );
 };

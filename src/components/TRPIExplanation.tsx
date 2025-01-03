@@ -147,9 +147,9 @@ const TRPIExplanation: React.FC = () => {
               </Typography>
             </li>
           </Box>
-          <Typography variant="body2" paragraph>
+         {/*  <Typography variant="body2" paragraph>
             <em>Trauma Effect:</em> If the Id is disrupted, perception may become distorted, causing stress on the individual's ability to process information effectively.
-          </Typography>
+          </Typography> */}
 
           <Typography variant="body2" paragraph>
             <strong>The Ego: Judging and Organizing (Te, Ti, Fe, Fi) for SF and NT Types</strong>

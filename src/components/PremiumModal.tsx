@@ -65,7 +65,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymen
           Unlock Your Answers
         </Typography>
         <Typography id="premium-modal-description" variant="body1" gutterBottom>
-          Pay €1.00 to change your results!
+          Pay €0.99 to change your results!
         </Typography>
     </Grid>
 <Grid item>
@@ -99,7 +99,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymen
             transactionInfo: {
               totalPriceStatus: 'FINAL',
               totalPriceLabel: 'Total',
-              totalPrice: '1.00',
+              totalPrice: '0.99',
               currencyCode: 'EUR',
               countryCode: 'NL',
             },

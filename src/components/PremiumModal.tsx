@@ -65,7 +65,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymen
           Unlock Your Answers
         </Typography>
         <Typography id="premium-modal-description" variant="body1" gutterBottom>
-          Pay €0.99 to change your results!
+          Pay €0.99 to change your previous answers!
         </Typography>
     </Grid>
 <Grid item>

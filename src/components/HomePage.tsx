@@ -166,7 +166,7 @@ const Home = () => {
         >
           Explore the 16 Personality Types
         </Typography>
-        <Matrix/>
+        <Matrix />
       </Box>
 
       <Grid container spacing={1} sx={{ 

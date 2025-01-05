@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Tooltip, useMediaQuery, Theme } from '@mui/material';
+import { Box, Typography, Tooltip, useMediaQuery, Theme, Grid } from '@mui/material';
 import { typesData } from '../utils/typesData';
 import { Link } from 'react-router-dom';
 
@@ -51,12 +51,13 @@ const Matrix: React.FC<MatrixProps> = ({ onSelectType, width }) => {
                 p={isMobile ? 1 : 2} // Reduce padding for mobile
                 textAlign="center"
                 borderRadius={2}
+                height="75px"
                 sx={{
                   cursor: 'pointer',
                   fontSize: isMobile ? '0.75rem' : '1rem', // Adjust text size for mobile
                 }}
               >
-                <Typography variant="subtitle1">{type.type}</Typography>
+                <Typography variant="h5">{type.type}</Typography>
               </Box>
             ) : (
               <Box
@@ -67,12 +68,13 @@ const Matrix: React.FC<MatrixProps> = ({ onSelectType, width }) => {
                 p={isMobile ? 1 : 2} // Reduce padding for mobile
                 textAlign="center"
                 borderRadius={2}
+                height="75px"
                 style={{ textDecoration: 'none' }}
                 sx={{
                   fontSize: isMobile ? '0.75rem' : '1rem', // Adjust text size for mobile
                 }}
               >
-                <Typography variant="subtitle1">{type.type}</Typography>
+                <Typography sx={{ fontWeight: 'bold' }} variant="h5">{type.type}</Typography>
               </Box>
             )}
           </Tooltip>

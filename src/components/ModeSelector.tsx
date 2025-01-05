@@ -106,7 +106,7 @@ const ResultDisplay: React.FC<ResultProps> = ({ selectedMode }) => {
         boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
       }}
     >
-      <Typography variant="h5" sx={{ fontWeight: "bold", color: "#555" }}>
+      <Typography variant="h2" sx={{ fontWeight: "bold", color: "#555" }}>
         {selectedMode} Mode
       </Typography>
       <Typography sx={{ mt: 2, fontSize: "1.1rem", color: "#666" }}>

@@ -515,6 +515,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   //   return acc;
   // }, {} as { [trait: string]: number[] }));
   // }
+  }
 
 
   const setRandomly = () => {

@@ -57,7 +57,7 @@ const Matrix: React.FC<MatrixProps> = ({ onSelectType, width }) => {
                   fontSize: isMobile ? '0.75rem' : '1rem', // Adjust text size for mobile
                 }}
               >
-                <Typography variant="h5">{type.type}</Typography>
+                <Typography sx={{ fontWeight: 'bold' }} variant="h5">{type.type}</Typography>
               </Box>
             ) : (
               <Box

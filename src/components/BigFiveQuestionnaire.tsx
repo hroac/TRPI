@@ -703,9 +703,11 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         </Typography>
         {isMobile ? (
           <Stack>
-            <IconButton onClick={handleOpenPremiumModal} color='primary'>
-            <LockOpenIcon/>
-          </IconButton>
+            {currentStage !== lastStage && (
+              <IconButton onClick={handleOpenPremiumModal} color='primary'>
+              <LockOpenIcon/>
+            </IconButton>
+            )}
           <IconButton onClick={setRandomly} color="primary">
             <ShuffleOn />
           </IconButton>
@@ -715,9 +717,11 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         </Stack>
         ) : (
           <Grid spacing={3}>
-            <IconButton onClick={(handleOpenPremiumModal)} color='primary'>
-            <LockOpenIcon/>
-          </IconButton>
+            {currentStage !== lastStage && (
+              <IconButton onClick={(handleOpenPremiumModal)} color='primary'>
+              <LockOpenIcon/>
+            </IconButton>
+            )}
           <IconButton onClick={setRandomly} color="primary">
             <ShuffleOn />
           </IconButton>

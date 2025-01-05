@@ -509,12 +509,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const reset = () => {
    setLastStage(0)
    setCurrentStage(0)
-   setResponses(statements.reduce((acc, s) => {
-    if (!acc[s.trait]) acc[s.trait] = [];
-    acc[s.trait].push(0.5);
-    return acc;
-  }, {} as { [trait: string]: number[] }));
-  }
+  //  setResponses(statements.reduce((acc, s) => {
+  //   if (!acc[s.trait]) acc[s.trait] = [];
+  //   acc[s.trait].push(0.5);
+  //   return acc;
+  // }, {} as { [trait: string]: number[] }));
+  // }
 
 
   const setRandomly = () => {

@@ -86,7 +86,7 @@ function App() {
                             { label: 'Take the test', path: '/test' },
                             { label: 'Result', path: `/result/${binId || ''}` },
                             { label: 'Big Five Input', path: '/input' },
-                            //{label:  'ChatGPT', path: '/talk'},
+                            {label:  'ChatGPT', path: '/talk'},
                             { label: 'Contact', path: '/contact' }
                         ].filter(item => {
 
@@ -96,6 +96,7 @@ function App() {
                             return true
                         })}
                     />
+
 
                     <Box sx={{ marginTop: '64px', background: 'linear-gradient(0deg, rgb(247, 248, 252), rgb(217 236 236))', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
                         <Routes>
@@ -110,7 +111,9 @@ function App() {
                             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                             <Route path="/talk" element={<TrpiTalk onComplete={handleComplete}/>} />
                         </Routes>
+                        <Box position={'relative'} top={225}>
                         <Footer />
+                        </Box>
                     </Box>
                 </HashRouter>
         </ThemeProvider>

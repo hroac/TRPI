@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Typography, Box, Grid } from '@mui/material';
+import { Paper, Typography, Box, Grid, Button } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import JsonBinApi from '../utils/saveResults';
@@ -10,6 +10,8 @@ import { guid } from '../utils/guid';
 import GhPagesFS from '../utils/GhPagesFS';
 import RatingComponent from '../components/RatingComponent';
 import { Helmet } from 'react-helmet';
+import { stages } from '../utils/mbtiMapping';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
 const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number }, binId: string }> = ({
   type,
@@ -56,6 +58,9 @@ interface ResultsProps {
 const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
   const [bin, setBin] = useState<any>(null); // State to store bin data
   const [loading, setLoading] = useState(true); // State to manage loading status
+  const [reviewIndex, setReviewIndex] = useState<number>(0);
+  const total = stages.length;
+  const stage = stages[reviewIndex];
   const params = useParams();
 
   useEffect(() => {
@@ -135,7 +140,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
     )
   }
 
-  const { type, bigFiveResponses, primary4FType, description } = bin;
+  const { type, bigFiveResponses, primary4FType, description, allResponses } = bin;
   //const mbtiType = type && typesData.find((t: any) => t.type === type);
 
   const data = {
@@ -197,7 +202,8 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
       <Box my={3}>
         <Bar data={data} options={options} />
       </Box>
-      {type && <AboutPage mbtiType={type} showBigFive={false} description={description} />}
+      {type && <AboutPage mbtiType={type} showBigFive={false} description={description} allResponses={allResponses} />}
+     
     </Paper>
   );
 };

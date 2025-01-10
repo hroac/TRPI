@@ -85,7 +85,7 @@ export const typesData: any[] = [
     silver: "ESTJ",
     gold: "ENTJ",
     bronze: "INFP",
-    quote: "I design the machine before testing it on the track.",
+    quote: "I tinker with the machine before testing it on the track.",
     description: `ISTP (Ti > Se) - Fight Mode, The Virtuoso: ISTPs are practical and resourceful, with a talent for hands-on problem-solving. Known for their mechanical and technical skills, they have a natural ability to understand how things work, often thriving in environments where they can apply their skills independently. ISTPs value efficiency and are quick to act, though they can appear detached due to their reserved nature. In "Fight" mode, ISTPs apply their logical and technical expertise to manage high-pressure situations, taking a calm and objective approach. They analyze situations critically, often relying on practical solutions and focusing intensely on resolving the issue at hand.`,
     strengths: [
       "Efficient",

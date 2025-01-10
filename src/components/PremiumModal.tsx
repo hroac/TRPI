@@ -11,7 +11,8 @@ const secretKeyParts = [
 ];
 
 // Decode and reconstruct the secret key
-const reconstructedSecretKey = atob(secretKeyParts.join(''));
+const reconstructedSecretKey = `pk_live_51PViCzHKnNyKk3kl1f3BOo3GMKcy68HDSO8RsjwIydff8UnKUnXtAk04aYmsmV8EHN6m3khoe8G0f7FsEQtYpO8400wOf5kqGe`
+//atob(secretKeyParts.join(''));
 
 const stripePromise = loadStripe(reconstructedSecretKey);
 

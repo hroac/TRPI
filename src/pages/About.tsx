@@ -1,19 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
-import { MBTIProfiles } from '../utils/mbtiMapping';
-import { Box, Grid, List, ListItem, Typography, Card, CardContent, useMediaQuery, useTheme } from '@mui/material';
+import { MBTIProfiles, stages } from '../utils/mbtiMapping';
+import { Box, Grid, List, ListItem, Typography, Card, CardContent, useMediaQuery, useTheme, Paper, Button, Stack } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import Carousel from '../components/Carousel';
 
 
 
 
-const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; description?: string; }> = ({ mbtiType, showBigFive = true, description = '' }) => {
+const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; description?: string, allResponses?: any}> = ({ mbtiType, showBigFive = true, description = '', allResponses = [] }) => {
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t: any) => t.type === type || t.type === mbtiType);
   const profile = MBTIProfiles.find((p: any) => p.name === type || p.name === mbtiType);
-
+  //const [slides, setSlides] = useState<Array<any>>([]); // State for slides
+  const slides = stages.map(stage => {
+    return { content: (
+      <Paper>
+    <Stack>
+      {
+        stage.map((stmt: any) => {
+          const index = stages.flat().indexOf(stmt)
+          const explanation = allResponses[index];
+      
+          return  (
+              <Paper sx={{ p: 3, mb: 5 }}>
+              <Typography variant="h6" gutterBottom>
+                {stmt.text}
+              </Typography>
+              <Typography color="text.secondary">
+                Trait: {stmt.trait.toUpperCase()}
+              </Typography>
+              <Box mt={1}>
+                <Typography sx={{ whiteSpace: "pre-wrap" }}>
+                  <strong>Your Answer:</strong>{" "}
+                  {typeof explanation === 'string' ? explanation.trim() : explanation.toString().slice(0, 3) || "(No explanation provided.)"}
+                </Typography>
+              </Box>
+            </Paper>
+            )
+        })
+      }
+    </Stack>
+    </Paper>
+    )
+}}) || []
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -92,14 +125,17 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
         <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
           <CardContent>
             <Typography variant="body1" paragraph>
-              {description + '\n' + typeInfo.description}
+              {description ?? typeInfo.description}
             </Typography>
           </CardContent>
         </Card>
       </Grid>
-
-    
-
+      <Carousel  slides={slides} settings={{
+  spaceBetween: 50,
+  slidesPerView: 1,
+  autoplay: { delay: 100 },
+  loop: true,
+}}/>
       <Box my={5}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>

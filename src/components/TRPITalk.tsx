@@ -53,32 +53,7 @@ interface TrpiTalkProps {
 const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   // Each statement -> user explanation text\
   const navigate = useNavigate();
-  const [userExplanations, setUserExplanations] = useState<string[]>(
-    
-/*       "I'm an outside-the-box thinker, I like to think of things in an alternative method. Especially creative solutions like finding workarounds for common issues is something that I excel at.",
-      "I like to ponder deep questions like where did the universe come from, where does God come from, are they the same thing, that sort of thing.",
-      "I can easily adapt to new situations and I'm comfortable with change.",
-      "I tend to stay organized and focused when I manage my tasks. I'm good at multitasking and find it easy to do",
-      "I love meeting new people and engaging with them and learning their stories. I like to see what makes people tick and I love making connections.",
-      "I do enjoy seeing my friends succeed and will help them wherever I can.",
-      "I don't often feel overwhelmed when dealing with multiple responsibilities, I tend to deal with that quite easily.",
-      "I don't prefer surprises, and I like everything to be kind of spontaneous at the same time Organization is boring especially like for example having a theme. I'd much rather everything be spontaneous",
-      "I often take charge in group settings when there's nobody else who wants to take charge when there's no other leader and I tend to do quite well at it",
-      "I sometimes prioritize harmony and I try to avoid conflict in my relationships by ignoring the little things that might bother me but are not worth bringing up.",
-      "I tend to just laugh at things and make jokes when I feel like I'm in a stressful situation. When I think I'm in a stressful situation.",
-      "When I set a goal for myself, I intend to reach it, I intend to obsess over it even.",
-      "I love debating with others and sharing ideas, especially when it comes to the fields that I'm interested in, like psychology and fantasy and mythologies, like the deep existential questions that you might ponder.",
-      "I do tend to be supportive towards others and try to be accepting of who they are and how they function. I try not to judge people.",
-      "I don't often second-guess myself, and when I do, it's only because new information has come to light that changes my opinion. Otherwise, I'm a pretty steadfast person.",
-      "I do tend to make decisions based on logic rather than emotions. I'm more of a head guy than a heart guy.",
-      "I tend to stay calm and assertive when I solve challenges, I face them head on and I don't let go until I feel like it's been fixed.",
-      "I am quite emphatic towards other people and I try to meet their needs, but not all the time.",
-      "I do dwell on past mistakes every once in a while, like everybody, and I tend to ruminate about possible new outcomes that could have happened, but not that much anymore, I'm quite happy with what I got now.",
-      "I'm a programmer by trade and so I have to work detail-oriented if I want to deliver a proper product, a full product. So I'm quite detail-oriented and I take time to work through tasks.",
-      "I've always been described as somebody who is an outside-the-box thinker and does things their own way while still achieving results.",
-      "It depends on the people I'm working with. If it's good people that I get along with and that are helpful that contribute something to the team Then yes, I like to work with them. If not, then I'd rather work alone",
-      "I don't tend to overthink situations, I do tend to overthink possible scenarios in situations I'm quite adept. But in my head I can be quite an overthinker."
-    */ 
+  const [userExplanations, setUserExplanations] = useState<string[]>( 
       localStorage.getItem("userExplanations") && JSON.parse(localStorage.getItem("userExplanations") || "") || Array(statements.length).fill("")
   );
 
@@ -236,7 +211,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   const handleFetchBigFiveScores = async () => {
     setLoadingScores(true);
     setErrorMessage("");
-
+    localStorage.removeItem('userExplanations');
     // Build our prompt
     const prompt = `
 You have ${statements.length} statements with user-provided free-text explanations. 
@@ -448,7 +423,13 @@ ${statements
       )
     }
 
-    return null;
+    
+
+    return (
+      <Button onClick={handleOpenPremiumModal}>
+        Get your results!
+        </Button>
+    );
   };
 
 

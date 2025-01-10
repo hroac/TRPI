@@ -288,9 +288,8 @@ ${statements
       setPrimary4F(primary4F);
       setMbtiType(mbtiType);
 
-      parsed.description = description;
       // Optionally call onComplete if you want to store or forward results
-      const binId = await onComplete({ primary4F, mbtiType,  profile: parsed, description: parsed.description, responses: userExplanations });
+      const binId = await onComplete({ primary4F, mbtiType,  profile: parsed, description: description, responses: userExplanations });
       navigate(`/result/${binId}`);
       // console.log("binId:", binId);
     } catch (err: any) {

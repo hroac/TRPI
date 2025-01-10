@@ -202,7 +202,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
       speakText("You have completed all stages. Let’s review your responses.");
 
       handleOpenPremiumModal();
-      //handleFetchBigFiveScores();
+      handleFetchBigFiveScores();
       window.scrollTo(0, 0);
     }
   };

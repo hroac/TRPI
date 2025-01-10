@@ -426,7 +426,7 @@ ${statements
     
 
     return (
-      <Button onClick={handleOpenPremiumModal}>
+      <Button onClick={handleFetchBigFiveScores}>
         Get your results!
         </Button>
     );

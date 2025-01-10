@@ -27,6 +27,7 @@
         "react-helmet-async": "^2.0.5",
         "react-router-dom": "^6.2.1",
         "react-scripts": "^5.0.1",
+        "react-snap": "^1.23.0",
         "styled-components": "^6.1.13",
         "swiper": "^11.1.14",
         "typescript": "^4.6.3"
@@ -42,7 +43,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
+        "build": "react-scripts build | react-snap",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d build"
     },

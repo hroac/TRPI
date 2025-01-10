@@ -283,6 +283,7 @@ ${statements
       window.scrollTo(0, 0);
 
       // Use your MBTI logic
+      delete parsed.description;
       const { primary4F, mbtiType } = processProfile(parsed);
       setPrimary4F(primary4F);
       setMbtiType(mbtiType);

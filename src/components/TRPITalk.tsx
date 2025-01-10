@@ -368,7 +368,7 @@ ${statements
                       />
                       {/* Microphone buttons */}
                   <Box position={'relative'} left={-50} top={-75} mt={1}>
-                    <Stack position={'relative'} bottom={isMobile ? '100%': 0} right={isMobile ? '30%' : '50%'}>
+                    <Stack position={'relative'} width={50} bottom={isMobile ? '100%': 0} right={isMobile ? '10%' : '0%'}>
                     <IconButton onClick={() => speakText(st.text, true)}>
                       <VolumeUp/>
                     </IconButton>

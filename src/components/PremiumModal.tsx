@@ -20,9 +20,12 @@ interface PremiumModalProps {
   open: boolean;
   onClose: () => void;
   handlePaymentSuccess: (paymentData: any) => void;
+  title: string,
+  description: string
+  price: number
 }
 
-const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymentSuccess }) => {
+const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymentSuccess, title, description, price }) => {
   const processPayment = async (paymentData: any) => {
     const stripe = await stripePromise;
     if (stripe) {
@@ -63,10 +66,10 @@ const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymen
 <Grid container spacing={1} justifyContent="center" alignItems="center">
     <Grid item> 
     <Typography id="premium-modal-title" variant="h6" component="h2" gutterBottom>
-          Unlock Your Answers
+          {title}
         </Typography>
         <Typography id="premium-modal-description" variant="body1" gutterBottom>
-          Pay €0.99 to change your previous answers!
+          {description}
         </Typography>
     </Grid>
 <Grid item>
@@ -100,7 +103,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymen
             transactionInfo: {
               totalPriceStatus: 'FINAL',
               totalPriceLabel: 'Total',
-              totalPrice: '0.99',
+              totalPrice: `${price}`,
               currencyCode: 'EUR',
               countryCode: 'NL',
             },

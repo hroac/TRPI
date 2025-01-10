@@ -328,7 +328,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       }
       </Box>
       {/* Modal for Matrix selection */}
-      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={reset}/>
+      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={reset} price={0.99} title='Unlock Your Answers' description='Pay €0.99 to change your previous answers!'/>
 
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box

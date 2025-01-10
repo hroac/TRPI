@@ -26,6 +26,8 @@ import { processProfile } from "../utils/mbtiMapping";
 import ScrollToTop from "../utils/ScrollToTop";
 import { statements, stages } from '../utils/mbtiMapping';
 import { useNavigate } from "react-router-dom";
+import PremiumModal from "./PremiumModal";
+import { Headset, HeadsetOff } from "@mui/icons-material";
 
 // -------------------------------------------------------------------------
 // Utility for decoding token parts
@@ -52,8 +54,8 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   // Each statement -> user explanation text\
   const navigate = useNavigate();
   const [userExplanations, setUserExplanations] = useState<string[]>(
- /*    [
-      "I'm an outside-the-box thinker, I like to think of things in an alternative method. Especially creative solutions like finding workarounds for common issues is something that I excel at.",
+    
+/*       "I'm an outside-the-box thinker, I like to think of things in an alternative method. Especially creative solutions like finding workarounds for common issues is something that I excel at.",
       "I like to ponder deep questions like where did the universe come from, where does God come from, are they the same thing, that sort of thing.",
       "I can easily adapt to new situations and I'm comfortable with change.",
       "I tend to stay organized and focused when I manage my tasks. I'm good at multitasking and find it easy to do",
@@ -76,16 +78,18 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
       "I've always been described as somebody who is an outside-the-box thinker and does things their own way while still achieving results.",
       "It depends on the people I'm working with. If it's good people that I get along with and that are helpful that contribute something to the team Then yes, I like to work with them. If not, then I'd rather work alone",
       "I don't tend to overthink situations, I do tend to overthink possible scenarios in situations I'm quite adept. But in my head I can be quite an overthinker."
-    ] */
-    Array(statements.length).fill("")
+    */ 
+   Array(statements.length).fill("")
   );
 
   // Current stage: -1 = not started, 0..5 = active stage, 6 = done
   const [currentStage, setCurrentStage] = useState<number>(-1);
 
   // Final overview
-  const [isOverviewMode, setIsOverviewMode] = useState<boolean>(false);
-  const [reviewIndex, setReviewIndex] = useState<number>(0);
+  const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
+  const handleOpenPremiumModal = () => SetPremiumModalOpen(true)
+  const handleClosePremiumModal = () => SetPremiumModalOpen(false)
+  
 
   // Big Five (0..100), MBTI, and custom description
   const [bigFive, setBigFive] = useState<{
@@ -105,6 +109,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   // -------------- Microphone / Voice Logic --------------
+  const [audioDisabled, setAudioDisabled] = useState<boolean>(true);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [recordingIndex, setRecordingIndex] = useState<number | null>(null); // which statement index is being recorded
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -185,7 +190,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
 
   // Simple TTS
   const speakText = (text: string) => {
-    if (!synthRef.current) return;
+    if (!synthRef.current || audioDisabled) return;
     const detectedLangs = langDetectRef.current.detect(text, 1);
     const language = detectedLangs?.[0]?.[0] || "english";
     const languageCode = getLanguageCode(language);
@@ -217,10 +222,12 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
       window.scrollTo(0, 0);
 
     } else {
+      
       setCurrentStage(6);
       speakText("You have completed all stages. Let’s review your responses.");
 
-      handleFetchBigFiveScores();
+      handleOpenPremiumModal();
+      //handleFetchBigFiveScores();
       window.scrollTo(0, 0);
     }
   };
@@ -450,7 +457,12 @@ ${statements
   // -------------- RENDER --------------
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 1500, width: isMobile ? 300 : 1050 }}>
+      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={handleFetchBigFiveScores}  price={0.99} title='Unlock your results' description="Pay €0.99 to view your results!"/>
+
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 5, p: 2 }}>
+      <IconButton sx={{position: 'relative', right: 100}} onClick={() => setAudioDisabled(!audioDisabled)}>
+        {audioDisabled ? (<HeadsetOff/>) : (<Headset/>)}
+      </IconButton>
       <Typography variant="h3" gutterBottom>
         TRPI Assessment
       </Typography>

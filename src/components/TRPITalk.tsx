@@ -281,6 +281,7 @@ ${statements
       });
       setDescription(parsed.description.toString() || "");
 
+      const backup = parsed.description.toString()
       window.scrollTo(0, 0);
 
       // Use your MBTI logic
@@ -290,7 +291,7 @@ ${statements
       setMbtiType(mbtiType);
 
       // Optionally call onComplete if you want to store or forward results
-      const binId = await onComplete({ primary4F, mbtiType,  profile: parsed, description: description, responses: userExplanations });
+      const binId = await onComplete({ primary4F, mbtiType,  profile: parsed, description: backup, responses: userExplanations });
       navigate(`/result/${binId}`);
       // console.log("binId:", binId);
     } catch (err: any) {

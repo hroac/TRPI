@@ -211,7 +211,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   const handleFetchBigFiveScores = async () => {
     setLoadingScores(true);
     setErrorMessage("");
-    localStorage.removeItem('userExplanations');
+    //localStorage.removeItem('userExplanations');
     // Build our prompt
     const prompt = `
 You have ${statements.length} statements with user-provided free-text explanations. 
@@ -278,7 +278,7 @@ ${statements
         agreeableness: parsed.agreeableness,
         neuroticism: parsed.neuroticism,
       });
-      setDescription(parsed.description || "");
+      setDescription(parsed.description.toString() || "");
 
       window.scrollTo(0, 0);
 
@@ -288,6 +288,7 @@ ${statements
       setPrimary4F(primary4F);
       setMbtiType(mbtiType);
 
+      parsed.description = description;
       // Optionally call onComplete if you want to store or forward results
       const binId = await onComplete({ primary4F, mbtiType,  profile: parsed, description: parsed.description, responses: userExplanations });
       navigate(`/result/${binId}`);

@@ -16,7 +16,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
   const typeInfo = typesData.find((t: any) => t.type === type || t.type === mbtiType);
   const profile = MBTIProfiles.find((p: any) => p.name === type || p.name === mbtiType);
   //const [slides, setSlides] = useState<Array<any>>([]); // State for slides
-  const slides = stages.map(stage => {
+  const slides =  allResponses.length  ? stages.map(stage => {
     return { content: (
       <Paper>
     <Stack>
@@ -46,7 +46,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
     </Stack>
     </Paper>
     )
-}}) || []
+}}) : []
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -125,7 +125,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
         <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
           <CardContent>
             <Typography variant="body1" paragraph>
-              {description ?? typeInfo.description}
+              {description || typeInfo.description}
             </Typography>
           </CardContent>
         </Card>

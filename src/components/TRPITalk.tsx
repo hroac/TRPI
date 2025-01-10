@@ -12,6 +12,7 @@ import {
   useTheme,
   Grid,
   LinearProgress,
+  Stack,
 } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import StopIcon from "@mui/icons-material/Stop";
@@ -27,7 +28,7 @@ import ScrollToTop from "../utils/ScrollToTop";
 import { statements, stages } from '../utils/mbtiMapping';
 import { useNavigate } from "react-router-dom";
 import PremiumModal from "./PremiumModal";
-import { Headset, HeadsetOff } from "@mui/icons-material";
+import { Headset, HeadsetOff, VolumeUp } from "@mui/icons-material";
 
 // -------------------------------------------------------------------------
 // Utility for decoding token parts
@@ -164,8 +165,8 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   };
 
   // Simple TTS
-  const speakText = (text: string) => {
-    if (!synthRef.current || audioDisabled) return;
+  const speakText = (text: string, audioEnabled: boolean = false) => {
+    if (!synthRef.current || (audioDisabled && !audioEnabled)) return;
     const detectedLangs = langDetectRef.current.detect(text, 1);
     const language = detectedLangs?.[0]?.[0] || "english";
     const languageCode = getLanguageCode(language);
@@ -348,7 +349,7 @@ ${statements
                         
                   
                   {/* Explanation box */}
-                    <Box position={'relative'} mt={1}>
+                    <Box position={'relative'} left={100} width={'80%'} mt={1}>
                       <TextareaAutosize
                         minRows={3}
                         style={{ width: "100%", padding: "8px" }}
@@ -366,6 +367,10 @@ ${statements
                       />
                       {/* Microphone buttons */}
                   <Box position={'relative'} left={-50} top={-75} mt={1}>
+                    <Stack position={'relative'} right={300}>
+                    <IconButton onClick={() => speakText(st.text, true)}>
+                      <VolumeUp/>
+                    </IconButton>
                       <IconButton
                         color={
                           isRecording && recordingIndex === statementIndex
@@ -384,6 +389,7 @@ ${statements
                           <MicIcon />
                         )}
                       </IconButton>
+                    </Stack>
                     </Box>
                     </Box>
                 

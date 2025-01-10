@@ -282,17 +282,8 @@ ${statements
 
       window.scrollTo(0, 0);
 
-      // Convert [0..100] => [0..1]
-      const normalizedProfile = {
-        openness: parsed.openness / 100,
-        conscientiousness: parsed.conscientiousness / 100,
-        extraversion: parsed.extraversion / 100,
-        agreeableness: parsed.agreeableness / 100,
-        neuroticism: parsed.neuroticism / 100,
-      };
-
       // Use your MBTI logic
-      const { primary4F, mbtiType } = processProfile(normalizedProfile);
+      const { primary4F, mbtiType } = processProfile(parsed);
       setPrimary4F(primary4F);
       setMbtiType(mbtiType);
 

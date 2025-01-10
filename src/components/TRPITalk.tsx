@@ -211,7 +211,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   const handleFetchBigFiveScores = async () => {
     setLoadingScores(true);
     setErrorMessage("");
-    //localStorage.removeItem('userExplanations');
+    localStorage.removeItem('userExplanations');
     // Build our prompt
     const prompt = `
 You have ${statements.length} statements with user-provided free-text explanations. 

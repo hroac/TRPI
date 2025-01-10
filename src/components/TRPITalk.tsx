@@ -349,7 +349,7 @@ ${statements
                         
                   
                   {/* Explanation box */}
-                    <Box position={'relative'} left={100} width={'80%'} mt={1}>
+                    <Box position={'relative'} left={'10%'} width={'80%'} mt={1}>
                       <TextareaAutosize
                         minRows={3}
                         style={{ width: "100%", padding: "8px" }}
@@ -367,7 +367,7 @@ ${statements
                       />
                       {/* Microphone buttons */}
                   <Box position={'relative'} left={-50} top={-75} mt={1}>
-                    <Stack position={'relative'} right={300}>
+                    <Stack position={'relative'} bottom={isMobile ? '100%': 0} right={isMobile ? '30%' : '50%'}>
                     <IconButton onClick={() => speakText(st.text, true)}>
                       <VolumeUp/>
                     </IconButton>
@@ -440,7 +440,7 @@ ${statements
       <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={handleFetchBigFiveScores}  price={0.99} title='Unlock your results' description="Pay €0.99 to view your results!"/>
 
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 5, p: 2 }}>
-      <IconButton sx={{position: 'relative', left: 750}} onClick={() => setAudioDisabled(!audioDisabled)}>
+      <IconButton sx={{position: 'relative', bottom:  `${isMobile ? 100 :0 }`, left:`${isMobile ? 300 : 750}`}} onClick={() => setAudioDisabled(!audioDisabled)}>
         {audioDisabled ? (<HeadsetOff/>) : (<Headset/>)}
       </IconButton>
       <Typography variant="h3" gutterBottom>

@@ -26,8 +26,8 @@ const Carousel: React.FC<CarouselProps> = ({ slides, settings = defaultSettings 
   const mergedSettings = { ...defaultSettings, ...settings };
 
   return (
-    <Box sx={{ width: '80%', margin: 'auto', paddingTop: '20px' }}>
-      <Swiper {...mergedSettings}>
+    <Box sx={{ width: '100%', margin: 'auto', paddingTop: '20px' }}>
+      <Swiper  {...mergedSettings}>
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             <Box sx={{ padding: '20px', backgroundColor: 'background', borderRadius: '8px' }}>

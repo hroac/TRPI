@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Typography, Box, Grid, Button } from '@mui/material';
+import { Paper, Typography, Box, Grid, Button, useTheme, useMediaQuery } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import JsonBinApi from '../utils/saveResults';
@@ -12,6 +12,7 @@ import RatingComponent from '../components/RatingComponent';
 import { Helmet } from 'react-helmet';
 import { stages } from '../utils/mbtiMapping';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import { isModifier } from 'typescript';
 
 const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number }, binId: string }> = ({
   type,
@@ -62,7 +63,8 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
   const total = stages.length;
   const stage = stages[reviewIndex];
   const params = useParams();
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   useEffect(() => {
     const fetchBinData = async () => {
       try {
@@ -112,7 +114,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
 
   if (loading) {
     return  (
-      <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
+      <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 600 }}>
       <Typography variant="h5" gutterBottom>
         Loading Test Results...
       </Typography>
@@ -127,7 +129,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
 
   if (!bin) {
     return  (
-      <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
+      <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 600 }}>
       <Typography variant="h5" gutterBottom>
         No Results Found...
       </Typography>
@@ -179,7 +181,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
 
 
   return (
-    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 600 }}>
+    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 600 }}>
       <ResultHelmet
        type={type}
        primary4FType={primary4FType}
@@ -192,7 +194,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
         TRPI Test Results - {primary4FType} - {type}  
       </Typography>
       </Box>
-    <Box position={'relative'} sx={{position: 'relative', left: 170, bottom: 10}}>
+    <Box position={'relative'} sx={{position: 'relative', left: isMobile ? -120 : 170, bottom: 10}}>
       <RatingComponent 
         bin={bin} 
         userId={guid()}

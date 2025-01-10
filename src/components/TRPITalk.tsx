@@ -79,7 +79,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
       "It depends on the people I'm working with. If it's good people that I get along with and that are helpful that contribute something to the team Then yes, I like to work with them. If not, then I'd rather work alone",
       "I don't tend to overthink situations, I do tend to overthink possible scenarios in situations I'm quite adept. But in my head I can be quite an overthinker."
     */ 
-   Array(statements.length).fill("")
+      localStorage.getItem("userExplanations") && JSON.parse(localStorage.getItem("userExplanations") || "") || Array(statements.length).fill("")
   );
 
   // Current stage: -1 = not started, 0..5 = active stage, 6 = done
@@ -392,6 +392,7 @@ ${statements
                           setUserExplanations((prev) => {
                             const updated = [...prev];
                             updated[statementIndex] = newText;
+                            localStorage.setItem('userExplanations', JSON.stringify(updated));
                             return updated;
                           });
                         }}
@@ -460,7 +461,7 @@ ${statements
       <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={handleFetchBigFiveScores}  price={0.99} title='Unlock your results' description="Pay €0.99 to view your results!"/>
 
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 5, p: 2 }}>
-      <IconButton sx={{position: 'relative', right: 100}} onClick={() => setAudioDisabled(!audioDisabled)}>
+      <IconButton sx={{position: 'relative', left: 750}} onClick={() => setAudioDisabled(!audioDisabled)}>
         {audioDisabled ? (<HeadsetOff/>) : (<Headset/>)}
       </IconButton>
       <Typography variant="h3" gutterBottom>

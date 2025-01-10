@@ -20,7 +20,7 @@ import ScrollToTop from './utils/ScrollToTop';
 import { guid } from './utils/guid';
 import GhPagesFS from './utils/GhPagesFS';
 import TrpiTalk from './components/TRPITalk';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const AppHelmet: React.FC = () => (
   <Helmet>

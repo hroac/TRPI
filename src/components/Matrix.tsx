@@ -19,6 +19,9 @@ const Matrix: React.FC<MatrixProps> = ({ onSelectType, width }) => {
       gap={isMobile ? 1 : 2} // Reduce gap on mobile
       mt={4} 
       width={width}
+      maxWidth={width}
+      position='relative'
+      right={width && isMobile ? 30 : 0}
     >
       {typesData.map((type) => {
         const archetypeDescription = type.description.slice(

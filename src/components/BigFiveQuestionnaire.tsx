@@ -356,7 +356,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           <Typography variant="body2" gutterBottom>
             Use this as a preset if you already know your type!
           </Typography>
-          <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '60%' : '90%'}/>
+          <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '20%' : '90%'}/>
           <Box sx={{position:'relative', right:'50px'}} mt={2} display="flex" justifyContent="center">
             <Button variant="contained" color="secondary" onClick={() => handleMatrixSelect('XXXX')}>
               I (don't) know my type!

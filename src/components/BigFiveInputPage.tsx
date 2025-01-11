@@ -306,12 +306,12 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
               Select Your Type Here
             </Typography>
             <Typography variant="body2" gutterBottom>
-              Use this as a preset if you already know your type, or choose "I don't know" if unsure!
+            Use this as a preset if you already know your type!
             </Typography>
             <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '60%' : '90%'}/>
             <Box sx={{position:'relative', right:'50px'}} mt={2} display="flex" justifyContent="center">
             <Button variant="contained" color="secondary" onClick={() => handleMatrixSelect('XXXX')}>
-                I don't know my type!
+                I (don't) know my type!
               </Button>
             </Box>
           </Box>

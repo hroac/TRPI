@@ -441,7 +441,7 @@ ${statements
       <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={handleFetchBigFiveScores}  price={0.99} title='Unlock your results' description="Pay €0.99 to view your results!"/>
 
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 5, p: 2 }}>
-      <IconButton sx={{position: 'relative', bottom:  `${isMobile ? 100 :0 }`, left:`${isMobile ? 300 : 750}`}} onClick={() => setAudioDisabled(!audioDisabled)}>
+      <IconButton sx={{position: 'relative', left:`${isMobile ? '200px' : '750px'}`}} onClick={() => setAudioDisabled(!audioDisabled)}>
         {audioDisabled ? (<HeadsetOff/>) : (<Headset/>)}
       </IconButton>
       <Typography variant="h3" gutterBottom>

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
 import { MBTIProfiles, stages } from '../utils/mbtiMapping';
-import { Box, Grid, List, ListItem, Typography, Card, CardContent, useMediaQuery, useTheme, Paper, Button, Stack } from '@mui/material';
+import { Box, Grid, List, ListItem, Typography, Card, CardContent, useMediaQuery, useTheme, Paper, Button, Stack, LinearProgress, Tooltip } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import Carousel from '../components/Carousel';
@@ -24,7 +24,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
         stage.map((stmt: any) => {
           const index = stages.flat().indexOf(stmt)
           const explanation = allResponses[index];
-      
+          const value = typeof explanation === 'string' ? explanation.trim() : parseFloat(explanation.toString().slice(0, 3)) * 100
           return  (
               <Paper sx={{ p: 3, mb: 5 }}>
               <Typography variant="h6" gutterBottom>
@@ -36,8 +36,10 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
               <Box mt={1}>
                 <Typography sx={{ whiteSpace: "pre-wrap" }}>
                   <strong>Your Answer:</strong>{" "}
-                  {typeof explanation === 'string' ? explanation.trim() : explanation.toString().slice(0, 3) || "(No explanation provided.)"}
+                  {value}
                 </Typography>
+                <LinearProgress  color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
+                <Tooltip title={`${value}`} arrow><LinearProgress  color="secondary" variant="determinate" value={parseFloat(explanation.toString().slice(0, 3)) * 100}/></Tooltip>
               </Box>
             </Paper>
             )

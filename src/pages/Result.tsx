@@ -181,7 +181,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
 
 
   return (
-    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 600 }}>
+    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', width: isMobile ? 300 : 600, maxWidth: isMobile ? 300 : 600 }}>
       <ResultHelmet
        type={type}
        primary4FType={primary4FType}

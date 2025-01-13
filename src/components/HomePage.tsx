@@ -71,7 +71,7 @@ const Home = () => {
         ...prevSlides,
         {
           content: (
-            <Box sx={{ textAlign: 'center' }}>
+            <Box component={Link} to={`/result/${key.record}`} sx={{ textAlign: 'center' }}>
               <Typography variant="h5" gutterBottom>
                 TRPI Test Results - {bin.primary4FType} - {bin.type}
               </Typography>

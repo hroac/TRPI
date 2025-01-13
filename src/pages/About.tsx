@@ -138,6 +138,37 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
   autoplay: { delay: 100 },
   loop: true,
 }}/>
+
+
+<Box my={5}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={6}>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Stereotype
+            </Typography>
+            <List dense>
+              <ListItem>
+                <Typography variant="body2" color="text.secondary">
+                  {typeInfo.Stereotype}
+                </Typography>
+              </ListItem>
+            </List>
+          </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Reality
+          </Typography>
+          <List dense>
+            <ListItem>
+              <Typography variant="body2" color="text.secondary">
+                {typeInfo.Reality}
+              </Typography>
+            </ListItem>
+          </List>
+        </Grid>
+    </Grid>
+  </Box>
+  
       <Box my={5}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
@@ -162,6 +193,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
           </Grid>
         </Grid>
       </Box>
+
 
       <Box marginTop={5}>
         <RelatedTypesBox type={type ? (type as unknown as any).toString() : mbtiType} />

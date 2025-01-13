@@ -82,7 +82,7 @@ const ResultDisplay: React.FC<ResultProps> = ({ selectedMode }) => {
       description: "The Freeze mode highlights a calm and analytical response to challenges. You excel at observing, gathering detailed information, and making well-thought-out decisions. This mode reflects your ability to stay composed and logical under pressure."
     },
     Fawn: {
-      functions: "Si/Ni + Te",
+      functions: "Si/Ni + Fe",
       mbti: ["ISFJ", "INFJ", "ESFJ", "ENFJ"],
       description: "The Fawn mode emphasizes empathy and collaboration. You excel in creating harmony and nurturing relationships. This mode showcases your natural ability to build trust, support others, and foster cooperation in challenging situations."
     },

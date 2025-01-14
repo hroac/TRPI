@@ -299,7 +299,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         {isMobile ? (
           <Stack>
             {currentStage !== lastStage && (
-              <IconButton onClick={handleOpenPremiumModal} color='primary'>
+              <IconButton onClick={window.location.hostname === "localhost" ? reset : handleOpenPremiumModal} color='primary'>
               <LockOpenIcon/>
             </IconButton>
             )}
@@ -313,7 +313,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         ) : (
           <Grid spacing={3}>
             {currentStage !== lastStage && (
-              <IconButton onClick={(handleOpenPremiumModal)} color='primary'>
+              <IconButton onClick={(window.location.hostname === "localhost" ? reset : handleOpenPremiumModal)} color='primary'>
               <LockOpenIcon/>
             </IconButton>
             )}
@@ -419,7 +419,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         <Button onClick={handleBack} disabled={currentStage === 0}>
           Back
         </Button>
-        {matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
+        {lastStage >= 2 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
           <Tooltip title={type.mode}>
             <Box
               bgcolor={type.bgColor}

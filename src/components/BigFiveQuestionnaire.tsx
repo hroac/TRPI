@@ -119,7 +119,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       return acc;
     }, {} as { [trait: string]: number[] });
     setResponses(randomResponses)
-    setLastStage(0)
+   // setLastStage(0)
 
     const weightedScores = Object.keys(randomResponses).reduce(
       (acc, traitKey) => {
@@ -157,7 +157,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     (trait: string, index: number) =>
     (event: Event, value: number | number[], activeThumb: number) => {
      // console.log('handleSliderChange',  currentStage, lastStage)
-      if(currentStage !== lastStage) {
+      if(currentStage < lastStage) {
         const sub = getSubtrait(trait, index, responses[trait][index] as number);
 
         setSelectedStatement(sub)
@@ -272,7 +272,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         );
       });
       setResponses(updatedResponses);
-      setLastStage(0)
+      //setLastStage(0)
 
       const primary4F = determinePrimary4FType(profile);
       const mbtiType = matchMBTIType(profile, primary4F);
@@ -388,8 +388,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
                onChange={handleSliderChange(s.trait, s.trait === 'openness' ? index : currentStage - 1)}
                 max={1}
                 step={0.01}
-                color={`${currentStage !== lastStage ? 'error' : 'primary'}`}
-                sx={{color: `${currentStage !== lastStage ? '#7705cc' : 'primary'}`}}
+                color={`${currentStage < lastStage ? 'error' : 'primary'}`}
+                sx={{color: `${currentStage < lastStage ? '#7705cc' : 'primary'}`}}
               />
             </Grid>
             <Grid item>

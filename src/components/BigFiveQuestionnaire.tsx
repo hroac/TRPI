@@ -113,12 +113,17 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
 
   const setRandomly = () => {
-    const randomResponses = statements.reduce((acc, s) => {
-      if (!acc[s.trait]) acc[s.trait] = [];
+    const stageResponses = stages.slice(lastStage, stages.length).flat();
+
+    const randomResponses = stageResponses.reduce((acc, s) => {
+      if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage - 1);
       acc[s.trait].push(Math.random());
       return acc;
     }, {} as { [trait: string]: number[] });
-    setResponses(randomResponses)
+    setResponses(((prevResponses: any) => {
+      console.log(prevResponses, randomResponses);
+      return {...prevResponses, ...randomResponses}
+    }))
    // setLastStage(0)
 
     const weightedScores = Object.keys(randomResponses).reduce(
@@ -140,7 +145,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     setMatchedType(type);
   }
 
-  const getSubtrait = (trait: string, index: number, value: number) => {
+  const getSubtext = (trait: string, index: number, value: number) => {
     const statement = statements.filter((s) => s.trait === trait)[index];
     if (!statement) return null;
 
@@ -156,9 +161,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const handleSliderChange =
     (trait: string, index: number) =>
     (event: Event, value: number | number[], activeThumb: number) => {
-     // console.log('handleSliderChange',  currentStage, lastStage)
+     // //console.log('handleSliderChange',  currentStage, lastStage)
       if(currentStage < lastStage) {
-        const sub = getSubtrait(trait, index, responses[trait][index] as number);
+        const sub = getSubtext(trait, index, responses[trait][index] as number);
 
         setSelectedStatement(sub)
         return;
@@ -182,7 +187,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         const primary4F = determinePrimary4FType(weightedScores);
         const mbtiType = matchMBTIType(weightedScores, primary4F);
         const type = matchMBTIType(weightedScores, primary4F,false);
-        const sub = getSubtrait(trait, index, value as number);
+        const sub = getSubtext(trait, index, value as number);
 
         setSelectedStatement(sub)
         setPrimary4FType(primary4F);
@@ -195,15 +200,15 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     };
 
   const handleNext = () => {
-    console.log('current stage first: ', currentStage )
-    console.log('isCurrentStage: ', currentStage, lastStage);
+    //console.log('current stage first: ', currentStage )
+    //console.log('isCurrentStage: ', currentStage, lastStage);
     if (currentStage < stages.length - 1) {
       setCurrentStage(currentStage + 1);
       if(currentStage + 1 > lastStage) {
         setLastStage(currentStage + 1);
         localStorage.setItem('stage', (currentStage + 1).toString());
       }
-      console.log('current stage first: ', currentStage + 1)
+      //console.log('current stage first: ', currentStage + 1)
 
     }
     setSelectedStatement(null)
@@ -251,7 +256,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleMatrixSelect = (type: string) => {
-    console.log('Selected Type:', type)
+    //console.log('Selected Type:', type)
     if (type === 'XXXX') {
       // If the user doesn't know their type, we can just log it or set states accordingly
      // setPrimary4FType(null);
@@ -264,7 +269,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const profile = MBTIProfiles.find((p) => p.name === type)?.traits;
     setSelectedMbtiType(type);
     if (profile) {
-      console.log(profile)
+      //console.log(profile)
+      
       const updatedResponses = { ...responses };
       Object.keys(updatedResponses).forEach((trait) => {
         updatedResponses[trait] = updatedResponses[trait].map(

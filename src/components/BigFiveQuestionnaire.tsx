@@ -266,17 +266,24 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       return;
     }
 
-    const profile = MBTIProfiles.find((p) => p.name === type)?.traits;
+    const profile: any = MBTIProfiles.find((p) => p.name === type)?.traits;
     setSelectedMbtiType(type);
     if (profile) {
       //console.log(profile)
-      
-      const updatedResponses = { ...responses };
-      Object.keys(updatedResponses).forEach((trait) => {
+      const stageResponses = stages.slice(lastStage, stages.length).flat();
+
+    const updatedResponses = stageResponses.reduce((acc, s) => {
+      if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage - 1);
+      acc[s.trait].push(profile[s.trait]);
+      return acc;
+    }, {} as { [trait: string]: number[] });
+
+      const resp = { ...responses };
+      /* Object.keys(updatedResponses).forEach((trait) => {
         updatedResponses[trait] = updatedResponses[trait].map(
           () => profile[trait as keyof typeof profile]
         );
-      });
+      }); */
       setResponses(updatedResponses);
       //setLastStage(0)
 

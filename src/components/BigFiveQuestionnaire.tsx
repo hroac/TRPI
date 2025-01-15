@@ -115,13 +115,14 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const setRandomly = () => {
     const stageResponses = stages.slice(lastStage, stages.length).flat();
 
+    console.log(stageResponses)
     const randomResponses = stageResponses.reduce((acc, s) => {
-      if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage - 1);
+      if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage ? lastStage - 1 : lastStage);
       acc[s.trait].push(Math.random());
       return acc;
     }, {} as { [trait: string]: number[] });
     setResponses(((prevResponses: any) => {
-      console.log(prevResponses, randomResponses);
+      //console.log(prevResponses, randomResponses);
       return {...prevResponses, ...randomResponses}
     }))
    // setLastStage(0)
@@ -273,7 +274,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       const stageResponses = stages.slice(lastStage, stages.length).flat();
 
     const updatedResponses = stageResponses.reduce((acc, s) => {
-      if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage - 1);
+      if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage ? lastStage - 1 : lastStage);
       acc[s.trait].push(profile[s.trait]);
       return acc;
     }, {} as { [trait: string]: number[] });

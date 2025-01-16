@@ -71,14 +71,35 @@ const Home = () => {
         ...prevSlides,
         {
           content: (
-            <Box component={Link} to={`/result/${key.record}`} sx={{ textAlign: 'center' }}>
-              <Typography variant="h5" gutterBottom>
-                TRPI Test Results - {bin.primary4FType} - {bin.type}
-              </Typography>
-              <Box display="flex" justifyContent="center" my={3}>
-                <Bar data={data} options={options} />
-              </Box>
-            </Box>
+            
+<Box
+  component={Link}
+  to={`/result/${key.record}`}
+  sx={{
+    textAlign: 'center',
+    textDecoration: 'none', // Remove underline from the entire Box if any
+    color: 'inherit',        // Inherit color to prevent default link color
+    '&:hover': {
+      textDecoration: 'none', // Prevent underline on hover
+    },
+  }}
+>
+  <Typography
+    variant="h5"
+    gutterBottom
+    sx={{
+      color: 'inherit',        // Inherit color to match parent and remove link color
+      textDecoration: 'none',  // Remove any text decoration
+      cursor: 'default',       // Optional: Change cursor to default if you don't want it to look clickable
+    }}
+  >
+    TRPI Test Results - {bin.primary4FType} - {bin.type}
+  </Typography>
+  <Box display="flex" justifyContent="center" my={3}>
+    <Bar data={data} options={options} />
+  </Box>
+</Box>
+
           ),
         },
       ]);

@@ -49,40 +49,184 @@ const TRPIHelmet: React.FC = () => (
 );
 const TRPIExplanation: React.FC = () => {
   const functionPairings = [
-    { type: 'ENTP', f4: 'Fight', stack: 'Ne > Ti > Fe > Si', dominant: 'Ne + Ti (Id + Ego)', auxiliary: 'Ni + Fe (Id + Superego)' },
-
-    { type: 'INTJ', f4: 'Freeze', stack: 'Ni > Te > Fi > Se', dominant: 'Ni + Te (Id + Ego)', auxiliary: 'Ne + Fi (Id + Superego)' },
-    
-    { type: 'ISFJ', f4: 'Fawn', stack: 'Si > Fe > Ti > Ne', dominant: 'Si + Fe (Id + Ego)', auxiliary: 'Se + Ti (Id + Superego)' },
-    
-    { type: 'ESFP', f4: 'Flight', stack: 'Se > Fi > Te > Ni', dominant: 'Se + Fi (Id + Ego)', auxiliary: 'Si + Te (Id + Superego)' },
-    
-    
-    { type: 'ESTP', f4: 'Fight', stack: 'Se > Ti > Fe > Ni', dominant: 'Se + Ti (Id + Superego)', auxiliary: 'Si + Fe (Id + Ego)' },
-    
-    { type: 'ISTJ', f4: 'Freeze', stack: 'Si > Te > Fi > Ne', dominant: 'Si + Te (Id + Superego)', auxiliary: 'Se + Fi (Id + Ego)' },
-    
-    { type: 'INFJ', f4: 'Fawn', stack: 'Ni > Fe > Ti > Se', dominant: 'Ni + Fe (Id + Superego)', auxiliary: 'Ne + Ti (Id + Ego)' },
-    
-    { type: 'ENFP', f4: 'Flight', stack: 'Ne > Fi > Te > Si', dominant: 'Ne + Fi (Id + Superego)', auxiliary: 'Ni + Te (Id + Ego)' },
-    
-    
-    { type: 'INTP', f4: 'Fight', stack: 'Ti > Ne > Si > Fe', dominant: 'Ti + Ne (Ego + Id)', auxiliary: 'Te + Si (Superego + Id)' },
-    
-    { type: 'ENTJ', f4: 'Freeze', stack: 'Te > Ni > Se > Fi', dominant: 'Te + Ni (Ego + Id)', auxiliary: 'Ti + Se (Superego + Id)' },
-    
-    { type: 'ESFJ', f4: 'Fawn', stack: 'Fe > Si > Ne > Ti', dominant: 'Fe + Si (Ego + Id)', auxiliary: 'Fi + Ne (Superego + Id)' },
-    
-    { type: 'ISFP', f4: 'Flight', stack: 'Fi > Se > Ni > Te', dominant: 'Fi + Se (Ego + Id)', auxiliary: 'Fe + Ni (Superego + Id)' },
-    
-    { type: 'ISTP', f4: 'Fight', stack: 'Ti > Se > Ni > Fe', dominant: 'Ti + Se (SuperEgo + Id)', auxiliary: 'Te + Ni (Ego + Id)' },
-    
-    { type: 'ESTJ', f4: 'Freeze', stack: 'Te > Si > Ne > Fi', dominant: 'Te + Si (Superego + Id)', auxiliary: 'Ti + Ne (Ego + Id)' },
-    
-    { type: 'ENFJ', f4: 'Fawn', stack: 'Fe > Ni > Se > Ti', dominant: 'Fe + Ni (Superego + Id)', auxiliary: 'Fi + Se (Ego + Id)' },
-    
-    { type: 'INFP', f4: 'Flight', stack: 'Fi > Ne > Si > Te', dominant: 'Fi + Ne (Superego + Id)', auxiliary: 'Fe + Si (Ego + Id)' },
+    { 
+      type: 'ENTP', 
+      f4: 'Fight', 
+      stack: 'Ne>Ti>Fe>Si', 
+      dominant: 'Ne>Ti (Id + Ego)', 
+      auxiliary: 'Ni>Te (Id + Ego)', 
+      tertiary: 'Ni>Fe (Id + Superego)', 
+      inferior: 'Ne>Fi (Id + Superego)', 
+      opposite: 'ISFJ',
+    },
+  
+    { 
+      type: 'INTJ', 
+      f4: 'Freeze', 
+      stack: 'Ni>Te>Fi>Se', 
+      dominant: 'Ni>Te (Id + Ego)', 
+      auxiliary: 'Ne>Ti (Id + Ego)', 
+      tertiary: 'Ne>Fi (Id + Superego)', 
+      inferior: 'Ni>Fe (Id + Superego)', 
+      opposite: 'ESFP',
+    },
+  
+    { 
+      type: 'ISFJ', 
+      f4: 'Fawn', 
+      stack: 'Si>Fe>Ti>Ne', 
+      dominant: 'Si>Fe (Id + Ego)', 
+      auxiliary: 'Se>Fi (Id + Ego)', 
+      tertiary: 'Se>Ti (Id + Superego)', 
+      inferior: 'Si>Te (Id + Superego)', 
+      opposite: 'ENTP',
+    },
+  
+    { 
+      type: 'ESFP', 
+      f4: 'Flight', 
+      stack: 'Se>Fi>Te>Ni', 
+      dominant: 'Se>Fi (Id + Ego)', 
+      auxiliary: 'Si>Fe (Id + Ego)', 
+      tertiary: 'Si>Te (Id + Superego)', 
+      inferior: 'Se>Ti (Id + Superego)', 
+      opposite: 'INTJ',
+    },
+  
+    { 
+      type: 'ESTP', 
+      f4: 'Fight', 
+      stack: 'Se>Ti>Fe>Ni', 
+      dominant: 'Se>Ti (Id + Ego)', 
+      auxiliary: 'Si>Te (Id + Ego)', 
+      tertiary: 'Si>Fe (Id + Superego)', 
+      inferior: 'Se>Fi (Id + Superego)', 
+      opposite: 'INFJ',
+    },
+  
+    { 
+      type: 'ISTJ', 
+      f4: 'Freeze', 
+      stack: 'Si>Te>Fi>Ne', 
+      dominant: 'Si>Te (Id + Ego)', 
+      auxiliary: 'Se>Ti (Id + Ego)', 
+      tertiary: 'Se>Fi (Id + Superego)', 
+      inferior: 'Si>Fe (Id + Superego)', 
+      opposite: 'ENFP',
+    },
+  
+    { 
+      type: 'INFJ', 
+      f4: 'Fawn', 
+      stack: 'Ni>Fe>Ti>Se', 
+      dominant: 'Ni>Fe (Id + Ego)', 
+      auxiliary: 'Ne>Fi (Id + Ego)', 
+      tertiary: 'Ne>Ti (Id + Superego)', 
+      inferior: 'Ni>Te (Id + Superego)', 
+      opposite: 'ESTP',
+    },
+  
+    { 
+      type: 'ENFP', 
+      f4: 'Flight', 
+      stack: 'Ne>Fi>Te>Si', 
+      dominant: 'Ne>Fi (Id + Ego)', 
+      auxiliary: 'Ni>Fe (Id + Ego)', 
+      tertiary: 'Ni>Te (Id + Superego)', 
+      inferior: 'Ne>Ti (Id + Superego)', 
+      opposite: 'ISTJ',
+    },
+  
+    { 
+      type: 'INTP', 
+      f4: 'Fight', 
+      stack: 'Ti>Ne>Si>Fe', 
+      dominant: 'Ti>Ne (Ego + Id)', 
+      auxiliary: 'Te>Ni (Ego + Id)', 
+      tertiary: 'Te>Si (Superego + Id)', 
+      inferior: 'Ti>Se (Superego + Id)', 
+      opposite: 'ESFJ',
+    },
+  
+    { 
+      type: 'ENTJ', 
+      f4: 'Freeze', 
+      stack: 'Te>Ni>Se>Fi', 
+      dominant: 'Te>Ni (Ego + Id)', 
+      auxiliary: 'Ti>Ne (Ego + Id)', 
+      tertiary: 'Ti>Se (Superego + Id)', 
+      inferior: 'Te>Si (Superego + Id)', 
+      opposite: 'ISFP',
+    },
+  
+    { 
+      type: 'ESFJ', 
+      f4: 'Fawn', 
+      stack: 'Fe>Si>Ne>Ti', 
+      dominant: 'Fe>Si (Id + Ego)', 
+      auxiliary: 'Fi>Se (Id + Ego)', 
+      tertiary: 'Fi>Ne (Id + Superego)', 
+      inferior: 'Fe>Ni (Id + Superego)', 
+      opposite: 'INTP',
+    },
+  
+    { 
+      type: 'ISFP', 
+      f4: 'Flight', 
+      stack: 'Fi>Se>Ni>Te', 
+      dominant: 'Fi>Se (Id + Ego)', 
+      auxiliary: 'Fe>Ni (Id + Ego)', 
+      tertiary: 'Fe>Ni (Id + Superego)', 
+      inferior: 'Fi>Ne (Id + Superego)', 
+      opposite: 'ENTJ',
+    },
+  
+    { 
+      type: 'ISTP', 
+      f4: 'Fight', 
+      stack: 'Ti>Se>Ni>Fe', 
+      dominant: 'Ti>Se (Superego + Id)', 
+      auxiliary: 'Te>Ni (Superego + Id)', 
+      tertiary: 'Te>Ni (Ego + Id)', 
+      inferior: 'Ti>Ne (Ego + Id)', 
+      opposite: 'ENFJ',
+    },
+  
+    { 
+      type: 'ESTJ', 
+      f4: 'Freeze', 
+      stack: 'Te>Si>Ne>Fi', 
+      dominant: 'Te>Si (Superego + Id)', 
+      auxiliary: 'Ti>Ne (Superego + Id)', 
+      tertiary: 'Ti>Ne (Ego + Id)', 
+      inferior: 'Te>Ni (Ego + Id)', 
+      opposite: 'INFP',
+    },
+  
+    { 
+      type: 'ENFJ', 
+      f4: 'Fawn', 
+      stack: 'Fe>Ni>Se>Ti', 
+      dominant: 'Fe>Ni (Superego + Id)', 
+      auxiliary: 'Fi>Se (Superego + Id)', 
+      tertiary: 'Fi>Se (Ego + Id)', 
+      inferior: 'Fe>Si (Ego + Id)', 
+      opposite: 'ISTP',
+    },
+  
+    { 
+      type: 'INFP', 
+      f4: 'Flight', 
+      stack: 'Fi>Ne>Si>Te', 
+      dominant: 'Fi>Ne (Superego + Id)', 
+      auxiliary: 'Fe>Si (Superego + Id)', 
+      tertiary: 'Fe>Si (Ego + Id)', 
+      inferior: 'Fi>Se (Ego + Id)', 
+      opposite: 'ESTJ',
+    },
   ];
+  
+  
   return (
     <Container sx={{marginTop: '64px'}}>
       <TRPIHelmet/>
@@ -288,7 +432,7 @@ const TRPIExplanation: React.FC = () => {
             <strong>Judging Shift:</strong> For certain types, there may be shifts between Thinking and Feeling functions (Te ↔ Ti, Fe ↔ Fi), affecting decision-making processes.
           </Typography>
           <Typography variant="body2" paragraph>
-            In stress, individuals may shift from their dominant pairing to their auxiliary pairing, leading to rigid or maladaptive behaviors due to underdevelopment.
+            In stress, individuals may shift from their dominant pairing to their tertiary pairing, leading to rigid or maladaptive behaviors due to underdevelopment.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -299,7 +443,7 @@ const TRPIExplanation: React.FC = () => {
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body2" paragraph>
-            Understanding how trauma influences cognitive functions requires examining the shifts between dominant and auxiliary function pairings. This involves analyzing the dynamics across different personality types, incorporating the concepts of Id, Ego, and Superego.
+            Understanding how trauma influences cognitive functions requires examining the shifts between dominant and tertiary function pairings. This involves analyzing the dynamics across different personality types, incorporating the concepts of Id, Ego, and Superego.
           </Typography>
           <Typography variant="body2" paragraph>
             In this framework, cognitive functions are grouped into pairings that emphasize dynamic relationships rather than individual functions alone. This pairing structure allows for more nuanced personality profiles and facilitates adaptability across situations.
@@ -308,28 +452,34 @@ const TRPIExplanation: React.FC = () => {
             The inversion of dominant functions under stress represents a shift from proactive engagement to a defensive stance. This can involve shifts in perception (Sensing ↔ Intuition) and judging functions (Thinking ↔ Feeling), leading to reliance on less effective cognitive processes.
           </Typography>
           <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell><strong>Type</strong></TableCell>
-                  <TableCell><strong>4F</strong></TableCell>
-                  <TableCell><strong>Grant Stack</strong></TableCell>
-                  <TableCell><strong>Dominant Pairing</strong></TableCell>
-                  <TableCell><strong>Auxiliary Pairing</strong></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {functionPairings.map((pairing, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{pairing.type}</TableCell>
-                    <TableCell>{pairing.f4}</TableCell>
-                    <TableCell>{pairing.stack}</TableCell>
-                    <TableCell>{pairing.dominant}</TableCell>
-                    <TableCell>{pairing.auxiliary}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+          <Table>
+           <TableHead>
+      <TableRow>
+        <TableCell><strong>Type</strong></TableCell>
+        <TableCell><strong>4F</strong></TableCell>
+        <TableCell><strong>Grant Stack</strong></TableCell>
+        <TableCell><strong>Dominant Pairing</strong></TableCell>
+        <TableCell><strong>Auxiliary Pairing</strong></TableCell>
+        <TableCell><strong>Tertiary Pairing</strong></TableCell>
+        <TableCell><strong>Inferior Pairing</strong></TableCell>
+        <TableCell><strong>Opposite</strong></TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {functionPairings.map((pairing, index) => (
+        <TableRow key={index}>
+          <TableCell>{pairing.type}</TableCell>
+          <TableCell>{pairing.f4}</TableCell>
+          <TableCell width={300}>{pairing.stack}</TableCell>
+          <TableCell width={150}>{pairing.dominant}</TableCell>
+          <TableCell width={150}>{pairing.auxiliary}</TableCell>
+          <TableCell width={150}>{pairing.tertiary}</TableCell>
+          <TableCell width={150}>{pairing.inferior}</TableCell>
+          <TableCell width={150}>{pairing.opposite}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
           </TableContainer>
         </AccordionDetails>
       </Accordion>

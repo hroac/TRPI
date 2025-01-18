@@ -82,13 +82,13 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     }
     return statements.reduce((acc, s) => {
     if (!acc[s.trait]) acc[s.trait] = [];
-    acc[s.trait].push(0.5);
+    acc[s.trait].push(0.500001);
     return acc;
   }, {} as { [trait: string]: number[] })
 };
 
   const [responses, setResponses] = useState(initialResponses)
-  const [currentStage, setCurrentStage] = useState(parseInt(localStorage.getItem('stage') || "0"));
+  const [currentStage, setCurrentStage] = useState(parseInt(localStorage.getItem('lastStage') || "0"));
   const [lastStage, setLastStage] = useState(parseInt(localStorage.getItem('stage')|| "0"))
   const [primary4FType, setPrimary4FType] = useState<string | null>(null);
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
@@ -100,7 +100,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const type = typesData.find(t => t.type === matchedMBTIType);
 
 
-  const reset = () => {
+  const unlock = () => {
    setLastStage(0)
    setCurrentStage(0)
   //  setResponses(statements.reduce((acc, s) => {
@@ -110,6 +110,20 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   // }, {} as { [trait: string]: number[] }));
   // }
   }
+
+  const reset = () => {
+    setLastStage(0)
+    setCurrentStage(0)
+    setResponses(statements.reduce((acc, s) => {
+     if (!acc[s.trait]) acc[s.trait] = [];
+     acc[s.trait].push(0.500001);
+     return acc;
+   }, {} as { [trait: string]: number[] }));
+   localStorage.removeItem('responses');
+   localStorage.removeItem('stage');
+
+   }
+
 
 
   const setRandomly = () => {
@@ -205,9 +219,22 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     //console.log('isCurrentStage: ', currentStage, lastStage);
     if (currentStage < stages.length - 1) {
       setCurrentStage(currentStage + 1);
-      if(currentStage + 1 > lastStage) {
+      localStorage.setItem('stage', (currentStage + 1).toString());
+
+      const stageAnswers: any = !currentStage ? Object.values(responses)[0] : Object.values({
+        conscientiousness: responses.conscientiousness,
+        extraversion: responses.extraversion,
+        agreeableness: responses.agreeableness,
+        neuroticism: responses.neuroticism,
+      }).reduce((acc: Array<any>, answer: any) => {
+        return [...acc, answer[currentStage - 1] ]
+      }, [])
+      console.log(stageAnswers);
+      const changed = !stageAnswers.every((answer: number) => answer === 0.500001)
+      if(currentStage + 1 > lastStage && changed) {
         setLastStage(currentStage + 1);
-        localStorage.setItem('stage', (currentStage + 1).toString());
+        localStorage.setItem('lastStage', (currentStage + 1).toString());
+
       }
       //console.log('current stage first: ', currentStage + 1)
 
@@ -313,10 +340,13 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         {isMobile ? (
           <Stack>
             {currentStage !== lastStage && (
-              <IconButton onClick={window.location.hostname === "localhost" ? reset : handleOpenPremiumModal} color='primary'>
+              <IconButton onClick={window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal} color='primary'>
               <LockOpenIcon/>
             </IconButton>
             )}
+             <IconButton onClick={reset} color='primary'>
+            <RestartAlt/>
+          </IconButton>
           <IconButton onClick={setRandomly} color="primary">
             <ShuffleOn />
           </IconButton>
@@ -325,12 +355,15 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           </IconButton>
         </Stack>
         ) : (
-          <Grid spacing={3}>
+          <Grid spacing={4}>
             {currentStage !== lastStage && (
-              <IconButton onClick={(window.location.hostname === "localhost" ? reset : handleOpenPremiumModal)} color='primary'>
+              <IconButton onClick={(window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal)} color='primary'>
               <LockOpenIcon/>
             </IconButton>
             )}
+             <IconButton onClick={reset} color='primary'>
+            <RestartAlt/>
+          </IconButton>
           <IconButton onClick={setRandomly} color="primary">
             <ShuffleOn />
           </IconButton>
@@ -342,7 +375,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       }
       </Box>
       {/* Modal for Matrix selection */}
-      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={reset} price={0.99} title='Unlock Your Answers' description='Pay €0.99 to change your previous answers!'/>
+      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={unlock} price={0.99} title='Unlock Your Answers' description='Pay €0.99 to change your previous answers!'/>
 
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box

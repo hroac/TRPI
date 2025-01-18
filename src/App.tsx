@@ -21,6 +21,9 @@ import { guid } from './utils/guid';
 import GhPagesFS from './utils/GhPagesFS';
 import TrpiTalk from './components/TRPITalk';
 import { Helmet } from 'react-helmet';
+import PdfViewer from './components/PdfViewer';
+import Sources from './pages/Sources';
+import path from 'path';
 
 const AppHelmet: React.FC = () => (
   <Helmet>
@@ -87,6 +90,7 @@ function App() {
                             { label: 'Result', path: `/result/${binId || ''}` },
                             { label: 'Big Five Input', path: '/input' },
                             {label:  'ChatGPT', path: '/talk'},
+                            {label:  'Sources', path: '/sources'},
                             { label: 'Contact', path: '/contact' }
                         ].filter(item => {
 
@@ -110,6 +114,7 @@ function App() {
                             <Route path="/services" element={<Services />} />
                             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                             <Route path="/talk" element={<TrpiTalk onComplete={handleComplete}/>} />
+                            <Route path='/sources' element={<Sources/>} />
                         </Routes>
                         <Box position={'relative'} top={225}>
                         <Footer />

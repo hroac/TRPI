@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Typography, Box, Grid, Button, useTheme, useMediaQuery } from '@mui/material';
+import { Paper, Typography, Box, Container, useTheme, useMediaQuery } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import JsonBinApi from '../utils/saveResults';
 import AboutPage from './About';
-import { typesData } from '../utils/typesData';
 import { useParams } from 'react-router-dom';
 import { guid } from '../utils/guid';
-import GhPagesFS from '../utils/GhPagesFS';
 import RatingComponent from '../components/RatingComponent';
 import { Helmet } from 'react-helmet';
 import { stages } from '../utils/mbtiMapping';
-import { ArrowBack, ArrowForward } from '@mui/icons-material';
-import { isModifier } from 'typescript';
 
 const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number }, binId: string }> = ({
   type,
@@ -46,62 +42,31 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
 };
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-/* 
-interface ResultsProps {
-  mbtiType: string;
-  bigFiveResponses: { [trait: string]: number };
-  primary4FType: string;
-} */
 
 interface ResultsProps {
   binId: string;
 }
-const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
-  const [bin, setBin] = useState<any>(null); // State to store bin data
-  const [loading, setLoading] = useState(true); // State to manage loading status
-  const [reviewIndex, setReviewIndex] = useState<number>(0);
-  const total = stages.length;
-  const stage = stages[reviewIndex];
-  const params = useParams();
+
+const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
+  const [bin, setBin] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   useEffect(() => {
     const fetchBinData = async () => {
       try {
-        //const userId = params?.userId || guid();
-        const userId = guid();
-        const local = localStorage.getItem(userId) || '';
-        if(!local || params?.binId) {
-          const bin = params?.binId || binId || ''; // Fetch binId from localStorage
-
-          if (bin) {
-            const binData = await JsonBinApi.getBinById(bin);
-            binData.binId = bin; // Retrieve bin data by binId
-            setBin(binData); // Set bin data to state
-          }
-          /* const ghPages = new GhPagesFS({ owner: 'hroac',
-            repo: 'TRPI',
-            branch: 'gh-data',
-            token: process.env.REACT_APP_GH_KEY?.toString() || ''})
-  
-        
-          const data = await ghPages.readJson(`${userId}.json`) */
-          //setBin(data)
-
-        } else {
-          const parsed = JSON.parse(local)
-          setBin(parsed)
-        }
-      
+        const binData = await JsonBinApi.getBinById(binId);
+        setBin(binData);
       } catch (error) {
-        console.error("Error fetching bin data:", error);
+        console.error('Error fetching bin data:', error);
       } finally {
-        setLoading(false); // Stop loading once data is fetched or error occurs
+        setLoading(false);
       }
     };
 
     fetchBinData();
-  }, []);
+  }, [binId]);
 
   const options = {
     responsive: true,
@@ -112,101 +77,84 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
     scales: { y: { beginAtZero: true, max: 100 } },
   };
 
-  if (loading) {
-    return  (
-      <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 600 }}>
-      <Typography variant="h5" gutterBottom>
-        Loading Test Results...
-      </Typography>
-      <Box my={3}>
-      <Box my={3}>
-      <Bar data={ { labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: []}} options={options} />
-      </Box>
-      </Box>
-    </Paper>
-    )
-  }
-
-  if (!bin) {
-    return  (
-      <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 600 }}>
-      <Typography variant="h5" gutterBottom>
-        No Results Found...
-      </Typography>
-      <Box my={3}>
-      <Box my={3}>
-        <Bar data={ { labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: []}} options={options} />
-      </Box>
-      </Box>
-    </Paper>
-    )
-  }
-
-  const { type, bigFiveResponses, primary4FType, description, allResponses } = bin;
-  //const mbtiType = type && typesData.find((t: any) => t.type === type);
-
-  const data = {
+  const placeholderData = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
-    datasets: [
-      {
-        label: 'Big Five Scores',
-        data: [
-          bigFiveResponses.openness * 100,
-          bigFiveResponses.conscientiousness * 100,
-          bigFiveResponses.extraversion * 100,
-          bigFiveResponses.agreeableness * 100,
-          bigFiveResponses.neuroticism * 100,
-        ],
-        backgroundColor: [
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
-          'rgba(255, 99, 132, 0.6)',
-        ],
-        borderColor: [
-          'rgba(75, 192, 192, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 99, 132, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
+    datasets: [],
   };
 
-
-
-
+  const data = bin
+    ? {
+        labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
+        datasets: [
+          {
+            label: 'Big Five Scores',
+            data: [
+              bin.bigFiveResponses.openness * 100,
+              bin.bigFiveResponses.conscientiousness * 100,
+              bin.bigFiveResponses.extraversion * 100,
+              bin.bigFiveResponses.agreeableness * 100,
+              bin.bigFiveResponses.neuroticism * 100,
+            ],
+            backgroundColor: [
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+              'rgba(255, 99, 132, 0.6)',
+            ],
+            borderColor: [
+              'rgba(75, 192, 192, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1,
+          },
+        ],
+      }
+    : placeholderData;
 
   return (
-    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', width: isMobile ? 300 : 600, maxWidth: isMobile ? 300 : 600 }}>
-      <ResultHelmet
-       type={type}
-       primary4FType={primary4FType}
-       bigFiveResponses={bigFiveResponses}
-       binId={binId}
-      />
-
-      <Box mt={3}>
-      <Typography variant="h5" gutterBottom>
-        TRPI Test Results - {primary4FType} - {type}  
-      </Typography>
-      </Box>
-    <Box position={'relative'} sx={{position: 'relative', left: isMobile ? -120 : 170, bottom: 10}}>
-      <RatingComponent 
-        bin={bin} 
-        userId={guid()}
-        onRatingSaved={(updatedBin: any) => JsonBinApi.updateResultsInJsonBin(updatedBin)} 
-      />
-      </Box>
-      <Box my={3}>
-        <Bar data={data} options={options} />
-      </Box>
-      {type && <AboutPage mbtiType={type} showBigFive={false} description={description} allResponses={allResponses} />}
-     
-    </Paper>
+    <Container maxWidth="md" sx={{  }}>
+      <Paper elevation={3} sx={{ padding: 4 }}>
+        {loading ? (
+          <Typography variant="h5" align="center">
+            Loading Test Results...
+          </Typography>
+        ) : bin ? (
+          <>
+            <ResultHelmet type={bin.type} primary4FType={bin.primary4FType} bigFiveResponses={bin.bigFiveResponses} binId={bin.binId}/>
+            <Typography variant="h5" gutterBottom>
+              TRPI Test Results - {bin.primary4FType} - {bin.type}
+            </Typography>
+            <Box display={'flex'} justifyContent={'flex-end'}>
+            <RatingComponent
+              bin={bin}
+              userId={guid()}
+              onRatingSaved={(updatedBin: any) => JsonBinApi.updateResultsInJsonBin(updatedBin)}
+            />
+            </Box>
+            <Box my={3}>
+              <Bar data={data} options={options} />
+            </Box>
+           
+            {bin.type && (
+              <AboutPage
+                mbtiType={bin.type}
+                showBigFive={false}
+                description={bin.description}
+                allResponses={bin.allResponses}
+              />
+            )}
+          </>
+        ) : (
+          <Typography variant="h5" align="center">
+            No Results Found
+          </Typography>
+        )}
+      </Paper>
+    </Container>
   );
 };
 

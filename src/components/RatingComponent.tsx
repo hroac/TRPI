@@ -87,7 +87,7 @@ const RatingComponent: React.FC<RatingProps> = ({ bin, userId, onRatingSaved }) 
   };
 
   return (
-    <Box sx={{ position: 'relative', left: 365, bottom: 29 }}>
+    <Box sx={{ position: 'relative' }}>
       {/* Display error messages if any */}
       {error && (
         <Box mb={2}>

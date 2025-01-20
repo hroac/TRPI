@@ -104,6 +104,7 @@ const Reviews: React.FC = () => {
         Reviews
       </Typography>
 
+      <Paper sx={{ p: 2, width: "100%" }} elevation={3}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6">Leave a Review</Typography>
         <TextField
@@ -126,6 +127,7 @@ const Reviews: React.FC = () => {
           Submit
         </Button>
       </Box>
+      </Paper>
 
       {loading ? (
         <CircularProgress />

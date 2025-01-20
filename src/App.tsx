@@ -24,6 +24,7 @@ import { Helmet } from 'react-helmet';
 import PdfViewer from './components/PdfViewer';
 import Sources from './pages/Sources';
 import path from 'path';
+import Reviews from './pages/Reviews';
 
 const AppHelmet: React.FC = () => (
   <Helmet>
@@ -91,6 +92,7 @@ function App() {
                             { label: 'Big Five Input', path: '/input' },
                             {label:  'ChatGPT', path: '/talk'},
                             {label:  'Sources', path: '/sources'},
+                            { label: 'Reviews', path: '/reviews'},
                             { label: 'Contact', path: '/contact' }
                         ].filter(item => {
 
@@ -115,6 +117,7 @@ function App() {
                             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                             <Route path="/talk" element={<TrpiTalk onComplete={handleComplete}/>} />
                             <Route path='/sources' element={<Sources/>} />
+                            <Route path='/reviews' element={<Reviews/>} />
                         </Routes>
                         <Box position={'relative'} top={225}>
                         <Footer />

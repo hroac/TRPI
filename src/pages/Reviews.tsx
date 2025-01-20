@@ -130,7 +130,9 @@ const Reviews: React.FC = () => {
       </Paper>
 
       {loading ? (
-        <CircularProgress />
+        <Box display={'flex'} justifyContent={'center'}>
+            <CircularProgress />
+        </Box>
       ) : (
         <List>
           {reviews.map((review) => (

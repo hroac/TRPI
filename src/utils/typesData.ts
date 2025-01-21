@@ -467,7 +467,7 @@ export const typesData: any[] = [
       "silver": "ENFJ",
       "gold": "ESFJ",
       "bronze": "ISTP",
-      "quote": "I follow my inner spark through uncharted lands and beyond",
+      "quote": "I follow my inner spark through uncharted lands",
       "description": "INFP (Fi > Ne) - Flight Mode, The Mediator: INFPs are idealistic, introspective, and driven by a strong sense of values. Known for their empathy and creative spirit, they are passionate about causes close to their heart and often strive to make a positive difference in the world. INFPs are deeply attuned to their emotions and seek authenticity in all they do. However, their focus on ideals can sometimes make it difficult for them to accept practical realities or communicate their feelings openly. In \"Flight\" mode, INFPs emotionally withdraw and seek solace in daydreams or meaningful self-expression. They instinctively step back from conflict, using their imagination to cope with stress, often preferring introspection over confrontation.",
       "strengths": [
         "Empathetic",

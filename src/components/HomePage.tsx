@@ -1,17 +1,29 @@
 // Enhanced Home.tsx with fancier UI elements
 import React, { useEffect, useState } from 'react';
-import { Typography, Button, Grid, Box, Container } from '@mui/material';
+import { Typography, Button, Grid, Box, Container, List, ListItem, Paper, ListItemText, CircularProgress } from '@mui/material';
 import Carousel from '../components/Carousel';
 import Matrix from './Matrix';
 import { Link } from 'react-router-dom';
 import JsonBinApi from '../utils/saveResults';
 import { Bar } from 'react-chartjs-2';
+import axios from 'axios';
 
+interface Review {
+  id: string;
+  name: string;
+  comment: string;
+  date: string;
+}
 
 const Home = () => {
   const [total, setTotal] = useState<number>(0)
   const [slides, setSlides] = useState<Array<any>>([]); // State for slides
-  
+  const [reviews, setReviews] = useState<Review[]>([]);
+  //const [loadingBins, setLoadingBins] = useState<boolean>(false);
+ // const [loadingReviews, setLoadingReviews] = useState<boolean>(false);
+  let loadingBins = false;
+  let loadingReviews = false;
+
   const getBins = async () => {
     const collection = await JsonBinApi.getBinsInCollection();
     const bins: any[] = [];
@@ -106,16 +118,54 @@ const Home = () => {
     }
   };
   
-  useEffect(() => {
-    if(!total) {
-    getBins();
+  const fetchReviews = async () => {
+   // setLoading(true);
+    try {
       
+const API_KEY = "$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG";
+const COLLECTION_ID = "678e2e23ad19ca34f8f154c5";
+      const url = `https://api.jsonbin.io/v3/c/${COLLECTION_ID}/bins`;
+      const response = await axios.get(url, {
+        headers: {
+          "X-Master-Key": API_KEY,
+          "Content-Type": "application/json",
+        },
+      });
+      const fetchedReviews = response.data.map((bin: any) => bin.record);
+      const reviews = [];
+
+      for (const review of fetchedReviews) {
+        const bin = await JsonBinApi.getBinById(review)
+        reviews.push(bin)
+      }
+      setReviews(reviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    } finally {
+      //setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if(loadingBins) {
+      return;
     }
 
-   
+    loadingBins = true;
+    //setLoadingBins(true);
+    if(!total) {
+    getBins(); 
+    }
   })
 
- 
+  useEffect(() => {
+    if(loadingReviews) {
+      return;
+    }
+    loadingReviews = true;
+    //setLoadingReviews(true);
+    fetchReviews();
+  }, []);
 
   return (
     <Container sx={{marginTop: '64px'}}>
@@ -176,6 +226,8 @@ const Home = () => {
             {total} people have taken the test!
           </Typography> */}
       {/* Carousel Section */}
+
+      
       <Box sx={{ mt: 8, width: '100%', py: 6 }}>
         <Typography 
           variant='h4' 
@@ -189,7 +241,6 @@ const Home = () => {
         </Typography>
         <Matrix />
       </Box>
-
       <Grid container spacing={1} sx={{ 
           mt: 6, 
           px: 3, 
@@ -199,6 +250,36 @@ const Home = () => {
       <Carousel slides={slides}/>
         
       </Grid>
+      
+      <List>
+          {reviews.map((review) => (
+           
+           <ListItem key={review.id} alignItems="flex-start" sx={{ mb: 2 }}>
+           <Paper sx={{ p: 2, width: "100%" }} elevation={3}>
+             <ListItemText
+               primary={
+                 <Typography variant="h6" gutterBottom>
+                   {review.name}
+                 </Typography>
+               }
+               secondary={
+                 <>
+                   <Typography
+                     component="span"
+                     variant="body2"
+                     color="text.secondary"
+                     gutterBottom
+                   >
+                     {new Date(review.date).toLocaleString()}
+                   </Typography>
+                   <Typography variant="body1">{review.comment}</Typography>
+                 </>
+               }
+             />
+           </Paper>
+         </ListItem>
+          ))}
+        </List>
       
       {/* Benefits Section */}
       <Grid 

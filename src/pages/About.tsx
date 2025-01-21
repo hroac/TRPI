@@ -24,7 +24,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
         stage.map((stmt: any) => {
           const index = stages.flat().indexOf(stmt)
           const explanation = allResponses[index];
-          const value = typeof explanation === 'string' ? explanation.trim() : parseFloat(explanation.toString().slice(0, 3)) * 100
+          const value = typeof explanation === 'string' ? explanation.trim() : parseInt((explanation * 100).toString(), 10);
           return  (
               <Paper sx={{ p: 3, mb: 5 }}>
               <Typography variant="h6" gutterBottom>
@@ -39,7 +39,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
                   {value}
                 </Typography>
                 <LinearProgress  color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
-                <Tooltip title={`${value}`} arrow><LinearProgress  color="secondary" variant="determinate" value={parseFloat(explanation.toString().slice(0, 3)) * 100}/></Tooltip>
+                <Tooltip title={`${value}`} arrow><LinearProgress  color="secondary" variant="determinate" value={parseFloat(value.toString())}/></Tooltip>
               </Box>
             </Paper>
             )

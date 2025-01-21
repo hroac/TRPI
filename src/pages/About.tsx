@@ -39,7 +39,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
                   {value}
                 </Typography>
                 <LinearProgress  color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
-                <Tooltip title={`${value}`} arrow><LinearProgress  color="secondary" variant="determinate" value={parseFloat(value.toString())}/></Tooltip>
+                <LinearProgress  color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
               </Box>
             </Paper>
             )

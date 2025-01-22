@@ -11,6 +11,7 @@ import Carousel from '../components/Carousel';
 
 
 
+
 const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; description?: string, allResponses?: any}> = ({ mbtiType, showBigFive = true, description = '', allResponses = [] }) => {
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t: any) => t.type === type || t.type === mbtiType);
@@ -23,8 +24,21 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
       {
         stage.map((stmt: any) => {
           const index = stages.flat().indexOf(stmt)
+          const statements = stages.flat();
+          const getSubtext = (trait: string, index: number, value: number) => {
+            const statement = statements[index];
+            if (!statement) return null;
+          
+            const percentage = Math.round(value * 100);
+            const range = Object.keys(statement.subtext).find((key) => {
+              const [min, max] = key.split('-').map(Number);
+              return percentage >= min && percentage <= max;
+            });
+          
+            return range ? (statement.subtext as any)[range]?.text : null;
+          };
           const explanation = allResponses[index];
-          const value = typeof explanation === 'string' ? explanation.trim() : parseInt((explanation * 100).toString(), 10);
+          const value = typeof explanation === 'string' ? explanation.trim() : `${parseInt((explanation * 100).toString(), 10)} \n${getSubtext(stmt.trait, index, explanation)}`;
           return  (
               <Paper sx={{ p: 3, mb: 5 }}>
               <Typography variant="h6" gutterBottom>

@@ -763,3 +763,182 @@ export const stages = [
   statements.slice(15, 19), // Stage 4
   statements.slice(19, 23), // Stage 5
 ];
+
+export   const functionPairings = [
+  { 
+    type: 'ENTP', 
+    f4: 'Fight', 
+    stack: 'Ne>Ti>Fe>Si', 
+    dominant: 'Ne>Ti (Id + Ego)', 
+    auxiliary: 'Ni>Te (Id + Ego)', 
+    tertiary: 'Ni>Fe (Id + Superego)', 
+    inferior: 'Ne>Fi (Id + Superego)', 
+    opposite: 'ISFJ',
+  },
+
+  { 
+    type: 'INTJ', 
+    f4: 'Freeze', 
+    stack: 'Ni>Te>Fi>Se', 
+    dominant: 'Ni>Te (Id + Ego)', 
+    auxiliary: 'Ne>Ti (Id + Ego)', 
+    tertiary: 'Ne>Fi (Id + Superego)', 
+    inferior: 'Ni>Fe (Id + Superego)', 
+    opposite: 'ESFP',
+  },
+
+  { 
+    type: 'ISFJ', 
+    f4: 'Fawn', 
+    stack: 'Si>Fe>Ti>Ne', 
+    dominant: 'Si>Fe (Id + Ego)', 
+    auxiliary: 'Se>Fi (Id + Ego)', 
+    tertiary: 'Se>Ti (Id + Superego)', 
+    inferior: 'Si>Te (Id + Superego)', 
+    opposite: 'ENTP',
+  },
+
+  { 
+    type: 'ESFP', 
+    f4: 'Flight', 
+    stack: 'Se>Fi>Te>Ni', 
+    dominant: 'Se>Fi (Id + Ego)', 
+    auxiliary: 'Si>Fe (Id + Ego)', 
+    tertiary: 'Si>Te (Id + Superego)', 
+    inferior: 'Se>Ti (Id + Superego)', 
+    opposite: 'INTJ',
+  },
+
+  { 
+    type: 'ESTP', 
+    f4: 'Fight', 
+    stack: 'Se>Ti>Fe>Ni', 
+    dominant: 'Se>Ti (Id + Superego)', 
+    auxiliary: 'Si>Te (Id + Superego)', 
+    tertiary: 'Si>Fe (Id + Ego)', 
+    inferior: 'Se>Fi (Id + Ego)', 
+    opposite: 'INFJ',
+  },
+
+  { 
+    type: 'ISTJ', 
+    f4: 'Freeze', 
+    stack: 'Si>Te>Fi>Ne', 
+    dominant: 'Si>Te (Id + Superego)', 
+    auxiliary: 'Se>Ti (Id + Superego)', 
+    tertiary: 'Se>Fi (Id + Ego)', 
+    inferior: 'Si>Fe (Id + Ego)', 
+    opposite: 'ENFP',
+  },
+
+  { 
+    type: 'INFJ', 
+    f4: 'Fawn', 
+    stack: 'Ni>Fe>Ti>Se', 
+    dominant: 'Ni>Fe (Id + Superego)', 
+    auxiliary: 'Ne>Fi (Id + Superego)', 
+    tertiary: 'Ne>Ti (Id + Ego)', 
+    inferior: 'Ni>Te (Id + Ego)', 
+    opposite: 'ESTP',
+  },
+
+  { 
+    type: 'ENFP', 
+    f4: 'Flight', 
+    stack: 'Ne>Fi>Te>Si', 
+    dominant: 'Ne>Fi (Id + Superego)', 
+    auxiliary: 'Ni>Fe (Id + Superego)', 
+    tertiary: 'Ni>Te (Id + Ego)', 
+    inferior: 'Ne>Ti (Id + Ego)', 
+    opposite: 'ISTJ',
+  },
+
+  { 
+    type: 'INTP', 
+    f4: 'Fight', 
+    stack: 'Ti>Ne>Si>Fe', 
+    dominant: 'Ti>Ne (Ego + Id)', 
+    auxiliary: 'Te>Ni (Ego + Id)', 
+    tertiary: 'Te>Si (Superego + Id)', 
+    inferior: 'Ti>Se (Superego + Id)', 
+    opposite: 'ESFJ',
+  },
+
+  { 
+    type: 'ENTJ', 
+    f4: 'Freeze', 
+    stack: 'Te>Ni>Se>Fi', 
+    dominant: 'Te>Ni (Ego + Id)', 
+    auxiliary: 'Ti>Ne (Ego + Id)', 
+    tertiary: 'Ti>Se (Superego + Id)', 
+    inferior: 'Te>Si (Superego + Id)', 
+    opposite: 'ISFP',
+  },
+
+  { 
+    type: 'ESFJ', 
+    f4: 'Fawn', 
+    stack: 'Fe>Si>Ne>Ti', 
+    dominant: 'Fe>Si (Ego + Id)', 
+    auxiliary: 'Fi>Se (Ego + Id)', 
+    tertiary: 'Fi>Ne (Superego + Id)',  
+    inferior: 'Fe>Ni (Superego + Id)',  
+    opposite: 'INTP',
+  },
+
+  { 
+    type: 'ISFP', 
+    f4: 'Flight', 
+    stack: 'Fi>Se>Ni>Te', 
+    dominant: 'Fi>Se (Ego + Id)', 
+    auxiliary: 'Fe>Ni (Ego + Id)', 
+    tertiary: 'Fe>Ni (Superego + Id)', 
+    inferior: 'Fi>Ne (Superego + Id)', 
+    opposite: 'ENTJ',
+  },
+
+  { 
+    type: 'ISTP', 
+    f4: 'Fight', 
+    stack: 'Ti>Se>Ni>Fe', 
+    dominant: 'Ti>Se (Superego + Id)', 
+    auxiliary: 'Te>Ni (Superego + Id)', 
+    tertiary: 'Te>Ni (Ego + Id)', 
+    inferior: 'Ti>Ne (Ego + Id)', 
+    opposite: 'ENFJ',
+  },
+
+  { 
+    type: 'ESTJ', 
+    f4: 'Freeze', 
+    stack: 'Te>Si>Ne>Fi', 
+    dominant: 'Te>Si (Superego + Id)', 
+    auxiliary: 'Ti>Ne (Superego + Id)', 
+    tertiary: 'Ti>Ne (Ego + Id)', 
+    inferior: 'Te>Ni (Ego + Id)', 
+    opposite: 'INFP',
+  },
+
+  { 
+    type: 'ENFJ', 
+    f4: 'Fawn', 
+    stack: 'Fe>Ni>Se>Ti', 
+    dominant: 'Fe>Ni (Superego + Id)', 
+    auxiliary: 'Fi>Se (Superego + Id)', 
+    tertiary: 'Fi>Se (Ego + Id)', 
+    inferior: 'Fe>Si (Ego + Id)', 
+    opposite: 'ISTP',
+  },
+
+  { 
+    type: 'INFP', 
+    f4: 'Flight', 
+    stack: 'Fi>Ne>Si>Te', 
+    dominant: 'Fi>Ne (Superego + Id)', 
+    auxiliary: 'Fe>Si (Superego + Id)', 
+    tertiary: 'Fe>Si (Ego + Id)', 
+    inferior: 'Fi>Se (Ego + Id)', 
+    opposite: 'ESTJ',
+  },
+];
+

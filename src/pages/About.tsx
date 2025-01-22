@@ -17,6 +17,7 @@ import {
   Paper,
   Stack,
   LinearProgress,
+  CircularProgress,
 } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import Carousel from '../components/Carousel';
@@ -54,6 +55,8 @@ const AboutPage: React.FC<{
 
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
 
   const handleOpenPremiumModal = () => setPremiumModalOpen(true);
   const handleClosePremiumModal = () => setPremiumModalOpen(false);
@@ -61,22 +64,29 @@ const AboutPage: React.FC<{
   const handlePaymentSuccess = async (data: any) => {
     setPaymentSuccessful(true);
     setPremiumModalOpen(false);
-    let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
-    let description = `${statements.map((statement, index) => {
-      const answer = allResponses[index];
-      const subText = getSubtext(statement.trait, index, answer)
-      return subText.trim();
-    }).join('\n')}`
+    setLoading(true);
 
-    description = await generateProfileAnalysis({
-      cognitiveProfile: profile,
-      scores: bin.bigFiveResponses,
-      demographics: data.demographics,
-      assesment: description,
-
-    })
-    JsonBinApi.updateResultsInJsonBin({...bin, ...data.demographics,  description});
-  handleReloadBin && handleReloadBin()
+    try{
+      let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
+      let description = `${statements.map((statement, index) => {
+        const answer = allResponses[index];
+        const subText = getSubtext(statement.trait, index, answer)
+        return subText.trim();
+      }).join('\n')}`
+  
+      description = await generateProfileAnalysis({
+        cognitiveProfile: profile,
+        scores: bin.bigFiveResponses,
+        demographics: data.demographics,
+        assesment: description,
+  
+      })
+      JsonBinApi.updateResultsInJsonBin({...bin, ...data.demographics,  description});
+    handleReloadBin && handleReloadBin()
+    } finally {
+      setLoading(false);
+    }
+   
 
     //console.log('Payment Data:', paymentData);
   };
@@ -178,9 +188,13 @@ const AboutPage: React.FC<{
       {/* Description and Generate Profile Button */}
       <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
         <CardContent>
-          <Typography variant="body1" paragraph>
+          {loading ? (
+            <Box display="flex" justifyContent="center">
+              <CircularProgress/>
+            </Box>
+          ) : ( <Typography variant="body1" paragraph>
             {description || typeInfo.description}
-          </Typography>
+          </Typography>)}
           <Button
             variant="contained"
             color="primary"

@@ -161,7 +161,7 @@ const AboutPage: React.FC<{
 
   return (
     <Box padding={4}>
-      <Typography variant="h3" align="center" gutterBottom>
+      <Typography variant="h4" align="center" gutterBottom>
         {type || mbtiType} -{' '}
         {typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
       </Typography>

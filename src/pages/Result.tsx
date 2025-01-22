@@ -191,7 +191,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
       />
 
       <Box mt={3}>
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h6" gutterBottom>
         TRPI Test Results - {primary4FType} - {type}  
       </Typography>
       </Box>

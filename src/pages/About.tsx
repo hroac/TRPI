@@ -195,7 +195,8 @@ const AboutPage: React.FC<{
           ) : ( <Typography variant="body1" paragraph>
             {description || typeInfo.description}
           </Typography>)}
-          <Button
+          {!description && (
+            <Button
             variant="contained"
             color="primary"
             fullWidth={!isMobile}
@@ -204,6 +205,7 @@ const AboutPage: React.FC<{
           >
             Generate a Custom Profile
           </Button>
+          )}
         </CardContent>
       </Card>
 

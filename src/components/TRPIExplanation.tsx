@@ -20,7 +20,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Matrix from './Matrix';
 import ModeSelector from './ModeSelector';
 import { Helmet } from 'react-helmet';
-
+import { functionPairings } from '../utils/mbtiMapping';
 const TRPIHelmet: React.FC = () => (
   <Helmet>
     <title>Understanding Personality with TRPI</title>
@@ -48,184 +48,7 @@ const TRPIHelmet: React.FC = () => (
   </Helmet>
 );
 const TRPIExplanation: React.FC = () => {
-  const functionPairings = [
-    { 
-      type: 'ENTP', 
-      f4: 'Fight', 
-      stack: 'Ne>Ti>Fe>Si', 
-      dominant: 'Ne>Ti (Id + Ego)', 
-      auxiliary: 'Ni>Te (Id + Ego)', 
-      tertiary: 'Ni>Fe (Id + Superego)', 
-      inferior: 'Ne>Fi (Id + Superego)', 
-      opposite: 'ISFJ',
-    },
-  
-    { 
-      type: 'INTJ', 
-      f4: 'Freeze', 
-      stack: 'Ni>Te>Fi>Se', 
-      dominant: 'Ni>Te (Id + Ego)', 
-      auxiliary: 'Ne>Ti (Id + Ego)', 
-      tertiary: 'Ne>Fi (Id + Superego)', 
-      inferior: 'Ni>Fe (Id + Superego)', 
-      opposite: 'ESFP',
-    },
-  
-    { 
-      type: 'ISFJ', 
-      f4: 'Fawn', 
-      stack: 'Si>Fe>Ti>Ne', 
-      dominant: 'Si>Fe (Id + Ego)', 
-      auxiliary: 'Se>Fi (Id + Ego)', 
-      tertiary: 'Se>Ti (Id + Superego)', 
-      inferior: 'Si>Te (Id + Superego)', 
-      opposite: 'ENTP',
-    },
-  
-    { 
-      type: 'ESFP', 
-      f4: 'Flight', 
-      stack: 'Se>Fi>Te>Ni', 
-      dominant: 'Se>Fi (Id + Ego)', 
-      auxiliary: 'Si>Fe (Id + Ego)', 
-      tertiary: 'Si>Te (Id + Superego)', 
-      inferior: 'Se>Ti (Id + Superego)', 
-      opposite: 'INTJ',
-    },
-  
-    { 
-      type: 'ESTP', 
-      f4: 'Fight', 
-      stack: 'Se>Ti>Fe>Ni', 
-      dominant: 'Se>Ti (Id + Ego)', 
-      auxiliary: 'Si>Te (Id + Ego)', 
-      tertiary: 'Si>Fe (Id + Superego)', 
-      inferior: 'Se>Fi (Id + Superego)', 
-      opposite: 'INFJ',
-    },
-  
-    { 
-      type: 'ISTJ', 
-      f4: 'Freeze', 
-      stack: 'Si>Te>Fi>Ne', 
-      dominant: 'Si>Te (Id + Ego)', 
-      auxiliary: 'Se>Ti (Id + Ego)', 
-      tertiary: 'Se>Fi (Id + Superego)', 
-      inferior: 'Si>Fe (Id + Superego)', 
-      opposite: 'ENFP',
-    },
-  
-    { 
-      type: 'INFJ', 
-      f4: 'Fawn', 
-      stack: 'Ni>Fe>Ti>Se', 
-      dominant: 'Ni>Fe (Id + Ego)', 
-      auxiliary: 'Ne>Fi (Id + Ego)', 
-      tertiary: 'Ne>Ti (Id + Superego)', 
-      inferior: 'Ni>Te (Id + Superego)', 
-      opposite: 'ESTP',
-    },
-  
-    { 
-      type: 'ENFP', 
-      f4: 'Flight', 
-      stack: 'Ne>Fi>Te>Si', 
-      dominant: 'Ne>Fi (Id + Ego)', 
-      auxiliary: 'Ni>Fe (Id + Ego)', 
-      tertiary: 'Ni>Te (Id + Superego)', 
-      inferior: 'Ne>Ti (Id + Superego)', 
-      opposite: 'ISTJ',
-    },
-  
-    { 
-      type: 'INTP', 
-      f4: 'Fight', 
-      stack: 'Ti>Ne>Si>Fe', 
-      dominant: 'Ti>Ne (Ego + Id)', 
-      auxiliary: 'Te>Ni (Ego + Id)', 
-      tertiary: 'Te>Si (Superego + Id)', 
-      inferior: 'Ti>Se (Superego + Id)', 
-      opposite: 'ESFJ',
-    },
-  
-    { 
-      type: 'ENTJ', 
-      f4: 'Freeze', 
-      stack: 'Te>Ni>Se>Fi', 
-      dominant: 'Te>Ni (Ego + Id)', 
-      auxiliary: 'Ti>Ne (Ego + Id)', 
-      tertiary: 'Ti>Se (Superego + Id)', 
-      inferior: 'Te>Si (Superego + Id)', 
-      opposite: 'ISFP',
-    },
-  
-    { 
-      type: 'ESFJ', 
-      f4: 'Fawn', 
-      stack: 'Fe>Si>Ne>Ti', 
-      dominant: 'Fe>Si (Id + Ego)', 
-      auxiliary: 'Fi>Se (Id + Ego)', 
-      tertiary: 'Fi>Ne (Id + Superego)', 
-      inferior: 'Fe>Ni (Id + Superego)', 
-      opposite: 'INTP',
-    },
-  
-    { 
-      type: 'ISFP', 
-      f4: 'Flight', 
-      stack: 'Fi>Se>Ni>Te', 
-      dominant: 'Fi>Se (Id + Ego)', 
-      auxiliary: 'Fe>Ni (Id + Ego)', 
-      tertiary: 'Fe>Ni (Id + Superego)', 
-      inferior: 'Fi>Ne (Id + Superego)', 
-      opposite: 'ENTJ',
-    },
-  
-    { 
-      type: 'ISTP', 
-      f4: 'Fight', 
-      stack: 'Ti>Se>Ni>Fe', 
-      dominant: 'Ti>Se (Superego + Id)', 
-      auxiliary: 'Te>Ni (Superego + Id)', 
-      tertiary: 'Te>Ni (Ego + Id)', 
-      inferior: 'Ti>Ne (Ego + Id)', 
-      opposite: 'ENFJ',
-    },
-  
-    { 
-      type: 'ESTJ', 
-      f4: 'Freeze', 
-      stack: 'Te>Si>Ne>Fi', 
-      dominant: 'Te>Si (Superego + Id)', 
-      auxiliary: 'Ti>Ne (Superego + Id)', 
-      tertiary: 'Ti>Ne (Ego + Id)', 
-      inferior: 'Te>Ni (Ego + Id)', 
-      opposite: 'INFP',
-    },
-  
-    { 
-      type: 'ENFJ', 
-      f4: 'Fawn', 
-      stack: 'Fe>Ni>Se>Ti', 
-      dominant: 'Fe>Ni (Superego + Id)', 
-      auxiliary: 'Fi>Se (Superego + Id)', 
-      tertiary: 'Fi>Se (Ego + Id)', 
-      inferior: 'Fe>Si (Ego + Id)', 
-      opposite: 'ISTP',
-    },
-  
-    { 
-      type: 'INFP', 
-      f4: 'Flight', 
-      stack: 'Fi>Ne>Si>Te', 
-      dominant: 'Fi>Ne (Superego + Id)', 
-      auxiliary: 'Fe>Si (Superego + Id)', 
-      tertiary: 'Fe>Si (Ego + Id)', 
-      inferior: 'Fi>Se (Ego + Id)', 
-      opposite: 'ESTJ',
-    },
-  ];
-  
+
   
   return (
     <Container sx={{marginTop: '64px'}}>
@@ -466,7 +289,7 @@ const TRPIExplanation: React.FC = () => {
       </TableRow>
     </TableHead>
     <TableBody>
-      {functionPairings.map((pairing, index) => (
+      {functionPairings.map((pairing: any, index: number) => (
         <TableRow key={index}>
           <TableCell>{pairing.type}</TableCell>
           <TableCell>{pairing.f4}</TableCell>

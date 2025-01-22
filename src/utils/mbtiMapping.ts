@@ -274,10 +274,10 @@ const weights: Record<string, Record<string, number>> = {
 
 // Trait-based exclusions for each mode
 const modeTraitExclusions: Record<string, (profile: any) => boolean> = {
-  Fight: profile =>  profile.extraversion >= ((profile.conscientiousness + profile.agreeableness, profile.neuroticism) /3),
-  Flight: profile => profile.neuroticism >= ((profile.conscientiousness + profile.agreeableness, profile.extraversion) /3),
-  Freeze: profile => profile.conscientiousness >= ((profile.extraversion + profile.agreeableness, profile.neuroticism) /3) && profile.agreeableness >= ((profile.extraversion + profile.conscientiousness, profile.neuroticism) /3),
-  Fawn: profile => profile.agreeableness >= ((profile.conscientiousness + profile.extraversion, profile.neuroticism) /3),
+  Fight: profile =>  profile.extraversion >= ((profile.conscientiousness + profile.agreeableness + profile.neuroticism) /3),
+  Flight: profile => profile.neuroticism >= ((profile.conscientiousness + profile.agreeableness + profile.extraversion) /3),
+  Freeze: profile => profile.conscientiousness >= ((profile.extraversion + profile.agreeableness + profile.neuroticism) /3),
+  Fawn: profile => profile.agreeableness >= ((profile.conscientiousness + profile.extraversion +  profile.neuroticism) /3),
 };
 
 // Weighted Euclidean distance calculation

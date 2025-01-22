@@ -2,41 +2,91 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
-import { MBTIProfiles, stages } from '../utils/mbtiMapping';
-import { Box, Grid, List, ListItem, Typography, Card, CardContent, useMediaQuery, useTheme, Paper, Button, Stack, LinearProgress, Tooltip } from '@mui/material';
+import { functionPairings, MBTIProfiles, stages } from '../utils/mbtiMapping';
+import {
+  Box,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  useMediaQuery,
+  useTheme,
+  Button,
+  List,
+  ListItem,
+  Paper,
+  Stack,
+  LinearProgress,
+} from '@mui/material';
 import { Bar } from 'react-chartjs-2';
-import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import Carousel from '../components/Carousel';
+import PremiumModal from '../components/PremiumModal';
+import JsonBinApi from '../utils/saveResults';
+import QuestionnaireModal from '../components/QuestionnaireModal';
+import { generateProfileAnalysis } from '../utils/profileGenerator';
 
-
-
-
-
-const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; description?: string, allResponses?: any}> = ({ mbtiType, showBigFive = true, description = '', allResponses = [] }) => {
+const AboutPage: React.FC<{
+  bin?: any,
+  mbtiType?: string;
+  showBigFive?: boolean;
+  description?: string;
+  allResponses?: any;
+  handleReloadBin?: () => void;
+}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = [], handleReloadBin = null }) => {
   const { type } = useParams<{ type: string }>();
-  const typeInfo = typesData.find((t: any) => t.type === type || t.type === mbtiType);
-  const profile = MBTIProfiles.find((p: any) => p.name === type || p.name === mbtiType);
-  //const [slides, setSlides] = useState<Array<any>>([]); // State for slides
+  const typeInfo = typesData.find((t) => t.type === type || t.type === mbtiType);
+  const profile = MBTIProfiles.find((p) => p.name === type || p.name === mbtiType);
+  const statements = stages.flat();
+  const getSubtext = (trait: string, index: number, value: number) => {
+    const statement = statements[index];
+    if (!statement) return null;
+  
+    const percentage = Math.round(value * 100);
+    const range = Object.keys(statement.subtext).find((key) => {
+      const [min, max] = key.split('-').map(Number);
+      return percentage >= min && percentage <= max;
+    });
+  
+    return range ? (statement.subtext as any)[range]?.text : null;
+  };
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const [premiumModalOpen, setPremiumModalOpen] = useState(false);
+  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+
+  const handleOpenPremiumModal = () => setPremiumModalOpen(true);
+  const handleClosePremiumModal = () => setPremiumModalOpen(false);
+  
+  const handlePaymentSuccess = async (data: any) => {
+    setPaymentSuccessful(true);
+    setPremiumModalOpen(false);
+    let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
+    let description = `${statements.map((statement, index) => {
+      const answer = allResponses[index];
+      const subText = getSubtext(statement.trait, index, answer)
+      return subText.trim();
+    }).join('\n')}`
+
+    description = await generateProfileAnalysis({
+      cognitiveProfile: profile,
+      scores: bin.bigFiveResponses,
+      demographics: data.demographics,
+      assesment: description,
+
+    })
+    JsonBinApi.updateResultsInJsonBin({...bin, ...data.demographics,  description});
+  handleReloadBin && handleReloadBin()
+
+    //console.log('Payment Data:', paymentData);
+  };
   const slides =  allResponses.length  ? stages.map(stage => {
     return { content: (
       <Paper>
     <Stack>
       {
         stage.map((stmt: any) => {
-          const index = stages.flat().indexOf(stmt)
-          const statements = stages.flat();
-          const getSubtext = (trait: string, index: number, value: number) => {
-            const statement = statements[index];
-            if (!statement) return null;
-          
-            const percentage = Math.round(value * 100);
-            const range = Object.keys(statement.subtext).find((key) => {
-              const [min, max] = key.split('-').map(Number);
-              return percentage >= min && percentage <= max;
-            });
-          
-            return range ? (statement.subtext as any)[range]?.text : null;
-          };
+          const index = statements.indexOf(stmt)
           const explanation = allResponses[index];
           const value = typeof explanation === 'string' ? explanation.trim() : `${parseInt((explanation * 100).toString(), 10)} \n${getSubtext(stmt.trait, index, explanation)}`;
           return  (
@@ -63,15 +113,12 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
     </Paper>
     )
 }}) : []
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
   const data = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
     datasets: [
       {
         label: 'Big Five Scores',
-        data: profile && profile.traits
+        data: profile?.traits
           ? [
               profile.traits.openness * 100,
               profile.traits.conscientiousness * 100,
@@ -79,7 +126,7 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
               profile.traits.agreeableness * 100,
               profile.traits.neuroticism * 100,
             ]
-          : [0, 0, 0, 0, 0], // Default values if profile or traits are undefined
+          : [0, 0, 0, 0, 0],
         backgroundColor: [
           'rgba(75, 192, 192, 0.6)',
           'rgba(54, 162, 235, 0.6)',
@@ -109,109 +156,114 @@ const AboutPage: React.FC<{ mbtiType?: string; showBigFive?: boolean; descriptio
   };
 
   if (!typeInfo) {
-    return <div>Type information not available.</div>;
+    return <Typography variant="h5">Type information not available.</Typography>;
   }
 
   return (
-    <Box paddingTop={8} paddingX={4}>
-      <Typography variant="h3" component="h1" align="center" gutterBottom>
-        {type || mbtiType} - {typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
+    <Box padding={4}>
+      <Typography variant="h3" align="center" gutterBottom>
+        {type || mbtiType} -{' '}
+        {typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
       </Typography>
 
-      <Grid spacing={2}>
+      {/* Big Five Scores Chart */}
+      {showBigFive && (
         <Box display="flex" justifyContent="center" my={4}>
-          {showBigFive && (
-            <Box width={isMobile ? '100%' : '60%'}>
-              <Bar data={data} options={options} />
-            </Box>
-          )}
+          <Box width={isMobile ? '100%' : '60%'}>
+            <Bar data={data} options={options} />
+          </Box>
         </Box>
-<Box display="flex" justifyContent="center">
-<Typography
-        variant="h4"
-        sx={{
-          fontStyle: 'italic',
-          fontWeight: 'bold',
-          mb: 2,
+      )}
+
+      {/* Description and Generate Profile Button */}
+      <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
+        <CardContent>
+          <Typography variant="body1" paragraph>
+            {description || typeInfo.description}
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth={!isMobile}
+            onClick={handleOpenPremiumModal}
+            sx={{ mt: 3 }}
+          >
+            Generate a Custom Profile
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Carousel */}
+      <Carousel
+        slides={slides}
+        settings={{
+          spaceBetween: 50,
+          slidesPerView: 1,
+          autoplay: { delay: 2000 },
+          loop: true,
         }}
-      >
-        {`"${typeInfo.quote}"`}
-      </Typography>
-</Box>
-        <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
-          <CardContent>
-            <Typography variant="body1" paragraph>
-              {description || typeInfo.description}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Carousel  slides={slides} settings={{
-  spaceBetween: 50,
-  slidesPerView: 1,
-  autoplay: { delay: 100 },
-  loop: true,
-}}/>
+      />
 
-
-<Box my={5}>
+      {/* Stereotype and Reality */}
+      <Box mt={5}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
-            <Typography variant="h5" component="h2" gutterBottom>
+            <Typography variant="h5" gutterBottom>
               Stereotype
             </Typography>
-            <List dense>
-              <ListItem>
-                <Typography variant="body2" color="text.secondary">
-                  {typeInfo.Stereotype}
-                </Typography>
-              </ListItem>
-            </List>
+            <Typography variant="body2" color="text.secondary">
+              {typeInfo.Stereotype}
+            </Typography>
           </Grid>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h5" component="h2" gutterBottom>
-            Reality
-          </Typography>
-          <List dense>
-            <ListItem>
-              <Typography variant="body2" color="text.secondary">
-                {typeInfo.Reality}
-              </Typography>
-            </ListItem>
-          </List>
+          <Grid item xs={12} md={6}>
+            <Typography variant="h5" gutterBottom>
+              Reality
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {typeInfo.Reality}
+            </Typography>
+          </Grid>
         </Grid>
-    </Grid>
-  </Box>
-  
-      <Box my={5}>
+      </Box>
+
+      {/* Strengths and Weaknesses */}
+      <Box mt={5}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
-            <Typography variant="h5" component="h2" gutterBottom>
+            <Typography variant="h5" gutterBottom>
               Strengths
             </Typography>
-            <List dense>
-              {typeInfo.strengths.map((strength: string, index: number) => (
-                <ListItem key={index}>{strength}</ListItem>
+            <List>
+              {typeInfo.strengths.map((strength: string, idx: number) => (
+                <ListItem key={idx}>{strength}</ListItem>
               ))}
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Typography variant="h5" component="h2" gutterBottom>
+            <Typography variant="h5" gutterBottom>
               Weaknesses
             </Typography>
-            <List dense>
-              {typeInfo.weaknesses.map((weakness: string, index: number) => (
-                <ListItem key={index}>{weakness}</ListItem>
+            <List>
+              {typeInfo.weaknesses.map((weakness: string, idx: number) => (
+                <ListItem key={idx}>{weakness}</ListItem>
               ))}
             </List>
           </Grid>
         </Grid>
       </Box>
 
-
-      <Box marginTop={5}>
-        <RelatedTypesBox type={type ? (type as unknown as any).toString() : mbtiType} />
+      {/* Related Types */}
+      <Box mt={5}>
+        <RelatedTypesBox type={type || mbtiType || ''} />
       </Box>
+
+      {/* Premium Modal */}
+      <QuestionnaireModal
+        open={premiumModalOpen}
+        onClose={handleClosePremiumModal}
+        handlePaymentSuccess={handlePaymentSuccess}
+        price={0.99}
+      />
     </Box>
   );
 };

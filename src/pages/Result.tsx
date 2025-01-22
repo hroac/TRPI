@@ -65,6 +65,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
   const params = useParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [date, setDate] = useState<Date>(new Date());
   useEffect(() => {
     const fetchBinData = async () => {
       try {
@@ -101,7 +102,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
     };
 
     fetchBinData();
-  }, []);
+  }, [date]);
 
   const options = {
     responsive: true,
@@ -204,7 +205,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
       <Box my={3}>
         <Bar data={data} options={options} />
       </Box>
-      {type && <AboutPage mbtiType={type} showBigFive={false} description={description} allResponses={allResponses} />}
+      {type && <AboutPage bin={bin} mbtiType={type} showBigFive={false} description={description} allResponses={allResponses}  handleReloadBin={() => setDate(new Date())}/>}
      
     </Paper>
   );

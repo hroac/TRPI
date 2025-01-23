@@ -25,6 +25,7 @@ import PremiumModal from '../components/PremiumModal';
 import JsonBinApi from '../utils/saveResults';
 import QuestionnaireModal from '../components/QuestionnaireModal';
 import { generateProfileAnalysis } from '../utils/profileGenerator';
+import { guid } from '../utils/guid';
 
 const AboutPage: React.FC<{
   bin?: any,
@@ -195,7 +196,7 @@ const AboutPage: React.FC<{
           ) : ( <Typography variant="body1" paragraph>
             {description || typeInfo.description}
           </Typography>)}
-          {!description && (
+          {bin.userId === guid() && !description && (
             <Button
             variant="contained"
             color="primary"

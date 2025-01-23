@@ -25,6 +25,7 @@ import PdfViewer from './components/PdfViewer';
 import Sources from './pages/Sources';
 import path from 'path';
 import Reviews from './pages/Reviews';
+import TypeCompatibilityChecker from './components/TypeCompatibilityChecker';
 
 const AppHelmet: React.FC = () => (
   <Helmet>
@@ -90,6 +91,7 @@ function App() {
                             { label: 'Take the test', path: '/test' },
                             { label: 'Result', path: `/result/${binId || ''}` },
                             { label: 'Big Five Input', path: '/input' },
+                            { label: 'Type Compatibility Check', path: '/check' },
                             {label:  'ChatGPT', path: '/talk'},
                             {label:  'Sources', path: '/sources'},
                             { label: 'Reviews', path: '/reviews'},
@@ -118,6 +120,7 @@ function App() {
                             <Route path="/talk" element={<TrpiTalk onComplete={handleComplete}/>} />
                             <Route path='/sources' element={<Sources/>} />
                             <Route path='/reviews' element={<Reviews/>} />
+                            <Route path='/check'  element={<TypeCompatibilityChecker/>} />
                         </Routes>
                         <Box position={'relative'} top={225}>
                         <Footer />

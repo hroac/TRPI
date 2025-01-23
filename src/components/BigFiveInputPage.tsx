@@ -103,11 +103,11 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
   // Set random trait values
   const setRandomly = () => {
     const randomTraits: Record<Trait, number> = {
-      Openness: Math.floor(Math.random() * 101),
-      Conscientiousness: Math.floor(Math.random() * 101),
-      Extraversion: Math.floor(Math.random() * 101),
-      Agreeableness: Math.floor(Math.random() * 101),
-      Neuroticism: Math.floor(Math.random() * 101),
+      Openness: Math.floor(Math.random() * 100),
+      Conscientiousness: Math.floor(Math.random() * 100),
+      Extraversion: Math.floor(Math.random() * 100),
+      Agreeableness: Math.floor(Math.random() * 100),
+      Neuroticism: Math.floor(Math.random() * 100),
     };
     setTraits(randomTraits);
 

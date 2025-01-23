@@ -152,7 +152,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       {} as { [trait: string]: number }
     );
     const primary4F = determinePrimary4FType(weightedScores);
-    const mbtiType = matchMBTIType(weightedScores, primary4F);
+    const mbtiType = matchMBTIType(weightedScores, primary4F );
     const type = matchMBTIType(weightedScores, primary4F, false);
 
     setPrimary4FType(primary4F);

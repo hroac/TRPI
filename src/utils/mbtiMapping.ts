@@ -1,3 +1,22 @@
+
+interface BigFiveValues {
+  openness: number;
+  conscientiousness: number;
+  extraversion: number;
+  agreeableness: number;
+  neuroticism: number;
+}
+
+interface Bin {
+  type: string;
+  primary4FType: string;
+  bigFiveResponses: BigFiveValues;
+  description: string;
+  allResponses: number[];
+  date: string;
+  userId: string;
+}
+
 export const MBTIProfiles = [
   {
       "name": "ENTP",
@@ -355,6 +374,192 @@ export const processProfile = (profile: any) => {
   return { primary4F, mbtiType };
 };
 
+export function pearsonCorrelationBigFive(profileA: number[], profileB: number[]): number {
+  if (profileA.length !== 5 || profileB.length !== 5) {
+      throw new Error("Both profiles must contain exactly five elements.");
+  }
+
+  // Validate that all scores are numbers and within expected ranges (e.g., 0-1, adjust as needed)
+  for (let i = 0; i < 5; i++) {
+      const a = profileA[i];
+      const b = profileB[i];
+      if (typeof a !== 'number' || typeof b !== 'number') {
+          throw new Error("All profile scores must be numbers.");
+      }
+      // Example validation for scores between 0 and 1
+      if (a < 0 || a > 1 || b < 0 || b > 1) {
+          throw new Error("All profile scores must be between 0 and 1.");
+      }
+  }
+
+  const n = 5;
+
+  // Calculate sums and sums of squares
+  let sumA = 0, sumB = 0, sumAB = 0, sumA2 = 0, sumB2 = 0;
+
+  for (let i = 0; i < n; i++) {
+      const a = profileA[i];
+      const b = profileB[i];
+      sumA += a;
+      sumB += b;
+      sumAB += a * b;
+      sumA2 += a * a;
+      sumB2 += b * b;
+  }
+
+  // Calculate numerator and denominator
+  const numerator = (n * sumAB) - (sumA * sumB);
+  const denominator = Math.sqrt((n * sumA2 - sumA * sumA) * (n * sumB2 - sumB * sumB));
+
+  
+
+  return  !denominator ? 1 :  numerator / denominator;
+}
+// src/utils/pearsonCorrelation.ts
+
+/**
+ * Calculates the Pearson correlation coefficient between two arrays.
+ * @param x - First array of numbers.
+ * @param y - Second array of numbers.
+ * @returns Pearson correlation coefficient.
+ */
+/**
+ * Calculates the Pearson correlation coefficient between two datasets.
+ *
+ * @param x - An array of numbers between 0 and 1.
+ * @param y - An array of numbers between 0 and 1.
+ * @returns The Pearson correlation coefficient as a number between -1 and 1.
+ * @throws Will throw an error if the input arrays are of different lengths or have fewer than two elements.
+ */
+export function pearsonCorrelation(x: number[], y: number[]): number {
+    if (x.length !== y.length) {
+        throw new Error("The two arrays must have the same length.");
+    }
+
+    const n = x.length;
+
+    if (n < 2) {
+        throw new Error("At least two elements are required to calculate correlation.");
+    }
+
+    // Calculate the sums and sums of squares
+    let sumX = 0;
+    let sumY = 0;
+    let sumXY = 0;
+    let sumXSquare = 0;
+    let sumYSquare = 0;
+
+    for (let i = 0; i < n; i++) {
+        const xi = x[i];
+        const yi = y[i];
+
+        // Ensure that each number is between 0 and 1
+        if (xi < 0 || xi > 1 || yi < 0 || yi > 1) {
+            throw new Error("All numbers must be between 0 and 1.");
+        }
+
+        sumX += xi;
+        sumY += yi;
+        sumXY += xi * yi;
+        sumXSquare += xi * xi;
+        sumYSquare += yi * yi;
+    }
+
+    // Calculate the numerator and denominator
+    const numerator = (n * sumXY) - (sumX * sumY);
+    const denominator = Math.sqrt(
+        (n * sumXSquare - sumX * sumX) * (n * sumYSquare - sumY * sumY)
+    );
+
+    if (denominator === 0) {
+        throw new Error("Denominator is zero, correlation is undefined.");
+    }
+
+    return numerator / denominator;
+}
+
+
+/**
+ * Calculates the average trait-to-trait Pearson correlation between two users.
+ * @param userA - Big Five values for User A.
+ * @param userB - Big Five values for User B.
+ * @returns Average trait correlation.
+ */
+export const calculateTraitCorrelation = (
+  userA: BigFiveValues,
+  userB: BigFiveValues
+): number => {
+  const traits: (keyof BigFiveValues)[] = [
+    'openness',
+    'conscientiousness',
+    'extraversion',
+    'agreeableness',
+    'neuroticism',
+  ];
+
+  const euclidian = weightedEuclideanDistance(userA, userB);
+  const correlations = traits.map((trait) =>
+    pearsonCorrelation([userA[trait] * 100], [userB[trait] * 100])
+  );
+
+  // Since each trait correlation is based on single pairs, we'll treat them as differences
+  // Instead, a better approach is to calculate the Euclidean distance or another metric
+  // However, following the user's request, we'll average the correlations
+  const validCorrelations = correlations.filter(
+    (corr) => !isNaN(corr) && isFinite(corr)
+  );
+  const averageCorrelation =
+    validCorrelations.reduce((a, b) => a + b, 0) / validCorrelations.length;
+
+  return averageCorrelation;
+};
+
+/**
+ * Calculates the per-answer Pearson correlation between two users.
+ * @param userA - Array of responses for User A.
+ * @param userB - Array of responses for User B.
+ * @returns Pearson correlation coefficient for answers.
+ */
+export const calculateAnswerCorrelation = (
+  userAResponses: number[],
+  userBResponses: number[]
+): number => {
+  return pearsonCorrelation(userAResponses, userBResponses);
+};
+
+/**
+ * Calculates the overall compatibility score between two users.
+ * Combines trait correlation and answer correlation.
+ * @param userA - Bin data for User A.
+ * @param userB - Bin data for User B.
+ * @returns Compatibility score as a number between 0 and 100.
+ */
+export const calculateCompatibilityScore = (userA: Bin, userB: Bin): number => {
+  const traitCorr = pearsonCorrelationBigFive(Object.values(userA.bigFiveResponses), Object.values(userB.bigFiveResponses));
+  const answerCorr = calculateAnswerCorrelation(userA.allResponses, userB.allResponses);
+
+  // Normalize correlations from [-1,1] to [0,100]
+  const normalizedTraitCorr = ((traitCorr + 1) / 2) * 100;
+  const normalizedAnswerCorr = ((answerCorr + 1) / 2) * 100;
+
+  // Weighted average: 50% traits, 50% answers
+  const compatibility = (normalizedTraitCorr + normalizedAnswerCorr) / 2;
+
+  return compatibility;
+};
+
+export const getSubtext = (trait: string, index: number, value: number) => {
+  const statement = statements[index];
+  if (!statement) return null;
+
+  const percentage = Math.round(value * 100);
+  const range = Object.keys(statement.subtext).find((key) => {
+    const [min, max] = key.split('-').map(Number);
+    return percentage >= min && percentage <= max;
+  });
+
+  return range ? (statement.subtext as any)[range]?.text : null;
+};
 
 export const statements = [
   {

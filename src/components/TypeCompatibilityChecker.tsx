@@ -514,14 +514,14 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
                     {label}
                   </Typography>
                 </Box>
-                <Tooltip title={`${parseInt(((userAData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toString())} %`} arrow>
+                <Tooltip title={`${parseInt(((userAData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toString()).toFixed(0)} %`} arrow>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {(userAData.bigFiveResponses as any)[label.toLowerCase()] * 100}%
+                    {((userAData.bigFiveResponses as any)[label.toLowerCase()] * 100).toFixed(0)}%
                   </Typography>
                 </Tooltip>
               </Box>
               <Slider
-                value={parseInt(((userAData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toString())}
+                value={parseInt(((userAData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toFixed(0).toString())}
                 onChange={(e: any, newValue: any) => {
                     setUserAData((prev) => { 
                         const bigFiveResponses = {
@@ -610,9 +610,9 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
                     {label}
                   </Typography>
                 </Box>
-                <Tooltip title={`${parseInt(((userBData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toString())} %`} arrow>
+                <Tooltip title={`${parseInt(((userBData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toFixed(0).toString())} %`} arrow>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {(userBData.bigFiveResponses as any)[label.toLowerCase()] * 100}%
+                    {((userBData.bigFiveResponses as any)[label.toLowerCase()] * 100).toFixed(0)}%
                   </Typography>
                 </Tooltip>
               </Box>
@@ -685,7 +685,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
             {traitCorrelation !== null && (
               <Box mt={3}>
                 <Typography variant="h6">Big Five Traits Correlation</Typography>
-                <Tooltip title={`Pearson Correlation: ${traitCorrelation.toFixed(2)}`} arrow>
+                <Tooltip title={`Pearson Correlation: ${traitCorrelation.toFixed(0)}`} arrow>
                   <LinearProgress
                     variant="determinate"
                     value={(traitCorrelation + 1) * 50} // Convert from [-1,1] to [0,100]
@@ -718,7 +718,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
             {responseCorrelation !== null && (
               <Box mt={3}>
                 <Typography variant="h6">Individual Responses Correlation</Typography>
-                <Tooltip title={`Pearson Correlation: ${responseCorrelation.toFixed(2)}`} arrow>
+                <Tooltip title={`Pearson Correlation: ${responseCorrelation.toFixed(0)}`} arrow>
                   <LinearProgress
                     variant="determinate"
                     value={(responseCorrelation + 1) * 50} // Convert from [-1,1] to [0,100]
@@ -751,7 +751,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
             {compatibilityScore !== null && (
               <Box mt={3}>
                 <Typography variant="h6">Overall Compatibility Score</Typography>
-                <Tooltip title={`${compatibilityScore.toFixed(2)}%`} arrow>
+                <Tooltip title={`${compatibilityScore.toFixed(0)}%`} arrow>
                   <LinearProgress
                     variant="determinate"
                     value={compatibilityScore}
@@ -804,7 +804,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
                         <Typography variant="subtitle1" gutterBottom>
                           User A
                         </Typography>
-                        <Typography variant="body2">{(slide.userAResponse * 100).toFixed(2)}%</Typography>
+                        <Typography variant="body2">{(slide.userAResponse * 100).toFixed(0)}%</Typography>
                         <LinearProgress color="secondary" variant="determinate" value={slide.userAResponse * 100} />
                         <LinearProgress color="secondary" variant="determinate" value={slide.userAResponse * 100} />
                         {slide.subtextA && (
@@ -829,7 +829,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
                         <Typography variant="subtitle1" gutterBottom>
                           User B
                         </Typography>
-                        <Typography variant="body2">{(slide.userBResponse * 100).toFixed(2)}%</Typography>
+                        <Typography variant="body2">{(slide.userBResponse * 100).toFixed(0)}%</Typography>
                         {slide.subtextB && (
                           <Typography variant="caption" color="text.secondary">
                             {slide.subtextB}

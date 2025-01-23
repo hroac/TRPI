@@ -252,7 +252,7 @@ const TRPIExplanation: React.FC = () => {
             <strong>Perception Shift:</strong> Involves shifts between Sensing and Intuition functions (Se ↔ Si, Ne ↔ Ni), altering how we perceive information.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Judging Shift:</strong> For certain types, there may be shifts between Thinking and Feeling functions (Te ↔ Ti, Fe ↔ Fi), affecting decision-making processes.
+            <strong>Judging Shift:</strong> Involves shifts between Thinking and Feeling functions (Te ↔ Ti, Fe ↔ Fi, Te ↔ Fi, Fe ↔ Ti), affecting decision-making processes.
           </Typography>
           <Typography variant="body2" paragraph>
             In stress, individuals may shift from their dominant pairing to their tertiary pairing, leading to rigid or maladaptive behaviors due to underdevelopment.

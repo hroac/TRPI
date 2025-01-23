@@ -685,7 +685,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
             {traitCorrelation !== null && (
               <Box mt={3}>
                 <Typography variant="h6">Big Five Traits Correlation</Typography>
-                <Tooltip title={`Pearson Correlation: ${traitCorrelation.toFixed(3)}`} arrow>
+                <Tooltip title={`Pearson Correlation: ${traitCorrelation.toFixed(2)}`} arrow>
                   <LinearProgress
                     variant="determinate"
                     value={(traitCorrelation + 1) * 50} // Convert from [-1,1] to [0,100]

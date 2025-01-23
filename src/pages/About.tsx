@@ -196,7 +196,7 @@ const AboutPage: React.FC<{
           ) : ( <Typography variant="body1" paragraph>
             {description || typeInfo.description}
           </Typography>)}
-          {bin.userId === guid() && !description && (
+          {bin && bin.userId === guid() && !description && (
             <Button
             variant="contained"
             color="primary"

@@ -94,7 +94,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [lastStage, setLastStage] = useState(parseInt(localStorage.getItem('stage')|| "0"))
   const [primary4FType, setPrimary4FType] = useState<string | null>(null);
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
-  const [accuracy, setAccuracy] = useState<number | null>(0);
+  const [accuracy, setAccuracy] = useState<number>(0);
   const [matchedType, setMatchedType] = useState<string | null>(null);
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
@@ -474,7 +474,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           Back
         </Button>
         {lastStage >= 2 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
-          <Tooltip title={type.mode}>
+          <Tooltip title={`${type.mode} \n ${(accuracy * 100).toFixed(1)}%`}>
             <Box
               bgcolor={type.bgColor}
               color="white"

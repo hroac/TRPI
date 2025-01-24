@@ -22,8 +22,8 @@ import {
 import LinkIcon from '@mui/icons-material/Link';
 import Carousel from './Carousel';
 import JsonBinApi from '../utils/saveResults';
-import { calculateTraitCorrelation, calculateAnswerCorrelation, calculateCompatibilityScore, matchMBTIType, determinePrimary4FType, pearsonCorrelation, pearsonCorrelationBigFive, MBTIProfiles } from '../utils/mbtiMapping';
-import { getSubtext } from '../utils/mbtiMapping';
+import { calculateTraitCorrelation, calculateAnswerCorrelation, calculateCompatibilityScore, pearsonProfile } from '../utils/mbtiMapping';
+import { determinePrimary4FType, getSubtext, MBTIProfiles, pearsonCorrelationBigFive } from '../utils/mbtiMapping';
 import { stages, statements } from '../utils/mbtiMapping';
 import { guid } from '../utils/guid';
 import {
@@ -85,7 +85,7 @@ const TypeCompatibilityChecker: React.FC = () => {
  
   const [userAData, setUserAData] = useState<BinData>( localStorage.getItem('binAData') && JSON.parse(localStorage.getItem('binAData') || '') || {
     primary4FType: determinePrimary4FType(defaultTraits),
-    type: matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
+    type:  pearsonProfile(Object.values(defaultTraits), MBTIProfiles),//matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
     bigFiveResponses: {
         openness: 0.5,
         conscientiousness: 0.5,
@@ -97,7 +97,7 @@ const TypeCompatibilityChecker: React.FC = () => {
   // State for User B
 const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBData') && JSON.parse(localStorage.getItem('binBData') || '') || {
     primary4FType: determinePrimary4FType(defaultTraits),
-    type: matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
+    type:  pearsonProfile(Object.values(defaultTraits), MBTIProfiles), //matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
     bigFiveResponses: {
         openness: 0.5,
         conscientiousness: 0.5,
@@ -185,14 +185,14 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
 
 
       const primary4F = determinePrimary4FType(profile);
-      const calculatedType = matchMBTIType(profile, primary4F, true);
+      const calculatedType =  pearsonProfile(Object.values(updatedTraits), MBTIProfiles) //matchMBTIType(profile, primary4F, true);
       setCompatibilityScore(null)
       setResponseCorrelation(null)
       setUserAData((prev) => ({
         ...prev,
         bigFiveResponses: profile,
         primary4FType: primary4F,
-        type: calculatedType
+        type: calculatedType.type
 
     }));
     }
@@ -226,12 +226,12 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
       };
 
       const primary4F = determinePrimary4FType(profile);
-      const calculatedType = matchMBTIType(profile, primary4F, true);
+      const calculatedType =  pearsonProfile(Object.values(updatedTraits), MBTIProfiles) //matchMBTIType(profile, primary4F, true);
       setUserBData((prev) => ({
         ...prev,
         primary4FType: primary4F,
         bigFiveResponses: profile,
-        type: calculatedType
+        type: calculatedType.type
 
     }));
     }
@@ -257,14 +257,14 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
       neuroticism: randomTraits.Neuroticism / 100,
     };
     const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType = matchMBTIType(bigFiveData, primary4F, true);
+    const calculatedType =  pearsonProfile(Object.values(bigFiveData), MBTIProfiles) //matchMBTIType(bigFiveData, primary4F, true);
     setResponseCorrelation(null)
     setCompatibilityScore(null)
     setUserAData((prev) => ({
         ...prev,
         primary4FType: primary4F,
         bigFiveResponses: bigFiveData,
-        type: calculatedType
+        type: calculatedType.type
 
     }));
   };
@@ -287,14 +287,14 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
       neuroticism: randomTraits.Neuroticism / 100,
     };
     const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType = matchMBTIType(bigFiveData, primary4F, true);
+    const calculatedType =  pearsonProfile(Object.values(bigFiveData), MBTIProfiles) //matchMBTIType(bigFiveData, primary4F, true);
     setResponseCorrelation(null)
     setCompatibilityScore(null)
     setUserBData((prev) => ({
         ...prev,
         bigFiveResponses: bigFiveData,
         primary4FType: primary4F,
-        type: calculatedType
+        type: calculatedType.type
 
     }));
   };
@@ -529,12 +529,12 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
                             [label.toLowerCase()]: Number(newValue) / 100,
                           }
                           const primary4FType = determinePrimary4FType(bigFiveResponses)
-                          const type = matchMBTIType(bigFiveResponses, primary4FType)
+                          const type =  pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles) //matchMBTIType(bigFiveResponses, primary4FType)
                           setCompatibilityScore(null)
                           setResponseCorrelation(null)
                         return{ 
                         ...prev,
-                        type, 
+                        type: type.type, 
                         primary4FType,
                         bigFiveResponses
                       }})
@@ -625,12 +625,12 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
                             [label.toLowerCase()]: Number(newValue) / 100,
                           }
                           const primary4FType = determinePrimary4FType(bigFiveResponses)
-                          const type = matchMBTIType(bigFiveResponses, primary4FType)
+                          const type =  pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles) //matchMBTIType(bigFiveResponses, primary4FType)
                           setCompatibilityScore(null)
                           setResponseCorrelation(null)
                         return{ 
                         ...prev,
-                        type, 
+                        type: type.type, 
                         primary4FType,
                         bigFiveResponses
                       }})

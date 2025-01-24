@@ -164,11 +164,11 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
   const calculateType = async () => {
     const bigFiveData = getBigFiveData();
     const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType = calculateMbtiType(bigFiveData, primary4F, true);
-    setMbtiType(calculatedType);
+    const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles)//calculateMbtiType(bigFiveData, primary4F, true);
+    setMbtiType(calculatedType.type);
 
     const newJson = {
-      type: calculatedType,
+      type: calculatedType.type,
       primary4FType: primary4F,
       bigFiveResponses: bigFiveData,
     };
@@ -178,7 +178,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
     const binId = await onComplete({
       profile: bigFiveData,
       selectedMbtiType: selectedMbtiType,
-      mbtiType: calculatedType,
+      mbtiType: calculatedType.type,
       primary4F,
     });
     navigate(`/result/${binId}`);

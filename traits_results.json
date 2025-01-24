@@ -1,0 +1,256 @@
+{
+  "typeAverages": {
+    "ENTP": {
+      "openness": 0.8274769473871638,
+      "conscientiousness": 0.5434565023195536,
+      "extraversion": 0.7416526194660876,
+      "agreeableness": 0.4872919576854446,
+      "neuroticism": 0.33923927277046295,
+      "count": 240
+    },
+    "INFJ": {
+      "openness": 0.7940223361477345,
+      "conscientiousness": 0.637010774655379,
+      "extraversion": 0.5250437842226034,
+      "agreeableness": 0.7948698693080358,
+      "neuroticism": 0.6963339486825318,
+      "count": 199
+    },
+    "ENFP": {
+      "openness": 0.8150550155585525,
+      "conscientiousness": 0.545440487858787,
+      "extraversion": 0.5948654601323194,
+      "agreeableness": 0.6056319107652169,
+      "neuroticism": 0.8150283515463916,
+      "count": 194
+    },
+    "ISTP": {
+      "openness": 0.46383350999999945,
+      "conscientiousness": 0.4526439233333332,
+      "extraversion": 0.4824073229879334,
+      "agreeableness": 0.4163668416666663,
+      "neuroticism": 0.4589965985714282,
+      "count": 120
+    },
+    "INTJ": {
+      "openness": 0.7710814730728902,
+      "conscientiousness": 0.742725673127199,
+      "extraversion": 0.5412059233969261,
+      "agreeableness": 0.35523639888386593,
+      "neuroticism": 0.49575361866681267,
+      "count": 134
+    },
+    "INTP": {
+      "openness": 0.6202875609116243,
+      "conscientiousness": 0.37744721384836644,
+      "extraversion": 0.46647513563816795,
+      "agreeableness": 0.33889186180902586,
+      "neuroticism": 0.31699691907746846,
+      "count": 126
+    },
+    "ISFP": {
+      "openness": 0.526690195213126,
+      "conscientiousness": 0.4541437253319586,
+      "extraversion": 0.4093392524353919,
+      "agreeableness": 0.4634626700616777,
+      "neuroticism": 0.6924991777013229,
+      "count": 126
+    },
+    "ESTP": {
+      "openness": 0.6614833333333332,
+      "conscientiousness": 0.5793281249999997,
+      "extraversion": 0.7912275,
+      "agreeableness": 0.4184,
+      "neuroticism": 0.50039375,
+      "count": 80
+    },
+    "INFP": {
+      "openness": 0.565270681954887,
+      "conscientiousness": 0.47310527218045106,
+      "extraversion": 0.3853909836090225,
+      "agreeableness": 0.5883684255639096,
+      "neuroticism": 0.8951992481203008,
+      "count": 133
+    },
+    "ENTJ": {
+      "openness": 0.7239835390946499,
+      "conscientiousness": 0.8868981481481478,
+      "extraversion": 0.7517629654320989,
+      "agreeableness": 0.40803183053926034,
+      "neuroticism": 0.3123765432098767,
+      "count": 81
+    },
+    "ESFP": {
+      "openness": 0.5951320066878717,
+      "conscientiousness": 0.5618740075722725,
+      "extraversion": 0.5863292436793219,
+      "agreeableness": 0.5881460406117978,
+      "neuroticism": 0.6533609988985271,
+      "count": 119
+    },
+    "ISFJ": {
+      "openness": 0.444088310239161,
+      "conscientiousness": 0.5646787846074434,
+      "extraversion": 0.3633263931764792,
+      "agreeableness": 0.7119470346411643,
+      "neuroticism": 0.7339220339285913,
+      "count": 68
+    },
+    "ESFJ": {
+      "openness": 0.48552631578947364,
+      "conscientiousness": 0.6701447368421052,
+      "extraversion": 0.5649578947368422,
+      "agreeableness": 0.7473684210526316,
+      "neuroticism": 0.4271315789473685,
+      "count": 19
+    },
+    "ISTJ": {
+      "openness": 0.3772128063269623,
+      "conscientiousness": 0.6021271329364262,
+      "extraversion": 0.3594050607208828,
+      "agreeableness": 0.3343354523864083,
+      "neuroticism": 0.4564915689426725,
+      "count": 46
+    },
+    "ENFJ": {
+      "openness": 0.779041301331383,
+      "conscientiousness": 0.7353850239999998,
+      "extraversion": 0.8476340000000002,
+      "agreeableness": 0.8236200000000001,
+      "neuroticism": 0.42214999999999997,
+      "count": 50
+    },
+    "ESTJ": {
+      "openness": 0.41069230769230775,
+      "conscientiousness": 0.7781153846153847,
+      "extraversion": 0.6499461538461537,
+      "agreeableness": 0.2825000153846154,
+      "neuroticism": 0.4416154153846153,
+      "count": 13
+    }
+  },
+  "profileAverages": {
+    "Fight": {
+      "conscientiousness": 0.4900018602437799,
+      "extraversion": 0.6221275126675218,
+      "agreeableness": 0.41048977746887266,
+      "neuroticism": 0.414838786620918
+    },
+    "Fawn": {
+      "conscientiousness": 0.6596436125070486,
+      "extraversion": 0.5875080689945786,
+      "agreeableness": 0.7648738174723774,
+      "neuroticism": 0.5258584786916597
+    },
+    "Freeze": {
+      "conscientiousness": 0.7509282474595675,
+      "extraversion": 0.5841911317594446,
+      "agreeableness": 0.32729289948270973,
+      "neuroticism": 0.4295797455737912
+    },
+    "Flight": {
+      "conscientiousness": 0.5074194417274087,
+      "extraversion": 0.490303026580424,
+      "agreeableness": 0.5591627432505744,
+      "neuroticism": 0.7596611326189748
+    }
+  },
+  "correlationResults": [
+    {
+      "type": "ENTP",
+      "matchingProfile": "Fight",
+      "correlation": 0.9247306379806596,
+      "coefficientOfDetermination": 0.8551267528201176
+    },
+    {
+      "type": "INFJ",
+      "matchingProfile": "Fawn",
+      "correlation": 0.5579686990747433,
+      "coefficientOfDetermination": 0.31132906914716146
+    },
+    {
+      "type": "ENFP",
+      "matchingProfile": "Flight",
+      "correlation": 0.9705960235554862,
+      "coefficientOfDetermination": 0.942056640941722
+    },
+    {
+      "type": "ISTP",
+      "matchingProfile": "Fight",
+      "correlation": 0.781996290708635,
+      "coefficientOfDetermination": 0.6115181986820639
+    },
+    {
+      "type": "INTJ",
+      "matchingProfile": "Freeze",
+      "correlation": 0.9731933228683549,
+      "coefficientOfDetermination": 0.94710524367555
+    },
+    {
+      "type": "INTP",
+      "matchingProfile": "Fight",
+      "correlation": 0.9880941222963295,
+      "coefficientOfDetermination": 0.9763299945165538
+    },
+    {
+      "type": "ISFP",
+      "matchingProfile": "Flight",
+      "correlation": 0.9898554246578832,
+      "coefficientOfDetermination": 0.9798137617246383
+    },
+    {
+      "type": "ESTP",
+      "matchingProfile": "Fight",
+      "correlation": 0.9814469650178502,
+      "coefficientOfDetermination": 0.9632381451427493
+    },
+    {
+      "type": "INFP",
+      "matchingProfile": "Flight",
+      "correlation": 0.9877917059533264,
+      "coefficientOfDetermination": 0.975732454350183
+    },
+    {
+      "type": "ENTJ",
+      "matchingProfile": "Freeze",
+      "correlation": 0.9160857917679712,
+      "coefficientOfDetermination": 0.8392131778791507
+    },
+    {
+      "type": "ESFP",
+      "matchingProfile": "Flight",
+      "correlation": 0.9495174963312111,
+      "coefficientOfDetermination": 0.9015834758390915
+    },
+    {
+      "type": "ISFJ",
+      "matchingProfile": "Fawn",
+      "correlation": 0.19527693131799662,
+      "coefficientOfDetermination": 0.03813307990497357
+    },
+    {
+      "type": "ESFJ",
+      "matchingProfile": "Fawn",
+      "correlation": 0.9688047489882085,
+      "coefficientOfDetermination": 0.9385826416621056
+    },
+    {
+      "type": "ISTJ",
+      "matchingProfile": "Freeze",
+      "correlation": 0.7592242741447839,
+      "coefficientOfDetermination": 0.5764214984506739
+    },
+    {
+      "type": "ENFJ",
+      "matchingProfile": "Fawn",
+      "correlation": 0.6664178332358669,
+      "coefficientOfDetermination": 0.4441127284547877
+    },
+    {
+      "type": "ESTJ",
+      "matchingProfile": "Freeze",
+      "correlation": 0.9888763983938742,
+      "coefficientOfDetermination": 0.9778765313004402
+    }
+  ]
+}

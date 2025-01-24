@@ -91,7 +91,7 @@ function App() {
                             { label: 'Take the test', path: '/test' },
                             { label: 'Result', path: `/result/${binId || ''}` },
                             { label: 'Big Five Input', path: '/input' },
-                            { label: 'Type Compatibility Check', path: '/check' },
+                            { label: 'Type Comparator', path: '/check' },
                             {label:  'ChatGPT', path: '/talk'},
                             {label:  'Sources', path: '/sources'},
                             { label: 'Reviews', path: '/reviews'},

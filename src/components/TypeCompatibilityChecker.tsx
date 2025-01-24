@@ -461,7 +461,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
   return (
     <Container maxWidth="lg" sx={{ marginTop: '40px', textAlign: 'center' }}>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
-        Type Compatibility Checker
+        Type Comparator
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: '30px', color: 'text.secondary' }}>
         Input the links to both users' profiles or manually input your Big Five traits to calculate compatibility.

@@ -24,6 +24,8 @@ import {
   determinePrimary4FType,
   matchMBTIType,
   MBTIProfiles,
+  pearsonCorrelationBigFive,
+  pearsonProfile,
 } from '../utils/mbtiMapping';
 import Matrix from './Matrix';
 import { 
@@ -92,6 +94,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [lastStage, setLastStage] = useState(parseInt(localStorage.getItem('stage')|| "0"))
   const [primary4FType, setPrimary4FType] = useState<string | null>(null);
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
+  const [accuracy, setAccuracy] = useState<number | null>(0);
   const [matchedType, setMatchedType] = useState<string | null>(null);
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
@@ -141,22 +144,21 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     }))
    // setLastStage(0)
 
-    const weightedScores = Object.keys(randomResponses).reduce(
-      (acc, traitKey) => {
-        const traitScores = randomResponses[traitKey].map((score, i) => 
-          score * (statements.find(s => s.trait === traitKey && statements.indexOf(s) === i)?.weight || 1)
-        );
-        acc[traitKey] = traitScores.reduce((sum, score) => sum + score, 0) / traitScores.length;
-        return acc;
-      },
-      {} as { [trait: string]: number }
+   const weightedScores = Object.keys(responses).reduce((acc, trait) => {
+    const traitScores = responses[trait].map((score: any, i: any) => 
+      score * (statements.find(s => s.trait === trait && statements.indexOf(s) === i)?.weight || 1)
     );
+    acc[trait] = traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
+    return acc;
+  }, {} as { [trait: string]: number });
     const primary4F = determinePrimary4FType(weightedScores);
-    const mbtiType = matchMBTIType(weightedScores, primary4F );
+    
+    const mbtiType = pearsonProfile(Object.values(weightedScores), MBTIProfiles)//matchMBTIType(weightedScores, primary4F );
     const type = matchMBTIType(weightedScores, primary4F, false);
 
     setPrimary4FType(primary4F);
-    setMatchedMBTIType(mbtiType);
+    setMatchedMBTIType(mbtiType.type);
+    setAccuracy(mbtiType.value);
     setMatchedType(type);
   }
 
@@ -200,14 +202,17 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         );
 
         const primary4F = determinePrimary4FType(weightedScores);
-        const mbtiType = matchMBTIType(weightedScores, primary4F);
-        const type = matchMBTIType(weightedScores, primary4F,false);
+        const mbtiType = pearsonProfile(Object.values(weightedScores), MBTIProfiles) //matchMBTIType(weightedScores, primary4F);
+       /// const type = matchMBTIType(weightedScores, primary4F,false);
+       const type = pearsonProfile(Object.values(weightedScores), MBTIProfiles)
         const sub = getSubtext(trait, index, value as number);
 
+        console.log(`type: ${type.type} ${type.value}`);
         setSelectedStatement(sub)
         setPrimary4FType(primary4F);
-        setMatchedMBTIType(mbtiType);
-        setMatchedType(type);
+        setMatchedMBTIType(mbtiType.type);
+        setAccuracy(mbtiType.value);
+        setMatchedType(type.type);
 
         localStorage.setItem('responses', JSON.stringify(updatedResponses))
         return updatedResponses;
@@ -260,7 +265,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     }, {} as { [trait: string]: number });
 
     const primary4F = determinePrimary4FType(weightedScores);
-    const mbtiType = matchMBTIType(weightedScores, primary4F);
+    const mbtiType = pearsonProfile(Object.values(weightedScores), MBTIProfiles)//matchMBTIType(weightedScores, primary4F);
     const profile = typesData.find(t => t.type === mbtiType);
 
     const newJson = {
@@ -271,7 +276,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     localStorage.setItem(guid(), JSON.stringify(newJson));
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
-    const binId = await onComplete({ primary4F, mbtiType, selectedMbtiType, profile: weightedScores, description: '', responses: Object.values(responses).flat()});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: Object.values(responses).flat()});
     navigate(`/result/${binId}`);
   };
 
@@ -316,12 +321,14 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       //setLastStage(0)
 
       const primary4F = determinePrimary4FType(profile);
-      const mbtiType = matchMBTIType(profile, primary4F);
-      const typeNo4F = matchMBTIType(profile, primary4F,false);
+      const mbtiType =pearsonProfile(Object.values(profile), MBTIProfiles)// matchMBTIType(profile, primary4F);
+      //const typeNo4F = matchMBTIType(profile, primary4F,false);
 
+      const typeNo4F = pearsonProfile(Object.values(profile), MBTIProfiles)
       setPrimary4FType(primary4F);
-      setMatchedMBTIType(mbtiType);
-      setMatchedType(typeNo4F);
+      setMatchedMBTIType(mbtiType.type);
+      setAccuracy(mbtiType.value);
+      setMatchedType(typeNo4F.type);
     } else {
       setPrimary4FType(null);
       setMatchedMBTIType(null);

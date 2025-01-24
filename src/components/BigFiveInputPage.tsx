@@ -23,7 +23,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MoodBadIcon from '@mui/icons-material/MoodBad';
 
-import { matchMBTIType as calculateMbtiType, determinePrimary4FType, MBTIProfiles } from '../utils/mbtiMapping';
+import { matchMBTIType as calculateMbtiType, determinePrimary4FType, MBTIProfiles, pearsonProfile } from '../utils/mbtiMapping';
 import { useNavigate } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import { typesData } from './typesData';
@@ -94,8 +94,8 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       };
 
       const primary4F = determinePrimary4FType(bigFiveData);
-      const calculatedType = calculateMbtiType(bigFiveData, primary4F, true);
-      setMbtiType(calculatedType);
+      const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles)// calculateMbtiType(bigFiveData, primary4F, true);
+      setMbtiType(calculatedType.type);
       return updatedTraits;
     });
   };
@@ -120,8 +120,8 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       neuroticism: randomTraits.Neuroticism / 100,
     };
     const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType = calculateMbtiType(bigFiveData, primary4F, true);
-    setMbtiType(calculatedType);
+    const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles)//calculateMbtiType(bigFiveData, primary4F, true);
+    setMbtiType(calculatedType.type);
   };
 
   // Handle selection from matrix modal
@@ -151,8 +151,8 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       setTraits(updatedTraits);
 
       const primary4F = determinePrimary4FType(profile);
-      const calculatedType = calculateMbtiType(profile, primary4F, true);
-      setMbtiType(calculatedType);
+      const calculatedType =  pearsonProfile(Object.values(updatedTraits), MBTIProfiles)//calculateMbtiType(profile, primary4F, true);
+      setMbtiType(calculatedType.type);
     } else {
       setMbtiType(null);
     }

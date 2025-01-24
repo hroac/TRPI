@@ -718,7 +718,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
             {responseCorrelation !== null && (
               <Box mt={3}>
                 <Typography variant="h6">Individual Responses Correlation</Typography>
-                <Tooltip title={`Pearson Correlation: ${responseCorrelation.toFixed(2)}`} arrow>
+                <Tooltip sx={{position:'relative', left: responseCorrelation * 1000 }} title={`Pearson Correlation: ${responseCorrelation.toFixed(2)}`} arrow>
                   <LinearProgress
                     variant="determinate"
                     value={(responseCorrelation + 1) * 50} // Convert from [-1,1] to [0,100]

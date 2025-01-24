@@ -374,6 +374,12 @@ export const processProfile = (profile: any) => {
   return { primary4F, mbtiType };
 };
 
+export function pearsonProfile(profile: number[], types: any[]) {
+  return types.map(type => {
+   return {type:type.name, value: pearsonCorrelationBigFive(profile, Object.values(type.traits))}
+  }).sort((a: any, b: any) => b.value - a.value)[0]
+}
+
 export function pearsonCorrelationBigFive(profileA: number[], profileB: number[]): number {
   if (profileA.length !== 5 || profileB.length !== 5) {
       throw new Error("Both profiles must contain exactly five elements.");

@@ -85,7 +85,7 @@ const TypeCompatibilityChecker: React.FC = () => {
  
   const [userAData, setUserAData] = useState<BinData>( localStorage.getItem('binAData') && JSON.parse(localStorage.getItem('binAData') || '') || {
     primary4FType: determinePrimary4FType(defaultTraits),
-    type:  pearsonProfile(Object.values(defaultTraits), MBTIProfiles),//matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
+    type:  pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,//matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
     bigFiveResponses: {
         openness: 0.5,
         conscientiousness: 0.5,
@@ -97,7 +97,7 @@ const TypeCompatibilityChecker: React.FC = () => {
   // State for User B
 const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBData') && JSON.parse(localStorage.getItem('binBData') || '') || {
     primary4FType: determinePrimary4FType(defaultTraits),
-    type:  pearsonProfile(Object.values(defaultTraits), MBTIProfiles), //matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
+    type:  pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type, //matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
     bigFiveResponses: {
         openness: 0.5,
         conscientiousness: 0.5,

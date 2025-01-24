@@ -23,12 +23,13 @@ import LanguageDetect from "languagedetect";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 // Example MBTI logic
-import { processProfile } from "../utils/mbtiMapping";
+import { MBTIProfiles, pearsonProfile, processProfile } from "../utils/mbtiMapping";
 import ScrollToTop from "../utils/ScrollToTop";
 import { statements, stages } from '../utils/mbtiMapping';
 import { useNavigate } from "react-router-dom";
 import PremiumModal from "./PremiumModal";
 import { Headset, HeadsetOff, VolumeUp } from "@mui/icons-material";
+import { typesData } from "./typesData";
 
 // -------------------------------------------------------------------------
 // Utility for decoding token parts
@@ -287,11 +288,12 @@ ${statements
       // Use your MBTI logic
       delete parsed.description;
       const { primary4F, mbtiType } = processProfile(parsed);
+      const type = pearsonProfile(Object.values(bigFive || {}), MBTIProfiles)
       setPrimary4F(primary4F);
-      setMbtiType(mbtiType);
+      setMbtiType(type.type);
 
       // Optionally call onComplete if you want to store or forward results
-      const binId = await onComplete({ primary4F, mbtiType,  profile: parsed, description: backup, responses: userExplanations });
+      const binId = await onComplete({ primary4F, mbtiType: type.type,  profile: parsed, description: backup, responses: userExplanations });
       navigate(`/result/${binId}`);
       // console.log("binId:", binId);
     } catch (err: any) {

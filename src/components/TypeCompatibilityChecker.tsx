@@ -176,11 +176,11 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
     if (profile) {
       // Convert profile traits (0.0-1.0) to percentage and update sliders
       const updatedTraits: BigFiveValues = {
-        openness: Math.round(profile.openness * 100),
-        conscientiousness: Math.round(profile.conscientiousness * 100),
-        extraversion: Math.round(profile.extraversion * 100),
-        agreeableness: Math.round(profile.agreeableness * 100),
-        neuroticism: Math.round(profile.neuroticism * 100),
+        openness: (profile.openness),
+        conscientiousness: (profile.conscientiousness),
+        extraversion: (profile.extraversion),
+        agreeableness: (profile.agreeableness),
+        neuroticism: (profile.neuroticism),
       };
 
 
@@ -218,11 +218,11 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
     if (profile) {
       // Convert profile traits (0.0-1.0) to percentage and update sliders
       const updatedTraits: BigFiveValues = {
-        openness: Math.round(profile.openness * 100),
-        conscientiousness: Math.round(profile.conscientiousness * 100),
-        extraversion: Math.round(profile.extraversion * 100),
-        agreeableness: Math.round(profile.agreeableness * 100),
-        neuroticism: Math.round(profile.neuroticism * 100),
+        openness: (profile.openness),
+        conscientiousness: (profile.conscientiousness),
+        extraversion: (profile.extraversion),
+        agreeableness: (profile.agreeableness),
+        neuroticism: (profile.neuroticism),
       };
 
       const primary4F = determinePrimary4FType(profile);

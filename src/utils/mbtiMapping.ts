@@ -378,12 +378,12 @@ export function pearsonProfile(profile: number[], types: any[]) {
   const validModes = Object.keys(weights).filter(mode =>
     modeTraitExclusions[mode](profile)
   );
-
+/* 
   if (validModes.length === 0) {
     throw new Error('No valid 4F mode for the given profile.');
-  }
+  } */
 
-  return types.filter(type => validModes.includes(type.mode)).map(type => {
+  return types.map(type => {
    return {type:type.name, value: pearsonCorrelationBigFive(profile, Object.values(type.traits))}
   }).sort((a: any, b: any) => b.value - a.value)[0]
 }

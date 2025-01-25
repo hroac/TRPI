@@ -151,7 +151,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       setTraits(updatedTraits);
 
       const primary4F = determinePrimary4FType(profile);
-      const calculatedType =  pearsonProfile(Object.values(updatedTraits), MBTIProfiles)//calculateMbtiType(profile, primary4F, true);
+      const calculatedType =  pearsonProfile(Object.values(profile), MBTIProfiles)//calculateMbtiType(profile, primary4F, true);
       setMbtiType(calculatedType.type);
     } else {
       setMbtiType(null);

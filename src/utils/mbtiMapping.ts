@@ -314,9 +314,9 @@ export const weightedEuclideanDistance = (profile: any, traits: any, weights: an
 };
 
 // Determine the primary 4F mode based on the profile
-export const determinePrimary4FType = (profile: any) => {
-  // Filter MBTIProfiles by modeTraitExclusions
-  const validModes = Object.keys(weights).filter(mode =>
+export const determinePrimary4FType = (profile: any): string => {
+  // 1. Filter by modeTraitExclusions
+  const validModes = Object.keys(modeTraitExclusions).filter((mode) =>
     modeTraitExclusions[mode](profile)
   );
 
@@ -324,20 +324,37 @@ export const determinePrimary4FType = (profile: any) => {
     throw new Error('No valid 4F mode for the given profile.');
   }
 
-  // Calculate weighted distance to determine the closest mode
-  const closestMode = validModes.reduce((closest, current) => {
-    const currentDistance = MBTIProfiles.filter(p => p.mode === current)
-      .map(p => weightedEuclideanDistance(profile, p.traits, weights[current]))
-      .reduce((a, b) => a + b, 0);
+  // 2. Among the valid modes, pick the one with the highest average Pearson correlation
+  const bestMode = validModes.reduce((best, current) => {
+    // Compute average correlation for the current mode
+    const currentAvgCorrelation =
+      MBTIProfiles.filter((p) => p.mode === current)
+        .map((p) =>
+          pearsonCorrelationBigFive(
+            Object.values(profile),      // user’s big five [openness, conscientiousness, ...]
+            Object.values(p.traits)      // MBTI type’s big five
+          )
+        )
+        .reduce((sum, val) => sum + val, 0) /
+      MBTIProfiles.filter((p) => p.mode === current).length;
 
-    const closestDistance = MBTIProfiles.filter(p => p.mode === closest)
-      .map(p => weightedEuclideanDistance(profile, p.traits, weights[closest]))
-      .reduce((a, b) => a + b, 0);
+    // Compute average correlation for the best mode so far
+    const bestAvgCorrelation =
+      MBTIProfiles.filter((p) => p.mode === best)
+        .map((p) =>
+          pearsonCorrelationBigFive(
+            Object.values(profile),
+            Object.values(p.traits)
+          )
+        )
+        .reduce((sum, val) => sum + val, 0) /
+      MBTIProfiles.filter((p) => p.mode === best).length;
 
-    return currentDistance < closestDistance ? current : closest;
+    // Keep whichever mode yields higher average correlation
+    return currentAvgCorrelation > bestAvgCorrelation ? current : best;
   });
 
-  return closestMode;
+  return bestMode;
 };
 
 // Match the closest MBTI type
@@ -1121,7 +1138,7 @@ export   const functionPairings = [
     f4: 'Fight', 
     stack: 'Ti>Se>Ni>Fe', 
     dominant: 'Ti>Se (Superego + Id)', 
-    auxiliary: 'Te>Ni (Superego + Id)', 
+    auxiliary: 'Te>Si (Superego + Id)', 
     tertiary: 'Te>Ni (Ego + Id)', 
     inferior: 'Ti>Ne (Ego + Id)', 
     opposite: 'ENFJ',

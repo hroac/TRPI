@@ -81,7 +81,41 @@ const TRPIExplanation: React.FC = () => {
       <Box justifyContent={'center'} sx={{ marginTop: '20px', marginBottom: '20px' }}>
         <Matrix />
       </Box>
-    
+      <Accordion>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="h6">Big Five Traits and 4F Trauma Responses</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Typography variant="body2" paragraph>
+      The TRPI framework integrates the Big Five personality traits with the 4F trauma responses to provide a deeper understanding of how stress and trauma shape personality. Here’s how they connect:
+    </Typography>
+    <Typography variant="body2" paragraph>
+      <strong>Openness:</strong> Represents the preference for new (Intuition) vs. familiar (Sensing) information. 
+      - High Openness aligns with abstract thinking and exploration (<em>Intuition</em>).
+      - Low Openness corresponds to concrete thinking and practicality (<em>Sensing</em>).
+    </Typography>
+    <Typography variant="body2" paragraph>
+      <strong>Conscientiousness:</strong> Linked to the <em>Freeze</em> response, it reflects self-discipline and planning. 
+      - High Conscientiousness individuals often use structured and logical processes (<em>Te</em>).
+    </Typography>
+    <Typography variant="body2" paragraph>
+      <strong>Extraversion:</strong> Tied to the <em>Fight</em> response, Extraversion drives assertiveness and action.
+      - High Extraversion correlates with external logic and rapid problem-solving (<em>Ti</em>).
+    </Typography>
+    <Typography variant="body2" paragraph>
+      <strong>Agreeableness:</strong> Related to the <em>Fawn</em> response, it emphasizes social harmony and collaboration.
+      - High Agreeableness involves prioritizing relationships and others' emotions (<em>Fe</em>).
+    </Typography>
+    <Typography variant="body2" paragraph>
+      <strong>Neuroticism:</strong> Linked to the <em>Flight</em> response, it reflects emotional sensitivity and avoidance.
+      - High Neuroticism is associated with heightened awareness of personal values and emotional depth (<em>Fi</em>).
+    </Typography>
+    <Typography variant="body2" paragraph>
+      By combining these traits with the 4F responses, TRPI offers a holistic view of personality, highlighting the dynamic interplay between natural tendencies and adaptive stress responses.
+    </Typography>
+  </AccordionDetails>
+</Accordion>
+
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Id, Ego, and Superego in Cognitive Function Theory</Typography>

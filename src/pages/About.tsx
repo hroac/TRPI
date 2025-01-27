@@ -185,7 +185,18 @@ const AboutPage: React.FC<{
           </Box>
         </Box>
       )}
-
+<Box display="flex" justifyContent="center">
+<Typography
+        variant="h4"
+        sx={{
+          fontStyle: 'italic',
+          fontWeight: 'bold',
+          mb: 2,
+        }}
+      >
+        {`"${typeInfo.quote}"`}
+      </Typography>
+</Box>
       {/* Description and Generate Profile Button */}
       <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
         <CardContent>

@@ -384,6 +384,63 @@ export const matchMBTIType = (profile: any, primary4F: any, filter: boolean = tr
   return closestType;
 };
 
+/**
+ * Matches a user's Big Five profile to the best MBTI type based on Pearson correlation and Euclidean distance.
+ * @param profile - User's Big Five profile (BigFiveValues format).
+ * @returns An object containing the matched MBTI type and all scores scaled from 0 to 100.
+ */
+export const matchMBTI = (profile: Record<any, any>) => {
+  const profileArray = Object.values(profile);
+
+  // Step 1: Calculate Scores (Pearson Correlation and Weighted Euclidean Distance)
+  const combinedScores = MBTIProfiles.map((candidate) => {
+    // Pearson correlation between the user profile and the candidate traits
+    const correlation = pearsonCorrelationBigFive(
+      profileArray,
+      Object.values(candidate.traits)
+    );
+
+    // Weighted Euclidean distance between the user profile and the candidate traits
+    const distance = weightedEuclideanDistance(
+      profile,
+      candidate.traits,
+      weights[candidate.mode]
+    );
+
+    // Normalize distance to a [0, 1] scale
+    const normalizedDistance = 1 / (1 + distance);
+
+    // Combine Pearson correlation and normalized distance
+    const combinedScore = (correlation + normalizedDistance) / 2;
+
+    // Scale combined score to [0, 100]
+    const scaledScore = combinedScore * 100;
+
+    return {
+      type: candidate.name,
+      score: scaledScore,
+      details: {
+        correlation: correlation * 100, // Pearson scaled to 0-100
+        normalizedDistance: normalizedDistance * 100, // Distance scaled to 0-100
+        originalDistance: distance, // Raw Euclidean distance
+      },
+    };
+  });
+
+  // Step 2: Sort by Score and Find the Best Match
+  const sortedScores = combinedScores.sort((a, b) => b.score - a.score);
+  const bestMatch = sortedScores[0];
+
+  // Step 3: Return the Results
+  return {
+    type: bestMatch.type, // Best matching MBTI type
+    scores: sortedScores.reduce((acc, item) => {
+      return {...acc, [item.type]: item}
+    }, {}), // All candidates with scores
+  };
+};
+
+
 // Main function to process the profile
 export const processProfile = (profile: any) => {
   const primary4F = determinePrimary4FType(profile);
@@ -391,18 +448,51 @@ export const processProfile = (profile: any) => {
   return { primary4F, mbtiType };
 };
 
-export function pearsonProfile(profile: number[], types: any[]) {
-  const validModes = Object.keys(weights).filter(mode =>
-    modeTraitExclusions[mode](profile)
-  );
-/* 
-  if (validModes.length === 0) {
-    throw new Error('No valid 4F mode for the given profile.');
+// We'll assume the order of traits is consistently:
+// [openness, conscientiousness, extraversion, agreeableness, neuroticism]
+
+export function filterTypesByMajorityTraitMatch(
+  userProfile: number[], 
+  types: any[], 
+  differenceThreshold: number = 0.3, 
+  minTraitsToMatch: number = 3
+) {
+  return types.filter(type => {
+    const typeTraitValues = Object.values(type.traits) as number[];
+    let matchCount = 0;
+
+    for (let i = 0; i < userProfile.length; i++) {
+      const diff = Math.abs(userProfile[i] - typeTraitValues[i]);
+      if (diff < differenceThreshold) {
+        matchCount++;
+      }
+    }
+
+    // Keep this profile if it meets or exceeds the minimum trait matches required
+    return matchCount >= minTraitsToMatch;
+  });
+}
+
+
+export function pearsonProfile(profile: number[], types: any[], filterTypes = true) {
+  // 1. Filter down the types by trait difference
+ // const filteredTypes = filterTypesByMajorityTraitMatch(profile, types, 0.4, 4);
+
+  // 2. If no types pass the filter, throw an error (or handle however you'd like)
+  /* if (!filteredTypes.length) {
+    throw new Error('No valid profiles for the given thresholds.');
   } */
 
-  return types.map(type => {
-   return {type:type.name, value: pearsonCorrelationBigFive(profile, Object.values(type.traits))}
-  }).sort((a: any, b: any) => b.value - a.value)[0]
+  // 3. Return the best match from the filtered set
+  return types
+    .map(type => ({
+      type: type.name,
+      value: pearsonCorrelationBigFive(
+        profile,
+        Object.values(type.traits)
+      )
+    }))
+    .sort((a, b) => b.value - a.value)[0];
 }
 
 export function pearsonCorrelationBigFive(profileA: number[], profileB: number[]): number {

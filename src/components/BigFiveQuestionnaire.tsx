@@ -22,6 +22,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import {
   determinePrimary4FType,
+  matchMBTI,
   matchMBTIType,
   MBTIProfiles,
   pearsonCorrelationBigFive,
@@ -153,12 +154,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   }, {} as { [trait: string]: number });
     const primary4F = determinePrimary4FType(weightedScores);
     
-    const mbtiType = pearsonProfile(Object.values(weightedScores), MBTIProfiles)//matchMBTIType(weightedScores, primary4F );
+    const mbtiType = matchMBTI(weightedScores )//matchMBTIType(weightedScores, primary4F );
     const type = matchMBTIType(weightedScores, primary4F, false);
 
     setPrimary4FType(primary4F);
     setMatchedMBTIType(mbtiType.type);
-    setAccuracy(mbtiType.value);
+    setAccuracy((mbtiType.scores as any)[mbtiType.type].score);
     setMatchedType(type);
   }
 
@@ -202,16 +203,16 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         );
 
         const primary4F = determinePrimary4FType(weightedScores);
-        const mbtiType = pearsonProfile(Object.values(weightedScores), MBTIProfiles) //matchMBTIType(weightedScores, primary4F);
+        const mbtiType = matchMBTI(weightedScores)//matchMBTIType(weightedScores, primary4F);
        /// const type = matchMBTIType(weightedScores, primary4F,false);
-       const type = pearsonProfile(Object.values(weightedScores), MBTIProfiles)
+       const type = matchMBTI(weightedScores)
         const sub = getSubtext(trait, index, value as number);
 
-        console.log(`type: ${type.type} ${type.value}`);
+        console.log(`type: ${type.type} ${(type.scores as any)[type.type]}`);
         setSelectedStatement(sub)
         setPrimary4FType(primary4F);
         setMatchedMBTIType(mbtiType.type);
-        setAccuracy(mbtiType.value);
+        setAccuracy((mbtiType.scores as any)[mbtiType.type].score);
         setMatchedType(type.type);
 
         localStorage.setItem('responses', JSON.stringify(updatedResponses))
@@ -265,7 +266,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     }, {} as { [trait: string]: number });
 
     const primary4F = determinePrimary4FType(weightedScores);
-    const mbtiType = pearsonProfile(Object.values(weightedScores), MBTIProfiles)//matchMBTIType(weightedScores, primary4F);
+    const mbtiType = matchMBTI(weightedScores)//matchMBTIType(weightedScores, primary4F);
     const profile = typesData.find(t => t.type === mbtiType);
 
     const newJson = {
@@ -321,13 +322,13 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       //setLastStage(0)
 
       const primary4F = determinePrimary4FType(profile);
-      const mbtiType =pearsonProfile(Object.values(profile), MBTIProfiles)// matchMBTIType(profile, primary4F);
+      const mbtiType = matchMBTI(profile)// matchMBTIType(profile, primary4F);
       //const typeNo4F = matchMBTIType(profile, primary4F,false);
 
-      const typeNo4F = pearsonProfile(Object.values(profile), MBTIProfiles)
+      const typeNo4F = matchMBTI(profile)// matchMBTIType(profile, typeNo4F
       setPrimary4FType(primary4F);
       setMatchedMBTIType(mbtiType.type);
-      setAccuracy(mbtiType.value);
+      setAccuracy((mbtiType.scores as any)[mbtiType.type].score);
       setMatchedType(typeNo4F.type);
     } else {
       setPrimary4FType(null);
@@ -474,7 +475,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           Back
         </Button>
         {lastStage >= 2 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
-          <Tooltip title={`${type.mode} \n ${(accuracy * 100).toFixed(1)}%`}>
+          <Tooltip title={`${type.mode} \n ${(accuracy).toFixed(1)}%`}>
             <Box
               bgcolor={type.bgColor}
               color="white"

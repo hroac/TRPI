@@ -23,7 +23,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MoodBadIcon from '@mui/icons-material/MoodBad';
 
-import { matchMBTIType as calculateMbtiType, determinePrimary4FType, MBTIProfiles, pearsonProfile } from '../utils/mbtiMapping';
+import { matchMBTIType as calculateMbtiType, determinePrimary4FType, matchMBTI, MBTIProfiles, pearsonProfile } from '../utils/mbtiMapping';
 import { useNavigate } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import { typesData } from './typesData';
@@ -198,7 +198,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       };
 
       const primary4F = determinePrimary4FType(bigFiveData);
-      const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles)// calculateMbtiType(bigFiveData, primary4F, true);
+      const calculatedType = matchMBTI(bigFiveData)// calculateMbtiType(bigFiveData, primary4F, true);
       setMbtiType(calculatedType.type);
       return updatedTraits;
     });
@@ -224,7 +224,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       neuroticism: randomTraits.Neuroticism / 100,
     };
     const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles)//calculateMbtiType(bigFiveData, primary4F, true);
+    const calculatedType = matchMBTI(bigFiveData)//calculateMbtiType(bigFiveData, primary4F, true);
     setMbtiType(calculatedType.type);
   };
 
@@ -255,7 +255,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       setTraits(updatedTraits);
 
       const primary4F = determinePrimary4FType(profile);
-      const calculatedType =  pearsonProfile(Object.values(profile), MBTIProfiles)//calculateMbtiType(profile, primary4F, true);
+      const calculatedType =  matchMBTI(profile)//calculateMbtiType(profile, primary4F, true);
       setMbtiType(calculatedType.type);
     } else {
       setMbtiType(null);
@@ -268,7 +268,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
   const calculateType = async () => {
     const bigFiveData = getBigFiveData();
     const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles)//calculateMbtiType(bigFiveData, primary4F, true);
+    const calculatedType = matchMBTI(bigFiveData) //calculateMbtiType(bigFiveData, primary4F, true);
     setMbtiType(calculatedType.type);
 
     const newJson = {

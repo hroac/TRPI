@@ -31,13 +31,99 @@ import Matrix from './Matrix';
 
 type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
 
-const traitInfo: { label: Trait; icon: React.ReactNode; color: string }[] = [
-  { label: 'Openness', icon: <EmojiObjectsIcon />, color: '#1E90FF' },
-  { label: 'Conscientiousness', icon: <CheckCircleIcon />, color: '#32CD32' },
-  { label: 'Extraversion', icon: <PeopleIcon />, color: '#FF8C00' },
-  { label: 'Agreeableness', icon: <FavoriteIcon />, color: '#FF69B4' },
-  { label: 'Neuroticism', icon: <MoodBadIcon />, color: '#DC143C' },
+const traitInfo: { 
+  label: Trait; 
+  icon: React.ReactNode; 
+  color: string; 
+  subtext: Record<string, { text: string; subtraits: Record<string, string> }>;
+}[] = [
+  {
+    label: 'Openness',
+    icon: <EmojiObjectsIcon />,
+    color: '#1E90FF',
+    subtext: {
+      '0-10': { text: 'I am slightly open to new ideas.', subtraits: { curiosity: 'slight', creativity: 'low' } },
+      '10-20': { text: 'I have a mild interest in exploring new perspectives.', subtraits: { curiosity: 'mild', creativity: 'emerging' } },
+      '20-30': { text: 'I sometimes consider new ideas.', subtraits: { curiosity: 'moderate', creativity: 'developing' } },
+      '30-40': { text: 'I moderately explore new perspectives.', subtraits: { curiosity: 'engaged', creativity: 'balanced' } },
+      '40-50': { text: 'I am fairly open to exploring different ideas.', subtraits: { curiosity: 'notable', creativity: 'active' } },
+      '50-60': { text: 'I am quite open to considering new perspectives.', subtraits: { curiosity: 'high', creativity: 'evident' } },
+      '60-70': { text: 'I regularly explore new ideas and perspectives.', subtraits: { curiosity: 'strong', creativity: 'flourishing' } },
+      '70-80': { text: 'I am highly open to trying different approaches.', subtraits: { curiosity: 'keen', creativity: 'profound' } },
+      '80-90': { text: 'I am extremely open to all kinds of ideas.', subtraits: { curiosity: 'exceptional', creativity: 'dynamic' } },
+      '90-100': { text: 'I am exceptionally open to exploring and embracing new perspectives.', subtraits: { curiosity: 'superior', creativity: 'innovative' } },
+    },
+  },
+  {
+    label: 'Conscientiousness',
+    icon: <CheckCircleIcon />,
+    color: '#32CD32',
+    subtext: {
+      '0-10': { text: 'I am slightly organized and dependable.', subtraits: { organization: 'minimal', reliability: 'low' } },
+      '10-20': { text: 'I have a mild tendency to stay organized.', subtraits: { organization: 'basic', reliability: 'emerging' } },
+      '20-30': { text: 'I sometimes act in an organized manner.', subtraits: { organization: 'developing', reliability: 'moderate' } },
+      '30-40': { text: 'I moderately focus on organization and dependability.', subtraits: { organization: 'balanced', reliability: 'consistent' } },
+      '40-50': { text: 'I am fairly organized and dependable.', subtraits: { organization: 'solid', reliability: 'notable' } },
+      '50-60': { text: 'I am quite focused on staying dependable.', subtraits: { organization: 'high', reliability: 'trustworthy' } },
+      '60-70': { text: 'I regularly stay organized and follow through.', subtraits: { organization: 'strong', reliability: 'dependable' } },
+      '70-80': { text: 'I am highly dependable and maintain strong organization.', subtraits: { organization: 'keen', reliability: 'exceptional' } },
+      '80-90': { text: 'I am extremely reliable in my actions.', subtraits: { organization: 'exceptional', reliability: 'superior' } },
+      '90-100': { text: 'I am exceptionally organized and dependable in all aspects.', subtraits: { organization: 'outstanding', reliability: 'perfect' } },
+    },
+  },
+  {
+    label: 'Extraversion',
+    icon: <PeopleIcon />,
+    color: '#FF8C00',
+    subtext: {
+      '0-10': { text: 'I am slightly social and outgoing.', subtraits: { assertiveness: 'low', sociability: 'minimal' } },
+      '10-20': { text: 'I have a mild tendency to engage with others.', subtraits: { assertiveness: 'emerging', sociability: 'basic' } },
+      '20-30': { text: 'I sometimes enjoy social activities.', subtraits: { assertiveness: 'moderate', sociability: 'developing' } },
+      '30-40': { text: 'I moderately engage in social situations.', subtraits: { assertiveness: 'balanced', sociability: 'consistent' } },
+      '40-50': { text: 'I am fairly outgoing and social.', subtraits: { assertiveness: 'notable', sociability: 'reliable' } },
+      '50-60': { text: 'I am quite enthusiastic in social settings.', subtraits: { assertiveness: 'strong', sociability: 'dependable' } },
+      '60-70': { text: 'I regularly enjoy interacting with others.', subtraits: { assertiveness: 'keen', sociability: 'exceptional' } },
+      '70-80': { text: 'I am highly energized by social activities.', subtraits: { assertiveness: 'high', sociability: 'superior' } },
+      '80-90': { text: 'I am extremely outgoing and thrive socially.', subtraits: { assertiveness: 'exceptional', sociability: 'flourishing' } },
+      '90-100': { text: 'I am exceptionally social and enjoy constant engagement.', subtraits: { assertiveness: 'perfect', sociability: 'outstanding' } },
+    },
+  },
+  {
+    label: 'Agreeableness',
+    icon: <FavoriteIcon />,
+    color: '#FF69B4',
+    subtext: {
+      '0-10': { text: 'I am slightly empathetic and considerate.', subtraits: { compassion: 'low', cooperation: 'minimal' } },
+      '10-20': { text: 'I have a mild tendency to care for others.', subtraits: { compassion: 'emerging', cooperation: 'basic' } },
+      '20-30': { text: 'I sometimes consider others’ feelings.', subtraits: { compassion: 'moderate', cooperation: 'developing' } },
+      '30-40': { text: 'I moderately empathize with others.', subtraits: { compassion: 'balanced', cooperation: 'consistent' } },
+      '40-50': { text: 'I am fairly caring and considerate.', subtraits: { compassion: 'notable', cooperation: 'reliable' } },
+      '50-60': { text: 'I am quite compassionate and understanding.', subtraits: { compassion: 'high', cooperation: 'trustworthy' } },
+      '60-70': { text: 'I regularly prioritize others’ feelings.', subtraits: { compassion: 'strong', cooperation: 'dependable' } },
+      '70-80': { text: 'I am highly empathetic and considerate.', subtraits: { compassion: 'keen', cooperation: 'exceptional' } },
+      '80-90': { text: 'I am extremely caring and attuned to others’ needs.', subtraits: { compassion: 'exceptional', cooperation: 'superior' } },
+      '90-100': { text: 'I am exceptionally understanding and empathetic towards everyone.', subtraits: { compassion: 'perfect', cooperation: 'outstanding' } },
+    },
+  },
+  {
+    label: 'Neuroticism',
+    icon: <MoodBadIcon />,
+    color: '#DC143C',
+    subtext: {
+      '0-10': { text: 'I am slightly affected by emotions and stress.', subtraits: { anxiety: 'low', emotional_stability: 'high' } },
+      '10-20': { text: 'I have a mild tendency to feel emotions intensely.', subtraits: { anxiety: 'mild', emotional_stability: 'moderate' } },
+      '20-30': { text: 'I sometimes feel emotions and stress strongly.', subtraits: { anxiety: 'moderate', emotional_stability: 'balanced' } },
+      '30-40': { text: 'I moderately experience emotional intensity.', subtraits: { anxiety: 'balanced', emotional_stability: 'notable' } },
+      '40-50': { text: 'I am fairly affected by stress and emotions.', subtraits: { anxiety: 'notable', emotional_stability: 'consistent' } },
+      '50-60': { text: 'I am quite prone to intense emotional experiences.', subtraits: { anxiety: 'strong', emotional_stability: 'low' } },
+      '60-70': { text: 'I regularly experience strong emotions.', subtraits: { anxiety: 'keen', emotional_stability: 'minimal' } },
+      '70-80': { text: 'I am highly sensitive to stress and emotional fluctuations.', subtraits: { anxiety: 'high', emotional_stability: 'rare' } },
+      '80-90': { text: 'I am extremely affected by emotional experiences.', subtraits: { anxiety: 'exceptional', emotional_stability: 'rare' } },
+      '90-100': { text: 'I am exceptionally sensitive to stress and emotions.', subtraits: { anxiety: 'superior', emotional_stability: 'exceptional' } },
+    },
+  },
 ];
+
 
 interface BigFiveValues {
   openness: number;
@@ -61,7 +147,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
 
   const [mbtiType, setMbtiType] = useState<string | null>(null);
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
-
+  const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -80,9 +166,27 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
     neuroticism: traits.Neuroticism / 100,
   });
 
+  const getSubtext = (trait: string, value: number) => {
+    const statement = traitInfo.filter((s) => { 
+      console.log(s.label === trait, s.label, trait)
+      return s.label === trait})[0];
+    if (!statement) return null;
+
+    const percentage = value;
+    const range = Object.keys(statement.subtext).find((key) => {
+      const [min, max] = key.split('-').map(Number);
+      return percentage >= min && percentage <= max;
+    });
+
+    return range ? (statement.subtext as any)[range]?.text : null;
+  };
+
   // Recalculate MBTI type when a trait changes
   const handleSliderChange = (trait: Trait) => (_event: Event, newValue: number | number[]) => {
     const value = newValue as number;
+    const sub = getSubtext(trait, traits[trait] as number);
+
+    setSelectedStatement(sub)
     setTraits((prev) => {
       const updatedTraits = { ...prev, [trait]: value };
       const bigFiveData = {
@@ -243,6 +347,12 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
           ))}
         </Grid>
 
+        <Box display={'flex'} justifyContent={'center'} my={3}>
+        {/* Display matched MBTI type or anything else as needed */}
+        <Typography variant='h6' fontWeight='bold' gutterBottom>
+          {selectedStatement && '"'}{selectedStatement}{selectedStatement && '"'}
+        </Typography>
+        </Box>
         {/* Display the currently matched MBTI type, if available */}
         {mbtiType && currentTypeData && (
           <Grid container spacing={1} justifyContent={'center'} marginTop={5}>
@@ -261,7 +371,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
             </Box>
           </Grid>
         )}
-
+       
         <Box mt={3}>
           <Button
             variant="contained"

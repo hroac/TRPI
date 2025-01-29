@@ -516,7 +516,7 @@ const TypeCompatibilityChecker: React.FC = () => {
     )
       return [];
 
-    return userAData.allResponses.map((response, idx) => {
+    const userData = userAData.allResponses.map((response, idx) => {
       const statement = statements[idx];
       const subtextA = getSubtext(statement.trait, idx, response);
       const subtextB = getSubtext(statement.trait, idx, userBData.allResponses![idx]);
@@ -533,6 +533,17 @@ const TypeCompatibilityChecker: React.FC = () => {
         compatibilityPercent,
       };
     });
+
+    const stagesA =  [
+        userData.slice(0, 3), // Stage 0
+        userData.slice(3, 7), // Stage 1
+        userData.slice(7, 11), // Stage 2
+        userData.slice(11, 15), // Stage 3
+        userData.slice(15, 19), // Stage 4
+        userData.slice(19, 23), // Stage 5
+      ];
+
+      return stagesA;
   };
 
   const slides = prepareCarouselSlides();
@@ -895,10 +906,9 @@ const TypeCompatibilityChecker: React.FC = () => {
               Responses Comparison
             </Typography>
             <Carousel
-              slides={slides.map((slide, idx) => ({
-                content: (
-                  <Box key={idx} sx={{ padding: '20px' }}>
-                    <Typography variant="h6" gutterBottom>
+              slides={isMobile ? slides.flat().map(slide => ({ content: (
+                <Box> 
+                     <Typography variant="h6" gutterBottom>
                       {slide.question}
                     </Typography>
                     <Grid container spacing={2} alignItems="center">
@@ -954,6 +964,70 @@ const TypeCompatibilityChecker: React.FC = () => {
                         </Paper>
                       </Grid>
                     </Grid>
+                </Box>
+              )})) : slides.map((slide, idx) => ({
+                content: (
+                  <Box key={idx} sx={{ padding: '20px' }}>
+                   {slide.map(item => (
+                    <Box>
+                         <Typography variant="h6" gutterBottom>
+                      {item.question}
+                    </Typography>
+                    <Grid container spacing={2} alignItems="center">
+                      {/* User A's Answer */}
+                      <Grid item xs={5}>
+                        <Paper sx={{ p: 2 }}>
+                          <Typography variant="subtitle1" gutterBottom>
+                            User A
+                          </Typography>
+                          <Typography variant="body2">
+                            {(item.userAResponse * 100).toFixed(0)}%
+                          </Typography>
+                          <LinearProgress
+                            color="secondary"
+                            variant="determinate"
+                            value={item.userAResponse * 100}
+                          />
+                          {item.subtextA && (
+                            <Typography variant="h6" color="text.secondary">
+                              {item.subtextA}
+                            </Typography>
+                          )}
+                        </Paper>
+                      </Grid>
+
+                      {/* Compatibility in the middle */}
+                      <Grid item xs={2}>
+                        <Box textAlign="center">
+                          <Typography variant="body2">Compatibility</Typography>
+                          <Typography variant="h6">{item.compatibilityPercent}%</Typography>
+                        </Box>
+                      </Grid>
+
+                      {/* User B's Answer */}
+                      <Grid item xs={5}>
+                        <Paper sx={{ p: 2 }}>
+                          <Typography variant="subtitle1" gutterBottom>
+                            User B
+                          </Typography>
+                          <Typography variant="body2">
+                            {(item.userBResponse * 100).toFixed(0)}%
+                          </Typography>
+                          <LinearProgress
+                            color="secondary"
+                            variant="determinate"
+                            value={item.userBResponse * 100}
+                          />
+                          {item.subtextB && (
+                            <Typography variant="h6" color="text.secondary">
+                              {item.subtextB}
+                            </Typography>
+                          )}
+                        </Paper>
+                      </Grid>
+                    </Grid>
+                    </Box>
+                   ))}
                   </Box>
                 ),
               }))}

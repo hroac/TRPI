@@ -120,7 +120,7 @@ function App() {
                             <Route path="/talk" element={<TrpiTalk onComplete={handleComplete}/>} />
                             <Route path='/sources' element={<Sources/>} />
                             <Route path='/reviews' element={<Reviews/>} />
-                            <Route path='/check'  element={<TypeCompatibilityChecker/>} />
+                            <Route path='/check/:r1/:r2'  element={<TypeCompatibilityChecker/>} />
                         </Routes>
                         <Box position={'relative'} top={225}>
                         <Footer />

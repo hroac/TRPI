@@ -52,6 +52,7 @@ import MoodBadIcon from '@mui/icons-material/MoodBad';
 import { typesData } from './typesData';
 import { ShuffleOn, SwitchAccount } from '@mui/icons-material';
 import Matrix from './Matrix';
+import { useParams } from 'react-router-dom';
 
 interface BigFiveValues {
   openness: number;
@@ -120,7 +121,7 @@ const LinkSharing: React.FC<{
     userBId?: string;
   }> = ({ userAId, userBId }) => {
     // Construct a share link including bin IDs if they exist
-    const shareLink = `https://traumaindicator.com/#/check?r1=${userAId || ''}&r2=${userBId || ''}`;
+    const shareLink = `https://traumaindicator.com/#/check/${userAId || ''}/${userBId || ''}`;
   
     const copyToClipboard = async () => {
       try {
@@ -161,7 +162,7 @@ const LinkSharing: React.FC<{
 const TypeCompatibilityChecker: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const params = useParams();
   // -- States for user A and user B data
   const [userAData, setUserAData] = useState<BinData>(() => {
     // Attempt to load from localStorage
@@ -415,9 +416,9 @@ const TypeCompatibilityChecker: React.FC = () => {
 
   // -- On mount, parse ?r1= & ?r2= from the URL
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const r1 = searchParams.get('r1');
-    const r2 = searchParams.get('r2');
+   
+    const r1 = params['r1'];
+    const r2 = params['r2'];
 
     // If none, do nothing. 
     // If we do have r1 / r2, it loads them from JSONBin as if user had used the link approach.

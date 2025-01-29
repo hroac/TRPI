@@ -22,9 +22,20 @@ import {
 import LinkIcon from '@mui/icons-material/Link';
 import Carousel from './Carousel';
 import JsonBinApi from '../utils/saveResults';
-import { calculateTraitCorrelation, calculateAnswerCorrelation, calculateCompatibilityScore, pearsonProfile } from '../utils/mbtiMapping';
-import { determinePrimary4FType, getSubtext, MBTIProfiles, pearsonCorrelationBigFive } from '../utils/mbtiMapping';
-import { stages, statements } from '../utils/mbtiMapping';
+import {
+  calculateAnswerCorrelation,
+  calculateCompatibilityScore,
+  pearsonProfile,
+  calculateTraitCorrelation,
+  pearsonCorrelationBigFive,
+} from '../utils/mbtiMapping';
+import {
+  determinePrimary4FType,
+  getSubtext,
+  MBTIProfiles,
+  statements,
+  stages,
+} from '../utils/mbtiMapping';
 import { guid } from '../utils/guid';
 import {
   getRemainingUses,
@@ -54,13 +65,21 @@ interface BinData {
   type: string;
   primary4FType: string;
   bigFiveResponses: BigFiveValues;
-  description: string;
-  allResponses: number[];
-  date: string;
-  userId: string;
+  description?: string;
+  allResponses?: number[];
+  date?: string;
+  userId?: string;
   binId?: string; // Optional, used for updates
 }
-type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism'
+type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
+
+const defaultTraits: BigFiveValues = {
+  openness: 0.5,
+  conscientiousness: 0.5,
+  extraversion: 0.5,
+  agreeableness: 0.5,
+  neuroticism: 0.5,
+};
 
 const traitInfo: { label: Trait; icon: React.ReactNode; color: string }[] = [
   { label: 'Openness', icon: <EmojiObjectsIcon />, color: '#1E90FF' },
@@ -70,50 +89,137 @@ const traitInfo: { label: Trait; icon: React.ReactNode; color: string }[] = [
   { label: 'Neuroticism', icon: <MoodBadIcon />, color: '#DC143C' },
 ];
 
+/**
+ * A small helper to fetch BinData by binId from JSONBin. 
+ * If it fails for any reason, we return a default 0.5 profile.
+ */
+async function fetchBinDataById(binId: string): Promise<BinData> {
+  try {
+    const binData = await JsonBinApi.getBinById(binId);
+    return { ...binData, binId };
+  } catch (error) {
+    console.error('Error fetching bin:', error);
+    // Fallback: Return a default 0.5 profile
+    return {
+      type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+      primary4FType: determinePrimary4FType(defaultTraits),
+      bigFiveResponses: { ...defaultTraits },
+      binId,
+      allResponses: [], 
+    };
+  }
+}
+
+/**
+ * A small link sharing component to generate a shareable URL
+ * for userA / userB bins.
+ */
+const LinkSharing: React.FC<{
+  userAId?: string;
+  userBId?: string;
+}> = ({ userAId, userBId }) => {
+  // Construct a share link including bin IDs if they exist
+  const shareLink = `https://traumaindicator.com/#/check?r1=${userAId || ''}&r2=${userBId || ''}`;
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      alert('Link copied to clipboard!');
+    } catch (error) {
+      console.error('Failed to copy text:', error);
+      alert('Unable to copy to clipboard.');
+    }
+  };
+
+  if(userAId && userBId) {
+  return (
+    <Paper sx={{ p: 2, width: "100%" }} elevation={3}>
+    <Box mt={3}>
+      <Typography variant="body1" gutterBottom>
+        Share this link with someone:
+      </Typography>
+      <Box display="flex" alignItems="center" gap={1}>
+        <TextField
+          variant="outlined"
+          size="small"
+          value={shareLink}
+          sx={{ width: '100%' }}
+          InputProps={{ readOnly: true }}
+        />
+        <Button variant="contained" onClick={copyToClipboard}>
+          Copy
+        </Button>
+      </Box>
+    </Box>
+    </Paper>
+  );
+}
+return <></>
+};
+
 const TypeCompatibilityChecker: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const defaultTraits =  {
-    openness: 0.5,
-    conscientiousness: 0.5,
-    extraversion: 0.5,
-    agreeableness: 0.5,
-    neuroticism: 0.5,
-  }
 
-  // State for User A
- 
-  const [userAData, setUserAData] = useState<BinData>( localStorage.getItem('binAData') && JSON.parse(localStorage.getItem('binAData') || '') || {
-    primary4FType: determinePrimary4FType(defaultTraits),
-    type:  pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,//matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
-    bigFiveResponses: {
-        openness: 0.5,
-        conscientiousness: 0.5,
-        extraversion: 0.5,
-        agreeableness: 0.5,
-        neuroticism: 0.5,
+  // -- State definitions --
+
+  // Holds the user A data
+  const [userAData, setUserAData] = useState<BinData>(() => {
+    // Attempt to load from localStorage
+    const saved = localStorage.getItem('binAData');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (err) {
+        return {
+          primary4FType: determinePrimary4FType(defaultTraits),
+          type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+          bigFiveResponses: { ...defaultTraits },
+        };
+      }
     }
+    // Otherwise default
+    return {
+      primary4FType: determinePrimary4FType(defaultTraits),
+      type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+      bigFiveResponses: { ...defaultTraits },
+    };
   });
-  // State for User B
-const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBData') && JSON.parse(localStorage.getItem('binBData') || '') || {
-    primary4FType: determinePrimary4FType(defaultTraits),
-    type:  pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type, //matchMBTIType(defaultTraits, determinePrimary4FType(defaultTraits)),
-    bigFiveResponses: {
-        openness: 0.5,
-        conscientiousness: 0.5,
-        extraversion: 0.5,
-        agreeableness: 0.5,
-        neuroticism: 0.5,
+
+  // Holds the user B data
+  const [userBData, setUserBData] = useState<BinData>(() => {
+    // Attempt to load from localStorage
+    const saved = localStorage.getItem('binBData');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (err) {
+        return {
+          primary4FType: determinePrimary4FType(defaultTraits),
+          type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+          bigFiveResponses: { ...defaultTraits },
+        };
+      }
     }
+    // Otherwise default
+    return {
+      primary4FType: determinePrimary4FType(defaultTraits),
+      type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+      bigFiveResponses: { ...defaultTraits },
+    };
   });
-  
+
   // Modals for Link Inputs
   const [openModalA, setOpenModalA] = useState<boolean>(false);
   const [openModalB, setOpenModalB] = useState<boolean>(false); 
   const [openTypeModalA, setOpenTypeModalA] = useState<boolean>(false);
   const [openTypeModalB, setOpenTypeModalB] = useState<boolean>(false);
+
+  // Link text fields
   const [userALink, setUserALink] = useState<string>('');
   const [userBLink, setUserBLink] = useState<string>('');
+
+  // Errors & loading states
   const [errorA, setErrorA] = useState<string>('');
   const [errorB, setErrorB] = useState<string>('');
   const [loadingA, setLoadingA] = useState<boolean>(false);
@@ -130,9 +236,9 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
 
   // Current Stage for Navigation
   const [currentStage, setCurrentStage] = useState<number>(0);
-  
 
-  // Handle opening and closing modals for link input
+  // -- Modals open/close --
+
   const handleOpenModalA = () => setOpenModalA(true);
   const handleCloseModalA = () => {
     setOpenModalA(false);
@@ -144,7 +250,6 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
     setOpenModalB(false);
     setErrorB('');
   };
-
 
   const handleOpenTypeModalA = () => setOpenTypeModalA(true);
   const handleCloseTypeModalA = () => {
@@ -158,86 +263,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
     setErrorB('');
   };
 
-  const handleMatrixSelectA = (selected: string) => {
-    console.log('Selected Type:', selected);
-   
-
-    if (selected === 'XXXX') {
-      // User doesn't know their type
-      //setMbtiType('XXXX');
-      handleCloseTypeModalA();
-      return;
-    }
-
-    setResponseCorrelation(null)
-    setCompatibilityScore(null)
-    // If user selected a known type, load its profile and adjust traits
-    const profile = MBTIProfiles.find((p) => p.name === selected)?.traits;
-    if (profile) {
-      // Convert profile traits (0.0-1.0) to percentage and update sliders
-      const updatedTraits: BigFiveValues = {
-        openness: (profile.openness),
-        conscientiousness: (profile.conscientiousness),
-        extraversion: (profile.extraversion),
-        agreeableness: (profile.agreeableness),
-        neuroticism: (profile.neuroticism),
-      };
-
-
-      const primary4F = determinePrimary4FType(profile);
-      const calculatedType =  pearsonProfile(Object.values(updatedTraits), MBTIProfiles) //matchMBTIType(profile, primary4F, true);
-      setCompatibilityScore(null)
-      setResponseCorrelation(null)
-      setUserAData((prev) => ({
-        ...prev,
-        bigFiveResponses: profile,
-        primary4FType: primary4F,
-        type: calculatedType.type
-
-    }));
-    }
-
-    handleCloseTypeModalA();
-  };
-
-  const handleMatrixSelectB = (selected: string) => {
-    console.log('Selected Type:', selected);
-   
-
-    if (selected === 'XXXX') {
-      // User doesn't know their type
-      //setMbtiType('XXXX');
-      handleCloseTypeModalB();
-      return;
-    }
-
-    setResponseCorrelation(null)
-    setCompatibilityScore(null)
-    // If user selected a known type, load its profile and adjust traits
-    const profile = MBTIProfiles.find((p) => p.name === selected)?.traits;
-    if (profile) {
-      // Convert profile traits (0.0-1.0) to percentage and update sliders
-      const updatedTraits: BigFiveValues = {
-        openness: (profile.openness),
-        conscientiousness: (profile.conscientiousness),
-        extraversion: (profile.extraversion),
-        agreeableness: (profile.agreeableness),
-        neuroticism: (profile.neuroticism),
-      };
-
-      const primary4F = determinePrimary4FType(profile);
-      const calculatedType =  pearsonProfile(Object.values(updatedTraits), MBTIProfiles) //matchMBTIType(profile, primary4F, true);
-      setUserBData((prev) => ({
-        ...prev,
-        primary4FType: primary4F,
-        bigFiveResponses: profile,
-        type: calculatedType.type
-
-    }));
-    }
-
-    handleCloseTypeModalB();
-  };
+  // -- Randomizing Big Five for demonstration --
 
   const setRandomlyA = () => {
     const randomTraits: Record<Trait, number> = {
@@ -248,7 +274,6 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
       Neuroticism: Math.floor(Math.random() * 100),
     };
 
-    // Recalculate MBTI based on random traits
     const bigFiveData = {
       openness: randomTraits.Openness / 100,
       conscientiousness: randomTraits.Conscientiousness / 100,
@@ -257,15 +282,15 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
       neuroticism: randomTraits.Neuroticism / 100,
     };
     const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType =  pearsonProfile(Object.values(bigFiveData), MBTIProfiles) //matchMBTIType(bigFiveData, primary4F, true);
-    setResponseCorrelation(null)
-    setCompatibilityScore(null)
-    setUserAData((prev) => ({
-        ...prev,
-        primary4FType: primary4F,
-        bigFiveResponses: bigFiveData,
-        type: calculatedType.type
+    const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles);
 
+    setResponseCorrelation(null);
+    setCompatibilityScore(null);
+    setUserAData((prev) => ({
+      ...prev,
+      primary4FType: primary4F,
+      bigFiveResponses: bigFiveData,
+      type: calculatedType.type,
     }));
   };
 
@@ -278,7 +303,6 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
       Neuroticism: Math.floor(Math.random() * 100),
     };
 
-    // Recalculate MBTI based on random traits
     const bigFiveData = {
       openness: randomTraits.Openness / 100,
       conscientiousness: randomTraits.Conscientiousness / 100,
@@ -287,21 +311,74 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
       neuroticism: randomTraits.Neuroticism / 100,
     };
     const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType =  pearsonProfile(Object.values(bigFiveData), MBTIProfiles) //matchMBTIType(bigFiveData, primary4F, true);
-    setResponseCorrelation(null)
-    setCompatibilityScore(null)
-    setUserBData((prev) => ({
-        ...prev,
-        bigFiveResponses: bigFiveData,
-        primary4FType: primary4F,
-        type: calculatedType.type
+    const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles);
 
+    setResponseCorrelation(null);
+    setCompatibilityScore(null);
+    setUserBData((prev) => ({
+      ...prev,
+      bigFiveResponses: bigFiveData,
+      primary4FType: primary4F,
+      type: calculatedType.type,
     }));
   };
-  // Fetch data from link
-  const fetchData = async (link: string): Promise<BinData> => {
-    // Extract binId from the link
-    // Assuming the binId is after '/#/result/'
+
+  // -- Handling the matrix selection modals --
+
+  const handleMatrixSelectA = (selected: string) => {
+    if (selected === 'XXXX') {
+      // If they don't know their type, just close
+      handleCloseTypeModalA();
+      return;
+    }
+    setResponseCorrelation(null);
+    setCompatibilityScore(null);
+
+    const profile = MBTIProfiles.find((p) => p.name === selected)?.traits;
+    if (profile) {
+      const primary4F = determinePrimary4FType(profile);
+      const calculatedType = pearsonProfile(Object.values(profile), MBTIProfiles);
+
+      setUserAData((prev) => ({
+        ...prev,
+        bigFiveResponses: profile,
+        primary4FType: primary4F,
+        type: calculatedType.type,
+      }));
+    }
+    handleCloseTypeModalA();
+  };
+
+  const handleMatrixSelectB = (selected: string) => {
+    if (selected === 'XXXX') {
+      // If they don't know their type, just close
+      handleCloseTypeModalB();
+      return;
+    }
+    setResponseCorrelation(null);
+    setCompatibilityScore(null);
+
+    const profile = MBTIProfiles.find((p) => p.name === selected)?.traits;
+    if (profile) {
+      const primary4F = determinePrimary4FType(profile);
+      const calculatedType = pearsonProfile(Object.values(profile), MBTIProfiles);
+
+      setUserBData((prev) => ({
+        ...prev,
+        bigFiveResponses: profile,
+        primary4FType: primary4F,
+        type: calculatedType.type,
+      }));
+    }
+    handleCloseTypeModalB();
+  };
+
+  // -- Link submission logic (manually typed links in the modal) --
+
+  const fetchDataByShareLink = async (link: string): Promise<BinData> => {
+    // We expect the format: https://.../#/result/<binId>
+    // Or something similar. Example:
+    // const url = new URL(link).hash => "#/result/<binId>"
     try {
       const url = new URL(link);
       const hash = url.hash; // e.g., '#/result/abcd1234'
@@ -311,21 +388,17 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
       if (!binId) {
         throw new Error('Invalid link format. Bin ID not found.');
       }
-
-      // Fetch bin data using JsonBinApi
-      const binData = await JsonBinApi.getBinById(binId);
-      return { ...binData, binId };
+      return await fetchBinDataById(binId);
     } catch (error) {
-      throw new Error('Invalid URL format.');
+      throw new Error('Invalid URL format or bin fetch error.');
     }
   };
 
-  // Handle submitting link for User A
   const handleSubmitA = async () => {
     setLoadingA(true);
     setErrorA('');
     try {
-      const data = await fetchData(userALink);
+      const data = await fetchDataByShareLink(userALink);
       setUserAData(data);
       setTraitCorrelation(null);
       setResponseCorrelation(null);
@@ -341,12 +414,11 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
     }
   };
 
-  // Handle submitting link for User B
   const handleSubmitB = async () => {
     setLoadingB(true);
     setErrorB('');
     try {
-      const data = await fetchData(userBLink);
+      const data = await fetchDataByShareLink(userBLink);
       setUserBData(data);
       setTraitCorrelation(null);
       setResponseCorrelation(null);
@@ -362,49 +434,105 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
     }
   };
 
- 
-  // Check if payment is required
+  // -- Payment logic --
+
   const checkPaymentRequirement = () => {
     if (needsPayment()) {
       setPremiumModalOpen(true);
     }
   };
 
-  // Handle payment success
   const handlePaymentSuccess = () => {
-    // Reset usage count
     resetUsage();
     setRemainingUses(getRemainingUses());
     setPremiumModalOpen(false);
     alert('Payment successful! Your usage count has been reset.');
   };
 
-  // Calculate Pearson Correlations
+  // -- On mount, parse any ?r1=&r2= query params for shareable link usage. --
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const r1 = searchParams.get('r1');
+    const r2 = searchParams.get('r2');
+
+    // If there are NO query params, do nothing and use the local state
+    // If there ARE query params, fetch them from JSONBin.
+    // If something fails, fallback to the default 0.5 profile.
+    const loadData = async () => {
+      if (!r1 && !r2) {
+        // No params => just keep local storage as is
+        return;
+      }
+
+      // If we DO have some params, let's attempt to fetch from JSONBin
+      let newAData = { ...userAData };
+      let newBData = { ...userBData };
+      try {
+        // If r1 is present, fetch user A from bin, else default
+        if (r1) {
+          newAData = await fetchBinDataById(r1);
+        } else {
+          newAData = {
+            type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+            primary4FType: determinePrimary4FType(defaultTraits),
+            bigFiveResponses: { ...defaultTraits },
+            binId: 'defaultA',
+          };
+        }
+        // If r2 is present, fetch user B from bin, else default
+        if (r2) {
+          newBData = await fetchBinDataById(r2);
+        } else {
+          newBData = {
+            type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+            primary4FType: determinePrimary4FType(defaultTraits),
+            bigFiveResponses: { ...defaultTraits },
+            binId: 'defaultB',
+          };
+        }
+        setUserAData(newAData);
+        setUserBData(newBData);
+      } catch (err) {
+        // if something goes wrong, fallback to 0.5 each
+        console.error('Error loading from query params:', err);
+        setUserAData({
+          type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+          primary4FType: determinePrimary4FType(defaultTraits),
+          bigFiveResponses: { ...defaultTraits },
+        });
+        setUserBData({
+          type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+          primary4FType: determinePrimary4FType(defaultTraits),
+          bigFiveResponses: { ...defaultTraits },
+        });
+      }
+    };
+    loadData();
+  }, []);
+
+  // -- Compute correlations whenever userAData or userBData changes --
   useEffect(() => {
     if (userAData && userBData) {
       try {
-        // Trait Correlation
-       
-        const traitCorr = pearsonCorrelationBigFive(Object.values(userAData.bigFiveResponses), Object.values(userBData.bigFiveResponses));
+        // Trait correlation
+        const traitCorr = pearsonCorrelationBigFive(
+          Object.values(userAData.bigFiveResponses || {}),
+          Object.values(userBData.bigFiveResponses || {})
+        );
         setTraitCorrelation(traitCorr);
 
-        // Response Correlation
-        const responsesA = userAData.allResponses;
-        const responsesB = userBData.allResponses;
+        const responsesA = userAData.allResponses || [];
+        const responsesB = userBData.allResponses || [];
 
-        // Ensure both users have the same number of responses
-        if ( responsesA && responsesB && responsesA.length !== responsesB.length) {
-          setResponseCorrelation(null);
-          setCompatibilityScore(null);
-          console.warn('Users have different number of responses.');
-        } else if (responsesA.length === 0) {
-          // If no responses, skip correlation
+        // Ensure both have the same # of responses
+        if (responsesA.length !== responsesB.length || responsesA.length === 0) {
+          // If no valid responses or mismatch, skip
           setResponseCorrelation(null);
           setCompatibilityScore(null);
         } else {
           const respCorr = calculateAnswerCorrelation(responsesA, responsesB);
           setResponseCorrelation(respCorr);
-          // Calculate overall compatibility score
+
           const compScore = calculateCompatibilityScore(userAData, userBData);
           setCompatibilityScore(compScore);
         }
@@ -414,35 +542,49 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
     }
   }, [userAData, userBData]);
 
-  // Prepare data for the carousel
+  // -- Prepare data for the carousel --
   const prepareCarouselSlides = () => {
-    if (!userAData || !userBData || !userAData.allResponses || !userBData.allResponses || userAData.allResponses.length === 0 || userBData.allResponses.length === 0) return [];
+    if (
+      !userAData ||
+      !userBData ||
+      !userAData.allResponses ||
+      !userBData.allResponses ||
+      userAData.allResponses.length === 0 ||
+      userBData.allResponses.length === 0
+    ) {
+      return [];
+    }
 
     const questions = userAData.allResponses.map((response, idx) => {
       const statement = statements[idx];
       const subtextA = getSubtext(statement.trait, idx, response);
-      const subtextB = getSubtext(statement.trait, idx, userBData.allResponses[idx]);
+      const subtextB = getSubtext(
+        statement.trait,
+        idx,
+        userBData.allResponses![idx]
+      );
 
-      // Calculate compatibility percentage for each answer
-      const compatibilityPercent = Math.round((1 - Math.abs(response - userBData.allResponses[idx])) * 100);
+      // Calculate how close the answers are
+      const compatibilityPercent = Math.round(
+        (1 - Math.abs(response - userBData.allResponses![idx])) * 100
+      );
 
       return {
         question: statement.text,
         trait: statement.trait,
         userAResponse: response,
-        userBResponse: userBData.allResponses[idx],
+        userBResponse: userBData.allResponses![idx],
         subtextA,
         subtextB,
         compatibilityPercent,
       };
     });
-
     return questions;
   };
 
   const slides = prepareCarouselSlides();
 
-  // Handle stage navigation
+  // -- Stage navigation, if used (left in place for clarity) --
   const handleNextStage = () => {
     if (currentStage < stages.length - 1) {
       setCurrentStage(currentStage + 1);
@@ -454,9 +596,9 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
       setCurrentStage(currentStage - 1);
     }
   };
-  
-  const typeA = typesData.find(type => type.type === userAData.type);
-  const typeB = typesData.find(type => type.type === userBData.type)
+
+  const typeA = typesData.find((t) => t.type === userAData.type);
+  const typeB = typesData.find((t) => t.type === userBData.type);
 
   return (
     <Container maxWidth="lg" sx={{ marginTop: '40px', textAlign: 'center' }}>
@@ -464,219 +606,219 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
         Type Comparator
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: '30px', color: 'text.secondary' }}>
-        Input the links to both users' profiles or manually input your Big Five traits to calculate compatibility.
+        Input the links to both users' profiles, select from known types, or manually adjust Big Five traits.
       </Typography>
 
-      {/* Usage Information */}
+      {/* Usage info */}
       <Box mb={4}>
         <Typography variant="body2" color="text.secondary">
           Remaining Uses This Week: {remainingUses}
         </Typography>
       </Box>
 
+      {/* Row for A / B columns */}
       <Grid container spacing={4} justifyContent="center">
         {/* User A Section */}
         <Grid item xs={12} sm={6}>
           <Paper elevation={3} sx={{ padding: '20px', borderRadius: '10px' }}>
-          <Typography variant="h6" sx={{ fontWeight: '500' }}>
-                User A
-              </Typography>
+            <Typography variant="h6" sx={{ fontWeight: '500' }}>
+              User A
+            </Typography>
             <Box display="flex" justifyContent="center">
-             
               <Box>
                 <IconButton onClick={handleOpenModalA} color="primary">
                   <LinkIcon />
                 </IconButton>
               </Box>
               <Box>
-          <IconButton onClick={setRandomlyA} color="primary" sx={{ marginRight: 1 }}>
-              <ShuffleOn />
-            </IconButton>
-          </Box>
-          <Box>
-            <IconButton onClick={handleOpenTypeModalA} color="primary">
-              <SwitchAccount />
-            </IconButton>
-          </Box>
+                <IconButton onClick={setRandomlyA} color="primary" sx={{ marginRight: 1 }}>
+                  <ShuffleOn />
+                </IconButton>
+              </Box>
+              <Box>
+                <IconButton onClick={handleOpenTypeModalA} color="primary">
+                  <SwitchAccount />
+                </IconButton>
+              </Box>
             </Box>
 
-            
-            {/* Display User A Data */}
+            {/* Display A's traits */}
             <Box mt={2}>
-               
-                <Grid container spacing={4}>
-          {traitInfo.map(({ label, icon, color }) => (
-            <Grid item xs={12} key={label}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  {icon}
-                  <Typography variant="h6" sx={{ marginLeft: '10px', fontWeight: '500', color }}>
-                    {label}
-                  </Typography>
-                </Box>
-                <Tooltip title={`${parseInt(((userAData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toString()).toFixed(0)} %`} arrow>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {((userAData.bigFiveResponses as any)[label.toLowerCase()] * 100).toFixed(0)}%
-                  </Typography>
+              <Grid container spacing={4}>
+                {traitInfo.map(({ label, icon, color }) => {
+                  const val = userAData.bigFiveResponses[label.toLowerCase() as keyof BigFiveValues] * 100;
+                  return (
+                    <Grid item xs={12} key={label}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          {icon}
+                          <Typography variant="h6" sx={{ marginLeft: '10px', fontWeight: '500', color }}>
+                            {label}
+                          </Typography>
+                        </Box>
+                        <Tooltip title={`${val.toFixed(0)} %`} arrow>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            {val.toFixed(0)}%
+                          </Typography>
+                        </Tooltip>
+                      </Box>
+                      <Slider
+                        value={Math.round(val)}
+                        onChange={(e: any, newValue: number | number[]) => {
+                          const newVal = Array.isArray(newValue) ? newValue[0] : newValue;
+                          setUserAData((prev) => {
+                            const bigFiveResponses = {
+                              ...prev.bigFiveResponses,
+                              [label.toLowerCase()]: newVal / 100,
+                            };
+                            const primary4FType = determinePrimary4FType(bigFiveResponses);
+                            const newType = pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles);
+                            // reset correlation
+                            setResponseCorrelation(null);
+                            setCompatibilityScore(null);
+                            return {
+                              ...prev,
+                              type: newType.type,
+                              primary4FType,
+                              bigFiveResponses,
+                            };
+                          });
+                        }}
+                        min={0}
+                        max={100}
+                        step={1}
+                        valueLabelDisplay="auto"
+                        sx={{
+                          color,
+                          '& .MuiSlider-thumb': { width: 24, height: 24 },
+                        }}
+                      />
+                    </Grid>
+                  );
+                })}
+              </Grid>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <Tooltip title={typeA?.mode || ''}>
+                  <Box
+                    bgcolor={typeA?.bgColor || '#777'}
+                    color="white"
+                    p={isMobile ? 1 : 2}
+                    textAlign="center"
+                    borderRadius={2}
+                    style={{ textDecoration: 'none' }}
+                    sx={{ fontSize: isMobile ? '0.75rem' : '1rem' }}
+                  >
+                    <Typography variant="subtitle1">{userAData.type}</Typography>
+                  </Box>
                 </Tooltip>
               </Box>
-              <Slider
-                value={parseInt(((userAData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toFixed(0).toString())}
-                onChange={(e: any, newValue: any) => {
-                    setUserAData((prev) => { 
-                        const bigFiveResponses = {
-                            ...prev.bigFiveResponses,
-                            [label.toLowerCase()]: Number(newValue) / 100,
-                          }
-                          const primary4FType = determinePrimary4FType(bigFiveResponses)
-                          const type =  pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles) //matchMBTIType(bigFiveResponses, primary4FType)
-                          setCompatibilityScore(null)
-                          setResponseCorrelation(null)
-                        return{ 
-                        ...prev,
-                        type: type.type, 
-                        primary4FType,
-                        bigFiveResponses
-                      }})
-                    }
-                  }
-                min={0}
-                max={100}
-                step={1}
-                valueLabelDisplay="auto"
-                sx={{
-                  color,
-                  '& .MuiSlider-thumb': { width: 24, height: 24 },
-                }}
-              />
-            </Grid>
-          ))}
-        </Grid>
-        <Box display="flex"  justifyContent={'center'}>
-               <Tooltip title={typeA.mode}>
-            <Box
-              bgcolor={typeA?.bgColor || ''}
-              color="white"
-              p={isMobile ? 1 : 2}
-              textAlign="center"
-              borderRadius={2}
-              style={{ textDecoration: 'none' }}
-              sx={{ fontSize: isMobile ? '0.75rem' : '1rem' }}
-            >
-              <Typography variant="subtitle1">{userAData.type}</Typography>
             </Box>
-          </Tooltip>
-               </Box>
-              </Box>
           </Paper>
         </Grid>
 
         {/* User B Section */}
         <Grid item xs={12} sm={6}>
           <Paper elevation={3} sx={{ padding: '20px', borderRadius: '10px' }}>
-          <Typography variant="h6" sx={{ fontWeight: '500' }}>
-                User B
-              </Typography>
+            <Typography variant="h6" sx={{ fontWeight: '500' }}>
+              User B
+            </Typography>
             <Box display="flex" justifyContent="center">
-              
               <Box>
                 <IconButton onClick={handleOpenModalB} color="primary">
                   <LinkIcon />
                 </IconButton>
               </Box>
               <Box>
-          <IconButton onClick={setRandomlyB} color="primary" sx={{ marginRight: 1 }}>
-              <ShuffleOn />
-            </IconButton>
-          </Box>
-          <Box>
-            <IconButton onClick={handleOpenTypeModalB} color="primary">
-              <SwitchAccount />
-            </IconButton>
-          </Box>
+                <IconButton onClick={setRandomlyB} color="primary" sx={{ marginRight: 1 }}>
+                  <ShuffleOn />
+                </IconButton>
+              </Box>
+              <Box>
+                <IconButton onClick={handleOpenTypeModalB} color="primary">
+                  <SwitchAccount />
+                </IconButton>
+              </Box>
             </Box>
 
-            {/* Display User B Data */}
-            {userBData ? (
-              <Box mt={2}>
-              
-                <Grid container spacing={4}>
-          {traitInfo.map(({ label, icon, color }) => (
-            <Grid item xs={12} key={label}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  {icon}
-                  <Typography variant="h6" sx={{ marginLeft: '10px', fontWeight: '500', color }}>
-                    {label}
-                  </Typography>
-                </Box>
-                <Tooltip title={`${parseInt(((userBData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toFixed(0).toString())} %`} arrow>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {((userBData.bigFiveResponses as any)[label.toLowerCase()] * 100).toFixed(0)}%
-                  </Typography>
+            {/* Display B's traits */}
+            <Box mt={2}>
+              <Grid container spacing={4}>
+                {traitInfo.map(({ label, icon, color }) => {
+                  const val = userBData.bigFiveResponses[label.toLowerCase() as keyof BigFiveValues] * 100;
+                  return (
+                    <Grid item xs={12} key={label}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          {icon}
+                          <Typography variant="h6" sx={{ marginLeft: '10px', fontWeight: '500', color }}>
+                            {label}
+                          </Typography>
+                        </Box>
+                        <Tooltip title={`${val.toFixed(0)} %`} arrow>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            {val.toFixed(0)}%
+                          </Typography>
+                        </Tooltip>
+                      </Box>
+                      <Slider
+                        value={Math.round(val)}
+                        onChange={(e: any, newValue: number | number[]) => {
+                          const newVal = Array.isArray(newValue) ? newValue[0] : newValue;
+                          setUserBData((prev) => {
+                            const bigFiveResponses = {
+                              ...prev.bigFiveResponses,
+                              [label.toLowerCase()]: newVal / 100,
+                            };
+                            const primary4FType = determinePrimary4FType(bigFiveResponses);
+                            const newType = pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles);
+                            // reset correlation
+                            setResponseCorrelation(null);
+                            setCompatibilityScore(null);
+                            return {
+                              ...prev,
+                              type: newType.type,
+                              primary4FType,
+                              bigFiveResponses,
+                            };
+                          });
+                        }}
+                        min={0}
+                        max={100}
+                        step={1}
+                        valueLabelDisplay="auto"
+                        sx={{
+                          color,
+                          '& .MuiSlider-thumb': { width: 24, height: 24 },
+                        }}
+                      />
+                    </Grid>
+                  );
+                })}
+              </Grid>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <Tooltip title={typeB?.mode || ''}>
+                  <Box
+                    bgcolor={typeB?.bgColor || '#777'}
+                    color="white"
+                    p={isMobile ? 1 : 2}
+                    textAlign="center"
+                    borderRadius={2}
+                    style={{ textDecoration: 'none' }}
+                    sx={{ fontSize: isMobile ? '0.75rem' : '1rem' }}
+                  >
+                    <Typography variant="subtitle1">{userBData.type}</Typography>
+                  </Box>
                 </Tooltip>
               </Box>
-              <Slider
-                value={parseInt(((userBData.bigFiveResponses as any)[label.toLowerCase()]  * 100).toString())}
-                onChange={(e: any, newValue: any) => {
-                    setUserBData((prev) => { 
-                        const bigFiveResponses = {
-                            ...prev.bigFiveResponses,
-                            [label.toLowerCase()]: Number(newValue) / 100,
-                          }
-                          const primary4FType = determinePrimary4FType(bigFiveResponses)
-                          const type =  pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles) //matchMBTIType(bigFiveResponses, primary4FType)
-                          setCompatibilityScore(null)
-                          setResponseCorrelation(null)
-                        return{ 
-                        ...prev,
-                        type: type.type, 
-                        primary4FType,
-                        bigFiveResponses
-                      }})
-                    }
-                  }
-                min={0}
-                max={100}
-                step={1}
-                valueLabelDisplay="auto"
-                sx={{
-                  color,
-                  '& .MuiSlider-thumb': { width: 24, height: 24 },
-                }}
-              />
-            </Grid>
-          ))}
-        </Grid>
-        <Box display="flex"  justifyContent={'center'}>
-               <Tooltip title={typeB.mode}>
-            <Box
-              bgcolor={typeB?.bgColor || ''}
-              color="white"
-              p={isMobile ? 1 : 2}
-              textAlign="center"
-              borderRadius={2}
-              style={{ textDecoration: 'none' }}
-              sx={{ fontSize: isMobile ? '0.75rem' : '1rem' }}
-            >
-              <Typography variant="subtitle1">{userBData.type}</Typography>
             </Box>
-          </Tooltip>
-               </Box>
-              </Box>
-            ) : (
-              <Typography variant="body2" sx={{ marginTop: '20px', color: 'text.secondary' }}>
-                No profile linked or manually inputted.
-              </Typography>
-            )}
           </Paper>
         </Grid>
       </Grid>
 
-      {/* Compatibility Scores */}
+      {/* Compatibility section */}
       {(traitCorrelation !== null || responseCorrelation !== null) && (
         <Box mt={5}>
-          <Paper elevation={3} sx={{ padding: '30px', borderRadius: '10px'}}>
+          <Paper elevation={3} sx={{ padding: '30px', borderRadius: '10px' }}>
             <Typography variant="h5" gutterBottom>
               Compatibility Scores
             </Typography>
@@ -688,7 +830,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
                 <Tooltip title={`Pearson Correlation: ${traitCorrelation.toFixed(2)}`} arrow>
                   <LinearProgress
                     variant="determinate"
-                    value={(traitCorrelation + 1) * 50} // Convert from [-1,1] to [0,100]
+                    value={(traitCorrelation + 1) * 50} // [-1..1] => [0..100]
                     sx={{
                       height: '10px',
                       borderRadius: '5px',
@@ -718,10 +860,10 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
             {responseCorrelation !== null && (
               <Box mt={3}>
                 <Typography variant="h6">Individual Responses Correlation</Typography>
-                <Tooltip sx={{position:'relative', left: responseCorrelation * 1000 }} title={`Pearson Correlation: ${responseCorrelation.toFixed(2)}`} arrow>
+                <Tooltip title={`Pearson Correlation: ${responseCorrelation.toFixed(2)}`} arrow>
                   <LinearProgress
                     variant="determinate"
-                    value={(responseCorrelation + 1) * 50} // Convert from [-1,1] to [0,100]
+                    value={(responseCorrelation + 1) * 50} // [-1..1] => [0..100]
                     sx={{
                       height: '10px',
                       borderRadius: '5px',
@@ -783,178 +925,164 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
         </Box>
       )}
 
-      {/* Carousel for Responses Comparison */}
+      {/* Carousel for response details */}
       {slides.length > 0 && (
-      <Paper sx={{ p: 2, width: "100%" }} elevation={3}>
-        <Box mt={5}>
-          <Typography variant="h5" gutterBottom>
-            Responses Comparison
-          </Typography>
-          <Carousel
-            slides={slides.map((slide, idx) => ({
-              content: (
-                <Box key={idx} sx={{ padding: '20px' }}>
-                  <Typography variant="h6" gutterBottom>
-                    {slide.question}
-                  </Typography>
-                  <Grid container spacing={2} alignItems="center">
-                    {/* User A's Answer */}
-                    <Grid item xs={5}>
-                      <Paper sx={{ p: 2 }}>
-                        <Typography variant="subtitle1" gutterBottom>
-                          User A
-                        </Typography>
-                        <Typography variant="body2">{(slide.userAResponse * 100).toFixed(0)}%</Typography>
-                        <LinearProgress color="secondary" variant="determinate" value={slide.userAResponse * 100} />
-                        <LinearProgress color="secondary" variant="determinate" value={slide.userAResponse * 100} />
-                        {slide.subtextA && (
-                          <Typography variant="caption" color="text.secondary">
-                            {slide.subtextA}
+        <Paper sx={{ p: 2, width: '100%' }} elevation={3}>
+          <Box mt={5}>
+            <Typography variant="h5" gutterBottom>
+              Responses Comparison
+            </Typography>
+            <Carousel
+              slides={slides.map((slide, idx) => ({
+                content: (
+                  <Box key={idx} sx={{ padding: '20px' }}>
+                    <Typography variant="h6" gutterBottom>
+                      {slide.question}
+                    </Typography>
+                    <Grid container spacing={2} alignItems="center">
+                      {/* User A's Answer */}
+                      <Grid item xs={5}>
+                        <Paper sx={{ p: 2 }}>
+                          <Typography variant="subtitle1" gutterBottom>
+                            User A
                           </Typography>
-                        )}
-                      </Paper>
-                    </Grid>
-
-                    {/* Compatibility Chart */}
-                    <Grid item xs={2}>
-                      <Box textAlign="center">
-                        <Typography variant="body2">Compatibility</Typography>
-                        <Typography variant="h6">{slide.compatibilityPercent}%</Typography>
-                      </Box>
-                    </Grid>
-
-                    {/* User B's Answer */}
-                    <Grid item xs={5}>
-                      <Paper sx={{ p: 2 }}>
-                        <Typography variant="subtitle1" gutterBottom>
-                          User B
-                        </Typography>
-                        <Typography variant="body2">{(slide.userBResponse * 100).toFixed(0)}%</Typography>
-                        {slide.subtextB && (
-                          <Typography variant="caption" color="text.secondary">
-                            {slide.subtextB}
-                            <LinearProgress color="secondary" variant="determinate" value={slide.userBResponse * 100} />
-                           <LinearProgress color="secondary" variant="determinate" value={slide.userBResponse * 100} />
+                          <Typography variant="body2">
+                            {(slide.userAResponse * 100).toFixed(0)}%
                           </Typography>
-                           
-                        )}
-                      </Paper>
+                          <LinearProgress
+                            color="secondary"
+                            variant="determinate"
+                            value={slide.userAResponse * 100}
+                          />
+                          {slide.subtextA && (
+                            <Typography variant="caption" color="text.secondary">
+                              {slide.subtextA}
+                            </Typography>
+                          )}
+                        </Paper>
+                      </Grid>
+                      {/* Compatibility in the middle */}
+                      <Grid item xs={2}>
+                        <Box textAlign="center">
+                          <Typography variant="body2">Compatibility</Typography>
+                          <Typography variant="h6">{slide.compatibilityPercent}%</Typography>
+                        </Box>
+                      </Grid>
+                      {/* User B's Answer */}
+                      <Grid item xs={5}>
+                        <Paper sx={{ p: 2 }}>
+                          <Typography variant="subtitle1" gutterBottom>
+                            User B
+                          </Typography>
+                          <Typography variant="body2">
+                            {(slide.userBResponse * 100).toFixed(0)}%
+                          </Typography>
+                          <LinearProgress
+                            color="secondary"
+                            variant="determinate"
+                            value={slide.userBResponse * 100}
+                          />
+                          {slide.subtextB && (
+                            <Typography variant="caption" color="text.secondary">
+                              {slide.subtextB}
+                            </Typography>
+                          )}
+                        </Paper>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Box>
-              ),
-            }))}
-            settings={{
-              spaceBetween: 50,
-              slidesToShow: 1,
-              slidesToScroll: 1,
-              autoplay: false,
-              infinite: false,
-              dots: true,
-              arrows: true,
-            }}
-          />
-          {/* Navigation Buttons */}
-          {/* <Box display="flex" justifyContent="space-between" mt={2}>
-            <Button variant="contained" onClick={handlePrevStage} disabled={currentStage === 0}>
-              Back
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleNextStage}
-              disabled={currentStage === stages.length - 1}
-            >
-              Next
-            </Button>
-          </Box> */}
-        </Box>
+                  </Box>
+                ),
+              }))}
+              settings={{
+                spaceBetween: 50,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: false,
+                infinite: false,
+                dots: true,
+                arrows: true,
+              }}
+            />
+          </Box>
         </Paper>
       )}
 
-        {/* Modal for Matrix selection */}
-        <Modal /*sx={{position: 'relative', top: '50px', left: '50px'}}*/ open={openTypeModalA} onClose={handleCloseTypeModalA}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            outline: 'none',
-            width: { xs: '90%', sm: '60%' },
-            borderRadius: '8px',
-          }}
-        >
-          <Box sx={{
-            marginLeft: '10%',
-            marginTop: '5%',
-            marginBottom: '5%',
-            marginRight: '5%',
-          }}>
-            <Typography variant="h6" gutterBottom>
-              Select Your Type Here
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-            Use this as a preset if you already know your type!
-            </Typography>
-            <Matrix onSelectType={handleMatrixSelectA} width={isMobile ? '60%' : '90%'}/>
-            <Box sx={{position:'relative', right:'50px'}} mt={2} display="flex" justifyContent="center">
-            <Button variant="contained" color="secondary" onClick={() => handleMatrixSelectA('XXXX')}>
-                I (don't) know my type!
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-      </Modal>
+      {/* Link Sharing component */}
+      <LinkSharing userAId={userAData.binId} userBId={userBData.binId} />
 
- {/* Modal for Matrix selection */}
- <Modal /*sx={{position: 'relative', top: '50px', left: '50px'}}*/ open={openTypeModalB} onClose={handleCloseTypeModalB}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            outline: 'none',
-            width: { xs: '90%', sm: '60%' },
-            borderRadius: '8px',
-          }}
-        >
-          <Box sx={{
-            marginLeft: '10%',
-            marginTop: '5%',
-            marginBottom: '5%',
-            marginRight: '5%',
-          }}>
-            <Typography variant="h6" gutterBottom>
-              Select Your Type Here
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-            Use this as a preset if you already know your type!
-            </Typography>
-            <Matrix onSelectType={handleMatrixSelectB} width={isMobile ? '60%' : '90%'}/>
-            <Box sx={{position:'relative', right:'50px'}} mt={2} display="flex" justifyContent="center">
-            <Button variant="contained" color="secondary" onClick={() => handleMatrixSelectB('XXXX')}>
-                I (don't) know my type!
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-      </Modal>
       {/* Premium Modal */}
       <PremiumModal
         open={premiumModalOpen}
         onClose={() => setPremiumModalOpen(false)}
-        title='Find out your compatibility now!'
-        description='for only €0.99 find out how compatible you are with your partner!'
+        title="Find out your compatibility now!"
+        description="For only €0.99, see how compatible you really are!"
         price={0.99}
         handlePaymentSuccess={handlePaymentSuccess}
       />
 
-      {/* Modals for Link Inputs */}
+      {/* Matrix Modals */}
+      <Modal open={openTypeModalA} onClose={handleCloseTypeModalA}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            outline: 'none',
+            width: { xs: '90%', sm: '60%' },
+            borderRadius: '8px',
+          }}
+        >
+          <Box sx={{ marginLeft: '10%', marginTop: '5%', marginBottom: '5%', marginRight: '5%' }}>
+            <Typography variant="h6" gutterBottom>
+              Select Your Type Here
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Use this as a preset if you already know your type!
+            </Typography>
+            <Matrix onSelectType={handleMatrixSelectA} width={isMobile ? '60%' : '90%'} />
+            <Box mt={2} display="flex" justifyContent="center">
+              <Button variant="contained" color="secondary" onClick={() => handleMatrixSelectA('XXXX')}>
+                I (don't) know my type!
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
+
+      <Modal open={openTypeModalB} onClose={handleCloseTypeModalB}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            outline: 'none',
+            width: { xs: '90%', sm: '60%' },
+            borderRadius: '8px',
+          }}
+        >
+          <Box sx={{ marginLeft: '10%', marginTop: '5%', marginBottom: '5%', marginRight: '5%' }}>
+            <Typography variant="h6" gutterBottom>
+              Select Your Type Here
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              Use this as a preset if you already know your type!
+            </Typography>
+            <Matrix onSelectType={handleMatrixSelectB} width={isMobile ? '60%' : '90%'} />
+            <Box mt={2} display="flex" justifyContent="center">
+              <Button variant="contained" color="secondary" onClick={() => handleMatrixSelectB('XXXX')}>
+                I (don't) know my type!
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
+
       {/* Modal for User A Link Input */}
       <Modal open={openModalA} onClose={handleCloseModalA}>
         <Box
@@ -971,7 +1099,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
           }}
         >
           <Typography variant="h6" gutterBottom>
-            Enter User A's Profile Link
+            Enter User A&apos;s Profile Link
           </Typography>
           <TextField
             fullWidth
@@ -1013,7 +1141,7 @@ const [userBData, setUserBData] = useState<BinData>(localStorage.getItem('binBDa
           }}
         >
           <Typography variant="h6" gutterBottom>
-            Enter User B's Profile Link
+            Enter User B&apos;s Profile Link
           </Typography>
           <TextField
             fullWidth

@@ -655,7 +655,7 @@ export const calculateAnswerCorrelation = (
  * @param userB - Bin data for User B.
  * @returns Compatibility score as a number between 0 and 100.
  */
-export const calculateCompatibilityScore = (userA: Bin, userB: Bin): number => {
+export const calculateCompatibilityScore = (userA: any, userB: any): number => {
   const traitCorr = pearsonCorrelationBigFive(Object.values(userA.bigFiveResponses), Object.values(userB.bigFiveResponses));
   const answerCorr = calculateAnswerCorrelation(userA.allResponses, userB.allResponses);
 

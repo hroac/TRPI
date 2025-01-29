@@ -71,8 +71,8 @@ interface BinData {
   userId?: string;
   binId?: string; // Optional, used for updates
 }
-type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
 
+// By default, everyone is at 0.5 for all Big Five traits
 const defaultTraits: BigFiveValues = {
   openness: 0.5,
   conscientiousness: 0.5,
@@ -80,6 +80,8 @@ const defaultTraits: BigFiveValues = {
   agreeableness: 0.5,
   neuroticism: 0.5,
 };
+
+type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
 
 const traitInfo: { label: Trait; icon: React.ReactNode; color: string }[] = [
   { label: 'Openness', icon: <EmojiObjectsIcon />, color: '#1E90FF' },
@@ -90,8 +92,7 @@ const traitInfo: { label: Trait; icon: React.ReactNode; color: string }[] = [
 ];
 
 /**
- * A small helper to fetch BinData by binId from JSONBin. 
- * If it fails for any reason, we return a default 0.5 profile.
+ * Attempts to fetch data from JSONBin given a binId. If it fails, we return default 0.5 data.
  */
 async function fetchBinDataById(binId: string): Promise<BinData> {
   try {
@@ -99,71 +100,69 @@ async function fetchBinDataById(binId: string): Promise<BinData> {
     return { ...binData, binId };
   } catch (error) {
     console.error('Error fetching bin:', error);
-    // Fallback: Return a default 0.5 profile
+    // fallback: return a default 0.5 profile
     return {
       type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
       primary4FType: determinePrimary4FType(defaultTraits),
       bigFiveResponses: { ...defaultTraits },
       binId,
-      allResponses: [], 
+      allResponses: [],
     };
   }
 }
 
 /**
- * A small link sharing component to generate a shareable URL
- * for userA / userB bins.
+ * A small link sharing component that generates a shareable URL for userA / userB bins.
+ * Opening that URL will automatically load the two user profiles.
  */
 const LinkSharing: React.FC<{
-  userAId?: string;
-  userBId?: string;
-}> = ({ userAId, userBId }) => {
-  // Construct a share link including bin IDs if they exist
-  const shareLink = `https://traumaindicator.com/#/check?r1=${userAId || ''}&r2=${userBId || ''}`;
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shareLink);
-      alert('Link copied to clipboard!');
-    } catch (error) {
-      console.error('Failed to copy text:', error);
-      alert('Unable to copy to clipboard.');
-    }
-  };
-
-  if(userAId && userBId) {
-  return (
-    <Paper sx={{ p: 2, width: "100%" }} elevation={3}>
-    <Box mt={3}>
-      <Typography variant="body1" gutterBottom>
-        Share this link with someone:
-      </Typography>
-      <Box display="flex" alignItems="center" gap={1}>
-        <TextField
-          variant="outlined"
-          size="small"
-          value={shareLink}
-          sx={{ width: '100%' }}
-          InputProps={{ readOnly: true }}
-        />
-        <Button variant="contained" onClick={copyToClipboard}>
-          Copy
-        </Button>
+    userAId?: string;
+    userBId?: string;
+  }> = ({ userAId, userBId }) => {
+    // Construct a share link including bin IDs if they exist
+    const shareLink = `https://traumaindicator.com/#/check?r1=${userAId || ''}&r2=${userBId || ''}`;
+  
+    const copyToClipboard = async () => {
+      try {
+        await navigator.clipboard.writeText(shareLink);
+        alert('Link copied to clipboard!');
+      } catch (error) {
+        console.error('Failed to copy text:', error);
+        alert('Unable to copy to clipboard.');
+      }
+    };
+  
+    if(userAId && userBId) {
+    return (
+      <Paper sx={{ p: 2, width: "100%" }} elevation={3}>
+      <Box mt={3}>
+        <Typography variant="body1" gutterBottom>
+          Share this with someone:
+        </Typography>
+        <Box display="flex" alignItems="center" gap={1}>
+          <TextField
+            variant="outlined"
+            size="small"
+            value={shareLink}
+            sx={{ width: '100%' }}
+            InputProps={{ readOnly: true }}
+          />
+          <Button variant="contained" onClick={copyToClipboard}>
+            Copy
+          </Button>
+        </Box>
       </Box>
-    </Box>
-    </Paper>
-  );
-}
-return <></>
-};
+      </Paper>
+    );
+  }
+  return <></>
+  };
 
 const TypeCompatibilityChecker: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  // -- State definitions --
-
-  // Holds the user A data
+  // -- States for user A and user B data
   const [userAData, setUserAData] = useState<BinData>(() => {
     // Attempt to load from localStorage
     const saved = localStorage.getItem('binAData');
@@ -171,14 +170,9 @@ const TypeCompatibilityChecker: React.FC = () => {
       try {
         return JSON.parse(saved);
       } catch (err) {
-        return {
-          primary4FType: determinePrimary4FType(defaultTraits),
-          type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
-          bigFiveResponses: { ...defaultTraits },
-        };
+        // fallback
       }
     }
-    // Otherwise default
     return {
       primary4FType: determinePrimary4FType(defaultTraits),
       type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
@@ -186,7 +180,6 @@ const TypeCompatibilityChecker: React.FC = () => {
     };
   });
 
-  // Holds the user B data
   const [userBData, setUserBData] = useState<BinData>(() => {
     // Attempt to load from localStorage
     const saved = localStorage.getItem('binBData');
@@ -194,14 +187,9 @@ const TypeCompatibilityChecker: React.FC = () => {
       try {
         return JSON.parse(saved);
       } catch (err) {
-        return {
-          primary4FType: determinePrimary4FType(defaultTraits),
-          type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
-          bigFiveResponses: { ...defaultTraits },
-        };
+        // fallback
       }
     }
-    // Otherwise default
     return {
       primary4FType: determinePrimary4FType(defaultTraits),
       type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
@@ -209,35 +197,37 @@ const TypeCompatibilityChecker: React.FC = () => {
     };
   });
 
-  // Modals for Link Inputs
+  // Modals for manually pasting links
   const [openModalA, setOpenModalA] = useState<boolean>(false);
-  const [openModalB, setOpenModalB] = useState<boolean>(false); 
+  const [openModalB, setOpenModalB] = useState<boolean>(false);
+
+  // Modals for matrix-based selection
   const [openTypeModalA, setOpenTypeModalA] = useState<boolean>(false);
   const [openTypeModalB, setOpenTypeModalB] = useState<boolean>(false);
 
-  // Link text fields
+  // The link text fields
   const [userALink, setUserALink] = useState<string>('');
   const [userBLink, setUserBLink] = useState<string>('');
 
-  // Errors & loading states
+  // Errors and loading states for link submission
   const [errorA, setErrorA] = useState<string>('');
   const [errorB, setErrorB] = useState<string>('');
   const [loadingA, setLoadingA] = useState<boolean>(false);
   const [loadingB, setLoadingB] = useState<boolean>(false);
 
-  // Compatibility Scores
+  // For display correlations
   const [traitCorrelation, setTraitCorrelation] = useState<number | null>(null);
   const [responseCorrelation, setResponseCorrelation] = useState<number | null>(null);
   const [compatibilityScore, setCompatibilityScore] = useState<number | null>(null);
 
-  // Usage Tracking
+  // Usage tracking / premium
   const [remainingUses, setRemainingUses] = useState<number>(getRemainingUses());
   const [premiumModalOpen, setPremiumModalOpen] = useState<boolean>(false);
 
-  // Current Stage for Navigation
+  // Stage navigation
   const [currentStage, setCurrentStage] = useState<number>(0);
 
-  // -- Modals open/close --
+  // -- Open/Close Handlers --
 
   const handleOpenModalA = () => setOpenModalA(true);
   const handleCloseModalA = () => {
@@ -263,71 +253,52 @@ const TypeCompatibilityChecker: React.FC = () => {
     setErrorB('');
   };
 
-  // -- Randomizing Big Five for demonstration --
-
+  // -- Utility: random 0..1 for each trait
   const setRandomlyA = () => {
-    const randomTraits: Record<Trait, number> = {
-      Openness: Math.floor(Math.random() * 100),
-      Conscientiousness: Math.floor(Math.random() * 100),
-      Extraversion: Math.floor(Math.random() * 100),
-      Agreeableness: Math.floor(Math.random() * 100),
-      Neuroticism: Math.floor(Math.random() * 100),
+    const randVal = () => Math.floor(Math.random() * 100) / 100;
+    const newTraits: BigFiveValues = {
+      openness: randVal(),
+      conscientiousness: randVal(),
+      extraversion: randVal(),
+      agreeableness: randVal(),
+      neuroticism: randVal(),
     };
-
-    const bigFiveData = {
-      openness: randomTraits.Openness / 100,
-      conscientiousness: randomTraits.Conscientiousness / 100,
-      extraversion: randomTraits.Extraversion / 100,
-      agreeableness: randomTraits.Agreeableness / 100,
-      neuroticism: randomTraits.Neuroticism / 100,
-    };
-    const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles);
-
+    const primary4FType = determinePrimary4FType(newTraits);
+    const newType = pearsonProfile(Object.values(newTraits), MBTIProfiles);
     setResponseCorrelation(null);
     setCompatibilityScore(null);
     setUserAData((prev) => ({
       ...prev,
-      primary4FType: primary4F,
-      bigFiveResponses: bigFiveData,
-      type: calculatedType.type,
+      bigFiveResponses: newTraits,
+      primary4FType,
+      type: newType.type,
     }));
   };
 
   const setRandomlyB = () => {
-    const randomTraits: Record<Trait, number> = {
-      Openness: Math.floor(Math.random() * 100),
-      Conscientiousness: Math.floor(Math.random() * 100),
-      Extraversion: Math.floor(Math.random() * 100),
-      Agreeableness: Math.floor(Math.random() * 100),
-      Neuroticism: Math.floor(Math.random() * 100),
+    const randVal = () => Math.floor(Math.random() * 100) / 100;
+    const newTraits: BigFiveValues = {
+      openness: randVal(),
+      conscientiousness: randVal(),
+      extraversion: randVal(),
+      agreeableness: randVal(),
+      neuroticism: randVal(),
     };
-
-    const bigFiveData = {
-      openness: randomTraits.Openness / 100,
-      conscientiousness: randomTraits.Conscientiousness / 100,
-      extraversion: randomTraits.Extraversion / 100,
-      agreeableness: randomTraits.Agreeableness / 100,
-      neuroticism: randomTraits.Neuroticism / 100,
-    };
-    const primary4F = determinePrimary4FType(bigFiveData);
-    const calculatedType = pearsonProfile(Object.values(bigFiveData), MBTIProfiles);
-
+    const primary4FType = determinePrimary4FType(newTraits);
+    const newType = pearsonProfile(Object.values(newTraits), MBTIProfiles);
     setResponseCorrelation(null);
     setCompatibilityScore(null);
     setUserBData((prev) => ({
       ...prev,
-      bigFiveResponses: bigFiveData,
-      primary4FType: primary4F,
-      type: calculatedType.type,
+      bigFiveResponses: newTraits,
+      primary4FType,
+      type: newType.type,
     }));
   };
 
-  // -- Handling the matrix selection modals --
-
+  // -- Matrix selection callbacks --
   const handleMatrixSelectA = (selected: string) => {
     if (selected === 'XXXX') {
-      // If they don't know their type, just close
       handleCloseTypeModalA();
       return;
     }
@@ -337,13 +308,12 @@ const TypeCompatibilityChecker: React.FC = () => {
     const profile = MBTIProfiles.find((p) => p.name === selected)?.traits;
     if (profile) {
       const primary4F = determinePrimary4FType(profile);
-      const calculatedType = pearsonProfile(Object.values(profile), MBTIProfiles);
-
+      const calcType = pearsonProfile(Object.values(profile), MBTIProfiles);
       setUserAData((prev) => ({
         ...prev,
         bigFiveResponses: profile,
         primary4FType: primary4F,
-        type: calculatedType.type,
+        type: calcType.type,
       }));
     }
     handleCloseTypeModalA();
@@ -351,7 +321,6 @@ const TypeCompatibilityChecker: React.FC = () => {
 
   const handleMatrixSelectB = (selected: string) => {
     if (selected === 'XXXX') {
-      // If they don't know their type, just close
       handleCloseTypeModalB();
       return;
     }
@@ -361,24 +330,20 @@ const TypeCompatibilityChecker: React.FC = () => {
     const profile = MBTIProfiles.find((p) => p.name === selected)?.traits;
     if (profile) {
       const primary4F = determinePrimary4FType(profile);
-      const calculatedType = pearsonProfile(Object.values(profile), MBTIProfiles);
-
+      const calcType = pearsonProfile(Object.values(profile), MBTIProfiles);
       setUserBData((prev) => ({
         ...prev,
         bigFiveResponses: profile,
         primary4FType: primary4F,
-        type: calculatedType.type,
+        type: calcType.type,
       }));
     }
     handleCloseTypeModalB();
   };
 
-  // -- Link submission logic (manually typed links in the modal) --
-
+  // -- Submit link (like the "link icon" approach) --
   const fetchDataByShareLink = async (link: string): Promise<BinData> => {
     // We expect the format: https://.../#/result/<binId>
-    // Or something similar. Example:
-    // const url = new URL(link).hash => "#/result/<binId>"
     try {
       const url = new URL(link);
       const hash = url.hash; // e.g., '#/result/abcd1234'
@@ -435,7 +400,6 @@ const TypeCompatibilityChecker: React.FC = () => {
   };
 
   // -- Payment logic --
-
   const checkPaymentRequirement = () => {
     if (needsPayment()) {
       setPremiumModalOpen(true);
@@ -449,26 +413,22 @@ const TypeCompatibilityChecker: React.FC = () => {
     alert('Payment successful! Your usage count has been reset.');
   };
 
-  // -- On mount, parse any ?r1=&r2= query params for shareable link usage. --
+  // -- On mount, parse ?r1= & ?r2= from the URL
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const r1 = searchParams.get('r1');
     const r2 = searchParams.get('r2');
 
-    // If there are NO query params, do nothing and use the local state
-    // If there ARE query params, fetch them from JSONBin.
-    // If something fails, fallback to the default 0.5 profile.
+    // If none, do nothing. 
+    // If we do have r1 / r2, it loads them from JSONBin as if user had used the link approach.
     const loadData = async () => {
       if (!r1 && !r2) {
-        // No params => just keep local storage as is
         return;
       }
-
-      // If we DO have some params, let's attempt to fetch from JSONBin
-      let newAData = { ...userAData };
-      let newBData = { ...userBData };
       try {
-        // If r1 is present, fetch user A from bin, else default
+        let newAData = { ...userAData };
+        let newBData = { ...userBData };
+
         if (r1) {
           newAData = await fetchBinDataById(r1);
         } else {
@@ -479,7 +439,7 @@ const TypeCompatibilityChecker: React.FC = () => {
             binId: 'defaultA',
           };
         }
-        // If r2 is present, fetch user B from bin, else default
+
         if (r2) {
           newBData = await fetchBinDataById(r2);
         } else {
@@ -490,11 +450,12 @@ const TypeCompatibilityChecker: React.FC = () => {
             binId: 'defaultB',
           };
         }
+
         setUserAData(newAData);
         setUserBData(newBData);
       } catch (err) {
-        // if something goes wrong, fallback to 0.5 each
         console.error('Error loading from query params:', err);
+        // fallback
         setUserAData({
           type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
           primary4FType: determinePrimary4FType(defaultTraits),
@@ -508,25 +469,25 @@ const TypeCompatibilityChecker: React.FC = () => {
       }
     };
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // -- Compute correlations whenever userAData or userBData changes --
+  // -- Whenever user A or B changes, recalc correlations
   useEffect(() => {
     if (userAData && userBData) {
       try {
-        // Trait correlation
+        // Big Five trait correlation
         const traitCorr = pearsonCorrelationBigFive(
           Object.values(userAData.bigFiveResponses || {}),
           Object.values(userBData.bigFiveResponses || {})
         );
         setTraitCorrelation(traitCorr);
 
+        // check allResponses
         const responsesA = userAData.allResponses || [];
         const responsesB = userBData.allResponses || [];
-
-        // Ensure both have the same # of responses
         if (responsesA.length !== responsesB.length || responsesA.length === 0) {
-          // If no valid responses or mismatch, skip
+          // skip if mismatch or empty
           setResponseCorrelation(null);
           setCompatibilityScore(null);
         } else {
@@ -542,7 +503,7 @@ const TypeCompatibilityChecker: React.FC = () => {
     }
   }, [userAData, userBData]);
 
-  // -- Prepare data for the carousel --
+  // Build slides if we have allResponses in both
   const prepareCarouselSlides = () => {
     if (
       !userAData ||
@@ -551,24 +512,16 @@ const TypeCompatibilityChecker: React.FC = () => {
       !userBData.allResponses ||
       userAData.allResponses.length === 0 ||
       userBData.allResponses.length === 0
-    ) {
+    )
       return [];
-    }
 
-    const questions = userAData.allResponses.map((response, idx) => {
+    return userAData.allResponses.map((response, idx) => {
       const statement = statements[idx];
       const subtextA = getSubtext(statement.trait, idx, response);
-      const subtextB = getSubtext(
-        statement.trait,
-        idx,
-        userBData.allResponses![idx]
-      );
-
-      // Calculate how close the answers are
+      const subtextB = getSubtext(statement.trait, idx, userBData.allResponses![idx]);
       const compatibilityPercent = Math.round(
         (1 - Math.abs(response - userBData.allResponses![idx])) * 100
       );
-
       return {
         question: statement.text,
         trait: statement.trait,
@@ -579,12 +532,10 @@ const TypeCompatibilityChecker: React.FC = () => {
         compatibilityPercent,
       };
     });
-    return questions;
   };
 
   const slides = prepareCarouselSlides();
 
-  // -- Stage navigation, if used (left in place for clarity) --
   const handleNextStage = () => {
     if (currentStage < stages.length - 1) {
       setCurrentStage(currentStage + 1);
@@ -597,6 +548,7 @@ const TypeCompatibilityChecker: React.FC = () => {
     }
   };
 
+  // get type display info
   const typeA = typesData.find((t) => t.type === userAData.type);
   const typeB = typesData.find((t) => t.type === userBData.type);
 
@@ -606,19 +558,19 @@ const TypeCompatibilityChecker: React.FC = () => {
         Type Comparator
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: '30px', color: 'text.secondary' }}>
-        Input the links to both users' profiles, select from known types, or manually adjust Big Five traits.
+        Input the links to both users' profiles, pick your known type, or manually adjust your Big Five traits.
       </Typography>
 
-      {/* Usage info */}
+      {/* Usage Info */}
       <Box mb={4}>
         <Typography variant="body2" color="text.secondary">
           Remaining Uses This Week: {remainingUses}
         </Typography>
       </Box>
 
-      {/* Row for A / B columns */}
+      {/* User A + User B columns */}
       <Grid container spacing={4} justifyContent="center">
-        {/* User A Section */}
+        {/* USER A */}
         <Grid item xs={12} sm={6}>
           <Paper elevation={3} sx={{ padding: '20px', borderRadius: '10px' }}>
             <Typography variant="h6" sx={{ fontWeight: '500' }}>
@@ -641,46 +593,51 @@ const TypeCompatibilityChecker: React.FC = () => {
                 </IconButton>
               </Box>
             </Box>
-
-            {/* Display A's traits */}
             <Box mt={2}>
               <Grid container spacing={4}>
                 {traitInfo.map(({ label, icon, color }) => {
-                  const val = userAData.bigFiveResponses[label.toLowerCase() as keyof BigFiveValues] * 100;
+                  const numericVal =
+                    userAData.bigFiveResponses[label.toLowerCase() as keyof BigFiveValues] * 100;
                   return (
                     <Grid item xs={12} key={label}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          marginBottom: '10px',
+                        }}
+                      >
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           {icon}
                           <Typography variant="h6" sx={{ marginLeft: '10px', fontWeight: '500', color }}>
                             {label}
                           </Typography>
                         </Box>
-                        <Tooltip title={`${val.toFixed(0)} %`} arrow>
+                        <Tooltip title={`${numericVal.toFixed(0)} %`} arrow>
                           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            {val.toFixed(0)}%
+                            {numericVal.toFixed(0)}%
                           </Typography>
                         </Tooltip>
                       </Box>
                       <Slider
-                        value={Math.round(val)}
+                        value={Math.round(numericVal)}
                         onChange={(e: any, newValue: number | number[]) => {
-                          const newVal = Array.isArray(newValue) ? newValue[0] : newValue;
+                          const updatedVal = Array.isArray(newValue) ? newValue[0] : newValue;
                           setUserAData((prev) => {
                             const bigFiveResponses = {
                               ...prev.bigFiveResponses,
-                              [label.toLowerCase()]: newVal / 100,
+                              [label.toLowerCase()]: updatedVal / 100,
                             };
-                            const primary4FType = determinePrimary4FType(bigFiveResponses);
+                            const primary4F = determinePrimary4FType(bigFiveResponses);
                             const newType = pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles);
-                            // reset correlation
                             setResponseCorrelation(null);
                             setCompatibilityScore(null);
                             return {
                               ...prev,
-                              type: newType.type,
-                              primary4FType,
                               bigFiveResponses,
+                              primary4FType: primary4F,
+                              type: newType.type,
                             };
                           });
                         }}
@@ -700,7 +657,7 @@ const TypeCompatibilityChecker: React.FC = () => {
               <Box display="flex" justifyContent="center" mt={2}>
                 <Tooltip title={typeA?.mode || ''}>
                   <Box
-                    bgcolor={typeA?.bgColor || '#777'}
+                    bgcolor={typeA?.bgColor || '#999'}
                     color="white"
                     p={isMobile ? 1 : 2}
                     textAlign="center"
@@ -716,7 +673,7 @@ const TypeCompatibilityChecker: React.FC = () => {
           </Paper>
         </Grid>
 
-        {/* User B Section */}
+        {/* USER B */}
         <Grid item xs={12} sm={6}>
           <Paper elevation={3} sx={{ padding: '20px', borderRadius: '10px' }}>
             <Typography variant="h6" sx={{ fontWeight: '500' }}>
@@ -739,46 +696,51 @@ const TypeCompatibilityChecker: React.FC = () => {
                 </IconButton>
               </Box>
             </Box>
-
-            {/* Display B's traits */}
             <Box mt={2}>
               <Grid container spacing={4}>
                 {traitInfo.map(({ label, icon, color }) => {
-                  const val = userBData.bigFiveResponses[label.toLowerCase() as keyof BigFiveValues] * 100;
+                  const numericVal =
+                    userBData.bigFiveResponses[label.toLowerCase() as keyof BigFiveValues] * 100;
                   return (
                     <Grid item xs={12} key={label}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          marginBottom: '10px',
+                        }}
+                      >
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           {icon}
                           <Typography variant="h6" sx={{ marginLeft: '10px', fontWeight: '500', color }}>
                             {label}
                           </Typography>
                         </Box>
-                        <Tooltip title={`${val.toFixed(0)} %`} arrow>
+                        <Tooltip title={`${numericVal.toFixed(0)} %`} arrow>
                           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            {val.toFixed(0)}%
+                            {numericVal.toFixed(0)}%
                           </Typography>
                         </Tooltip>
                       </Box>
                       <Slider
-                        value={Math.round(val)}
+                        value={Math.round(numericVal)}
                         onChange={(e: any, newValue: number | number[]) => {
-                          const newVal = Array.isArray(newValue) ? newValue[0] : newValue;
+                          const updatedVal = Array.isArray(newValue) ? newValue[0] : newValue;
                           setUserBData((prev) => {
                             const bigFiveResponses = {
                               ...prev.bigFiveResponses,
-                              [label.toLowerCase()]: newVal / 100,
+                              [label.toLowerCase()]: updatedVal / 100,
                             };
-                            const primary4FType = determinePrimary4FType(bigFiveResponses);
+                            const primary4F = determinePrimary4FType(bigFiveResponses);
                             const newType = pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles);
-                            // reset correlation
                             setResponseCorrelation(null);
                             setCompatibilityScore(null);
                             return {
                               ...prev,
-                              type: newType.type,
-                              primary4FType,
                               bigFiveResponses,
+                              primary4FType: primary4F,
+                              type: newType.type,
                             };
                           });
                         }}
@@ -798,7 +760,7 @@ const TypeCompatibilityChecker: React.FC = () => {
               <Box display="flex" justifyContent="center" mt={2}>
                 <Tooltip title={typeB?.mode || ''}>
                   <Box
-                    bgcolor={typeB?.bgColor || '#777'}
+                    bgcolor={typeB?.bgColor || '#999'}
                     color="white"
                     p={isMobile ? 1 : 2}
                     textAlign="center"
@@ -815,15 +777,14 @@ const TypeCompatibilityChecker: React.FC = () => {
         </Grid>
       </Grid>
 
-      {/* Compatibility section */}
+      {/* Compatibility Scores */}
       {(traitCorrelation !== null || responseCorrelation !== null) && (
         <Box mt={5}>
           <Paper elevation={3} sx={{ padding: '30px', borderRadius: '10px' }}>
             <Typography variant="h5" gutterBottom>
               Compatibility Scores
             </Typography>
-
-            {/* Big Five Traits Correlation */}
+            {/* Big Five Trait correlation */}
             {traitCorrelation !== null && (
               <Box mt={3}>
                 <Typography variant="h6">Big Five Traits Correlation</Typography>
@@ -863,7 +824,7 @@ const TypeCompatibilityChecker: React.FC = () => {
                 <Tooltip title={`Pearson Correlation: ${responseCorrelation.toFixed(2)}`} arrow>
                   <LinearProgress
                     variant="determinate"
-                    value={(responseCorrelation + 1) * 50} // [-1..1] => [0..100]
+                    value={(responseCorrelation + 1) * 50}
                     sx={{
                       height: '10px',
                       borderRadius: '5px',
@@ -889,7 +850,7 @@ const TypeCompatibilityChecker: React.FC = () => {
               </Box>
             )}
 
-            {/* Overall Compatibility Score */}
+            {/* Overall Compatibility */}
             {compatibilityScore !== null && (
               <Box mt={3}>
                 <Typography variant="h6">Overall Compatibility Score</Typography>
@@ -925,7 +886,7 @@ const TypeCompatibilityChecker: React.FC = () => {
         </Box>
       )}
 
-      {/* Carousel for response details */}
+      {/* Responses Comparison Carousel */}
       {slides.length > 0 && (
         <Paper sx={{ p: 2, width: '100%' }} elevation={3}>
           <Box mt={5}>
@@ -961,6 +922,7 @@ const TypeCompatibilityChecker: React.FC = () => {
                           )}
                         </Paper>
                       </Grid>
+
                       {/* Compatibility in the middle */}
                       <Grid item xs={2}>
                         <Box textAlign="center">
@@ -968,6 +930,7 @@ const TypeCompatibilityChecker: React.FC = () => {
                           <Typography variant="h6">{slide.compatibilityPercent}%</Typography>
                         </Box>
                       </Grid>
+
                       {/* User B's Answer */}
                       <Grid item xs={5}>
                         <Paper sx={{ p: 2 }}>
@@ -1007,10 +970,10 @@ const TypeCompatibilityChecker: React.FC = () => {
         </Paper>
       )}
 
-      {/* Link Sharing component */}
+      {/* Link Sharing: pass each user's binId */}
       <LinkSharing userAId={userAData.binId} userBId={userBData.binId} />
 
-      {/* Premium Modal */}
+      {/* Premium modal */}
       <PremiumModal
         open={premiumModalOpen}
         onClose={() => setPremiumModalOpen(false)}
@@ -1020,7 +983,7 @@ const TypeCompatibilityChecker: React.FC = () => {
         handlePaymentSuccess={handlePaymentSuccess}
       />
 
-      {/* Matrix Modals */}
+      {/* Modal for Type Selection: User A */}
       <Modal open={openTypeModalA} onClose={handleCloseTypeModalA}>
         <Box
           sx={{
@@ -1035,7 +998,7 @@ const TypeCompatibilityChecker: React.FC = () => {
             borderRadius: '8px',
           }}
         >
-          <Box sx={{ marginLeft: '10%', marginTop: '5%', marginBottom: '5%', marginRight: '5%' }}>
+          <Box sx={{ margin: '5% 10%' }}>
             <Typography variant="h6" gutterBottom>
               Select Your Type Here
             </Typography>
@@ -1052,6 +1015,7 @@ const TypeCompatibilityChecker: React.FC = () => {
         </Box>
       </Modal>
 
+      {/* Modal for Type Selection: User B */}
       <Modal open={openTypeModalB} onClose={handleCloseTypeModalB}>
         <Box
           sx={{
@@ -1066,7 +1030,7 @@ const TypeCompatibilityChecker: React.FC = () => {
             borderRadius: '8px',
           }}
         >
-          <Box sx={{ marginLeft: '10%', marginTop: '5%', marginBottom: '5%', marginRight: '5%' }}>
+          <Box sx={{ margin: '5% 10%' }}>
             <Typography variant="h6" gutterBottom>
               Select Your Type Here
             </Typography>

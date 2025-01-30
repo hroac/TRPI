@@ -21,9 +21,9 @@ export const MBTIProfiles = [
   {
       "name": "ENTP",
       "traits": {
-          "openness": 0.85,
+          "openness": 0.8,
           "conscientiousness": 0.55,
-          "extraversion": 0.8,
+          "extraversion": 0.75,
           "agreeableness": 0.45,
           "neuroticism": 0.35
       },
@@ -38,8 +38,8 @@ export const MBTIProfiles = [
       "traits": {
           "openness": 0.65,
           "conscientiousness": 0.6,
-          "extraversion": 0.85,
-          "agreeableness": 0.35,
+          "extraversion": 0.8,
+          "agreeableness": 0.4,
           "neuroticism": 0.5
       },
       "mode": "Fight",
@@ -51,9 +51,9 @@ export const MBTIProfiles = [
   {
       "name": "INTP",
       "traits": {
-          "openness": 0.7,
+          "openness": 0.6,
           "conscientiousness": 0.4,
-          "extraversion": 0.55,
+          "extraversion": 0.45,
           "agreeableness": 0.35,
           "neuroticism": 0.3
       },
@@ -83,7 +83,7 @@ export const MBTIProfiles = [
       "traits": {
           "openness": 0.75,
           "conscientiousness": 0.75,
-          "extraversion": 0.5,
+          "extraversion": 0.55,
           "agreeableness": 0.35,
           "neuroticism": 0.5
       },
@@ -97,9 +97,9 @@ export const MBTIProfiles = [
       "name": "ISTJ",
       "traits": {
           "openness": 0.4,
-          "conscientiousness": 0.65,
-          "extraversion": 0.4,
-          "agreeableness": 0.3,
+          "conscientiousness": 0.6,
+          "extraversion": 0.35,
+          "agreeableness": 0.35,
           "neuroticism": 0.45
       },
       "mode": "Freeze",
@@ -111,11 +111,11 @@ export const MBTIProfiles = [
   {
       "name": "ENTJ",
       "traits": {
-          "openness": 0.65,
+          "openness": 0.7,
           "conscientiousness": 0.9,
-          "extraversion": 0.65,
-          "agreeableness": 0.35,
-          "neuroticism": 0.35
+          "extraversion": 0.75,
+          "agreeableness": 0.4,
+          "neuroticism": 0.3
       },
       "mode": "Freeze",
       "gold": "ISTP",
@@ -142,7 +142,7 @@ export const MBTIProfiles = [
       "name": "ISFJ",
       "traits": {
           "openness": 0.45,
-          "conscientiousness": 0.65,
+          "conscientiousness": 0.55,
           "extraversion": 0.35,
           "agreeableness": 0.75,
           "neuroticism": 0.65
@@ -160,7 +160,7 @@ export const MBTIProfiles = [
           "conscientiousness": 0.6,
           "extraversion": 0.5,
           "agreeableness": 0.8,
-          "neuroticism": 0.65
+          "neuroticism": 0.7
       },
       "mode": "Fawn",
       "gold": "ENTP",
@@ -171,10 +171,10 @@ export const MBTIProfiles = [
   {
       "name": "ESFJ",
       "traits": {
-          "openness": 0.4,
-          "conscientiousness": 0.6,
-          "extraversion": 0.6,
-          "agreeableness": 0.8,
+          "openness": 0.5,
+          "conscientiousness": 0.65,
+          "extraversion": 0.55,
+          "agreeableness": 0.75,
           "neuroticism": 0.4
       },
       "mode": "Fawn",
@@ -186,7 +186,7 @@ export const MBTIProfiles = [
   {
       "name": "ENFJ",
       "traits": {
-          "openness": 0.7,
+          "openness": 0.75,
           "conscientiousness": 0.75,
           "extraversion": 0.8,
           "agreeableness": 0.9,
@@ -203,7 +203,7 @@ export const MBTIProfiles = [
       "traits": {
           "openness": 0.6,
           "conscientiousness": 0.55,
-          "extraversion": 0.75,
+          "extraversion": 0.6,
           "agreeableness": 0.6,
           "neuroticism": 0.65
       },
@@ -216,7 +216,7 @@ export const MBTIProfiles = [
   {
       "name": "ENFP",
       "traits": {
-          "openness": 0.9,
+          "openness": 0.8,
           "conscientiousness": 0.55,
           "extraversion": 0.6,
           "agreeableness": 0.6,
@@ -246,8 +246,8 @@ export const MBTIProfiles = [
   {
       "name": "INFP",
       "traits": {
-          "openness": 0.65,
-          "conscientiousness": 0.5,
+          "openness": 0.55,
+          "conscientiousness": 0.45,
           "extraversion": 0.4,
           "agreeableness": 0.6,
           "neuroticism": 0.9

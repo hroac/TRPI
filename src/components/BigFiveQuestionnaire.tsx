@@ -223,6 +223,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const handleNext = () => {
     //console.log('current stage first: ', currentStage )
     //console.log('isCurrentStage: ', currentStage, lastStage);
+    window.scrollTo(0, 0);
     if (currentStage < stages.length - 1) {
       setCurrentStage(currentStage + 1);
       localStorage.setItem('stage', (currentStage + 1).toString());
@@ -249,6 +250,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   };
 
   const handleBack = () => {
+    window.scrollTo(0, 0);
     if (currentStage > 0) {
       setCurrentStage(currentStage - 1);
       //localStorage.setItem('stage', (currentStage - 1).toString());

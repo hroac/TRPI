@@ -312,7 +312,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
         </Box>
 
         <Typography variant="body1" sx={{ marginBottom: '30px', color: 'text.secondary' }}>
-          Adjust the sliders to reflect your personality on each Big Five trait. These values help us determine your unique MBTI profile.
+          Adjust the sliders to reflect your personality on each Big Five trait. These values help us determine your unique profile.
         </Typography>
 
         <Grid container spacing={4}>

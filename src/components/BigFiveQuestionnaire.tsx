@@ -125,6 +125,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
    }, {} as { [trait: string]: number[] }));
    localStorage.removeItem('responses');
    localStorage.removeItem('stage');
+   localStorage.removeItem('lastStage');
 
    }
 
@@ -476,7 +477,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         <Button onClick={handleBack} disabled={currentStage === 0}>
           Back
         </Button>
-        {lastStage >= 2 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
+        {lastStage >= 6 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
           <Tooltip title={`${type.mode} \n ${(accuracy).toFixed(1)}%`}>
             <Box
               bgcolor={type.bgColor}

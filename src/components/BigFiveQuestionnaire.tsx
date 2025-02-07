@@ -325,7 +325,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           () => profile[trait as keyof typeof profile]
         );
       }); */
-      setResponses(updatedResponses);
+      setResponses({...responses, ...updatedResponses});
       //setLastStage(0)
 
       const primary4F = determinePrimary4FType(profile);

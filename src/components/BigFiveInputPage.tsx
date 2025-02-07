@@ -147,6 +147,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
 
   const [mbtiType, setMbtiType] = useState<string | null>(null);
   const [accuracy, setAccuracy] = useState<number>(0);
+  const [list, setList] = useState<Record<any, any>>({})
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
   const theme = useTheme();
@@ -169,7 +170,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
 
   const getSubtext = (trait: string, value: number) => {
     const statement = traitInfo.filter((s) => { 
-      console.log(s.label === trait, s.label, trait)
+//console.log(s.label === trait, s.label, trait)
       return s.label === trait})[0];
     if (!statement) return null;
 
@@ -202,6 +203,8 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       const calculatedType = matchMBTI(bigFiveData)// calculateMbtiType(bigFiveData, primary4F, true);
       setMbtiType(calculatedType.type);
       setAccuracy((calculatedType.scores as any)[calculatedType.type].score);
+      setList(calculatedType.scores)
+      console.log(calculatedType);
       return updatedTraits;
     });
   };
@@ -289,6 +292,8 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       mbtiType: calculatedType.type,
       primary4F,
       accuracy,
+      list,
+
     });
     navigate(`/result/${binId}`);
   };

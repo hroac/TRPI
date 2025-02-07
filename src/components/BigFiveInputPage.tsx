@@ -146,6 +146,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
   });
 
   const [mbtiType, setMbtiType] = useState<string | null>(null);
+  const [accuracy, setAccuracy] = useState<number>(0);
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
   const theme = useTheme();
@@ -200,6 +201,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       const primary4F = determinePrimary4FType(bigFiveData);
       const calculatedType = matchMBTI(bigFiveData)// calculateMbtiType(bigFiveData, primary4F, true);
       setMbtiType(calculatedType.type);
+      setAccuracy((calculatedType.scores as any)[calculatedType.type].score);
       return updatedTraits;
     });
   };
@@ -226,6 +228,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
     const primary4F = determinePrimary4FType(bigFiveData);
     const calculatedType = matchMBTI(bigFiveData)//calculateMbtiType(bigFiveData, primary4F, true);
     setMbtiType(calculatedType.type);
+    setAccuracy((calculatedType.scores as any)[calculatedType.type].score);
   };
 
   // Handle selection from matrix modal
@@ -233,6 +236,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
     console.log('Selected Type:', selected);
     setSelectedMbtiType(selected);
 
+    setAccuracy(100);
     if (selected === 'XXXX') {
       // User doesn't know their type
       //setMbtiType('XXXX');
@@ -284,6 +288,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
       selectedMbtiType: selectedMbtiType,
       mbtiType: calculatedType.type,
       primary4F,
+      accuracy,
     });
     navigate(`/result/${binId}`);
   };
@@ -356,6 +361,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
         {/* Display the currently matched MBTI type, if available */}
         {mbtiType && currentTypeData && (
           <Grid container spacing={1} justifyContent={'center'} marginTop={5}>
+            <Tooltip title={`${currentTypeData.mode} \n ${(accuracy).toFixed(1)}%`}>
             <Box
               bgcolor={currentTypeData.bgColor}
               color="white"
@@ -369,6 +375,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
             >
               <Typography variant="subtitle1">{currentTypeData.type}</Typography>
             </Box>
+            </Tooltip>
           </Grid>
         )}
        

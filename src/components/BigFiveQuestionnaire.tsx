@@ -96,6 +96,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [primary4FType, setPrimary4FType] = useState<string | null>(null);
   const [matchedMBTIType, setMatchedMBTIType] = useState<string | null>(null);
   const [accuracy, setAccuracy] = useState<number>(0);
+  const [list, setList] = useState<Record<any, any>>([]);
   const [matchedType, setMatchedType] = useState<string | null>(null);
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
@@ -161,6 +162,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     setPrimary4FType(primary4F);
     setMatchedMBTIType(mbtiType.type);
     setAccuracy((mbtiType.scores as any)[mbtiType.type].score);
+      setList(mbtiType.scores);
     setMatchedType(type);
   }
 
@@ -209,11 +211,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
        const type = matchMBTI(weightedScores)
         const sub = getSubtext(trait, index, value as number);
 
-        console.log(`type: ${type.type} ${(type.scores as any)[type.type]}`);
+        console.log(`type: ${type.type} ${JSON.stringify((type.scores as any)[type.type])}`);
         setSelectedStatement(sub)
         setPrimary4FType(primary4F);
         setMatchedMBTIType(mbtiType.type);
         setAccuracy((mbtiType.scores as any)[mbtiType.type].score);
+      setList(mbtiType.scores);
         setMatchedType(type.type);
 
         localStorage.setItem('responses', JSON.stringify(updatedResponses))
@@ -280,7 +283,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     localStorage.setItem(guid(), JSON.stringify(newJson));
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: Object.values(responses).flat()});
+    localStorage.removeItem('lastStage');
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: Object.values(responses).flat(), accuracy, list});
     navigate(`/result/${binId}`);
   };
 
@@ -332,6 +336,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       setPrimary4FType(primary4F);
       setMatchedMBTIType(mbtiType.type);
       setAccuracy((mbtiType.scores as any)[mbtiType.type].score);
+      setList(mbtiType.scores);
       setMatchedType(typeNo4F.type);
     } else {
       setPrimary4FType(null);

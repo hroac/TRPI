@@ -68,6 +68,8 @@ function App() {
             bigFiveResponses: responses.profile,
             description: responses.description || '',
             allResponses: responses.responses || [],
+            accuracy: responses.accuracy || 0,
+            list: responses.list || {},
         });
         setBinId(binId);
         localStorage.setItem('binId', binId); // Store the bin ID under 'userId'

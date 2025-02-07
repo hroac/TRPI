@@ -143,7 +143,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
     )
   }
 
-  const { type, bigFiveResponses, primary4FType, description, allResponses } = bin;
+  const { type, bigFiveResponses, primary4FType, description, allResponses, accuracy } = bin;
   //const mbtiType = type && typesData.find((t: any) => t.type === type);
 
   const data = {
@@ -192,7 +192,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
 
       <Box display={'flex'} justifyContent={'center'} mt={3}>
       <Typography variant="h5" gutterBottom>
-        TRPI Test Results - {primary4FType} - {type}  
+        TRPI Test Results - {primary4FType} - {type} - {accuracy ? `${accuracy.toFixed(1)}%` : ''}  
       </Typography>
       </Box>
       <Box display={'flex'} justifyContent={'flex-end'}>

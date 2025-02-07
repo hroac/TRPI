@@ -234,11 +234,7 @@ const AboutPage: React.FC<{
           autoHeight: true,
         }}
       />
- {
-      Object.keys(list).length > 0 && (
-        <Ranking data={list}/>
-      )
-     }
+
       {/* Stereotype and Reality */}
       <Box mt={5}>
         <Grid container spacing={4}>
@@ -287,6 +283,11 @@ const AboutPage: React.FC<{
         </Grid>
       </Box>
 
+      {
+      Object.keys(list).length > 0 && (
+        <Ranking data={list}/>
+      )
+     }
       {/* Related Types */}
       <Box mt={5}>
         <RelatedTypesBox type={type || mbtiType || ''} />

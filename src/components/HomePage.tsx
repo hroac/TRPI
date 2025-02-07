@@ -247,7 +247,7 @@ const COLLECTION_ID = "678e2e23ad19ca34f8f154c5";
           justifyContent: 'center' 
         }}>
 
-      <Carousel slides={slides} settings={{autoheight: false}}/>
+      <Carousel slides={slides} settings={{autoHeight: false}}/>
         
       </Grid>
       

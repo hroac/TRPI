@@ -231,6 +231,7 @@ const AboutPage: React.FC<{
           slidesPerView: 1,
           autoplay: { delay: 2000 },
           loop: true,
+          autoHeight: true,
         }}
       />
  {

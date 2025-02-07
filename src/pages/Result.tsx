@@ -195,7 +195,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
         TRPI Test Results - {primary4FType} - {type} - {accuracy ? `${accuracy.toFixed(1)}%` : ''}  
       </Typography>
       </Box>
-      <Box display={'flex'} justifyContent={'flex-end'}>
+      <Box display={'flex'} justifyContent={'flex-end'} position={'relative'} top={isMobile ? -85 : -50}>
             <RatingComponent
               bin={bin}
               userId={guid()}

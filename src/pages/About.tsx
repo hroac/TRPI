@@ -26,6 +26,7 @@ import JsonBinApi from '../utils/saveResults';
 import QuestionnaireModal from '../components/QuestionnaireModal';
 import { generateProfileAnalysis } from '../utils/profileGenerator';
 import { guid } from '../utils/guid';
+import Ranking from '../components/Ranking';
 
 const AboutPage: React.FC<{
   bin?: any,
@@ -33,8 +34,9 @@ const AboutPage: React.FC<{
   showBigFive?: boolean;
   description?: string;
   allResponses?: any;
+  list?: Record<any, any>;
   handleReloadBin?: () => void;
-}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = [], handleReloadBin = null }) => {
+}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = [], list={}, handleReloadBin = null }) => {
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t) => t.type === type || t.type === mbtiType);
   const profile = MBTIProfiles.find((p) => p.name === type || p.name === mbtiType);
@@ -220,7 +222,7 @@ const AboutPage: React.FC<{
           )}
         </CardContent>
       </Card>
-
+    
       {/* Carousel */}
       <Carousel
         slides={slides}
@@ -231,7 +233,11 @@ const AboutPage: React.FC<{
           loop: true,
         }}
       />
-
+ {
+      Object.keys(list).length > 0 && (
+        <Ranking data={list}/>
+      )
+     }
       {/* Stereotype and Reality */}
       <Box mt={5}>
         <Grid container spacing={4}>

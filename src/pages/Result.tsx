@@ -143,7 +143,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
     )
   }
 
-  const { type, bigFiveResponses, primary4FType, description, allResponses, accuracy } = bin;
+  const { type, bigFiveResponses, primary4FType, description, allResponses, accuracy, list } = bin;
   //const mbtiType = type && typesData.find((t: any) => t.type === type);
 
   const data = {
@@ -205,7 +205,7 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
       <Box my={3}>
         <Bar data={data} options={options} />
       </Box>
-      {type && <AboutPage bin={bin} mbtiType={type} showBigFive={false} description={description} allResponses={allResponses}  handleReloadBin={() => setDate(new Date())}/>}
+      {type && <AboutPage bin={bin} mbtiType={type} showBigFive={false} description={description} allResponses={allResponses} list={list} handleReloadBin={() => setDate(new Date())}/>}
      
     </Paper>
   );

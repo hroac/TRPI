@@ -15,6 +15,7 @@ interface CarouselProps {
 
 // Default Swiper settings
 const defaultSettings = {
+  autoHeight: true,
   spaceBetween: 50,
   slidesPerView: 1,
   autoplay: { delay: 3000 },

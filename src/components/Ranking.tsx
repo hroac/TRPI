@@ -64,7 +64,7 @@ const Ranking: React.FC<RankingProps> = ({ data }) => {
         return (
           <Box key={item.type} sx={{ marginBottom: 3 }}>
             <Typography variant="h6" gutterBottom>
-              {index + 1}. {item.type} (Score: {item.score.toFixed(2)})
+              {index + 1}. {item.type} ({item.score.toFixed(2)}%)
             </Typography>
             <LinearProgress
               variant="determinate"

@@ -363,6 +363,13 @@ const TypeCompatibilityChecker: React.FC = () => {
   const handleSubmitA = async () => {
     setLoadingA(true);
     setErrorA('');
+
+    if(remainingUses < 1) {
+      handleCloseModalA();
+      checkPaymentRequirement();
+      setLoadingA(false);
+      return;
+    }
     try {
       const data = await fetchDataByShareLink(userALink);
       setUserAData(data);
@@ -383,6 +390,13 @@ const TypeCompatibilityChecker: React.FC = () => {
   const handleSubmitB = async () => {
     setLoadingB(true);
     setErrorB('');
+
+    if(remainingUses < 1) {
+      handleCloseModalA();
+      checkPaymentRequirement();
+      setLoadingB(false);
+      return;
+    }
     try {
       const data = await fetchDataByShareLink(userBLink);
       setUserBData(data);

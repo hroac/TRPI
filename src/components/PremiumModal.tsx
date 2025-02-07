@@ -22,10 +22,22 @@ interface PremiumModalProps {
   handlePaymentSuccess: (paymentData: any) => void;
   title: string,
   description: string
-  price: number
+  price: number,
+  blockClose?: boolean
 }
 
-const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymentSuccess, title, description, price }) => {
+const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymentSuccess, title, description, price, blockClose = false }) => {
+  const handleModalClose = (
+    event: {},
+    reason?: 'backdropClick' | 'escapeKeyDown'
+  ) => {
+    if (blockClose && reason === 'backdropClick' || reason === 'escapeKeyDown') {
+      // Prevent closing the modal if the user clicks outside or presses Esc.
+      return;
+    }
+    onClose();
+  };
+
   const processPayment = async (paymentData: any) => {
     const stripe = await stripePromise;
     if (stripe) {
@@ -48,7 +60,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose, handlePaymen
   };
 
   return (
-    <Modal open={open} onClose={onClose} aria-labelledby="premium-modal-title" aria-describedby="premium-modal-description">
+    <Modal open={open} onClose={handleModalClose} aria-labelledby="premium-modal-title" aria-describedby="premium-modal-description">
       <Box
         sx={{
           position: 'absolute',

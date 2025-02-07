@@ -44,10 +44,7 @@ const Ranking: React.FC<RankingProps> = ({ data }) => {
   const minScore = Math.min(...topItems.map(item => item.score));
   const scoreRange = maxScore - minScore;
 
-  const getNormalizedValue = (score: number): number => {
-    if (scoreRange === 0) return 0;
-    return ((score - minScore) / scoreRange) * 100;
-  };
+
 
   // Predefined colors for the top 5 items
   const barColors = ['#1976d2', '#dc004e', '#2e7d32', '#ed6c02', '#8e24aa'];
@@ -58,7 +55,6 @@ const Ranking: React.FC<RankingProps> = ({ data }) => {
             Closest types
         </Typography>
       {topItems.map((item, index) => {
-        const normalizedValue = getNormalizedValue(item.score);
         const barColor = barColors[index % barColors.length];
 
         return (

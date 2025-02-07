@@ -26,9 +26,11 @@ const Ranking: React.FC<RankingProps> = ({ data }) => {
   const items: RankingItem[] = Object.values(data);
 
   // Identify the most accurate type based on the highest correlation
-  const mostAccurate = items.reduce((prev, current) =>
+/*   const mostAccurate = items.reduce((prev, current) =>
     current.details.correlation > prev.details.correlation ? current : prev
-  );
+  ); */
+
+  const mostAccurate = Object.values(items)[0]
 
   // Filter out the most accurate type
   const filteredItems = items.filter(item => item.type !== mostAccurate.type);
@@ -37,7 +39,8 @@ const Ranking: React.FC<RankingProps> = ({ data }) => {
   const sortedItems = filteredItems.sort((a, b) => b.score - a.score);
 
   // Limit to the top 5 items
-  const topItems = sortedItems.slice(0, 5);
+  const topItems = sortedItems.slice(0, 5).filter(item => item.type !== mostAccurate.type);
+
 
   // Normalize the score values among the top items for a 0-100 range
   const maxScore = Math.max(...topItems.map(item => item.score));

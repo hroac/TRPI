@@ -133,7 +133,7 @@ export const typesData: any[] = [
       "silver": "ESFP",
       "gold": "ESTP",
       "bronze": "INTJ",
-      "quote": "I preserve the home, so others always have a place to return to.",
+      "quote": "I preserve the past, so others always have a place to return to.",
       "description": "ISFJ (Si > Fe) - Fawn Mode, The Defender: ISFJs are caring and attentive, with a strong sense of responsibility toward others' well-being. Known for their warm demeanor and commitment to helping, they often take on supportive roles within their communities. ISFJs value harmony and stability, making them highly dependable and attentive to others' needs. However, their preference for routine and concern for others can sometimes lead them to avoid conflict or neglect their own needs. In \"Fawn\" mode, the focus turns to appeasing perceived threats by emphasizing harmony and emotional connection. ISFJs become hyper-aware of others' needs, working tirelessly to maintain peace and stability, sometimes at the expense of their own well-being.",
       "strengths": [
         "Caring",

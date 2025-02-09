@@ -234,7 +234,7 @@ export const MBTIProfiles = [
           "openness": 0.5,
           "conscientiousness": 0.45,
           "extraversion": 0.4,
-          "agreeableness": 0.5,
+          "agreeableness": 0.45,
           "neuroticism": 0.7
       },
       "mode": "Flight",

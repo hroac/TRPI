@@ -355,7 +355,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         </Typography>
         {isMobile ? (
           <Stack>
-            {currentStage > lastStage && lastStage !== 1 && (
+            {currentStage < lastStage && lastStage !== 1 && (
               <IconButton onClick={window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal} color='primary'>
               <LockOpenIcon/>
             </IconButton>

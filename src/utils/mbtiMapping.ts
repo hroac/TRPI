@@ -966,8 +966,7 @@ export const statements = [
       '90-100': { text: 'I always base my decisions on facts, completely setting aside my feelings.', weight: 1.0 
       }
     }
-  }
-  
+  },
   
   {
     text: 'I tend to stay calm and assertive when solving problems.',

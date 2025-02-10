@@ -941,38 +941,49 @@ export const statements = [
   },
   
   {
-    text: 'I tend to make decisions based on logic rather than emotions.',
+    text: 'I tend to make decisions based on facts rather than feelings.',
     trait: 'conscientiousness',
     weight: 1.3,
     subtext: {
-      '0-10': { text: 'I rarely rely on logic when making decisions.', weight: 0.1 },
-      '10-20': { text: 'I occasionally make logical decisions but often consider emotions.', weight: 0.2 },
-      '20-30': { text: 'I sometimes prioritize logic over emotions in decisions.', weight: 0.3 },
-      '30-40': { text: 'I moderately rely on logic when deciding.', weight: 0.4 },
-      '40-50': { text: 'I fairly often make decisions based on logic.', weight: 0.5 },
-      '50-60': { text: 'I frequently prioritize logic over emotions.', weight: 0.6 },
-      '60-70': { text: 'I regularly rely on logical reasoning in decisions.', weight: 0.7 },
-      '70-80': { text: 'I strongly favor logic over emotions in decision-making.', weight: 0.8 },
-      '80-90': { text: 'I am highly focused on making logical decisions.', weight: 0.9 },
-      '90-100': { text: 'I always make decisions rooted in logical reasoning.', weight: 1.0 },
+      '0-10': { text: 'I almost always make decisions based on my feelings, rarely relying on facts.', weight: 0.1 
+      },
+      '10-20': { text: 'I mostly decide using my emotions, with little consideration for facts.', weight: 0.2 
+      },
+      '20-30': { text: 'I sometimes consider facts, but my feelings usually guide my choices.',  weight: 0.3 
+      },
+      '30-40': { text: 'I occasionally let facts influence my decisions, though feelings tend to dominate.',  weight: 0.4 
+      },
+      '40-50': { text: 'I try to balance facts and feelings when making decisions.', weight: 0.5 
+      },
+      '50-60': { text: 'I usually lean toward basing my decisions on facts, even though emotions still play a role.', weight: 0.6 
+      },
+      '60-70': { text: 'I frequently base my decisions on facts rather than on my feelings.', weight: 0.7 
+      },
+      '70-80': { text: 'I consistently prioritize facts in my decision-making, with minimal influence from emotions.', weight: 0.8 
+      },
+      '80-90': { text: 'I almost always rely on facts when making decisions, rarely letting feelings interfere.', weight: 0.9 
+      },
+      '90-100': { text: 'I always base my decisions on facts, completely setting aside my feelings.', weight: 1.0 
+      }
     }
-  },
+  }
+  
   
   {
-    text: 'I tend to stay calm and assertive when solving challenges.',
+    text: 'I tend to stay calm and assertive when solving problems.',
     trait: 'extraversion',
     weight: 1.3,
     subtext: {
-      '0-10': { text: 'I rarely stay calm or assertive when facing challenges.', weight: 0.1 },
+      '0-10': { text: 'I rarely stay calm or assertive when facing problems.', weight: 0.1 },
       '10-20': { text: 'I occasionally remain calm but struggle with assertiveness.', weight: 0.2 },
       '20-30': { text: 'I sometimes stay calm and assertive in difficult situations.', weight: 0.3 },
       '30-40': { text: 'I moderately stay calm and focused under pressure.', weight: 0.4 },
-      '40-50': { text: 'I fairly often maintain calm and assertiveness when solving challenges.', weight: 0.5 },
+      '40-50': { text: 'I fairly often maintain calm and assertiveness when solving problems.', weight: 0.5 },
       '50-60': { text: 'I frequently stay calm and assertive under stress.', weight: 0.6 },
       '60-70': { text: 'I regularly remain calm and focused when solving problems.', weight: 0.7 },
-      '70-80': { text: 'I strongly stay composed and assertive in challenges.', weight: 0.8 },
+      '70-80': { text: 'I strongly stay composed and assertive when faced with problems.', weight: 0.8 },
       '80-90': { text: 'I am highly calm and assertive under pressure.', weight: 0.9 },
-      '90-100': { text: 'I always stay calm, composed, and assertive when facing challenges.', weight: 1.0 },
+      '90-100': { text: 'I always stay calm, composed, and assertive when facing problems.', weight: 1.0 },
     }
   },
   {

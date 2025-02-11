@@ -2,7 +2,9 @@ import axios from 'axios';
 import { guid } from './guid';
 
 const API_KEY = '$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG';
-const COLLECTION_ID = '6666e443acd3cb34a8556706'; // Collection ID
+const COLLECTION_ID_TRPI = '6666e443acd3cb34a8556706';
+const COLLECTION_ID_BIGFIVE = '67ab305cad19ca34f8ff62b6';
+ // Collection ID
 
 class JsonBinApi {
     // Method to save results to JSONBin and add to the specified collection, returning the bin ID
@@ -22,7 +24,7 @@ class JsonBinApi {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Master-Key': API_KEY,
-                        'X-Collection-Id': COLLECTION_ID,
+                        'X-Collection-Id': state.allResponses.length ? COLLECTION_ID_TRPI : COLLECTION_ID_BIGFIVE,
                         'X-Bin-Name': state.type,
                     },
                 }
@@ -53,7 +55,7 @@ class JsonBinApi {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Master-Key': API_KEY,
-                        'X-Collection-Id': COLLECTION_ID,
+                        'X-Collection-Id': state.allResponses.length ? COLLECTION_ID_TRPI : COLLECTION_ID_BIGFIVE,
                         'X-Bin-Name': state.type,
                     },
                 }
@@ -70,7 +72,7 @@ class JsonBinApi {
 
     // Method to retrieve all bins in a specific collection
     static async getBinsInCollection() {
-        const url = `https://api.jsonbin.io/v3/c/${COLLECTION_ID}/bins`;
+        const url = `https://api.jsonbin.io/v3/c/${COLLECTION_ID_TRPI}/bins`;
 
         try {
             const response = await axios.get(url, {

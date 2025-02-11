@@ -981,7 +981,7 @@ export const statements = [
       '10-20': { text: 'I occasionally remain calm but struggle with assertiveness.', weight: 0.2 },
       '20-30': { text: 'I sometimes stay calm and assertive in difficult situations.', weight: 0.3 },
       '30-40': { text: 'I moderately stay calm and focused under pressure.', weight: 0.4 },
-      '40-50': { text: 'I fairly often maintain calm and assertiveness when solving problems.', weight: 0.5 },
+      '40-50': { text: 'I fairly often maintain calm and assertive when solving problems.', weight: 0.5 },
       '50-60': { text: 'I frequently stay calm and assertive under stress.', weight: 0.6 },
       '60-70': { text: 'I regularly remain calm and focused when solving problems.', weight: 0.7 },
       '70-80': { text: 'I strongly stay composed and assertive when faced with problems.', weight: 0.8 },

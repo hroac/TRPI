@@ -317,7 +317,7 @@ export const weightedEuclideanDistance = (profile: any, traits: any, weights: an
 export const determinePrimary4FType = (profile: any): string => {
   // 1. Filter by modeTraitExclusions
 
-  const fourF = MBTIProfiles.find(profile => profile.name === matchMBTI(profile).type)?.mode;
+  const fourF = MBTIProfiles.find(p => p.name === matchMBTI(profile).type)?.mode;
   if(fourF) return fourF;
    
   const validModes = Object.keys(modeTraitExclusions).filter((mode) =>

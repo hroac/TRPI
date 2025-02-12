@@ -652,6 +652,70 @@ export const calculateAnswerCorrelation = (
   return pearsonCorrelation(userAResponses, userBResponses);
 };
 
+
+
+/**
+ * For traits where similarity is desired (openness, conscientiousness, agreeableness).
+ * Returns a value between 0 and 1, where 1 is identical.
+ */
+function calculateTraitSimilarity(scoreA: number, scoreB: number): number {
+  return 1 - Math.abs(scoreA - scoreB);
+}
+
+/**
+ * For extraversion, we desire a moderate difference.
+ * We'll use a triangular function that peaks at an optimal difference (optDiff) of 0.2:
+ * - If the difference is 0, the score is 0.
+ * - If the difference equals 0.2, the score is 1.
+ * - If the difference is 0.4 or greater, the score falls back to 0.
+ * For differences between 0 and 0.2 and between 0.2 and 0.4, the score is linearly interpolated.
+ */
+function calculateExtraversionScore(scoreA: number, scoreB: number): number {
+  const diff = Math.abs(scoreA - scoreB);
+  const optDiff = 0.2;
+  const maxDiff = 0.4;
+
+  if (diff <= optDiff) {
+    // Rising linear portion from 0 (when diff=0) to 1 (when diff=optDiff)
+    return diff / optDiff;
+  } else if (diff > optDiff && diff <= maxDiff) {
+    // Falling linear portion from 1 (when diff=optDiff) to 0 (when diff=maxDiff)
+    return (maxDiff - diff) / (maxDiff - optDiff);
+  } else {
+    return 0;
+  }
+}
+
+/**
+ * For neuroticism we desire complementarity.
+ * A simple continuous function is to use the absolute difference.
+ * (A higher difference indicates that one partner is high and the other low.)
+ */
+function calculateNeuroticismScore(scoreA: number, scoreB: number): number {
+  return Math.abs(scoreA - scoreB);
+}
+
+/**
+ * Calculates overall compatibility (0–1 scale) by averaging the individual trait scores.
+ */
+export function calculateCompatibilityScore(profileA: any, profileB: any): number {
+  const opennessScore = calculateTraitSimilarity(profileA.bigFiveResponses.openness, profileB.bigFiveResponses.openness);
+  const conscientiousnessScore = calculateTraitSimilarity(profileA.bigFiveResponses.conscientiousness, profileB.bigFiveResponses.conscientiousness);
+  const extraversionScore = calculateExtraversionScore(profileA.bigFiveResponses.extraversion, profileB.bigFiveResponses.extraversion);
+  const agreeablenessScore = calculateTraitSimilarity(profileA.bigFiveResponses.agreeableness, profileB.bigFiveResponses.agreeableness);
+  const neuroticismScore = calculateNeuroticismScore(profileA.bigFiveResponses.neuroticism, profileB.bigFiveResponses.neuroticism);
+
+  const overallScore = (
+    opennessScore +
+    conscientiousnessScore +
+    extraversionScore +
+    agreeablenessScore +
+    neuroticismScore
+  ) / 5;
+
+  return overallScore * 100;
+}
+
 /**
  * Calculates the overall compatibility score between two users.
  * Combines trait correlation and answer correlation.
@@ -659,7 +723,7 @@ export const calculateAnswerCorrelation = (
  * @param userB - Bin data for User B.
  * @returns Compatibility score as a number between 0 and 100.
  */
-export const calculateCompatibilityScore = (userA: any, userB: any): number => {
+/* export const calculateCompatibilityScore = (userA: any, userB: any): number => {
   const traitCorr = pearsonCorrelationBigFive(Object.values(userA.bigFiveResponses), Object.values(userB.bigFiveResponses));
   const answerCorr = calculateAnswerCorrelation(userA.allResponses, userB.allResponses);
 
@@ -672,7 +736,7 @@ export const calculateCompatibilityScore = (userA: any, userB: any): number => {
 
   return compatibility;
 };
-
+ */
 export const getSubtext = (trait: string, index: number, value: number) => {
   const statement = statements[index];
   if (!statement) return null;

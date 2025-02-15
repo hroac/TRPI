@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Box, Typography, Divider } from '@mui/material';
+import { Container, Box, Typography, Divider, Link } from '@mui/material';
 
 const TermsOfService: React.FC = () => {
   return (
@@ -71,7 +71,7 @@ const TermsOfService: React.FC = () => {
           7. Contact Information
         </Typography>
         <Typography paragraph>
-          If you have any questions or concerns regarding these Terms, please contact us at support@traumaindicator.com.
+          If you have any questions or concerns regarding these Terms, please contact using the provided <Link href="/#/contact" color="inherit" underline="hover">contact form.</Link>.
         </Typography>
       </Box>
     </Container>

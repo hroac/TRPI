@@ -6,7 +6,7 @@ import Contact from './pages/Contact';
 import Header from './components/Header';
 import { Box, Container, ThemeProvider, Typography } from '@mui/material';
 import pastelTheme from './styles/theme';
-import JsonBinApi from './utils/saveResults';
+import JsonBinApi from './utils/jsonBin';
 import BigFiveQuestionnaire from './components/BigFiveQuestionnaire';
 import ResultsPage from './pages/Result';
 import BigFiveInputPage from './components/BigFiveInputPage';
@@ -26,6 +26,7 @@ import Sources from './pages/Sources';
 import path from 'path';
 import Reviews from './pages/Reviews';
 import TypeComparator from './components/TypeComparator';
+import Scheduler from './pages/Scheduler';
 
 const AppHelmet: React.FC = () => (
   <Helmet>
@@ -124,6 +125,7 @@ function App() {
                             <Route path='/reviews' element={<Reviews/>} />
                             <Route path='/check/:r1/:r2'  element={<TypeComparator/>} />
                             <Route path='/check'  element={<TypeComparator/>} />
+                            <Route path='/scheduler' element={<Scheduler/>} />
                         </Routes>
                         <Box position={'relative'} top={225}>
                         <Footer />

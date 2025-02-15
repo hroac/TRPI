@@ -22,7 +22,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import Carousel from '../components/Carousel';
 import PremiumModal from '../components/PremiumModal';
-import JsonBinApi from '../utils/saveResults';
+import JsonBinApi from '../utils/jsonBin';
 import QuestionnaireModal from '../components/QuestionnaireModal';
 import { generateProfileAnalysis } from '../utils/profileGenerator';
 import { guid } from '../utils/guid';

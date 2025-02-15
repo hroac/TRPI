@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Typography, Box, Grid, Button, useTheme, useMediaQuery } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import JsonBinApi from '../utils/saveResults';
+import JsonBinApi from '../utils/jsonBin';
 import AboutPage from './About';
 import { typesData } from '../utils/typesData';
 import { useParams } from 'react-router-dom';

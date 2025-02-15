@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Box, Tooltip, styled, Typography, Grid } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import JsonBinApi from '../utils/saveResults';
+import JsonBinApi from '../utils/jsonBin';
 
 interface RatingProps {
   bin: any;

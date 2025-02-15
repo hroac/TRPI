@@ -4,7 +4,7 @@ import { Typography, Button, Grid, Box, Container, List, ListItem, Paper, ListIt
 import Carousel from '../components/Carousel';
 import Matrix from './Matrix';
 import { Link } from 'react-router-dom';
-import JsonBinApi from '../utils/saveResults';
+import JsonBinApi from '../utils/jsonBin';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 

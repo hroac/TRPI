@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { guid } from "../utils/guid";
-import JsonBinApi from "../utils/saveResults";
+import JsonBinApi from "../utils/jsonBin";
 
 const API_KEY = "$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG";
 const COLLECTION_ID = "678e2e23ad19ca34f8f154c5";

@@ -44,7 +44,7 @@ const ADMIN_CALENDAR_ID = 'rsk.rook@gmail.com';
 const GOOGLE_CLIENT_ID = '356497060674-ndjka8l1iod2obja36djpah0fckmaot9.apps.googleusercontent.com';
 const RATE_PER_INTERVAL = 29.95; // per 30 minutes
 
-const Scheduler: React.FC = () => {
+const Calendar: React.FC = () => {
   const theme = useTheme();
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -259,7 +259,7 @@ const Scheduler: React.FC = () => {
         </style>
         <Box sx={{ p: 2 }}>
           <Typography variant="h4" gutterBottom textAlign="center">
-            Scheduler
+            Calendar
           </Typography>
 
           {!currentUser && (
@@ -386,4 +386,4 @@ const Scheduler: React.FC = () => {
   );
 };
 
-export default Scheduler;
+export default Calendar;

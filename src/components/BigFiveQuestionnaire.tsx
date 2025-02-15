@@ -355,7 +355,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         </Typography>
         {isMobile ? (
           <Stack>
-            {currentStage < lastStage && lastStage !== 1 && (
+            {currentStage < lastStage && (
               <IconButton onClick={window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal} color='primary'>
               <LockOpenIcon/>
             </IconButton>
@@ -372,7 +372,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         </Stack>
         ) : (
           <Grid spacing={4}>
-            {currentStage < lastStage && lastStage !== 1 && (
+            {currentStage < lastStage && (
               <IconButton onClick={(window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal)} color='primary'>
               <LockOpenIcon/>
             </IconButton>

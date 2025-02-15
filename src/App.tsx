@@ -27,6 +27,7 @@ import path from 'path';
 import Reviews from './pages/Reviews';
 import TypeComparator from './components/TypeComparator';
 import Scheduler from './pages/Scheduler';
+import TermsOfService from './pages/Terms';
 
 const AppHelmet: React.FC = () => (
   <Helmet>
@@ -126,6 +127,7 @@ function App() {
                             <Route path='/check/:r1/:r2'  element={<TypeComparator/>} />
                             <Route path='/check'  element={<TypeComparator/>} />
                             <Route path='/scheduler' element={<Scheduler/>} />
+                            <Route path='/terms' element={<TermsOfService/>} />
                         </Routes>
                         <Box position={'relative'} top={225}>
                         <Footer />

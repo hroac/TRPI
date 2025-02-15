@@ -51,6 +51,7 @@ const Footer: React.FC = () => {
               <Link href="/#/about" color="inherit" underline="hover">About</Link>
               <Link href="/#/services" color="inherit" underline="hover">Services</Link>
               <Link href="/#/contact" color="inherit" underline="hover">Contact Us</Link>
+              <Link href="/#/terms" color="inherit" underline="hover">Terms of Service</Link>
               <Link href="/#/privacy-policy" color="inherit" underline="hover">Privacy Policy</Link>
             </Box>
           </Grid>

@@ -100,7 +100,7 @@ const TRPIExplanation: React.FC = () => {
     </Typography>
     <Typography variant="body2" paragraph>
       <strong>Extraversion:</strong> Tied to the <em>Fight</em> response, Extraversion drives assertiveness and action.
-      - High Extraversion correlates with external logic and rapid problem-solving (<em>Ti</em>).
+      - High Extraversion correlates with internal logic and rapid problem-solving (<em>Ti</em>).
     </Typography>
     <Typography variant="body2" paragraph>
       <strong>Agreeableness:</strong> Related to the <em>Fawn</em> response, it emphasizes social harmony and collaboration.

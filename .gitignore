@@ -18,3 +18,4 @@ src/utils/weighted_comprehensive_results.json
 src/utils/weighted_results.json
 src/utils/bins-2024-12-20.json
 src/utils/pearson.js
+src/utils/4f.js

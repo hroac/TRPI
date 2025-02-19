@@ -23,7 +23,7 @@ import LanguageDetect from "languagedetect";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 // Example MBTI logic
-import { MBTIProfiles, pearsonProfile, processProfile } from "../utils/mbtiMapping";
+import { matchMBTI, MBTIProfiles, pearsonProfile, processProfile } from "../utils/mbtiMapping";
 import ScrollToTop from "../utils/ScrollToTop";
 import { statements, stages } from '../utils/mbtiMapping';
 import { useNavigate } from "react-router-dom";
@@ -288,8 +288,9 @@ ${statements
       // Use your MBTI logic
       delete parsed.description;
       const { primary4F, mbtiType } = processProfile(parsed);
-      const type = pearsonProfile(Object.values(bigFive || {}), MBTIProfiles)
-      setPrimary4F(primary4F);
+      const type = matchMBTI(Object.values(bigFive || {}))
+      const profile = MBTIProfiles.find(profile => profile.name === type.type)
+      setPrimary4F(profile?.mode || primary4F);
       setMbtiType(type.type);
 
       // Optionally call onComplete if you want to store or forward results

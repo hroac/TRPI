@@ -4,7 +4,7 @@ import App from './App';
 
 // Import any global CSS or assets here
 import './styles/index.css';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -13,4 +13,4 @@ root.render(
   </React.StrictMode>
 );
 
-serviceWorkerRegistration
+serviceWorkerRegistration()

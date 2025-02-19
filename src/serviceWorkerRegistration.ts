@@ -1,6 +1,7 @@
 // src/serviceWorkerRegistration.ts
 
-if ('serviceWorker' in navigator) {
+function serviceWorkerRegistration() {
+  if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/service-worker.js')
         .then(registration => {
@@ -11,6 +12,8 @@ if ('serviceWorker' in navigator) {
         });
     });
   }
+}
+
   
-  export {};
+  export default serviceWorkerRegistration;
   

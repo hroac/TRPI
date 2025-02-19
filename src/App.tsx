@@ -96,7 +96,7 @@ function App() {
                             { label: 'Take the test', path: '/test' },
                             { label: 'Result', path: `/result/${binId || ''}` },
                             { label: 'Big Five Input', path: '/input' },
-                            { label: 'Type Comparator', path: '/check' },
+                            { label: 'Type Comparator', path: '/compare' },
                             {label:  'ChatGPT', path: '/talk'},
                             {label:  'Sources', path: '/sources'},
                             { label: 'Reviews', path: '/reviews'},
@@ -126,7 +126,7 @@ function App() {
                             <Route path='/sources' element={<Sources/>} />
                             <Route path='/reviews' element={<Reviews/>} />
                             <Route path='/check/:r1/:r2'  element={<TypeComparator/>} />
-                            <Route path='/check'  element={<TypeComparator/>} />
+                            <Route path='/compare'  element={<TypeComparator/>} />
                             <Route path='/scheduler' element={<Scheduler/>} />
                             <Route path='/terms' element={<TermsOfService/>} />
                         </Routes>

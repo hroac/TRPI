@@ -28,6 +28,7 @@ import {
   pearsonProfile,
   calculateTraitCorrelation,
   pearsonCorrelationBigFive,
+  matchMBTI,
 } from '../utils/mbtiMapping';
 import {
   determinePrimary4FType,
@@ -102,9 +103,11 @@ async function fetchBinDataById(binId: string): Promise<BinData> {
   } catch (error) {
     console.error('Error fetching bin:', error);
     // fallback: return a default 0.5 profile
+    const type = matchMBTI(defaultTraits);
+    const profile = MBTIProfiles.find(profile => profile.name === type.type) || MBTIProfiles[0];
     return {
-      type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
-      primary4FType: determinePrimary4FType(defaultTraits),
+      type: type.type,
+      primary4FType: profile.mode,
       bigFiveResponses: { ...defaultTraits },
       binId,
       allResponses: [],
@@ -174,9 +177,12 @@ const TypeCompatibilityChecker: React.FC = () => {
         // fallback
       }
     }
+    const type =  matchMBTI(defaultTraits);
+    const profile = MBTIProfiles.find(profile => profile.name === type.type) || MBTIProfiles[0];
+
     return {
-      primary4FType: determinePrimary4FType(defaultTraits),
-      type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+      primary4FType: profile.mode,
+      type: type.type,
       bigFiveResponses: { ...defaultTraits },
     };
   });
@@ -191,9 +197,11 @@ const TypeCompatibilityChecker: React.FC = () => {
         // fallback
       }
     }
+    const type = matchMBTI(defaultTraits);
+    const profile = MBTIProfiles.find(profile => profile.name === type.type) || MBTIProfiles[0];
     return {
-      primary4FType: determinePrimary4FType(defaultTraits),
-      type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
+      primary4FType: profile.mode,
+      type: type.type,
       bigFiveResponses: { ...defaultTraits },
     };
   });
@@ -264,14 +272,14 @@ const TypeCompatibilityChecker: React.FC = () => {
       agreeableness: randVal(),
       neuroticism: randVal(),
     };
-    const primary4FType = determinePrimary4FType(newTraits);
-    const newType = pearsonProfile(Object.values(newTraits), MBTIProfiles);
+    const newType = matchMBTI(newTraits);
+    const profile = MBTIProfiles.find(profile => profile.name === newType.type) || MBTIProfiles[0];
     setResponseCorrelation(null);
     setCompatibilityScore(null);
     setUserAData((prev) => ({
       ...prev,
       bigFiveResponses: newTraits,
-      primary4FType,
+      primary4FType: profile.mode,
       type: newType.type,
     }));
   };
@@ -285,14 +293,14 @@ const TypeCompatibilityChecker: React.FC = () => {
       agreeableness: randVal(),
       neuroticism: randVal(),
     };
-    const primary4FType = determinePrimary4FType(newTraits);
-    const newType = pearsonProfile(Object.values(newTraits), MBTIProfiles);
+    const newType = matchMBTI(newTraits);
+    const profile = MBTIProfiles.find(profile => profile.name === newType.type) || MBTIProfiles[0];
     setResponseCorrelation(null);
     setCompatibilityScore(null);
     setUserBData((prev) => ({
       ...prev,
       bigFiveResponses: newTraits,
-      primary4FType,
+      primary4FType: profile.mode,
       type: newType.type,
     }));
   };
@@ -308,12 +316,12 @@ const TypeCompatibilityChecker: React.FC = () => {
 
     const profile = MBTIProfiles.find((p) => p.name === selected)?.traits;
     if (profile) {
-      const primary4F = determinePrimary4FType(profile);
-      const calcType = pearsonProfile(Object.values(profile), MBTIProfiles);
+      const calcType = matchMBTI(profile);
+    const fourF = MBTIProfiles.find(profile => profile.name === calcType.type) || MBTIProfiles[0];
       setUserAData((prev) => ({
         ...prev,
         bigFiveResponses: profile,
-        primary4FType: primary4F,
+        primary4FType: fourF.mode,
         type: calcType.type,
       }));
     }
@@ -330,12 +338,13 @@ const TypeCompatibilityChecker: React.FC = () => {
 
     const profile = MBTIProfiles.find((p) => p.name === selected)?.traits;
     if (profile) {
-      const primary4F = determinePrimary4FType(profile);
-      const calcType = pearsonProfile(Object.values(profile), MBTIProfiles);
+      
+      const calcType = matchMBTI(profile);
+      const fourF = MBTIProfiles.find(profile => profile.name === calcType.type) || MBTIProfiles[0];
       setUserBData((prev) => ({
         ...prev,
         bigFiveResponses: profile,
-        primary4FType: primary4F,
+        primary4FType: fourF.mode,
         type: calcType.type,
       }));
     }
@@ -447,9 +456,11 @@ const TypeCompatibilityChecker: React.FC = () => {
         if (r1) {
           newAData = await fetchBinDataById(r1);
         } else {
+          const type = matchMBTI(defaultTraits)
+          const profile = MBTIProfiles.find(profile => profile.name === type.type) || MBTIProfiles[0];
           newAData = {
-            type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
-            primary4FType: determinePrimary4FType(defaultTraits),
+            type: type.type,
+            primary4FType: profile.mode,
             bigFiveResponses: { ...defaultTraits },
             binId: 'defaultA',
           };
@@ -458,9 +469,11 @@ const TypeCompatibilityChecker: React.FC = () => {
         if (r2) {
           newBData = await fetchBinDataById(r2);
         } else {
+          const type = matchMBTI(defaultTraits)
+          const profile = MBTIProfiles.find(profile => profile.name === type.type) || MBTIProfiles[0];
           newBData = {
-            type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
-            primary4FType: determinePrimary4FType(defaultTraits),
+            type: type.type,
+            primary4FType: profile.mode,
             bigFiveResponses: { ...defaultTraits },
             binId: 'defaultB',
           };
@@ -471,14 +484,16 @@ const TypeCompatibilityChecker: React.FC = () => {
       } catch (err) {
         console.error('Error loading from query params:', err);
         // fallback
+        const type = matchMBTI(defaultTraits)
+        const profile = MBTIProfiles.find(profile => profile.name === type.type) || MBTIProfiles[0];
         setUserAData({
-          type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
-          primary4FType: determinePrimary4FType(defaultTraits),
+          type: type.type,
+          primary4FType: profile.mode,
           bigFiveResponses: { ...defaultTraits },
         });
         setUserBData({
-          type: pearsonProfile(Object.values(defaultTraits), MBTIProfiles).type,
-          primary4FType: determinePrimary4FType(defaultTraits),
+          type: type.type,
+          primary4FType: profile.mode,
           bigFiveResponses: { ...defaultTraits },
         });
       }
@@ -655,14 +670,14 @@ const TypeCompatibilityChecker: React.FC = () => {
                               ...prev.bigFiveResponses,
                               [label.toLowerCase()]: updatedVal / 100,
                             };
-                            const primary4F = determinePrimary4FType(bigFiveResponses);
-                            const newType = pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles);
+                            const newType = matchMBTI(bigFiveResponses);
+                            const profile = MBTIProfiles.find(profile => profile.name === newType.type) || MBTIProfiles[0];
                             setResponseCorrelation(null);
                             setCompatibilityScore(null);
                             return {
                               ...prev,
                               bigFiveResponses,
-                              primary4FType: primary4F,
+                              primary4FType: profile.mode,
                               type: newType.type,
                             };
                           });
@@ -758,14 +773,14 @@ const TypeCompatibilityChecker: React.FC = () => {
                               ...prev.bigFiveResponses,
                               [label.toLowerCase()]: updatedVal / 100,
                             };
-                            const primary4F = determinePrimary4FType(bigFiveResponses);
-                            const newType = pearsonProfile(Object.values(bigFiveResponses), MBTIProfiles);
+                            const newType = matchMBTI(bigFiveResponses);
+                            const profile = MBTIProfiles.find(profile => profile.name === newType.type) || MBTIProfiles[0];
                             setResponseCorrelation(null);
                             setCompatibilityScore(null);
                             return {
                               ...prev,
                               bigFiveResponses,
-                              primary4FType: primary4F,
+                              primary4FType: profile.mode,
                               type: newType.type,
                             };
                           });
@@ -928,7 +943,9 @@ const TypeCompatibilityChecker: React.FC = () => {
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}
                       <Grid item xs={5}>
-                        <Paper sx={{ p: 2 }}>
+                        {typeof slide.userAResponse !== "string"
+                        ? (
+                          <Paper sx={{ p: 2 }}>
                           <Typography variant="subtitle1" gutterBottom>
                             User A
                           </Typography>
@@ -946,19 +963,35 @@ const TypeCompatibilityChecker: React.FC = () => {
                             </Typography>
                           )}
                         </Paper>
+                        )
+                        : (
+<Paper sx={{ p: 2 }}>
+                          <Typography variant="subtitle1" gutterBottom>
+                            User A
+                          </Typography>
+                          <Typography variant="body2">
+                            {(slide.userAResponse as string).slice(0, (slide.userAResponse as string).indexOf('.') || 100)}
+                          </Typography>
+                        
+                        </Paper>
+                        )
+                      }
                       </Grid>
 
                       {/* Compatibility in the middle */}
                       <Grid item xs={2}>
-                        <Box textAlign="center">
+                        {slide.compatibilityPercent && (
+                          <Box textAlign="center">
                           <Typography variant="body2">Compatibility</Typography>
-                          <Typography variant="h6">{slide.compatibilityPercent}%</Typography>
+                          <Typography variant="h6">{slide.compatibilityPercent || 0}%</Typography>
                         </Box>
+                        )}
                       </Grid>
 
                       {/* User B's Answer */}
                       <Grid item xs={5}>
-                        <Paper sx={{ p: 2 }}>
+                        { typeof slide.userBResponse !== "string" ? (
+                          <Paper sx={{ p: 2 }}>
                           <Typography variant="subtitle1" gutterBottom>
                             User B
                           </Typography>
@@ -976,6 +1009,18 @@ const TypeCompatibilityChecker: React.FC = () => {
                             </Typography>
                           )}
                         </Paper>
+                        ) : (
+<Paper sx={{ p: 2 }}>
+                          <Typography variant="subtitle1" gutterBottom>
+                            User B
+                          </Typography>
+                          <Typography variant="body2">
+                            {slide.userBResponse}
+                          </Typography>
+                        
+                        </Paper>
+                        )
+                        }
                       </Grid>
                     </Grid>
                 </Box>
@@ -990,7 +1035,9 @@ const TypeCompatibilityChecker: React.FC = () => {
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}
                       <Grid item xs={5}>
-                        <Paper sx={{ p: 2 }}>
+                        {
+                           typeof item.userAResponse !== 'string' ? (
+                            <Paper sx={{ p: 2 }}>
                           <Typography variant="subtitle1" gutterBottom>
                             User A
                           </Typography>
@@ -1008,18 +1055,31 @@ const TypeCompatibilityChecker: React.FC = () => {
                             </Typography>
                           )}
                         </Paper>
+                           ) : (
+<Paper sx={{ p: 2 }}>
+                          <Typography variant="subtitle1" gutterBottom>
+                            User A
+                          </Typography>
+                          <Typography variant="body2">
+                            {(item.userAResponse as string).slice(0, (item.userAResponse as string).indexOf(".") || 100)}
+                          </Typography>
+                        </Paper>
+                           )
+                        }
                       </Grid>
 
                       {/* Compatibility in the middle */}
                       <Grid item xs={2}>
                         <Box textAlign="center">
                           <Typography variant="body2">Compatibility</Typography>
-                          <Typography variant="h6">{item.compatibilityPercent}%</Typography>
+                          <Typography variant="h6">{item.compatibilityPercent || 0}%</Typography>
                         </Box>
                       </Grid>
 
                       {/* User B's Answer */}
                       <Grid item xs={5}>
+                        {
+                          typeof item.userBResponse !== "string" ? (
                         <Paper sx={{ p: 2 }}>
                           <Typography variant="subtitle1" gutterBottom>
                             User B
@@ -1038,6 +1098,17 @@ const TypeCompatibilityChecker: React.FC = () => {
                             </Typography>
                           )}
                         </Paper>
+                          ) : (
+                            <Paper sx={{ p: 2 }}>
+                            <Typography variant="subtitle1" gutterBottom>
+                              User B
+                            </Typography>
+                            <Typography variant="body2">
+                              {(item.userBResponse as unknown as string).slice(0, (item.userBResponse as unknown as string).indexOf(".") || 100)}
+                            </Typography>
+                          </Paper>
+                          )
+                        }
                       </Grid>
                     </Grid>
                     </Box>

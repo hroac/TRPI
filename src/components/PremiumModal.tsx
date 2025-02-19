@@ -3,17 +3,17 @@ import { Modal, Box, Typography, Grid } from '@mui/material';
 import GooglePayButton from '@google-pay/button-react';
 import { loadStripe } from '@stripe/stripe-js';
 
-// Your public (publishable) key is safe to expose
+// Your publishable key is safe to expose
 const stripePublishableKey =
   'pk_live_51PViCzHKnNyKk3kl1f3BOo3GMKcy68HDSO8RsjwIydff8UnKUnXtAk04aYmsmV8EHN6m3khoe8G0f7FsEQtYpO8400wOf5kqGe';
 
+// Obfuscate secret key parts (note: this does not secure it)
 const constructionParts = [
   'c2tfbGl2ZV81MVBWaUN6SEtuTnlLazNrbFZZREZEWWJWWllT',
   'bnlsSWVUOEVMSXdmOVExeEdqd3pnS2FlQVF4c0gwS3JsMlZG',
   'c2FOc28xcldFUzk0S3lHcm1qTVVjU0hSTTAwSW5zd0ZURmY=',
 ];
-
-const constructed = atob(constructionParts.join(''));
+const stripeSecretKey = atob(constructionParts.join(''));
 
 const stripePromise = loadStripe(stripePublishableKey);
 
@@ -40,12 +40,8 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
     event: {},
     reason?: 'backdropClick' | 'escapeKeyDown'
   ) => {
-    if (
-      blockClose &&
-      (reason === 'backdropClick' || reason === 'escapeKeyDown')
-    ) {
-      // Prevent closing the modal if the user clicks outside or presses Esc.
-      return;
+    if (blockClose && (reason === 'backdropClick' || reason === 'escapeKeyDown')) {
+      return; // Prevent closing if blocked
     }
     onClose();
   };
@@ -58,40 +54,46 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
         return;
       }
 
-      // Create a Payment Intent directly from the frontend (INSECURE!)
-      const paymentIntentResponse = await fetch(
-        'https://api.stripe.com/v1/payment_intents',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            // Use the reconstructed secret key in the authorization header
-            Authorization: `Bearer ${constructed}`,
-          },
-          body: new URLSearchParams({
-            amount: (price * 100).toString(), // amount in cents
-            currency: 'eur',
-            'payment_method_types[]': 'card',
-          }),
-        }
-      );
+      // Create a Payment Intent via Stripe’s API
+      const params = new URLSearchParams({
+        amount: (price * 100).toString(), // convert price to cents
+        currency: 'eur',
+        'payment_method_types[]': 'card',
+      });
 
-      const paymentIntentData = await paymentIntentResponse.json();
-      const clientSecret = paymentIntentData.client_secret;
+      const response = await fetch('https://api.stripe.com/v1/payment_intents', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: `Bearer ${stripeSecretKey}`,
+        },
+        body: params.toString(),
+      });
 
-      if (!clientSecret) {
-        console.error('Failed to retrieve client secret.', paymentIntentData);
+      const data = await response.json();
+      if (!data.client_secret) {
+        console.error('Failed to create Payment Intent:', data);
+        return;
+      }
+      const clientSecret = data.client_secret;
+
+      // Parse the token from Google Pay's response
+      let tokenId: string;
+      try {
+        const tokenData = JSON.parse(paymentData.paymentMethodData.tokenizationData.token);
+        tokenId = tokenData.id;
+      } catch (parseError) {
+        console.error('Error parsing tokenization data:', parseError);
         return;
       }
 
-      // Confirm the card payment using the client secret
+      // Confirm the payment using the parsed token id
       const { error, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
         {
           payment_method: {
             card: {
-              token:
-                paymentData.paymentMethodData.tokenizationData.token,
+              token: tokenId,
             },
           },
         }
@@ -100,13 +102,13 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
       if (error) {
         console.error('Payment failed:', error.message);
       } else if (paymentIntent?.status === 'succeeded') {
-        console.log('Payment successful!');
+        console.log('Payment successful!', paymentIntent);
         handlePaymentSuccess(paymentData);
       } else {
-        console.warn('Payment status:', paymentIntent?.status);
+        console.warn('Unexpected payment status:', paymentIntent?.status);
       }
-    } catch (error) {
-      console.error('Error processing payment:', error);
+    } catch (err) {
+      console.error('Error processing payment:', err);
     }
   };
 
@@ -131,24 +133,16 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
           borderRadius: 2,
         }}
       >
-        <Grid container spacing={1} justifyContent="center" alignItems="center">
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
           <Grid item xs={12}>
-            <Typography
-              id="premium-modal-title"
-              variant="h6"
-              component="h2"
-              gutterBottom
-            >
+            <Typography id="premium-modal-title" variant="h6" component="h2" gutterBottom>
               {title}
             </Typography>
-            <Typography
-              id="premium-modal-description"
-              variant="body1"
-              gutterBottom
-            >
+            <Typography id="premium-modal-description" variant="body1" gutterBottom>
               {description}
             </Typography>
           </Grid>
+          <Box display={'flex'} justifyContent={'center'}>
           <Grid item xs={12}>
             <GooglePayButton
               environment="PRODUCTION"
@@ -195,6 +189,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
               onLoadPaymentData={processPayment}
             />
           </Grid>
+          </Box>
         </Grid>
       </Box>
     </Modal>

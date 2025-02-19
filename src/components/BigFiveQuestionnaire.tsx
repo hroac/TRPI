@@ -280,7 +280,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       primary4FType: primary4F,
       bigFiveResponses: weightedScores,
     }
-    localStorage.setItem(guid(), JSON.stringify(newJson));
+   
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');

@@ -63,6 +63,7 @@ function App() {
     const handleComplete = async (responses: any) => {
         console.log(responses);
 
+        localStorage.setItem(guid(), JSON.stringify(responses));
         // Save results to JSONBin and retrieve the bin ID
          const binId = await JsonBinApi.saveResultsToJsonBin({
             type: responses.mbtiType,

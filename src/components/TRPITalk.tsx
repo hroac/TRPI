@@ -78,6 +78,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   } | null>(null);
   const [primary4F, setPrimary4F] = useState<string>("");
   const [mbtiType, setMbtiType] = useState<string>("");
+  const [percentage, setPercentage] = useState<number>(0)
   const [binId, setBinId] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
@@ -292,9 +293,10 @@ ${statements
       const profile = MBTIProfiles.find(profile => profile.name === type.type)
       setPrimary4F(profile?.mode || primary4F);
       setMbtiType(type.type);
+      setPercentage((type.scores as any)[type.type].score);
 
       // Optionally call onComplete if you want to store or forward results
-      const binId = await onComplete({ primary4F, mbtiType: type.type,  profile: parsed, description: backup, responses: userExplanations });
+      const binId = await onComplete({ primary4F, mbtiType: type.type, description: backup, responses: userExplanations, accuracy: percentage });
       navigate(`/result/${binId}`);
       // console.log("binId:", binId);
     } catch (err: any) {

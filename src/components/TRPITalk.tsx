@@ -428,9 +428,12 @@ ${statements
     
 
     return (
-      <Button onClick={handleFetchBigFiveScores}>
+      <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+        <Button onClick={handleOpenPremiumModal}>
         Get your results!
         </Button>
+      </Box>
+      
     );
   };
 

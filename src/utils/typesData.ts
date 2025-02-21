@@ -41,7 +41,7 @@ export const typesData: any[] = [
       "silver": "ISTJ",
       "gold": "ISFJ",
       "bronze": "ENFP",
-      "quote": "I jump into the race and calculate my moves on the fly.",
+      "quote": "I calculate my moves on the fly.",
       "description": "ESTP (Se > Ti) - Fight Mode, The Entrepreneur: ESTPs are energetic, action-oriented problem solvers who excel in high-stakes environments. Known for their quick decision-making and adaptability, they are skilled at thinking on their feet, often taking calculated risks to achieve immediate results. With a strong preference for hands-on experiences, ESTPs approach life with a \"seize the moment\" mentality, making them natural thrill-seekers and innovators in practical fields. However, their focus on the present can sometimes cause them to overlook long-term consequences. In \"Fight\" mode, they harness an active prefrontal cortex and heightened adrenaline, swiftly assessing threats and launching into direct action. Their sharp observational skills help ESTPs respond decisively, making them highly effective at tackling stressors head-on.",
       "strengths": [
         "Energetic",

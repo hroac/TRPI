@@ -9,6 +9,7 @@ import {
   Modal,
   Tooltip,
   Grid,
+  Snackbar,
 } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -73,6 +74,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [date, setDate] = useState<Date>(new Date());
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     const fetchBinData = async () => {
@@ -109,13 +111,22 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
     scales: { y: { beginAtZero: true, max: 100 } },
   };
 
-  const handleOpenShareModal = () => setShareModalOpen(true);
-  const handleCloseShareModal = () => setShareModalOpen(false);
-
   const shareDescription = bin?.description ? bin.description : "Check out my TRPI test results!";
   const shareUrl = window.location.href;
   const encodedUrl = encodeURIComponent(shareUrl);
   const encodedDesc = encodeURIComponent(shareDescription);
+
+  // When the share icon is clicked, open the modal, copy the link, and show the snackbar.
+  const handleOpenShareModal = () => {
+    navigator.clipboard.writeText(shareUrl).catch((err) =>
+      console.error("Failed to copy: ", err)
+    );
+    setShareModalOpen(true);
+    setSnackbarOpen(true);
+  };
+
+  const handleCloseShareModal = () => setShareModalOpen(false);
+  const handleSnackbarClose = () => setSnackbarOpen(false);
 
   if (loading) {
     return (
@@ -124,7 +135,10 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
           Loading Test Results...
         </Typography>
         <Box my={3}>
-          <Bar data={{ labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: [] }} options={options} />
+          <Bar
+            data={{ labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: [] }}
+            options={options}
+          />
         </Box>
       </Paper>
     );
@@ -137,7 +151,10 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
           No Results Found...
         </Typography>
         <Box my={3}>
-          <Bar data={{ labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: [] }} options={options} />
+          <Bar
+            data={{ labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: [] }}
+            options={options}
+          />
         </Box>
       </Paper>
     );
@@ -187,17 +204,13 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
       />
       <Grid container spacing={2} alignItems="center">
         <Grid item>
-          {
-            isBinOwner ? (
-              <Tooltip title="Share Your Results">
-            <IconButton onClick={handleOpenShareModal} color="primary">
-              <ShareIcon fontSize="medium" />
-            </IconButton>
-          </Tooltip>
-            ) : (
-              <></>
-            )
-          }
+          {isBinOwner ? (
+            <Tooltip title="Share Your Results (Link Copied)">
+              <IconButton onClick={handleOpenShareModal} color="primary">
+                <ShareIcon fontSize="medium" />
+              </IconButton>
+            </Tooltip>
+          ) : null}
         </Grid>
         <Grid item xs>
           <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ wordBreak: 'break-word' }}>
@@ -264,6 +277,14 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
           </Box>
         </Box>
       </Modal>
+
+      {/* Snackbar Notification */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        message="Link Copied to Clipboard!"
+      />
 
       <Box my={3}>
         <Bar data={data} options={options} />

@@ -70,7 +70,8 @@ const Calendar: React.FC = () => {
     computedPrice = intervals * RATE_PER_INTERVAL;
 
     if(computedPrice < RATE_PER_INTERVAL) {
-      computedPrice = RATE_PER_INTERVAL;
+      computedPrice = RATE_PER_INTERVAL; 
+    }
   }
 
   // ----------------------------

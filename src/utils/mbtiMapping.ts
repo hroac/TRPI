@@ -1105,7 +1105,7 @@ export const statements = [
     }
   },
   {
-    text: 'I’m known for being independent and bold in my approach to problems.',
+    text: 'I’m known for being bold and independent in my approach to problems.',
     trait: 'extraversion',
     weight: 1.0,
     subtext: {
@@ -1116,9 +1116,9 @@ export const statements = [
       '40-50': { text: 'I fairly often show independence and boldness.', weight: 0.5 },
       '50-60': { text: 'I frequently solve problems independently and boldly.', weight: 0.6 },
       '60-70': { text: 'I regularly take bold and independent approaches to problems.', weight: 0.7 },
-      '70-80': { text: 'I strongly demonstrate independence and boldness.', weight: 0.8 },
-      '80-90': { text: 'I am highly independent and bold in my approach to challenges.', weight: 0.9 },
-      '90-100': { text: 'I always act independently and boldly when solving problems.', weight: 1.0 },
+      '70-80': { text: 'I strongly demonstrate boldness and independence.', weight: 0.8 },
+      '80-90': { text: 'I am highly bold and independent in my approach to challenges.', weight: 0.9 },
+      '90-100': { text: 'I always act boldly and independently when solving problems.', weight: 1.0 },
     }
   },
   {

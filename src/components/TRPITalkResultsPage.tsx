@@ -23,7 +23,7 @@ const statements = [
   { text: 'I’m sensitive to other people’s feelings and try to meet their needs.', trait: 'agreeableness' },
   { text: 'I often dwell on past mistakes and worry about future outcomes.', trait: 'neuroticism' },
   { text: 'I am detail-oriented and take time to think through tasks carefully.', trait: 'conscientiousness' },
-  { text: 'I’m known for being independent and bold in my approach to problems.', trait: 'extraversion' },
+  { text: 'I’m known for being bold and independent in my approach to problems.', trait: 'extraversion' },
   { text: 'I prefer to work as part of a team and value cooperation.', trait: 'agreeableness' },
   { text: 'I tend to overthink situations and feel uneasy about the unknown.', trait: 'neuroticism' },
 ];

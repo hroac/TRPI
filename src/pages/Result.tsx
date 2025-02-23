@@ -175,6 +175,8 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
     ],
   };
 
+  const isBinOwner = guid() === bin?.userId;
+
   return (
     <Paper elevation={3} sx={{ p: 2, m: '20px auto', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600 }}>
       <ResultHelmet
@@ -185,15 +187,21 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
       />
       <Grid container spacing={2} alignItems="center">
         <Grid item>
-          <Tooltip title="Share Your Results">
+          {
+            isBinOwner ? (
+              <Tooltip title="Share Your Results">
             <IconButton onClick={handleOpenShareModal} color="primary">
               <ShareIcon fontSize="medium" />
             </IconButton>
           </Tooltip>
+            ) : (
+              <></>
+            )
+          }
         </Grid>
         <Grid item xs>
           <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ wordBreak: 'break-word' }}>
-            TRPI Test Results - {primary4FType} - {type} {accuracy ? `- ${accuracy.toFixed(1)}%` : ''}
+            TRPI - {primary4FType} - {type} {accuracy ? `- ${accuracy.toFixed(1)}%` : ''}
           </Typography>
         </Grid>
         <Grid item>

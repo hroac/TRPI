@@ -68,6 +68,9 @@ const Calendar: React.FC = () => {
     const durationMinutes = (end.getTime() - start.getTime()) / 60000;
     const intervals = Math.ceil(durationMinutes / 30);
     computedPrice = intervals * RATE_PER_INTERVAL;
+
+    if(computedPrice < RATE_PER_INTERVAL) {
+      computedPrice = RATE_PER_INTERVAL;
   }
 
   // ----------------------------

@@ -1,18 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Typography, Box, Grid, Button, useTheme, useMediaQuery } from '@mui/material';
+import {
+  Paper,
+  Typography,
+  Box,
+  IconButton,
+  useTheme,
+  useMediaQuery,
+  Modal,
+  Tooltip,
+  Grid,
+} from '@mui/material';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip as ChartTooltip,
+  Legend,
+} from 'chart.js';
 import JsonBinApi from '../utils/jsonBin';
 import AboutPage from './About';
-import { typesData } from '../utils/typesData';
 import { useParams } from 'react-router-dom';
 import { guid } from '../utils/guid';
-import GhPagesFS from '../utils/GhPagesFS';
 import RatingComponent from '../components/RatingComponent';
 import { Helmet } from 'react-helmet';
 import { stages } from '../utils/mbtiMapping';
-import { ArrowBack, ArrowForward } from '@mui/icons-material';
-import { isModifier } from 'typescript';
+import { Share as ShareIcon, Close as CloseIcon } from '@mui/icons-material';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import RedditIcon from '@mui/icons-material/Reddit';
+import InstagramIcon from '@mui/icons-material/Instagram';
 
 const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number }, binId: string }> = ({
   type,
@@ -20,89 +38,67 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
   bigFiveResponses,
   binId,
 }) => {
-  // Generate a sideways ASCII bar chart
   const generateAsciiBarChart = (scores: { [trait: string]: number }): string => {
     const traits = ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'];
     return traits
       .map((trait) => {
         const score = Math.round(scores[trait.toLowerCase()] * 100);
-        const bar = `${'█'.repeat(Math.round(score / 10))}`;
+        const bar = '█'.repeat(Math.round(score / 10));
         return `${trait.padEnd(20)} ${bar.padEnd(10)} ${score}%`;
       })
       .join('\n');
   };
 
   const asciiChart = generateAsciiBarChart(bigFiveResponses);
-  const url = `https://traumaindicator.com/#/result/${binId}`
   return (
     <Helmet>
       <title>{`TRPI - ${type} - ${primary4FType}`}</title>
-      <meta
-        name="description"
-        content={`\n${asciiChart}`}
-      />
+      <meta name="description" content={`\n${asciiChart}`} />
     </Helmet>
   );
 };
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-/* 
-interface ResultsProps {
-  mbtiType: string;
-  bigFiveResponses: { [trait: string]: number };
-  primary4FType: string;
-} */
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ChartTooltip, Legend);
 
 interface ResultsProps {
   binId: string;
 }
-const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
-  const [bin, setBin] = useState<any>(null); // State to store bin data
-  const [loading, setLoading] = useState(true); // State to manage loading status
-  const [reviewIndex, setReviewIndex] = useState<number>(0);
-  const total = stages.length;
-  const stage = stages[reviewIndex];
+
+const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
+  const [bin, setBin] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [reviewIndex] = useState<number>(0);
   const params = useParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [date, setDate] = useState<Date>(new Date());
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+
   useEffect(() => {
     const fetchBinData = async () => {
       try {
-        //const userId = params?.userId || guid();
         const userId = guid();
         const local = localStorage.getItem(userId) || '';
-        if(!local || params?.binId) {
-          const bin = params?.binId || binId || ''; // Fetch binId from localStorage
-
-          if (bin) {
-            const binData = await JsonBinApi.getBinById(bin);
-            binData.binId = bin; // Retrieve bin data by binId
-            setBin(binData); // Set bin data to state
+        if (!local || params?.binId) {
+          const binParam = params?.binId || binId || '';
+          if (binParam) {
+            const binData = await JsonBinApi.getBinById(binParam);
+            binData.binId = binParam;
+            setBin(binData);
           }
-          /* const ghPages = new GhPagesFS({ owner: 'hroac',
-            repo: 'TRPI',
-            branch: 'gh-data',
-            token: process.env.REACT_APP_GH_KEY?.toString() || ''})
-  
-        
-          const data = await ghPages.readJson(`${userId}.json`) */
-          //setBin(data)
-
         } else {
-          const parsed = JSON.parse(local)
-          setBin(parsed)
+          const parsed = JSON.parse(local);
+          setBin(parsed);
         }
-      
       } catch (error) {
         console.error("Error fetching bin data:", error);
       } finally {
-        setLoading(false); // Stop loading once data is fetched or error occurs
+        setLoading(false);
       }
     };
 
     fetchBinData();
-  }, [date]);
+  }, [date, params, binId]);
 
   const options = {
     responsive: true,
@@ -113,39 +109,41 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
     scales: { y: { beginAtZero: true, max: 100 } },
   };
 
+  const handleOpenShareModal = () => setShareModalOpen(true);
+  const handleCloseShareModal = () => setShareModalOpen(false);
+
+  const shareDescription = bin?.description ? bin.description : "Check out my TRPI test results!";
+  const shareUrl = window.location.href;
+  const encodedUrl = encodeURIComponent(shareUrl);
+  const encodedDesc = encodeURIComponent(shareDescription);
+
   if (loading) {
-    return  (
-      <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 600 }}>
-      <Typography variant="h5" gutterBottom>
-        Loading Test Results...
-      </Typography>
-      <Box my={3}>
-      <Box my={3}>
-      <Bar data={ { labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: []}} options={options} />
-      </Box>
-      </Box>
-    </Paper>
-    )
+    return (
+      <Paper elevation={3} sx={{ p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
+        <Typography variant="h5" gutterBottom>
+          Loading Test Results...
+        </Typography>
+        <Box my={3}>
+          <Bar data={{ labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: [] }} options={options} />
+        </Box>
+      </Paper>
+    );
   }
 
   if (!bin) {
-    return  (
-      <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 600 }}>
-      <Typography variant="h5" gutterBottom>
-        No Results Found...
-      </Typography>
-      <Box my={3}>
-      <Box my={3}>
-        <Bar data={ { labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: []}} options={options} />
-      </Box>
-      </Box>
-    </Paper>
-    )
+    return (
+      <Paper elevation={3} sx={{ p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
+        <Typography variant="h5" gutterBottom>
+          No Results Found...
+        </Typography>
+        <Box my={3}>
+          <Bar data={{ labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: [] }} options={options} />
+        </Box>
+      </Paper>
+    );
   }
 
   const { type, bigFiveResponses, primary4FType, description, allResponses, accuracy, list } = bin;
-  //const mbtiType = type && typesData.find((t: any) => t.type === type);
-
   const data = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
     datasets: [
@@ -177,36 +175,103 @@ const ResultsPage: React.FC<ResultsProps> = ({binId}) => {
     ],
   };
 
-
-
-
-
   return (
-    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', width: isMobile ? 300 : 600, maxWidth: isMobile ? 300 : 600 }}>
+    <Paper elevation={3} sx={{ p: 2, m: '20px auto', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600 }}>
       <ResultHelmet
-       type={type}
-       primary4FType={primary4FType}
-       bigFiveResponses={bigFiveResponses}
-       binId={binId}
+        type={type}
+        primary4FType={primary4FType}
+        bigFiveResponses={bigFiveResponses}
+        binId={binId}
       />
+      <Grid container spacing={2} alignItems="center">
+        <Grid item>
+          <Tooltip title="Share Your Results">
+            <IconButton onClick={handleOpenShareModal} color="primary">
+              <ShareIcon fontSize="medium" />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Grid item xs>
+          <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ wordBreak: 'break-word' }}>
+            TRPI Test Results - {primary4FType} - {type} {accuracy ? `- ${accuracy.toFixed(1)}%` : ''}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <RatingComponent
+            bin={bin}
+            userId={guid()}
+            onRatingSaved={(updatedBin: any) => JsonBinApi.updateResultsInJsonBin(updatedBin)}
+          />
+        </Grid>
+      </Grid>
 
-      <Box display={'flex'} justifyContent={'center'} mt={3}>
-      <Typography variant="h5" gutterBottom>
-        TRPI Test Results - {primary4FType} - {type} - {accuracy ? `${accuracy.toFixed(1)}%` : ''}  
-      </Typography>
-      </Box>
-      <Box display={'flex'} justifyContent={'flex-end'} position={'relative'} top={isMobile ? -85 : -50}>
-            <RatingComponent
-              bin={bin}
-              userId={guid()}
-              onRatingSaved={(updatedBin: any) => JsonBinApi.updateResultsInJsonBin(updatedBin)}
-            />
-            </Box>
+      {/* Share Modal */}
+      <Modal open={shareModalOpen} onClose={handleCloseShareModal}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: isMobile ? 280 : 400,
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Typography variant="h6">Share Your TRPI Results</Typography>
+            <IconButton onClick={handleCloseShareModal}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Typography variant="body1" mb={2}>
+            {shareDescription}
+          </Typography>
+          <Box display="flex" justifyContent="space-around">
+            <Tooltip title="Share on Facebook">
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedDesc}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FacebookIcon fontSize="large" color="primary" />
+              </a>
+            </Tooltip>
+            <Tooltip title="Share on Reddit">
+              <a
+                href={`https://www.reddit.com/submit?url=${encodedUrl}&title=${encodedDesc}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <RedditIcon fontSize="large" color="primary" />
+              </a>
+            </Tooltip>
+            <Tooltip title="Share on Instagram">
+              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+                <InstagramIcon fontSize="large" color="primary" />
+              </a>
+            </Tooltip>
+          </Box>
+        </Box>
+      </Modal>
+
       <Box my={3}>
         <Bar data={data} options={options} />
       </Box>
-      {type && <AboutPage bin={bin} mbtiType={type} showBigFive={false} description={description} allResponses={allResponses} list={list} handleReloadBin={() => setDate(new Date())}/>}
-     
+
+      {type && (
+        <AboutPage
+          bin={bin}
+          mbtiType={type}
+          showBigFive={false}
+          description={description}
+          allResponses={allResponses}
+          list={list}
+          handleReloadBin={() => setDate(new Date())}
+        />
+      )}
     </Paper>
   );
 };

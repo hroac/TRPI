@@ -59,7 +59,6 @@ const AboutPage: React.FC<{
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const [loading, setLoading] = useState(false);
-  //const [loading, setLoading] = useState(false);
 
   const handleOpenPremiumModal = () => setPremiumModalOpen(true);
   const handleClosePremiumModal = () => setPremiumModalOpen(false);
@@ -69,63 +68,60 @@ const AboutPage: React.FC<{
     setPremiumModalOpen(false);
     setLoading(true);
 
-    try{
+    try {
       let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
-      let description = `${statements.map((statement, index) => {
+      let descriptionText = `${statements.map((statement, index) => {
         const answer = allResponses[index];
-        const subText = getSubtext(statement.trait, index, answer)
+        const subText = getSubtext(statement.trait, index, answer);
         return subText.trim();
-      }).join('\n')}`
+      }).join('\n')}`;
   
-      description = await generateProfileAnalysis({
+      descriptionText = await generateProfileAnalysis({
         cognitiveProfile: profile,
         scores: bin.bigFiveResponses,
         demographics: data.demographics,
-        assesment: description,
-  
-      })
-      JsonBinApi.updateResultsInJsonBin({...bin, ...data.demographics,  description});
-    handleReloadBin && handleReloadBin()
+        assesment: descriptionText,
+      });
+      JsonBinApi.updateResultsInJsonBin({ ...bin, ...data.demographics, description: descriptionText });
+      handleReloadBin && handleReloadBin();
     } finally {
       setLoading(false);
     }
-   
-
-    //console.log('Payment Data:', paymentData);
   };
-  const slides =  allResponses.length  ? stages.map(stage => {
+
+  const slides = allResponses.length ? stages.map(stage => {
     return { content: (
       <Paper>
-    <Stack>
-      {
-        stage.map((stmt: any) => {
-          const index = statements.indexOf(stmt)
-          const explanation = allResponses[index];
-          const value = typeof explanation === 'string' ? explanation.trim() : `${parseInt((explanation * 100).toString(), 10)} \n${getSubtext(stmt.trait, index, explanation)}`;
-          return  (
-              <Paper sx={{ p: 3, mb: 5 }}>
-              <Typography variant="h6" gutterBottom>
-                {stmt.text}
-              </Typography>
-              <Typography color="text.secondary">
-                Trait: {stmt.trait.toUpperCase()}
-              </Typography>
-              <Box mt={1}>
-                <Typography sx={{ whiteSpace: "pre-wrap" }}>
-                  <strong>Your Answer:</strong>{" "}
-                  {value}
+        <Stack spacing={2}>
+          {stage.map((stmt: any) => {
+            const index = statements.indexOf(stmt);
+            const explanation = allResponses[index];
+            const value = typeof explanation === 'string' 
+              ? explanation.trim() 
+              : `${parseInt((explanation * 100).toString(), 10)} \n${getSubtext(stmt.trait, index, explanation)}`;
+            return (
+              <Paper sx={{ p: 3, mb: 5 }} key={index}>
+                <Typography variant="h6" gutterBottom>
+                  {stmt.text}
                 </Typography>
-                <LinearProgress  color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
-                <LinearProgress  color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
-              </Box>
-            </Paper>
-            )
-        })
-      }
-    </Stack>
-    </Paper>
-    )
-}}) : []
+                <Typography color="text.secondary">
+                  Trait: {stmt.trait.toUpperCase()}
+                </Typography>
+                <Box mt={1}>
+                  <Typography sx={{ whiteSpace: "pre-wrap" }}>
+                    <strong>Your Answer:</strong> {value}
+                  </Typography>
+                  <LinearProgress color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
+                  <LinearProgress color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
+                </Box>
+              </Paper>
+            );
+          })}
+        </Stack>
+      </Paper>
+    )};
+  }) : [];
+
   const data = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
     datasets: [
@@ -173,52 +169,61 @@ const AboutPage: React.FC<{
   }
 
   return (
-    <Box padding={4}>
-      <Typography variant="h4" align="center" gutterBottom>
-        {type || mbtiType} -{' '}
-        {typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
+    <Box padding={isMobile ? 2 : 4}>
+      <Typography
+        variant={isMobile ? "h5" : "h4"}
+        align="center"
+        gutterBottom
+        sx={{ wordBreak: 'break-word' }}
+      >
+        {type || mbtiType} - {typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
       </Typography>
 
       {/* Big Five Scores Chart */}
       {showBigFive && (
         <Box display="flex" justifyContent="center" my={4}>
-          <Box width={isMobile ? '100%' : '60%'}>
+          <Box width={isMobile ? '90%' : '60%'}>
             <Bar data={data} options={options} />
           </Box>
         </Box>
       )}
-<Box display="flex" justifyContent="center">
-<Typography
-        variant="h4"
-        sx={{
-          fontStyle: 'italic',
-          fontWeight: 'bold',
-          mb: 2,
-        }}
-      >
-        {`"${typeInfo.quote}"`}
-      </Typography>
-</Box>
+
+      <Box display="flex" justifyContent="center">
+        <Typography
+          variant="h4"
+          sx={{
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            mb: 2,
+            fontSize: isMobile ? '1.5rem' : '2rem',
+          }}
+        >
+          {`"${typeInfo.quote}"`}
+        </Typography>
+      </Box>
+
       {/* Description and Generate Profile Button */}
-      <Card variant="outlined" sx={{ marginY: 3, padding: 2 }}>
+      <Card variant="outlined" sx={{ my: 3, p: 2 }}>
         <CardContent>
           {loading ? (
             <Box display="flex" justifyContent="center">
-              <CircularProgress/>
+              <CircularProgress />
             </Box>
-          ) : ( <Typography variant="body1" paragraph>
-            {description || typeInfo.description}
-          </Typography>)}
+          ) : (
+            <Typography variant="body1" paragraph>
+              {description || typeInfo.description}
+            </Typography>
+          )}
           {bin && bin.userId === guid() && !description && (
             <Button
-            variant="contained"
-            color="primary"
-            fullWidth={!isMobile}
-            onClick={handleOpenPremiumModal}
-            sx={{ mt: 3 }}
-          >
-            Generate a Custom Profile
-          </Button>
+              variant="contained"
+              color="primary"
+              fullWidth={!isMobile}
+              onClick={handleOpenPremiumModal}
+              sx={{ mt: 3 }}
+            >
+              Generate a Custom Profile
+            </Button>
           )}
         </CardContent>
       </Card>
@@ -283,11 +288,8 @@ const AboutPage: React.FC<{
         </Grid>
       </Box>
 
-      {
-      Object.keys(list).length > 0 && (
-        <Ranking data={list}/>
-      )
-     }
+      {Object.keys(list).length > 0 && <Ranking data={list} />}
+
       {/* Related Types */}
       <Box mt={5}>
         <RelatedTypesBox type={type || mbtiType || ''} />

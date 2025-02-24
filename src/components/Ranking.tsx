@@ -32,7 +32,7 @@ const Ranking: React.FC<RankingProps> = ({ data }) => {
 
   const mostAccurate = Object.values(items)[0]
 
-  // Filter out the most accurate type
+  // Filter out the most accurate type 
   const filteredItems = items.filter(item => item.type !== mostAccurate.type);
 
   // Sort the remaining items by score in descending order

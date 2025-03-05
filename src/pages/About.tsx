@@ -27,6 +27,7 @@ import QuestionnaireModal from '../components/QuestionnaireModal';
 import { generateProfileAnalysis } from '../utils/profileGenerator';
 import { guid } from '../utils/guid';
 import Ranking from '../components/Ranking';
+import ReactMarkdown from 'react-markdown';
 
 const AboutPage: React.FC<{
   bin?: any,
@@ -72,6 +73,7 @@ const AboutPage: React.FC<{
       let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
       let descriptionText = `${statements.map((statement, index) => {
         const answer = allResponses[index];
+        if(!answer) return '';
         const subText = getSubtext(statement.trait, index, answer);
         return subText.trim();
       }).join('\n')}`;
@@ -211,7 +213,7 @@ const AboutPage: React.FC<{
             </Box>
           ) : (
             <Typography variant="body1" paragraph>
-              {description || typeInfo.description}
+              {<ReactMarkdown>{description}</ReactMarkdown> || typeInfo.description}
             </Typography>
           )}
           {bin && bin.userId === guid() && !description && (

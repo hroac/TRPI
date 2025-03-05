@@ -39,10 +39,12 @@ export interface FullProfile {
   assesment: any,
   scores: BigFiveScores;
   demographics: {
-    age: number;
-    sex: string;
-    career: string;
-    familyStatus: string;
+        age: number;
+        gender : string;
+        occupation : string;
+        education: string;
+        relationshipStatus: string;
+        interests: string;
   };
 }
 
@@ -75,13 +77,15 @@ export const generateProfileAnalysis = async (profile: FullProfile): Promise<str
 
     **Demographics:**
     - Age: ${demographics.age}
-    - Sex: ${demographics.sex}
-    - Career: ${demographics.career}
-    - Family Status: ${demographics.familyStatus}
+    - Sex: ${demographics.gender}
+    - Career: ${demographics.occupation}
+    - Relationship Status: ${demographics.relationshipStatus}
+    - Interests: ${demographics.interests}
+    
 
     **Guidelines for Analysis:**
     1. **Cognitive Profile:**
-        - Highlight how the F4 trauma response (e.g., Flight) influences their behavior.
+        - Highlight how the 4F trauma response (e.g., Flight) influences their behavior.
         - Suggest actionable steps for leveraging their function stack effectively.
         - Address challenges posed by their opposite type (${cognitiveProfile.opposite}).
 
@@ -95,7 +99,7 @@ export const generateProfileAnalysis = async (profile: FullProfile): Promise<str
         - Stress Management: Suggest methods to manage challenges associated with neuroticism and trauma response.
         - Relationships: Provide advice for improving connections with others based on their function stack and Big Five traits.
 
-also pretty please format this nicely, write it like a psychogist would write a report to a client to help them understand themselves. include newline characters and no other formatting as my code does not support it. and get straight into the analysis  dont include titles
+also pretty please format this nicely, write it like a psychogist would write a report to a client to help them understand themselves. use md formatting and make it fancy!!. and get straight into the analysis  dont include titles
   `;
 
   try {
@@ -113,7 +117,7 @@ also pretty please format this nicely, write it like a psychogist would write a 
             Fawn: Si/Ni + Fe = Agreeableness
             Flight: Se/Ne + Fi = Neuroticism
 
-            you are also an expert at formatting text and add newlines and whitespace wherever necessary
+            you are also an expert at formatting text and use md formatting wherever necessary
             ` },
           { role: "user", content: prompt },
         ],

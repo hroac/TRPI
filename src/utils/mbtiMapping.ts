@@ -186,10 +186,10 @@ export const MBTIProfiles = [
   {
       "name": "ENFJ",
       "traits": {
-          "openness": 0.75,
-          "conscientiousness": 0.75,
+          "openness": 0.8,
+          "conscientiousness": 0.7,
           "extraversion": 0.8,
-          "agreeableness": 0.9,
+          "agreeableness": 0.8,
           "neuroticism": 0.4
       },
       "mode": "Fawn",

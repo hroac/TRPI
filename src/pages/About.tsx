@@ -213,7 +213,7 @@ const AboutPage: React.FC<{
             </Box>
           ) : (
             <Typography variant="body1" paragraph>
-              {<ReactMarkdown>{description}</ReactMarkdown> || typeInfo.description}
+              {description && <ReactMarkdown>{description}</ReactMarkdown> || typeInfo.description}
             </Typography>
           )}
           {bin && bin.userId === guid() && !description && (

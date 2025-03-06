@@ -160,7 +160,7 @@ export const MBTIProfiles = [
           "conscientiousness": 0.6,
           "extraversion": 0.5,
           "agreeableness": 0.8,
-          "neuroticism": 0.7
+          "neuroticism": 0.65
       },
       "mode": "Fawn",
       "gold": "ENTP",
@@ -190,7 +190,7 @@ export const MBTIProfiles = [
           "conscientiousness": 0.7,
           "extraversion": 0.8,
           "agreeableness": 0.8,
-          "neuroticism": 0.4
+          "neuroticism": 0.5
       },
       "mode": "Fawn",
       "gold": "ISFP",

@@ -511,7 +511,7 @@ const TypeCompatibilityChecker: React.FC = () => {
           Object.values(userAData.bigFiveResponses || {}),
           Object.values(userBData.bigFiveResponses || {})
         );
-        setTraitCorrelation(traitCorr);
+        setTraitCorrelation(Math.abs(traitCorr));
 
         // check allResponses
         const responsesA = userAData.allResponses || [];
@@ -522,10 +522,10 @@ const TypeCompatibilityChecker: React.FC = () => {
           setCompatibilityScore(null);
         } else {
           const respCorr = calculateAnswerCorrelation(responsesA, responsesB);
-          setResponseCorrelation(respCorr);
+          setResponseCorrelation(Math.abs(respCorr));
 
           const compScore = calculateCompatibilityScore(userAData, userBData);
-          setCompatibilityScore(compScore);
+          setCompatibilityScore(Math.abs(compScore));
         }
       } catch (error) {
         console.error('Error in correlation calculations:', error);

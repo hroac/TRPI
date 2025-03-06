@@ -224,12 +224,13 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
             fullWidth
           >
             <MenuItem value="Single">Single</MenuItem>
+            <MenuItem value="Relationship">In a relationship</MenuItem>
             <MenuItem value="Married">Married</MenuItem>
             <MenuItem value="Divorced">Divorced</MenuItem>
             <MenuItem value="Widowed">Widowed</MenuItem>
           </TextField>
           <TextField
-            label="Interests/Hobbies"
+            label="Interests/Questions"
             value={interests}
             onChange={(e) => setInterests(e.target.value)}
             fullWidth

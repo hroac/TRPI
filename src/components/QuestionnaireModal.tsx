@@ -172,8 +172,9 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
           Create Your Personalized Profile
         </Typography>
         <Typography variant="body2" gutterBottom>
-          Please answer the following questions to help us tailor your experience:
+          Please answer the following questions to help us tailor your experience: (leave blank if you feel uncomfortable answering)
         </Typography>
+        
 
         {/* Enhanced Questionnaire */}
         <Stack spacing={2} mt={2}>
@@ -239,6 +240,7 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
           />
         </Stack>
 
+       
         {/* Payment Section */}
         <Box mt={4} display="flex" justifyContent="center">
           <Stack spacing={2}>

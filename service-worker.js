@@ -8,8 +8,8 @@ if (workbox) {
 
     // Precache assets. In a production build, your bundler would replace __WB_MANIFEST with the list of files.
     workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || [
-        { url: '/', revision: '3' },
-        { url: '/index.html', revision: '3' },
+        { url: '/', revision: '4' },
+        { url: '/index.html', revision: '4' },
         { url: '/manifest.json', revision: '2' },
         // add other files as needed
     ]);

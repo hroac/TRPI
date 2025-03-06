@@ -242,7 +242,7 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
         {/* Payment Section */}
         <Box mt={4} display="flex" justifyContent="center">
           <Stack spacing={2}>
-            <Typography variant="h6">Price: €{price.toFixed(2)}</Typography>
+            <Box display={"flex"} justifyContent={'center'}><Typography variant="h6">Price: €{price.toFixed(2)}</Typography></Box>
             <GooglePayButton
               environment="PRODUCTION"
               buttonSizeMode="fill"

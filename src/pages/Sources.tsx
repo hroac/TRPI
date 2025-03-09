@@ -33,21 +33,12 @@ const sources = [
     `,
   },
   {
-    src: '/pdfs/Validating the Myers-Briggs-Archetypes.pdf',
-    link: 'https://osf.io/zrq4v',
-    title: 'Validating the Myers-Briggs-Archetypes',
+    src: '/pdfs/Validating the Myers-Briggs-Types.pdf',
+    link: 'https://osf.io/7hzjn',
+    title: 'Validating the Myers-Briggs Types',
     description: `
-      Examines correlations between MBTI archetypes, Big Five traits, and trauma responses, supporting the alignment
+      Examines correlations between MBTI types, Big Five traits, and trauma responses, supporting the alignment
       of MBTI types with specific profiles under stress and personality dynamics.
-    `,
-  },
-  {
-    src: '/pdfs/Validating_Myers-Briggs_Archetypes_Through_Big_Five_Profiles.pdf',
-    link: 'https://osf.io/dsp9q',
-    title: 'Validating Myers-Briggs Archetypes Through Big Five Profiles',
-    description: `
-      Validates MBTI archetypes through Big Five profiles, introducing cognitive layers, hemispheric function pairing, and dynamic shifts
-      under stress. Provides an enhanced framework for understanding personality patterns.
     `,
   },
   {

@@ -7,12 +7,14 @@ if (workbox) {
     console.log("Workbox is loaded");
 
     // Precache assets. In a production build, your bundler would replace __WB_MANIFEST with the list of files.
-    workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || [
-        { url: '/', revision: '4' },
-        { url: '/index.html', revision: '4' },
-        { url: '/manifest.json', revision: '2' },
+    workbox.precaching.precacheAndRoute(
+      self.__WB_MANIFEST || [
+        { url: "/", revision: "5" },
+        { url: "/index.html", revision: "5" },
+        { url: "/manifest.json", revision: "2" },
         // add other files as needed
-    ]);
+      ]
+    );
     workbox.core.skipWaiting();
     workbox.core.clientsClaim();
 

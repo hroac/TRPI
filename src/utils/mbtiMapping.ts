@@ -1339,7 +1339,7 @@ export   const functionPairings = [
     f4: 'Flight', 
     stack: 'Fi>Ne>Si>Te', 
     dominant: 'Fi>Ne (Superego + Id)', 
-    auxiliary: 'Fe>Si (Superego + Id)', 
+    auxiliary: 'Fe>Ni (Superego + Id)', 
     tertiary: 'Fe>Si (Ego + Id)', 
     inferior: 'Fi>Se (Ego + Id)', 
     opposite: 'ESTJ',

@@ -192,32 +192,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       setResponses((prev: any) => {
         const updatedResponses = { ...prev };
         updatedResponses[trait][index] = value as number;
-
-        
-        const weightedScores = Object.keys(updatedResponses).reduce(
-          (acc, traitKey) => {
-            const traitScores = updatedResponses[traitKey].map((score: any, i: any) => 
-              score * (statements.find(s => s.trait === traitKey && statements.indexOf(s) === i)?.weight || 1)
-            );
-            acc[traitKey] = traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
-            return acc;
-          },
-          {} as { [trait: string]: number }
-        );
-
-        const primary4F = determinePrimary4FType(weightedScores);
-        const mbtiType = matchMBTI(weightedScores)//matchMBTIType(weightedScores, primary4F);
-       /// const type = matchMBTIType(weightedScores, primary4F,false);
-       const type = matchMBTI(weightedScores)
         const sub = getSubtext(trait, index, value as number);
-
-        console.log(`type: ${type.type} ${JSON.stringify((type.scores as any)[type.type])}`);
         setSelectedStatement(sub)
-        setPrimary4FType(primary4F);
-        setMatchedMBTIType(mbtiType.type);
-        setAccuracy((mbtiType.scores as any)[mbtiType.type].score);
-      setList(mbtiType.scores);
-        setMatchedType(type.type);
 
         localStorage.setItem('responses', JSON.stringify(updatedResponses))
         return updatedResponses;
@@ -284,7 +260,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: Object.values(responses).flat(), accuracy, list});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: flattenResponses(responses), accuracy, list});
     navigate(`/result/${binId}`);
   };
 
@@ -295,6 +271,16 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const handleClosePremiumModal = () => SetPremiumModalOpen(false)
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const flattenResponses = (responses: any) : number[] => {
+    const flat : number[] = Object.values(responses).flat() as number[]
+    const allResponses : number[] = []
+
+    allResponses.push(...flat.slice(0, 3))
+    allResponses.push(...flat.slice(6, 26))
+    allResponses.push(...flat.slice(3, 6))
+    return allResponses;
+  }
 
   const handleMatrixSelect = (type: string) => {
     //console.log('Selected Type:', type)
@@ -345,6 +331,16 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     }
     handleCloseModal();
   };
+
+  const determineIndex = (currentStage: number, trait: string, index: number) : number => {
+   if(trait === 'openness') {
+      if(currentStage === 6) {
+        return index + 3
+      }
+      return index
+    }
+    return currentStage - 1
+  }
 
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 750, width: isMobile ? 300 : 750 }}>
@@ -447,8 +443,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
               {/* The index mapping here depends on how you originally mapped sliders. 
                   If you notice any indexing issues, adjust accordingly. */}
               <Slider
-               value={responses[s.trait][s.trait === 'openness' ? index : currentStage - 1]}
-               onChange={handleSliderChange(s.trait, s.trait === 'openness' ? index : currentStage - 1)}
+               value={responses[s.trait][determineIndex(currentStage, s.trait, index)]}
+               onChange={handleSliderChange(s.trait, determineIndex(currentStage, s.trait, index))}
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}

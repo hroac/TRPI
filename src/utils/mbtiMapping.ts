@@ -1155,7 +1155,57 @@ export const statements = [
       '90-100': { text: 'I always overthink situations and feel deeply uneasy about uncertainty.', weight: 1.0 },
     }
   },
-  
+  {
+    text: 'I eagerly seek out new experiences and relish the unknown.',
+    trait: 'openness',
+    weight: 1.1,
+    subtext: {
+      '0-10': { text: 'I rarely seek new experiences.', weight: 0.1 },
+      '10-20': { text: 'I sometimes avoid stepping outside my comfort zone.', weight: 0.2 },
+      '20-30': { text: 'I occasionally try something new when prompted.', weight: 0.3 },
+      '30-40': { text: 'I moderately explore new experiences.', weight: 0.4 },
+      '40-50': { text: 'I am fairly interested in trying new activities.', weight: 0.5 },
+      '50-60': { text: 'I often venture into unfamiliar experiences.', weight: 0.6 },
+      '60-70': { text: 'I regularly embrace opportunities to try new things.', weight: 0.7 },
+      '70-80': { text: 'I actively pursue new adventures and experiences.', weight: 0.8 },
+      '80-90': { text: 'I am highly driven to explore novel experiences.', weight: 0.9 },
+      '90-100': { text: 'I always seek out and embrace new, exciting experiences.', weight: 1.0 },
+    }
+  },
+  {
+    text: 'I appreciate art, culture, and diverse perspectives.',
+    trait: 'openness',
+    weight: 1.0,
+    subtext: {
+      '0-10': { text: 'I rarely notice art or diverse cultural ideas.', weight: 0.1 },
+      '10-20': { text: 'I occasionally encounter art and cultural elements.', weight: 0.2 },
+      '20-30': { text: 'I sometimes enjoy artistic expressions.', weight: 0.3 },
+      '30-40': { text: 'I moderately appreciate art and cultural diversity.', weight: 0.4 },
+      '40-50': { text: 'I fairly often engage with art and diverse cultures.', weight: 0.5 },
+      '50-60': { text: 'I regularly enjoy art and explore different cultural expressions.', weight: 0.6 },
+      '60-70': { text: 'I consistently seek out artistic and cultural experiences.', weight: 0.7 },
+      '70-80': { text: 'I actively embrace a variety of artistic and cultural perspectives.', weight: 0.8 },
+      '80-90': { text: 'I am highly appreciative of art, culture, and diverse ideas.', weight: 0.9 },
+      '90-100': { text: 'I always immerse myself in art, culture, and diverse perspectives.', weight: 1.0 },
+    }
+  },
+  {
+    text: 'I thrive on creative challenges and innovative problem-solving.',
+    trait: 'openness',
+    weight: 1.2,
+    subtext: {
+      '0-10': { text: 'I rarely engage in creative challenges or innovative problem-solving.', weight: 0.1 },
+      '10-20': { text: 'I sometimes shy away from creative problem-solving.', weight: 0.2 },
+      '20-30': { text: 'I occasionally try to think creatively when necessary.', weight: 0.3 },
+      '30-40': { text: 'I moderately engage with creative challenges.', weight: 0.4 },
+      '40-50': { text: 'I fairly often attempt to solve problems in innovative ways.', weight: 0.5 },
+      '50-60': { text: 'I often use creative approaches to tackle challenges.', weight: 0.6 },
+      '60-70': { text: 'I regularly embrace creative and innovative problem-solving.', weight: 0.7 },
+      '70-80': { text: 'I strongly seek out creative challenges and innovative solutions.', weight: 0.8 },
+      '80-90': { text: 'I am highly engaged in finding innovative approaches to problems.', weight: 0.9 },
+      '90-100': { text: 'I always thrive on creative challenges and embrace innovation.', weight: 1.0 },
+    }
+  }
   ]
 
 // Group statements into stages
@@ -1166,6 +1216,7 @@ export const stages = [
   statements.slice(11, 15), // Stage 3
   statements.slice(15, 19), // Stage 4
   statements.slice(19, 23), // Stage 5
+  statements.slice(23, 26), // Stage 6
 ];
 
 export   const functionPairings = [

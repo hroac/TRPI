@@ -262,7 +262,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: flattenResponses(responses), accuracy, list});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: flattenResponses(responses), accuracy, list: mbtiType.scores});
     navigate(`/result/${binId}`);
   };
 

@@ -959,7 +959,7 @@ export const statements = [
   {
     text: 'I enjoy discussing ideas and debating with others.',
     trait: 'extraversion',
-    weight: 1.1,
+    weight: 0.9,
     subtext: {
       '0-10': { text: 'I rarely enjoy discussing ideas or debating with others.', weight: 0.1 },
       '10-20': { text: 'I occasionally engage in discussions but avoid debates.', weight: 0.2 },

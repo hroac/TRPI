@@ -83,7 +83,7 @@ export const MBTIProfiles = [
       "traits": {
           "openness": 0.75,
           "conscientiousness": 0.75,
-          "extraversion": 0.45,
+          "extraversion": 0.55,
           "agreeableness": 0.35,
           "neuroticism": 0.5
       },

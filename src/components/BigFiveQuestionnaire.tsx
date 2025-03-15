@@ -249,10 +249,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
     const primary4F = determinePrimary4FType(weightedScores);
     const mbtiType = matchMBTI(weightedScores)//matchMBTIType(weightedScores, primary4F);
-    const profile = typesData.find(t => t.type === mbtiType);
-
+    const profile = typesData.find(t => t.type === mbtiType.type);
+    const accuracy = mbtiType.scores[mbtiType.type]
+    setAccuracy(accuracy)
+    setList(mbtiType.scores)
     const newJson = {
-      type: mbtiType,
+      type: mbtiType.type,
       primary4FType: primary4F,
       bigFiveResponses: weightedScores,
     }

@@ -149,7 +149,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
    const weightedScores = Object.keys(responses).reduce((acc, trait) => {
     const traitScores = responses[trait].map((score: any, i: any) => 
-      score * (statements.find(s => s.trait === trait && statements.indexOf(s) === i)?.weight || 1)
+      score * (getStatement(trait, i).weight || 1)
     );
     acc[trait] = traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
     return acc;
@@ -241,8 +241,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const handleSubmit = async () => {
     const weightedScores = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait].map((score: any, i: any) => 
-        score * (statements.find(s => s.trait === trait && statements.indexOf(s) === i)?.weight || 1)
-      );
+        score * (getStatement(trait, i).weight || 1)
+       );
       acc[trait] = traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
       return acc;
     }, {} as { [trait: string]: number });
@@ -299,10 +299,10 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     setSelectedMbtiType(type);
     if (profile) {
       //console.log(profile)
-      const stageResponses = stages.slice(lastStage, stages.length).flat();
+      const stageResponses = stages.slice(0, stages.length).flat();
 
     const updatedResponses = stageResponses.reduce((acc, s) => {
-      if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage ? lastStage - 1 : lastStage);
+      if (!acc[s.trait]) acc[s.trait] = [];
       acc[s.trait].push(profile[s.trait]);
       return acc;
     }, {} as { [trait: string]: number[] });
@@ -313,7 +313,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           () => profile[trait as keyof typeof profile]
         );
       }); */
-      setResponses({...responses, ...updatedResponses});
+      setResponses({...updatedResponses});
       //setLastStage(0)
 
       const primary4F = determinePrimary4FType(profile);
@@ -333,6 +333,30 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     }
     handleCloseModal();
   };
+
+  const getStatement = (trait: any, i: any) => {
+    /* const stage = statements.filter((s) => s.trait === trait)
+    const resp = responses[trait][i];
+    const flat = responses.flat(resp)
+    const index = flat.indexOf(resp)
+    const statement = stage[index]; */
+
+    const stage = statements.filter((s) => s.trait === trait)
+    const statement = stage[i]
+
+
+    return statement
+    
+  }
+
+  const determineStage = (index: number) => {
+    if(index > 0 && 3) {
+      return 1
+    }
+    if(index > 0 && 3) {
+      return 1
+    }
+  }
 
   const determineIndex = (currentStage: number, trait: string, index: number) : number => {
    if(trait === 'openness') {

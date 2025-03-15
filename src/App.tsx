@@ -60,6 +60,12 @@ function App() {
     // Load saved results and userId from local storage on app initialization
     const [binId, setBinId] = useState<string>(localStorage.getItem('binId')?.toString() || '')
    const userId = guid();
+   const [referrer, setReferrer] = useState<string>("");
+
+  useEffect(() => {
+    setReferrer(document.referrer || "Direct Visit");
+  }, []);
+
     const handleComplete = async (responses: any) => {
         console.log(responses);
 
@@ -73,6 +79,7 @@ function App() {
             allResponses: responses.responses || [],
             accuracy: responses.accuracy || 0,
             list: responses.list || {},
+            referrer,
         });
         setBinId(binId);
         localStorage.setItem('binId', binId); // Store the bin ID under 'userId'

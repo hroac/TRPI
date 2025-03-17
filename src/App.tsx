@@ -56,7 +56,6 @@ const AppHelmet: React.FC = () => (
 );
 
 function App() {
-    console.log(process.env)
     // Load saved results and userId from local storage on app initialization
     const [binId, setBinId] = useState<string>(localStorage.getItem('binId')?.toString() || '')
    const userId = guid();
@@ -76,7 +75,7 @@ function App() {
             primary4FType: responses.primary4F,
             bigFiveResponses: responses.profile,
             description: responses.description || '',
-            allResponses: responses.responses || [],
+            responses: responses.responses || [],
             accuracy: responses.accuracy || 0,
             list: responses.list || {},
             referrer,

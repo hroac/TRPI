@@ -534,7 +534,7 @@ const TypeCompatibilityChecker: React.FC = () => {
   }, [userAData, userBData]);
   
 const flattenResponses = (responses: any) : number[] => {
-    //const flat : number[] = Object.values(responses).flat() as number[]
+    const flat : number[] = Object.values(responses).flat() as number[]
     const allResponses : number[] = []
 
     allResponses.push(...flat.slice(0, 3))

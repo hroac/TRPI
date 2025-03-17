@@ -137,7 +137,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   
   const determineIndex = (statement: any) : number => {
     const flat = statements.flat()
-    const index = flat.indexof(statement)
+    const index = flat.indexOf(statement)
    return index
   }
   

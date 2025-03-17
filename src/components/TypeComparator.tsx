@@ -557,7 +557,7 @@ const flattenResponses = (responses: any) : number[] => {
     const userData = flattenResponses(userAData.responses).map((response, idx) => {
       const statement = statements[idx];
       const subtextA = getSubtext(statement.trait, idx, response);
-      const subtextB = getSubtext(statement.trait, idx, flattenResponses(userBData).responses![idx]);
+      const subtextB = getSubtext(statement.trait, idx, flattenResponses(userBData.responses)![idx]);
       const compatibilityPercent = Math.round(
         (1 - Math.abs(response - userBData.responses![idx])) * 100
       );

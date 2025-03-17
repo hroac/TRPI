@@ -37,15 +37,12 @@ const AboutPage: React.FC<{
   allResponses?: any;
   list?: Record<any, any>;
   handleReloadBin?: () => void;
-}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = [], list={}, handleReloadBin = null }) => {
+}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = {}, list={}, handleReloadBin = null }) => {
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t) => t.type === type || t.type === mbtiType);
   const profile = MBTIProfiles.find((p) => p.name === type || p.name === mbtiType);
   const statements = stages.flat();
-  const getSubtext = (trait: string, index: number, value: number) => {
-    const statement = statements[index];
-    if (!statement) return null;
-  
+  const getSubtext = (statement: any, value: number) => {
     const percentage = Math.round(value * 100);
     const range = Object.keys(statement.subtext).find((key) => {
       const [min, max] = key.split('-').map(Number);
@@ -72,9 +69,9 @@ const AboutPage: React.FC<{
     try {
       let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
       let descriptionText = `${statements.map((statement, index) => {
-        const answer = allResponses[index];
+        const answer = allResponses[statement.trait][index];
         if(!answer) return '';
-        const subText = getSubtext(statement.trait, index, answer);
+        const subText = getSubtext(statement, answer);
         return subText.trim();
       }).join('\n')}`;
   
@@ -91,16 +88,16 @@ const AboutPage: React.FC<{
     }
   };
 
-  const slides = allResponses.length ? stages.map(stage => {
+  const slides = Object.values(allResponses).length ? stages.map(stage => {
     return { content: (
       <Paper>
         <Stack spacing={2}>
           {stage.map((stmt: any) => {
-            const index = statements.indexOf(stmt);
-            const explanation = allResponses[index];
+            const index = statements.filter(s => s.trait === stmt.trait).indexOf(stmt);
+            const explanation = allResponses[stmt.trait][index];
             const value = typeof explanation === 'string' 
               ? explanation.trim() 
-              : `${parseInt((explanation * 100).toString(), 10)} \n${getSubtext(stmt.trait, index, explanation)}`;
+              : `${parseInt((explanation * 100).toString(), 10)} \n${getSubtext(stmt, explanation)}`;
             return (
               <Paper sx={{ p: 3, mb: 5 }} key={index}>
                 <Typography variant="h6" gutterBottom>

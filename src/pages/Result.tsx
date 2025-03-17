@@ -160,7 +160,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
     );
   }
 
-  const { type, bigFiveResponses, primary4FType, description, allResponses, accuracy, list } = bin;
+  const { type, bigFiveResponses, primary4FType, description, allResponses, responses, accuracy, list } = bin;
   const data = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
     datasets: [
@@ -296,7 +296,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
           mbtiType={type}
           showBigFive={false}
           description={description}
-          allResponses={allResponses}
+          allResponses={responses}
           list={list}
           handleReloadBin={() => setDate(new Date())}
         />

@@ -262,7 +262,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: flattenResponses(responses), accuracy, list: mbtiType.scores});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, accuracy, list: mbtiType.scores});
     navigate(`/result/${binId}`);
   };
 
@@ -275,12 +275,15 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const flattenResponses = (responses: any) : number[] => {
-    const flat : number[] = Object.values(responses).flat() as number[]
+    //const flat : number[] = Object.values(responses).flat() as number[]
     const allResponses : number[] = []
 
-    allResponses.push(...flat.slice(0, 3))
-    allResponses.push(...flat.slice(6, 26))
-    allResponses.push(...flat.slice(3, 6))
+    allResponses.push(...responses.openness.slice(0, 3))
+    allResponses.push(...responses.openness.slice(0, 3))
+    allResponses.push(...responses.openness.slice(0, 3))
+    allResponses.push(...responses.openness.slice(3, 6))
+    //allResponses.push(...flat.slice(6, 26))
+   // allResponses.push(...flat.slice(3, 6))
     return allResponses;
   }
 

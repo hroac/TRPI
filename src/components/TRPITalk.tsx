@@ -135,14 +135,10 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
     }
   };
   
-  const determineIndex = (currentStage: number, trait: string, index: number) : number => {
-   if(trait === 'openness') {
-      if(currentStage === 6) {
-        return index + 3
-      }
-      return index
-    }
-    return currentStage - 1
+  const determineIndex = (statement: any) : number => {
+    const flat = statements.flat()
+    const index = flat.indexof(statement)
+   return index
   }
   
   const handleStopRecording = () => {
@@ -350,10 +346,7 @@ ${statements
           </Typography>
           {stageStatements.map((st, idx) => {
             // Global index for this statement
-            const statementIndex =
-              stages
-                .slice(0, currentStage)
-                .reduce((count, arr) => count + arr.length, 0) + determineIndex(currentStage, st.trait, idx);
+            const statementIndex = determineIndex(st)
 
             return (
               <Paper key={statementIndex} sx={{ p: 2, mb: 2 }}>

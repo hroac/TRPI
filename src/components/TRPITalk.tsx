@@ -134,7 +134,17 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
       console.error("Error accessing microphone:", err);
     }
   };
-
+  
+  const determineIndex = (currentStage: number, trait: string, index: number) : number => {
+   if(trait === 'openness') {
+      if(currentStage === 6) {
+        return index + 3
+      }
+      return index
+    }
+    return currentStage - 1
+  }
+  
   const handleStopRecording = () => {
     if (!isRecording || !mediaRecorderRef.current) return;
     mediaRecorderRef.current.stop();
@@ -343,7 +353,7 @@ ${statements
             const statementIndex =
               stages
                 .slice(0, currentStage)
-                .reduce((count, arr) => count + arr.length, 0) + idx;
+                .reduce((count, arr) => count + arr.length, 0) + determineIndex(currentStage, st.trait, idx);
 
             return (
               <Paper key={statementIndex} sx={{ p: 2, mb: 2 }}>
@@ -446,7 +456,7 @@ ${statements
   // -------------- RENDER --------------
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 1500, width: isMobile ? 300 : 1050 }}>
-      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={handleFetchBigFiveScores}  price={0.99} title='Unlock your results' description="Pay €0.99 to view your results!"/>
+      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={handleFetchBigFiveScores}  price={5.99} title='Unlock your results' description="Pay €0.99 to view your results!"/>
 
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 5, p: 2 }}>
       <IconButton sx={{position: 'relative', left:`${isMobile ? '200px' : '750px'}`}} onClick={() => setAudioDisabled(!audioDisabled)}>

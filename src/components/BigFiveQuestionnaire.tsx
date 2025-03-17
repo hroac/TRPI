@@ -279,8 +279,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const allResponses : number[] = []
 
     allResponses.push(...flat.slice(0, 3))
-    allResponses.push(...flat.slice(6, 26))
-    allResponses.push(...flat.slice(3, 6))
+    allResponses.push(...flat.slice(3, 23))
+    allResponses.push(...flat.slice(23, 6))
     return allResponses;
   }
 

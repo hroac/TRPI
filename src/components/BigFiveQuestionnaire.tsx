@@ -102,8 +102,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
   const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
+  const [submitted, setSubmitted] = useState<boolean>(false)
   const type = typesData.find(t => t.type === matchedMBTIType);
-
+ 
 
   const unlock = () => {
    setLastStage(0)
@@ -239,6 +240,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   };
 
   const handleSubmit = async () => {
+    setSubmitted(true)
     const weightedScores = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait].map((score: any, i: any) => 
         score * (getStatement(trait, i).weight || 1)
@@ -524,7 +526,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         )}
         {currentStage === stages.length - 1 ? (
           <Button onClick={handleSubmit} variant="contained" color="primary">
-            Submit
+            {submitted ? 'Submitted' : 'Submit'}
+            disabled={submitted}
           </Button>
         ) : (
           <Button onClick={handleNext} variant="contained" color="primary">

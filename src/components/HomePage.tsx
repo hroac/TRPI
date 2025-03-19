@@ -38,11 +38,11 @@ const Home = () => {
     for (const key of collection) {
       const index = collection.indexOf(key);
 
-      if(collected[index]) {
+      /*if(collected[index]) {
         return;
-      }
+      }*/
       setCollected((prevCollected: boolean[]) => {
-        prevCollected[index] = true;
+        //prevCollected[index] = true;
         return prevCollected
       })
       const bin = await JsonBinApi.getBinById(key.record);
@@ -93,7 +93,7 @@ const Home = () => {
         ],
       };
   
-      console.log(index, key)
+     // console.log(index, key)
       // Append the new slide content to the existing slides
       
       setSlides((prevSlides: any[]) => {

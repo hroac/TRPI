@@ -17,20 +17,34 @@ interface Review {
 
 const Home = () => {
   const [total, setTotal] = useState<number>(0)
+  const [collection, setCollection] = useState<any[]>([])
+  const [collected, setCollected] = useState<boolean[]>([])
   const [slides, setSlides] = useState<Array<any>>([]); // State for slides
   const [reviews, setReviews] = useState<Review[]>([]);
-  //const [loadingBins, setLoadingBins] = useState<boolean>(false);
- // const [loadingReviews, setLoadingReviews] = useState<boolean>(false);
-  let loadingBins = false;
-  let loadingReviews = false;
+  const [loadingBins, setLoadingBins] = useState<boolean>(false);
+  const [loadingReviews, setLoadingReviews] = useState<boolean>(false);
+ 
 
 
   const getBins = async () => {
     const collection = await JsonBinApi.getBinsInCollection();
     const bins: any[] = [];
     setTotal(collection.length);
-  
+    setCollection(collection);
+  };
+
+  const loadBins = async () => {
+    setCollected(new Array<boolean>(collection.length).fill(false));
     for (const key of collection) {
+      const index = collection.indexOf(key);
+
+      if(collected[index]) {
+        return;
+      }
+      setCollected((prevCollected: boolean[]) => {
+        prevCollected[index] = true;
+        return prevCollected
+      })
       const bin = await JsonBinApi.getBinById(key.record);
   
       const options = {
@@ -79,10 +93,11 @@ const Home = () => {
         ],
       };
   
+      console.log(index, key)
       // Append the new slide content to the existing slides
-      setSlides((prevSlides: any[]) => [
-        ...prevSlides,
-        {
+      
+      setSlides((prevSlides: any[]) => {
+        prevSlides[index] = {
           content: (
             
 <Box
@@ -114,10 +129,12 @@ const Home = () => {
 </Box>
 
           ),
-        },
-      ]);
+        }
+        return prevSlides;
+      });
+     
     }
-  };
+  }
   
   const fetchReviews = async () => {
    // setLoading(true);
@@ -153,19 +170,25 @@ const COLLECTION_ID = "678e2e23ad19ca34f8f154c5";
       return;
     }
 
-    loadingBins = true;
-    //setLoadingBins(true);
+    //loadingBins = true;
+    setLoadingBins(true);
     if(!total) {
     getBins(); 
     }
   }, [total, loadingBins])
 
+
+  useEffect(() => {
+    if(collection.length > 0) {
+      loadBins();
+    }
+  }, [collection])
   useEffect(() => {
     if(loadingReviews) {
       return;
     }
-    loadingReviews = true;
-    //setLoadingReviews(true);
+    //loadingReviews = true;
+    setLoadingReviews(true);
     fetchReviews();
   }, []);
 

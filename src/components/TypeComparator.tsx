@@ -68,7 +68,7 @@ interface BinData {
   primary4FType: string;
   bigFiveResponses: BigFiveValues;
   description?: string;
-  allResponses?: number[];
+  responses?: number[];
   date?: string;
   userId?: string;
   binId?: string; // Optional, used for updates
@@ -110,7 +110,7 @@ async function fetchBinDataById(binId: string): Promise<BinData> {
       primary4FType: profile.mode,
       bigFiveResponses: { ...defaultTraits },
       binId,
-      allResponses: [],
+      responses: [],
     };
   }
 }
@@ -513,9 +513,9 @@ const TypeCompatibilityChecker: React.FC = () => {
         );
         setTraitCorrelation(Math.abs(traitCorr));
 
-        // check allResponses
-        const responsesA = userAData.allResponses || [];
-        const responsesB = userBData.allResponses || [];
+        // check responses
+        const responsesA = flattenResponses(userAData.responses) || [];
+        const responsesB = flattenResponses(userBData.responses) || [];
         if (responsesA.length !== responsesB.length || responsesA.length === 0) {
           // skip if mismatch or empty
           setResponseCorrelation(null);
@@ -532,31 +532,40 @@ const TypeCompatibilityChecker: React.FC = () => {
       }
     }
   }, [userAData, userBData]);
+  
+const flattenResponses = (responses: any) : number[] => {
+    const flat : number[] = Object.values(responses).flat() as number[]
+    const allResponses : number[] = []
 
-  // Build slides if we have allResponses in both
+    allResponses.push(...flat.slice(0, 3))
+    allResponses.push(...flat.slice(6, 26))
+    allResponses.push(...flat.slice(3, 6))
+    return allResponses;
+  }
+  // Build slides if we have responses in both
   const prepareCarouselSlides = () => {
     if (
       !userAData ||
       !userBData ||
-      !userAData.allResponses ||
-      !userBData.allResponses ||
-      userAData.allResponses.length === 0 ||
-      userBData.allResponses.length === 0
+      !userAData.responses ||
+      !userBData.responses ||
+      flattenResponses(userAData.responses).length === 0 ||
+      flattenResponses(userBData.responses).length === 0
     )
       return [];
 
-    const userData = userAData.allResponses.map((response, idx) => {
+    const userData = flattenResponses(userAData.responses).map((response, idx) => {
       const statement = statements[idx];
       const subtextA = getSubtext(statement.trait, idx, response);
-      const subtextB = getSubtext(statement.trait, idx, userBData.allResponses![idx]);
+      const subtextB = getSubtext(statement.trait, idx, flattenResponses(userBData.responses)![idx]);
       const compatibilityPercent = Math.round(
-        (1 - Math.abs(response - userBData.allResponses![idx])) * 100
+        (1 - Math.abs(response - flattenResponses(userBData.responses)![idx])) * 100
       );
       return {
         question: statement.text,
         trait: statement.trait,
         userAResponse: response,
-        userBResponse: userBData.allResponses![idx],
+        userBResponse: flattenResponses(userBData.responses)![idx],
         subtextA,
         subtextB,
         compatibilityPercent,
@@ -570,7 +579,8 @@ const TypeCompatibilityChecker: React.FC = () => {
         userData.slice(11, 15), // Stage 3
         userData.slice(15, 19), // Stage 4
         userData.slice(19, 23), // Stage 5
-      ];
+        userData.slice(23, 26)
+        ];
 
       return stagesA;
   };

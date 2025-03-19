@@ -38,11 +38,11 @@ const Home = () => {
     for (const key of collection) {
       const index = collection.indexOf(key);
 
-      /*if(collected[index]) {
-        return;
-      }*/
+      if(collected[index]) {
+        break;
+      }
       setCollected((prevCollected: boolean[]) => {
-        //prevCollected[index] = true;
+        prevCollected[index] = true;
         return prevCollected
       })
       const bin = await JsonBinApi.getBinById(key.record);

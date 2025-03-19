@@ -24,6 +24,7 @@ const Home = () => {
   let loadingBins = false;
   let loadingReviews = false;
 
+
   const getBins = async () => {
     const collection = await JsonBinApi.getBinsInCollection();
     const bins: any[] = [];
@@ -105,7 +106,7 @@ const Home = () => {
       cursor: 'default',       // Optional: Change cursor to default if you don't want it to look clickable
     }}
   >
-    TRPI Test Results - {bin.primary4FType} - {bin.type}
+    TRPI Test Results - {bin.primary4FType} - {bin.type}  {bin.accuracy ? `- ${bin.accuracy.toFixed(1)}%` : ''}
   </Typography>
   <Box display="flex" justifyContent="center" my={3}>
     <Bar data={data} options={options} />
@@ -131,6 +132,7 @@ const COLLECTION_ID = "678e2e23ad19ca34f8f154c5";
           "Content-Type": "application/json",
         },
       });
+      
       const fetchedReviews = response.data.map((bin: any) => bin.record);
       const reviews = [];
 
@@ -156,7 +158,7 @@ const COLLECTION_ID = "678e2e23ad19ca34f8f154c5";
     if(!total) {
     getBins(); 
     }
-  })
+  }, [total, loadingBins])
 
   useEffect(() => {
     if(loadingReviews) {

@@ -460,7 +460,7 @@ ${statements
       </Typography>
       <Typography variant="body1" sx={{ mb: 3 }}>
         Please share your thoughts (typed or via voice). After finishing all stages,
-        we’ll generate approximate Big Five (0–100) + MBTI results and a custom description.
+        we’ll generate approximate Big Five (0–100) + MBTI results and a custom description for just €5.99. 
       </Typography>
 
       {renderStage()}

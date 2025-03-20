@@ -109,7 +109,7 @@ const AboutPage: React.FC<{
                 </Typography>
                 <Box mt={1}>
                   <Typography sx={{ whiteSpace: "pre-wrap" }}>
-                    <strong>Your Answer:</strong> {value}
+                    <strong>Your Answer:</strong> {value || ""}
                   </Typography>
                   <LinearProgress color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
                   <LinearProgress color="secondary" variant="determinate" value={parseFloat(value.toString())}/>

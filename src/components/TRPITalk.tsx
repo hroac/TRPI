@@ -55,13 +55,19 @@ interface TrpiTalkProps {
 const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   // Each statement -> user explanation text\
   const navigate = useNavigate();
-  const [userExplanations, setUserExplanations] = useState<string[]>( 
-      localStorage.getItem("userExplanations") && JSON.parse(localStorage.getItem("userExplanations") || "") || Array(statements.length).fill("")
+  const [userExplanations, setUserExplanations] = useState<Record<string, any>>( 
+      localStorage.getItem("userExplanations") && JSON.parse(localStorage.getItem("userExplanations") || "") || {
+        openness: new Array(6).fill(""),
+        conscientiousness: new Array(5).fill(""),
+        extraversion: new Array(5).fill(""),
+        agreeableness: new Array(5).fill(""),
+        neuroticism: new Array(5).fill("")
+      }
   );
 
   // Current stage: -1 = not started, 0..5 = active stage, 6 = done
   const [currentStage, setCurrentStage] = useState<number>(-1);
-
+  const [submitted, setSubmitted] = useState<boolean>(false)
   // Final overview
   const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
   const handleOpenPremiumModal = () => SetPremiumModalOpen(true)
@@ -95,7 +101,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   const synthRef = useRef<SpeechSynthesis>(window.speechSynthesis);
   const langDetectRef = useRef(new LanguageDetect());
 
-  const handleStartRecording = async (statementIndex: number) => {
+  const handleStartRecording = async (statementIndex: number, trait: string) => {
     if (isRecording) return;
     setRecordingIndex(statementIndex);
 
@@ -115,13 +121,13 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
 
         // Append transcribed text
         setUserExplanations((prev) => {
-          const updated = [...prev];
-          const oldText = updated[statementIndex];
-          updated[statementIndex] = oldText
-            ? oldText + " " + text
-            : text;
+          const updated = {...prev};
+          const oldText = updated[trait][statementIndex];
+          updated[trait][statementIndex] = oldText ? oldText + " " + text : text;
+          localStorage.setItem('userExplanations', JSON.stringify(updated));
           return updated;
         });
+        
         speakText(`Recorded your response for question ${statementIndex + 1}.`);
       };
 
@@ -136,10 +142,12 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   };
   
   const determineIndex = (statement: any) : number => {
-    const flat = statements.flat()
-    const index = flat.indexOf(statement)
-   return index
+    const stmts = stages.flat().filter(stmnt => stmnt.trait === statement.trait)
+    const index = stmts.indexOf(statement);
+    return index;
   }
+
+   
   
   const handleStopRecording = () => {
     if (!isRecording || !mediaRecorderRef.current) return;
@@ -210,8 +218,8 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
       setCurrentStage(6);
       speakText("You have completed all stages. Let’s review your responses.");
 
+      handleFetchBigFiveScores();
       handleOpenPremiumModal();
-      //handleFetchBigFiveScores();
       window.scrollTo(0, 0);
     }
   };
@@ -220,6 +228,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   const handleFetchBigFiveScores = async () => {
     setLoadingScores(true);
     setErrorMessage("");
+    setSubmitted(true);
     localStorage.removeItem('userExplanations');
     // Build our prompt
     const prompt = `
@@ -294,15 +303,13 @@ ${statements
 
       // Use your MBTI logic
       delete parsed.description;
-      const { primary4F, mbtiType } = processProfile(parsed);
-      const type = matchMBTI(Object.values(bigFive || {}))
+      const type = matchMBTI(Object.values(parsed || {}))
       const profile = MBTIProfiles.find(profile => profile.name === type.type)
-      setPrimary4F(profile?.mode || primary4F);
       setMbtiType(type.type);
       setPercentage((type.scores as any)[type.type].score);
 
       // Optionally call onComplete if you want to store or forward results
-      const binId = await onComplete({ primary4F, mbtiType: type.type, bigFiveResponses: bigFive, description: backup, responses: userExplanations, accuracy: percentage });
+      const binId = await onComplete({ primary4F: profile?.mode, mbtiType: type.type, profile: parsed, description: backup, responses: userExplanations, accuracy: percentage });
       navigate(`/result/${binId}`);
       // console.log("binId:", binId);
     } catch (err: any) {
@@ -339,17 +346,19 @@ ${statements
     // Ongoing stages
     if (currentStage >= 0 && currentStage < stages.length) {
       const stageStatements = stages[currentStage];
+      console.log(stageStatements)
       return (
         <Box>
           <Typography variant="h5" mb={2}>
             Stage {currentStage + 1} of {stages.length}
           </Typography>
           {stageStatements.map((st, idx) => {
+            //console.log(st)
             // Global index for this statement
             const statementIndex = determineIndex(st)
 
             return (
-              <Paper key={statementIndex} sx={{ p: 2, mb: 2 }}>
+              <Paper key={`${st.trait}-${statementIndex}`} sx={{ p: 2, mb: 2 }}>
                 <Grid  spacing={3}>
                 <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                   {st.text}
@@ -363,12 +372,13 @@ ${statements
                         minRows={3}
                         style={{ width: "100%", padding: "8px" }}
                         placeholder="Type your explanation here (or use the microphone to the left)."
-                        value={userExplanations[statementIndex]}
+                        value={userExplanations[st.trait][statementIndex]}
                         onChange={(e) => {
                           const newText = e.target.value;
                           setUserExplanations((prev) => {
-                            const updated = [...prev];
-                            updated[statementIndex] = newText;
+                            const updated = {...prev}
+                            const index = determineIndex(st)
+                            updated[st.trait][index] = newText;
                             localStorage.setItem('userExplanations', JSON.stringify(updated));
                             return updated;
                           });
@@ -389,7 +399,7 @@ ${statements
                         onClick={() =>
                           isRecording && recordingIndex === statementIndex
                             ? handleStopRecording()
-                            : handleStartRecording(statementIndex)
+                            : handleStartRecording(statementIndex, st.trait)
                         }
                       >
                         {isRecording && recordingIndex === statementIndex ? (
@@ -409,7 +419,7 @@ ${statements
             );
           })}
           <Box textAlign="right" mt={2}>
-            <Button variant="contained" onClick={handleStageSubmit}>
+            <Button variant="contained" onClick={handleStageSubmit} disabled={submitted}>
               {currentStage === stages.length - 1
                 ? "Finish & Review Answers"
                 : "Next Stage"}
@@ -445,7 +455,7 @@ ${statements
 
 
 
-  const newProgress = (userExplanations.lastIndexOf("") / userExplanations.length) * 100
+  
   // -------------- RENDER --------------
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 1500, width: isMobile ? 300 : 1050 }}>

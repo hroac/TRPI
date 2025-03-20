@@ -525,9 +525,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
           </Tooltip>
         )}
         {currentStage === stages.length - 1 ? (
-          <Button onClick={handleSubmit} variant="contained" color="primary">
+          <Button onClick={handleSubmit} variant="contained" color="primary" disabled={submitted}>
             {submitted ? 'Submitted' : 'Submit'}
-            disabled={submitted}
+             
           </Button>
         ) : (
           <Button onClick={handleNext} variant="contained" color="primary">

@@ -796,6 +796,97 @@ function selectStatements(statements: any[]) {
   return selectedStatements;
 }
 
+function selectMoreStatements(statements: any[]) {
+  const opennessStatements = statements.filter(s => s.trait === 'openness');
+  const conscientiousnessStatements = statements.filter(s => s.trait === 'conscientiousness');
+  const extraversionStatements = statements.filter(s => s.trait === 'extraversion');
+  const agreeablenessStatements = statements.filter(s => s.trait === 'agreeableness');
+  const neuroticismStatements = statements.filter(s => s.trait === 'neuroticism');
+
+  const selectedStatements = [];
+
+  // Helper function to select a random statement and remove it from the array
+  const selectRandom = (arr: any[]) => {
+    if (arr.length > 0) {
+      const randomIndex = Math.floor(Math.random() * arr.length);
+      const selected = arr.splice(randomIndex, 1)[0];
+      return selected;
+    }
+    return null; // Handle case where array might be empty (though it shouldn't be based on our counts)
+  };
+
+  // Select initial Openness statements
+  for (let i = 0; i < 3; i++) {
+    const statement = selectRandom(opennessStatements);
+    if (statement) selectedStatements.push(statement);
+  }
+
+  // Select CEAN sequence 4 times
+  for (let i = 0; i < 9; i++) {
+    let statement = selectRandom(conscientiousnessStatements);
+    if (statement) selectedStatements.push(statement);
+    statement = selectRandom(extraversionStatements);
+    if (statement) selectedStatements.push(statement);
+    statement = selectRandom(agreeablenessStatements);
+    if (statement) selectedStatements.push(statement);
+    statement = selectRandom(neuroticismStatements);
+    if (statement) selectedStatements.push(statement);
+  }
+
+  // Select final Openness statements
+  for (let i = 0; i < 3; i++) {
+    const statement = selectRandom(opennessStatements);
+    if (statement) selectedStatements.push(statement);
+  }
+
+  return selectedStatements;
+}
+function selectEvenMoreStatements(statements: any[]) {
+  const opennessStatements = statements.filter(s => s.trait === 'openness');
+  const conscientiousnessStatements = statements.filter(s => s.trait === 'conscientiousness');
+  const extraversionStatements = statements.filter(s => s.trait === 'extraversion');
+  const agreeablenessStatements = statements.filter(s => s.trait === 'agreeableness');
+  const neuroticismStatements = statements.filter(s => s.trait === 'neuroticism');
+
+  const selectedStatements = [];
+
+  // Helper function to select a random statement and remove it from the array
+  const selectRandom = (arr: any[]) => {
+    if (arr.length > 0) {
+      const randomIndex = Math.floor(Math.random() * arr.length);
+      const selected = arr.splice(randomIndex, 1)[0];
+      return selected;
+    }
+    return null; // Handle case where array might be empty (though it shouldn't be based on our counts)
+  };
+
+  // Select initial Openness statements
+  for (let i = 0; i < 6; i++) {
+    const statement = selectRandom(opennessStatements);
+    if (statement) selectedStatements.push(statement);
+  }
+
+  // Select CEAN sequence 4 times
+  for (let i = 0; i < 16; i++) {
+    let statement = selectRandom(conscientiousnessStatements);
+    if (statement) selectedStatements.push(statement);
+    statement = selectRandom(extraversionStatements);
+    if (statement) selectedStatements.push(statement);
+    statement = selectRandom(agreeablenessStatements);
+    if (statement) selectedStatements.push(statement);
+    statement = selectRandom(neuroticismStatements);
+    if (statement) selectedStatements.push(statement);
+  }
+
+  // Select final Openness statements
+  for (let i = 0; i < 6; i++) {
+    const statement = selectRandom(opennessStatements);
+    if (statement) selectedStatements.push(statement);
+  }
+
+  return selectedStatements;
+}
+
 export const allStatements = [
   {
       "text": "I enjoy pondering abstract ideas.",
@@ -4518,6 +4609,8 @@ export const allStatements = [
 ]
 export const statements = selectStatements(allStatements)
 
+export const longStatements = selectMoreStatements(allStatements);
+
 // Group statements into stages
 export const stages = [
   statements.slice(0, 3), // Stage 0
@@ -4528,6 +4621,40 @@ export const stages = [
   statements.slice(19, 23), // Stage 5
   statements.slice(23, 26), // Stage 6
 ];
+
+export const longStages = [
+  longStatements.slice(0,3), // Stage 0
+  longStatements.slice(3, 7),  // stage 1
+  longStatements.slice(7, 11), // Stage 2
+  longStatements.slice(11, 15), // Stage 3
+  longStatements.slice(15, 19), // Stage 4
+  longStatements.slice(19, 23), // Stage 5
+  longStatements.slice(23, 27), // stage 6 
+  longStatements.slice(27, 31), // stage 7
+  longStatements.slice(31, 35), // stage 8
+  longStatements.slice(35, 39),  // stage 9
+  longStatements.slice(39, 42), // stage 10
+]
+export const allStages = [
+  allStatements.slice(0,3), // Stage 0
+  allStatements.slice(3, 7),  // stage 1
+  allStatements.slice(7, 11), // Stage 2
+  allStatements.slice(11, 15), // Stage 3
+  allStatements.slice(15, 19), // Stage 4
+  allStatements.slice(19, 23), // Stage 5
+  allStatements.slice(23, 27), // stage 6 
+  allStatements.slice(27, 31), // stage 7
+  allStatements.slice(31, 35), // stage 8
+  allStatements.slice(35, 39),  // stage 9
+  allStatements.slice(39, 43), // stage 10
+  allStatements.slice(43, 47), // stage 11
+  allStatements.slice(47, 51),  // stage 12
+  allStatements.slice(51, 55),  // stage 13
+  allStatements.slice(55, 59),  // stage 14
+  allStatements.slice(59, 63),  // stage 15
+  allStatements.slice(63, 67),  // stage 16
+  allStatements.slice(67, 70),  // stage 17
+]
 
 
 

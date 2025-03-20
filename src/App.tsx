@@ -28,6 +28,7 @@ import Reviews from './pages/Reviews';
 import TypeComparator from './components/TypeComparator';
 import Scheduler from './pages/Scheduler';
 import TermsOfService from './pages/Terms';
+import LongBigFiveQuestionnaire from './components/LongBigFiveQuestionaire';
 
 const AppHelmet: React.FC = () => (
   <Helmet>
@@ -137,6 +138,7 @@ function App() {
                             <Route path='/compare'  element={<TypeComparator/>} />
                             <Route path='/scheduler' element={<Scheduler/>} />
                             <Route path='/terms' element={<TermsOfService/>} />
+                            <Route path='/assessment' element={<LongBigFiveQuestionnaire onComplete={handleComplete}/>} />
                         </Routes>
                         <Box position={'relative'} top={225}>
                         <Footer />

@@ -39,7 +39,7 @@ const Home = () => {
       const index = collection.indexOf(key);
 
       if(collected[index]) {
-        break;
+        continue;
       }
       setCollected((prevCollected: boolean[]) => {
         prevCollected[index] = true;

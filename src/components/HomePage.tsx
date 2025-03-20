@@ -192,56 +192,152 @@ const COLLECTION_ID = "678e2e23ad19ca34f8f154c5";
     fetchReviews();
   }, []);
 
+  const heroSlidesData = [
+    {
+      content: (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', px: 4, textAlign: 'center' }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 'bold',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+              color: '#333',
+              mb: 2,
+            }}
+          >
+            Welcome to TRPI
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              mt: 2,
+              color: '#666',
+              maxWidth: 600,
+              mb: 4,
+            }}
+          >
+            Discover your true personality type with TRPI's unique approach. Dive deeper, correct mistypes, and gain a complete understanding of yourself.
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            component={Link}
+            to="/test"
+            sx={{
+              mt: 2,
+              px: 4,
+              py: 1.5,
+              borderRadius: 4,
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            Start the Test
+          </Button>
+        </Box>
+      ),
+    },
+    {
+      content: (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', px: 4, textAlign: 'center' }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 'bold',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+              color: '#333',
+              mb: 2,
+            }}
+          >
+            Explore with Open-Ended Questions
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              mt: 2,
+              color: '#666',
+              maxWidth: 600,
+              mb: 4,
+            }}
+          >
+            Engage with our TRPI Talk feature powered by ChatGPT for a different perspective on your personality.
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            component={Link}
+            to="/talk"
+            sx={{
+              mt: 2,
+              px: 4,
+              py: 1.5,
+              borderRadius: 4,
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            Try TRPI Talk
+          </Button>
+        </Box>
+      ),
+    },
+    {
+      content: (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', px: 4, textAlign: 'center' }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 'bold',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+              color: '#333',
+              mb: 2,
+            }}
+          >
+            Take the Long Format Test
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              mt: 2,
+              color: '#666',
+              maxWidth: 600,
+              mb: 4,
+            }}
+          >
+            For a more detailed personality analysis, try our extended TRPI Assessment Tool.
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            component={Link}
+            to="/assessment"
+            sx={{
+              mt: 2,
+              px: 4,
+              py: 1.5,
+              borderRadius: 4,
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            Take the test!
+          </Button>
+        </Box>
+      ),
+    },
+  ];
+
   return (
     <Container sx={{marginTop: '64px'}}>
       {/* Hero Section */}
-      <Box 
-        sx={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          py: 8, 
-          //background: 'linear-gradient(to right, rgb(217 236 236), rgb(217 246 236))',
-          textAlign: 'center',
-          borderRadius: 3
-        }}
-      >
-        <Typography 
-          variant='h2' 
-          sx={{ 
-            fontWeight: 'bold', 
-            textShadow: '2px 2px 4px rgba(0,0,0,0.2)', 
-            color: '#333' 
-          }}
-        >
-          Welcome to TRPI
-        </Typography>
-        <Typography 
-          variant='h6' 
-          sx={{ 
-            mt: 2, 
-            color: '#666', 
-            maxWidth: 600 
-          }}
-        >
-          Discover your true personality type with TRPI's unique approach. Dive deeper, correct mistypes, and gain a complete understanding of yourself.
-        </Typography>
-        <Button 
-          variant='contained' 
-          color='secondary' 
-          size='large' 
-          component={Link}
-          to='/test'
-          sx={{ 
-            mt: 4, 
-            px: 4, 
-            py: 1.5, 
-            borderRadius: 4, 
-            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' 
-          }}
-        >
-          Start the Test
-        </Button>
+      <Box sx={{ py: 8, textAlign: 'center', borderRadius: 3 }}>
+        <Carousel slides={heroSlidesData} settings={{
+      autoplay: {
+        delay: 500, // Change the delay to 5000 milliseconds (5 seconds)
+        disableOnInteraction: false, // Optional: Keep autoplaying even after user interaction
+      },
+      pagination: { clickable: true },
+    }} />
       </Box>
       {/* <Typography variant='h4'  sx={{ 
             fontWeight: '500', 
@@ -250,6 +346,7 @@ const COLLECTION_ID = "678e2e23ad19ca34f8f154c5";
           }}>
             {total} people have taken the test!
           </Typography> */}
+
       {/* Carousel Section */}
 
       

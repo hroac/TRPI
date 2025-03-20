@@ -35,13 +35,14 @@ const AboutPage: React.FC<{
   showBigFive?: boolean;
   description?: string;
   allResponses?: any;
+  statements?: any[];
   list?: Record<any, any>;
   handleReloadBin?: () => void;
-}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = {}, list={}, handleReloadBin = null }) => {
+}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = {}, statements = [], list={}, handleReloadBin = null }) => {
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t) => t.type === type || t.type === mbtiType);
   const profile = MBTIProfiles.find((p) => p.name === type || p.name === mbtiType);
-  const statements = stages.flat();
+  const stmnts = stages.flat();
   const getSubtext = (statement: any, value: number) => {
     const percentage = Math.round(value * 100);
     const range = Object.keys(statement.subtext).find((key) => {
@@ -68,7 +69,7 @@ const AboutPage: React.FC<{
 
     try {
       let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
-      let descriptionText = `${statements.map((statement, index) => {
+      let descriptionText = `${stmnts.map((statement, index) => {
         const answer = allResponses[statement.trait][index];
         if(!answer) return '';
         const subText = getSubtext(statement, answer);
@@ -93,7 +94,7 @@ const AboutPage: React.FC<{
       <Paper>
         <Stack spacing={2}>
           {stage.map((stmt: any) => {
-            const index = statements.filter(s => s.trait === stmt.trait).indexOf(stmt);
+            const index = stmnts.filter(s => s.trait === stmt.trait).indexOf(stmt);
             const explanation = allResponses[stmt.trait][index];
             const value = typeof explanation === 'string' 
               ? explanation.trim() 

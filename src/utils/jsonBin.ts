@@ -47,9 +47,10 @@ class JsonBinApi {
             const response = await axios.post(
                 url,
                 {
-                    ...state,
                     date: new Date().toISOString(),
                     userId: userGuid,
+                    ...state,
+               
                 },
                 {
                     headers: {

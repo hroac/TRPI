@@ -71,14 +71,16 @@ function App() {
         localStorage.setItem(guid(), JSON.stringify(responses));
         // Save results to JSONBin and retrieve the bin ID
          const binId = await JsonBinApi.saveResultsToJsonBin({
+            referrer,
             type: responses.mbtiType,
             primary4FType: responses.primary4F,
             bigFiveResponses: responses.profile,
+            accuracy: responses.accuracy || 0,
             description: responses.description || '',
             responses: responses.responses || [],
-            accuracy: responses.accuracy || 0,
             list: responses.list || {},
-            referrer,
+            statements: responses.statements || [],
+
         });
         setBinId(binId);
         localStorage.setItem('binId', binId); // Store the bin ID under 'userId'

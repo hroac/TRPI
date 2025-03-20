@@ -218,8 +218,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         return [...acc, answer[currentStage - 1] ]
       }, [])
       console.log(stageAnswers);
-      const changed = !stageAnswers.every((answer: number) => answer === 0.500001)
-      if(currentStage + 1 > lastStage && changed) {
+      const changed = stageAnswers.every((answer: number) => answer !== 0.500001)
+      if(changed && currentStage + 1 > lastStage) {
         setLastStage(currentStage + 1);
         localStorage.setItem('lastStage', (currentStage + 1).toString());
 
@@ -264,7 +264,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, accuracy, list: mbtiType.scores});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores});
     navigate(`/result/${binId}`);
   };
 
@@ -461,7 +461,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       {/* Display current stage statements */}
       {stages[currentStage].map((s, index) => (
         <Box key={`${s.trait}-${index}`} my={3}>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="subtitle1" gutterBottom align='center'>
             {s.text}
           </Typography>
           <Grid container spacing={3} alignItems="center">

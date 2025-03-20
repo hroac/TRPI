@@ -309,7 +309,7 @@ ${statements
       setPercentage((type.scores as any)[type.type].score);
 
       // Optionally call onComplete if you want to store or forward results
-      const binId = await onComplete({ primary4F: profile?.mode, mbtiType: type.type, profile: parsed, description: backup, responses: userExplanations, accuracy: percentage });
+      const binId = await onComplete({ primary4F: profile?.mode, mbtiType: type.type, profile: parsed, description: backup, responses: userExplanations, accuracy: (type.scores as any)[type.type].score, statements, list: type.scores});
       navigate(`/result/${binId}`);
       // console.log("binId:", binId);
     } catch (err: any) {

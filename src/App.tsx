@@ -103,6 +103,9 @@ function App() {
                             { label: 'Home', path: '/' },
                             { label: 'About', path: '/about' },
                             { label: 'Take the test', path: '/test' },
+                           {
+                             label: 'Long Format' path: '/assessment'
+                           }
                             { label: 'Result', path: `/result/${binId || ''}` },
                             { label: 'Big Five Input', path: '/input' },
                             { label: 'Type Comparator', path: '/compare' },

@@ -101,45 +101,7 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   const synthRef = useRef<SpeechSynthesis>(window.speechSynthesis);
   const langDetectRef = useRef(new LanguageDetect());
 
-  const handleStartRecording = async (statementIndex: number, trait: string) => {
-    if (isRecording) return;
-    setRecordingIndex(statementIndex);
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data);
-      };
-
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/flac" });
-        const text = await transcribeAudio(audioBlob);
-
-        // Append transcribed text
-        setUserExplanations((prev) => {
-          const updated = {...prev};
-          const oldText = updated[trait][statementIndex];
-          updated[trait][statementIndex] = oldText ? oldText + " " + text : text;
-          localStorage.setItem('userExplanations', JSON.stringify(updated));
-          return updated;
-        });
-        
-        speakText(`Recorded your response for question ${statementIndex + 1}.`);
-      };
-
-      mediaRecorder.start();
-      setIsRecording(true);
-      speakText(
-        `Recording started for question ${statementIndex + 1}. Please speak your response.`
-      );
-    } catch (err) {
-      console.error("Error accessing microphone:", err);
-    }
-  };
+  
   
   const determineIndex = (statement: any) : number => {
     const stmts = stages.flat().filter(stmnt => stmnt.trait === statement.trait)
@@ -148,14 +110,58 @@ const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   }
 
    
-  
-  const handleStopRecording = () => {
-    if (!isRecording || !mediaRecorderRef.current) return;
-    mediaRecorderRef.current.stop();
-    setIsRecording(false);
-    setRecordingIndex(null);
-    speakText("Recording stopped.");
-  };
+const handleStartRecording = async (statementIndex: number, trait: string) => {
+  if (isRecording) return;
+  setRecordingIndex(statementIndex);
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mediaRecorder = new MediaRecorder(stream, {
+      mimeType: MediaRecorder.isTypeSupported('audio/webm')
+        ? 'audio/webm'
+        : 'audio/mp3',
+    });
+    mediaRecorderRef.current = mediaRecorder;
+    audioChunksRef.current = [];
+
+    mediaRecorder.ondataavailable = (event) => {
+      audioChunksRef.current.push(event.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: mediaRecorder.mimeType,
+      });
+      const text = await transcribeAudio(audioBlob);
+
+      setUserExplanations((prev) => {
+        const updated = { ...prev };
+        const oldText = updated[trait][statementIndex];
+        updated[trait][statementIndex] = oldText
+          ? oldText + ' ' + text
+          : text;
+        localStorage.setItem(
+          'userExplanations',
+          JSON.stringify(updated)
+        );
+        return updated;
+      });
+
+      speakText(`Recorded your response for question ${statementIndex + 1}.`);
+    };
+
+    mediaRecorder.start();
+    setIsRecording(true);
+    speakText(
+      `Recording started for question ${
+        statementIndex + 1
+      }. Please speak your response.`
+    );
+  } catch (err) {
+    console.error('Error accessing microphone:', err);
+    alert('Unable to access microphone. Please check your permissions.');
+  }
+};  
 
   const transcribeAudio = async (audioBlob: Blob): Promise<string> => {
     const formData = new FormData();

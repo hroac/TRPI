@@ -41,10 +41,11 @@ const Home = () => {
      /*  if(collected[index]) {
         continue;
       } */
+      /*
       setCollected((prevCollected: boolean[]) => {
         prevCollected[index] = true;
         return prevCollected
-      })
+      })*/
       const bin = await JsonBinApi.getBinById(key.record);
   
       const options = {

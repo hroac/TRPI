@@ -888,3725 +888,3747 @@ function selectEvenMoreStatements(statements: any[]) {
 }
 
 export const allStatements = [
-  {
-      "text": "I enjoy pondering abstract ideas.",
+    {
+      "text": "I contemplate abstract concepts.",
       "trait": "openness",
       "weight": 1.1,
+      "aspect": "Intellect",
       "subtext": {
-          "0-10": {
-              "text": "I rarely think about abstract ideas.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally consider abstract ideas.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy thinking about abstract ideas.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy pondering abstract concepts.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often think about abstract ideas.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy pondering abstract ideas.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly think deeply about abstract concepts.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy exploring abstract ideas.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am extremely interested in abstract ideas.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I am fascinated by abstract and complex ideas.",
-              "weight": 1
-          }
-      },
-      "aspect": "Intellect"
-  },
-  {
-      "text": "I like to engage in philosophical discussions.",
+        "0-10": {
+          "text": "I seldom reflect on abstract concepts.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally consider simple abstract ideas.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes ponder abstract ideas.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately reflect on abstract concepts.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often engage in abstract thought.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently immerse myself in abstract contemplation.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly delve into abstract ideas.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly enjoy exploring abstract concepts.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very drawn to abstract thinking.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I am profoundly absorbed in the world of abstract ideas.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I participate in philosophical debates.",
       "trait": "openness",
       "weight": 1,
+      "aspect": "Intellect",
       "subtext": {
-          "0-10": {
-              "text": "I rarely engage in philosophical discussions.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally participate in such discussions.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy philosophical discussions.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately like to discuss philosophical topics.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often engage in philosophical discussions.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy philosophical discussions.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly seek out philosophical discussions.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy debating philosophical ideas.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very interested in philosophical discussions.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I am passionate about engaging in philosophical discussions.",
-              "weight": 1
-          }
-      },
-      "aspect": "Intellect"
-  },
-  {
-      "text": "I enjoy trying new and unusual things.",
+        "0-10": {
+          "text": "I rarely engage in philosophical discussions.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally share a philosophical thought.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes join in on philosophical conversations.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy discussing philosophical topics.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often contribute to philosophical debates.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently engage in deep philosophical discussions.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly seek out philosophical exchanges.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly enthusiastic about debating philosophical ideas.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very committed to philosophical dialogue.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I am passionately involved in philosophical debates.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I seek out novel and unconventional experiences.",
       "trait": "openness",
       "weight": 0.9,
+      "aspect": "Intellect",
       "subtext": {
-          "0-10": {
-              "text": "I rarely try new things.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally try something new.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy trying new things.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately like to try new experiences.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often try new and unusual things.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently seek out new experiences.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly try novel and different things.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy experimenting with new activities.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very open to trying unusual things.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I am always eager to try new and unusual things.",
-              "weight": 1
-          }
-      },
-      "aspect": "Intellect"
-  },
-  {
-      "text": "I am curious about different cultures and ways of life.",
+        "0-10": {
+          "text": "I rarely try new experiences.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally experiment with something new.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes engage in new activities.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately try out novel experiences.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often embrace new and unusual things.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently pursue novel experiences.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly experiment with unconventional activities.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly enjoy exploring new experiences.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very open to trying unusual things.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I am always eager to embrace novel and unconventional experiences.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I demonstrate curiosity about diverse cultures and lifestyles.",
       "trait": "openness",
       "weight": 1.2,
+      "aspect": "Intellect",
       "subtext": {
-          "0-10": {
-              "text": "I have little interest in other cultures.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I am slightly curious about different cultures.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes wonder about other ways of life.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately curious about different cultures.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often think about different cultures.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I am frequently curious about other cultures.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly seek information about different cultures.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly interested in different cultures.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very curious about diverse ways of life.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I am deeply fascinated by different cultures and lifestyles.",
-              "weight": 1
-          }
-      },
-      "aspect": "Intellect"
-  },
-  {
-      "text": "I enjoy learning about new subjects and expanding my knowledge.",
+        "0-10": {
+          "text": "I show little interest in different cultures.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally wonder about other cultures.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes consider different ways of life.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately appreciate diverse cultures.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often reflect on various cultural ways of living.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently show curiosity about different cultures.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly explore information about diverse cultures.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly interested in learning about different lifestyles.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very curious about the variety of cultural expressions.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I am deeply fascinated by diverse cultures and ways of life.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I actively pursue new knowledge and welcome learning in various domains.",
       "trait": "openness",
       "weight": 1.3,
+      "aspect": "Intellect",
       "subtext": {
-          "0-10": {
-              "text": "I rarely seek new knowledge.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally learn something new.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy learning new things.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately like to expand my knowledge.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often learn about new subjects.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy learning and expanding my knowledge.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly seek opportunities to learn new things.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly interested in expanding my knowledge.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very eager to learn about new subjects.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I have a strong passion for learning and expanding my mind.",
-              "weight": 1
-          }
-      },
-      "aspect": "Intellect"
-  },
-  {
-      "text": "I am open to changing my opinions based on new information.",
+        "0-10": {
+          "text": "I rarely seek out new knowledge.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally learn something new.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes engage in learning new subjects.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately value expanding my knowledge.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often explore new topics.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently pursue opportunities to learn.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly engage in expanding my intellectual horizons.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly interested in acquiring new knowledge.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very eager to learn about a wide range of subjects.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I have an intense passion for learning and broadening my intellectual scope.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I readily update my beliefs when presented with new evidence.",
       "trait": "openness",
       "weight": 1,
+      "aspect": "Intellect",
       "subtext": {
-          "0-10": {
-              "text": "I rarely change my opinions.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally reconsider my views.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes change my mind based on new facts.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately open to revising my opinions.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often reconsider my views when presented with new information.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently change my opinions when new information arises.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly update my views based on new evidence.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly willing to change my opinions.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very open to revising my beliefs.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I readily change my opinions in light of new information.",
-              "weight": 1
-          }
-      },
-      "aspect": "Intellect"
-  },
-  {
-      "text": "I work hard to achieve my goals.",
+        "0-10": {
+          "text": "I rarely change my opinions.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally reconsider my views.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes adjust my opinions based on new facts.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately revise my views when needed.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often reconsider my opinions with new information.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently update my beliefs when confronted with evidence.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly adjust my opinions based on fresh insights.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly open to modifying my views.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very inclined to revise my beliefs with new information.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I readily transform my opinions in light of new evidence.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently exert effort to attain my objectives.",
       "trait": "conscientiousness",
       "weight": 1.2,
+      "aspect": "Industriousness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely work hard on my goals.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally put effort into my goals.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes work hard on my goals.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately work towards my goals.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often work hard to achieve my goals.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently work hard to reach my objectives.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly put in a lot of effort to achieve my goals.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly prioritize working hard on my goals.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very dedicated to working hard for my goals.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always work extremely hard to achieve my goals.",
-              "weight": 1
-          }
-      },
-      "aspect": "Industriousness"
-  },
-  {
-      "text": "I feel capable and competent in my abilities.",
+        "0-10": {
+          "text": "I rarely work hard to reach my goals.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally put some effort into my goals.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes work hard on my goals.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately strive toward my objectives.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often devote effort to achieve my goals.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently put in considerable effort to reach my aims.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly work with diligence to achieve my objectives.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly prioritize exerting effort to reach my goals.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very dedicated to working hard for my objectives.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I consistently go above and beyond to achieve my goals.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I reliably perceive myself as capable and competent.",
       "trait": "conscientiousness",
       "weight": 1.1,
+      "aspect": "Industriousness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel capable.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel competent.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel capable in certain areas.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel competent in my abilities.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel capable and competent.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel confident in my abilities.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly feel capable and competent in what I do.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I have a strong sense of my own competence.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very confident in my abilities.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I have a very strong sense of capability and competence.",
-              "weight": 1
-          }
-      },
-      "aspect": "Industriousness"
-  },
-  {
-      "text": "I am good at resisting temptation.",
+        "0-10": {
+          "text": "I rarely feel capable.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel somewhat competent.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel capable in certain areas.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately feel competent in my abilities.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel capable and competent.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently feel confident in my abilities.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel capable and effective in what I do.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I have a strong sense of my own competence.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very confident in my abilities.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I possess an unwavering belief in my competence.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I effectively resist impulses and temptations.",
+      "trait": "conscientiousness",
+      "weight": 1,
+      "aspect": "Industriousness",
+      "subtext": {
+        "0-10": {
+          "text": "I often give in to temptations.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally manage to resist a temptation.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes successfully resist impulses.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately manage to keep my impulses in check.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often resist temptations effectively.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently control my impulses in tempting situations.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly demonstrate strong self-control.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly capable of resisting temptation.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very adept at maintaining self-control.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I consistently and robustly resist all temptations.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I habitually deliberate before taking action.",
+      "trait": "conscientiousness",
+      "weight": 1.1,
+      "aspect": "Industriousness",
+      "subtext": {
+        "0-10": {
+          "text": "I rarely think before acting.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally pause briefly before acting.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes consider my actions beforehand.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately reflect before making decisions.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often think carefully before acting.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently deliberate before taking any action.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly plan my actions carefully.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly methodical in thinking before I act.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very deliberate and thoughtful in my actions.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always think thoroughly before making any decision.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently manage my time efficiently.",
+      "trait": "conscientiousness",
+      "weight": 1,
+      "aspect": "Industriousness",
+      "subtext": {
+        "0-10": {
+          "text": "I rarely use my time efficiently.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally manage my time well.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes use my time in a productive way.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately make good use of my time.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often work efficiently.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently manage my time effectively.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly use my time in a very efficient manner.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly efficient in managing my time.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very skilled at using my time wisely.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always maximize my efficiency in time management.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I maintain a preference for neat and orderly surroundings.",
+      "trait": "conscientiousness",
+      "weight": 1.1,
+      "aspect": "Orderliness",
+      "subtext": {
+        "0-10": {
+          "text": "I do not mind if things are messy.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally tidy up my space.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes prefer things to be neat.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately favor an orderly environment.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often maintain a tidy space.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently ensure that my surroundings are neat.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly keep my environment orderly.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value order and neatness.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very particular about maintaining order.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always insist on a perfectly neat and orderly environment.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I carefully attend to details.",
+      "trait": "conscientiousness",
+      "weight": 1,
+      "aspect": "Orderliness",
+      "subtext": {
+        "0-10": {
+          "text": "I often overlook important details.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally notice small details.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes pay attention to details.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately focus on details.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often notice important details.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently attend to even subtle details.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly ensure that no detail is overlooked.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly meticulous about details.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very thorough in noticing every detail.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always pay exceptionally close attention to every detail.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I reliably adhere to established rules and guidelines.",
+      "trait": "conscientiousness",
+      "weight": 1.1,
+      "aspect": "Orderliness",
+      "subtext": {
+        "0-10": {
+          "text": "I often disregard rules and guidelines.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally follow rules when reminded.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes make an effort to follow rules.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately adhere to rules.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often follow established guidelines.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently abide by rules and regulations.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly conform to established rules.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly respect and follow rules.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very careful to adhere to all rules.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always strictly follow rules and regulations.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I routinely develop plans and adhere to them.",
+      "trait": "conscientiousness",
+      "weight": 1,
+      "aspect": "Orderliness",
+      "subtext": {
+        "0-10": {
+          "text": "I rarely make plans.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally make loose plans.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes plan but don’t always follow through.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately like to plan activities.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often create plans and try to follow them.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently make detailed plans and adhere to them.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly plan ahead and execute my plans.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value planning and stick to my plans.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very committed to following my plans.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always meticulously plan and strictly adhere to my schedule.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I value having a structured schedule and routine.",
+      "trait": "conscientiousness",
+      "weight": 0.9,
+      "aspect": "Orderliness",
+      "subtext": {
+        "0-10": {
+          "text": "I prefer spontaneity over routine.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally follow a loose schedule.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes appreciate having a general routine.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately value a consistent schedule.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often rely on a set routine.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently adhere to a regular schedule.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly maintain a structured routine.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value having a consistent routine.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very reliant on my schedule.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always strictly adhere to a well-planned routine.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently remain organized and focused when juggling tasks.",
       "trait": "conscientiousness",
       "weight": 1,
       "subtext": {
-          "0-10": {
-              "text": "I often give in to temptation.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally resist temptation.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes manage to resist temptation.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately good at resisting temptation.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often resist temptations.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently manage to resist temptation.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly resist impulses and temptations.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly capable of resisting temptation.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very good at controlling my impulses.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I have a very strong ability to resist temptation.",
-              "weight": 1
-          }
-      },
-      "aspect": "Industriousness"
-  },
-  {
-      "text": "I think carefully before acting.",
-      "trait": "conscientiousness",
-      "weight": 1.1,
-      "subtext": {
-          "0-10": {
-              "text": "I rarely think before acting.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally think briefly before acting.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes think before I act.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately think before making decisions.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often think carefully before acting.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently consider my actions beforehand.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly think things through before acting.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly deliberate in my actions.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very thoughtful before I act.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always think very carefully before taking any action.",
-              "weight": 1
-          }
-      },
-      "aspect": "Industriousness"
-  },
-  {
-      "text": "I am efficient and make good use of my time.",
-      "trait": "conscientiousness",
-      "weight": 1,
-      "subtext": {
-          "0-10": {
-              "text": "I am rarely efficient with my time.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally use my time efficiently.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes manage my time well.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately efficient in using my time.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often make good use of my time.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently work efficiently.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly use my time effectively.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly efficient in managing my time.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very good at using my time wisely.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always use my time with maximum efficiency.",
-              "weight": 1
-          }
-      },
-      "aspect": "Industriousness"
-  },
-  {
-      "text": "I like to have things neat and tidy.",
-      "trait": "conscientiousness",
-      "weight": 1.1,
-      "subtext": {
-          "0-10": {
-              "text": "I don't mind things being messy.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally tidy up.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes like things to be neat.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately prefer a tidy environment.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often like things to be neat and tidy.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently keep my surroundings tidy.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly ensure things are neat and in order.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value having a neat and tidy space.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very particular about things being tidy.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always ensure everything is perfectly neat and tidy.",
-              "weight": 1
-          }
-      },
-      "aspect": "Orderliness"
-  },
-  {
-      "text": "I pay attention to details.",
-      "trait": "conscientiousness",
-      "weight": 1,
-      "subtext": {
-          "0-10": {
-              "text": "I often overlook details.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally notice details.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes pay attention to details.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately pay attention to details.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often notice important details.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently pay close attention to details.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly focus on even small details.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly detail-oriented.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very meticulous about details.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always pay very close attention to every detail.",
-              "weight": 1
-          }
-      },
-      "aspect": "Orderliness"
-  },
-  {
-      "text": "I follow rules and regulations.",
-      "trait": "conscientiousness",
-      "weight": 1.1,
-      "subtext": {
-          "0-10": {
-              "text": "I often disregard rules.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally follow rules.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes adhere to rules and regulations.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately follow rules.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often follow rules and guidelines.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently abide by rules and regulations.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly follow established rules.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly respect and follow rules.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very careful to follow all rules.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always strictly adhere to rules and regulations.",
-              "weight": 1
-          }
-      },
-      "aspect": "Orderliness"
-  },
-  {
-      "text": "I like to make plans and stick to them.",
-      "trait": "conscientiousness",
-      "weight": 1,
-      "subtext": {
-          "0-10": {
-              "text": "I rarely make plans.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally make loose plans.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes make plans but don't always stick to them.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately like to plan things.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often make plans and try to follow them.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently make detailed plans and stick to them.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly plan ahead and follow my plans.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value having and sticking to plans.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very committed to following my plans.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always make detailed plans and strictly adhere to them.",
-              "weight": 1
-          }
-      },
-      "aspect": "Orderliness"
-  },
-  {
-      "text": "I like to have a schedule and routine.",
+        "0-10": {
+          "text": "I rarely stay organized when managing tasks.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally try to organize my tasks.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes remain focused when handling multiple tasks.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately keep my tasks organized.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often stay organized while managing tasks.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently remain focused and organized during multitasking.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly manage multiple tasks with a clear focus.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly maintain organization and focus when juggling tasks.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly efficient at managing multiple priorities.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always stay exceptionally organized and focused when handling many tasks.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I favor planned and organized activities over spontaneity.",
       "trait": "conscientiousness",
       "weight": 0.9,
       "subtext": {
-          "0-10": {
-              "text": "I prefer spontaneity over routine.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally follow a loose schedule.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes like having a general routine.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately prefer having a schedule.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often follow a schedule and routine.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently rely on a schedule for my day.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly maintain a structured schedule.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value having a consistent routine.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very reliant on my schedule.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always adhere strictly to my schedule and routine.",
-              "weight": 1
-          }
-      },
-      "aspect": "Orderliness"
-  },
-  {
-      "text": "I stay focused and organized when managing multiple tasks.",
-      "trait": "conscientiousness",
-      "weight": 1,
-      "subtext": {
-          "0-10": {
-              "text": "I rarely stay focused or organized when handling tasks.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally try to stay organized but struggle to maintain focus.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes stay organized when managing tasks.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately focus on staying organized and managing tasks effectively.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often stay organized and focused while managing tasks.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently stay on top of tasks through focus and organization.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly stay focused and manage tasks in an organized manner.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly focus on staying organized when handling multiple tasks.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly organized and focused when managing multiple priorities.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always stay focused and highly organized when managing tasks.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely prefer organized activities.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally enjoy planned events.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes choose structured activities over spontaneous ones.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately prefer organized activities.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often choose planned over spontaneous events.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently opt for organized activities.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly plan my activities rather than leaving them to chance.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly favor structured and well-organized events.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly inclined to choose planned activities.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always prioritize meticulously organized and planned events.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I prefer organized, planned activities over spontaneous events.",
-      "trait": "conscientiousness",
-      "weight": 0.9,
-      "subtext": {
-          "0-10": {
-              "text": "I rarely prefer organized activities and enjoy spontaneity.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally enjoy planned activities but like being spontaneous.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes prefer organized activities over spontaneous ones.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy planned activities.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often prefer organized and structured events.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently choose planned activities over spontaneous ones.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly prefer organized, planned events.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly favor structured and well-planned activities.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly inclined to choose organized events over spontaneous ones.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I exclusively prefer meticulously organized and planned activities.",
-              "weight": 1
-          }
-      }
-  },
-  {
-      "text": "I feel a strong responsibility to meet my goals and commitments.",
+    },
+    {
+      "text": "I possess a strong sense of duty toward fulfilling my goals and commitments.",
       "trait": "conscientiousness",
       "weight": 1.1,
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel responsible for meeting my goals or commitments.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally take responsibility for meeting my goals.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel committed to fulfilling my goals.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel responsible for achieving my goals.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel a strong responsibility to meet commitments.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently ensure I meet my goals and commitments.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly feel accountable for achieving my goals.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly feel responsible for meeting my commitments.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly dedicated to fulfilling my goals and responsibilities.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always feel a deep responsibility to achieve my goals.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely feel responsible for my commitments.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel a mild sense of responsibility.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel responsible for meeting my goals.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately feel accountable for my commitments.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel a strong duty to meet commitments.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently ensure that I meet my goals.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel deeply responsible for my commitments.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly prioritize fulfilling my obligations.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very dedicated to meeting my goals and commitments.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel an intense responsibility to achieve my goals.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I tend to make decisions based on facts rather than feelings.",
+    },
+    {
+      "text": "I predominantly base my decisions on factual evidence rather than emotions.",
       "trait": "conscientiousness",
       "weight": 1.3,
       "subtext": {
-          "0-10": {
-              "text": "I almost always make decisions based on my feelings, rarely relying on facts.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I mostly decide using my emotions, with little consideration for facts.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes consider facts, but my feelings usually guide my choices.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I occasionally let facts influence my decisions, though feelings tend to dominate.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I try to balance facts and feelings when making decisions.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I usually lean toward basing my decisions on facts, even though emotions still play a role.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I frequently base my decisions on facts rather than on my feelings.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I consistently prioritize facts in my decision-making, with minimal influence from emotions.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I almost always rely on facts when making decisions, rarely letting feelings interfere.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always base my decisions on facts, completely setting aside my feelings.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I almost always decide based on feelings.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I mostly rely on emotions when deciding.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes consider facts, but feelings often guide me.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I occasionally let facts influence my decisions.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I try to balance facts with emotions when deciding.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I usually lean toward making decisions based on facts.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I frequently base my decisions on objective evidence.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I consistently prioritize facts over feelings in my decision-making.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I almost always rely on factual information when deciding.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always base my decisions solely on factual evidence.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I am detail-oriented and take time to think through tasks carefully.",
+    },
+    {
+      "text": "I systematically focus on details and thoughtfully plan my tasks.",
       "trait": "conscientiousness",
       "weight": 0.9,
       "subtext": {
-          "0-10": {
-              "text": "I rarely pay attention to details or think through tasks.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally take time to think about tasks in detail.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes focus on details when completing tasks.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately pay attention to details.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often think through tasks carefully.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently focus on details and think through tasks.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly take time to focus on details.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly focus on details and think carefully about tasks.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly detail-oriented and thorough with tasks.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always focus on details and think through tasks thoroughly.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely think through details when completing tasks.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally reflect on task details.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes consider details when working.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately plan my tasks with attention to details.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often ensure my tasks are well thought out.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently focus on details and plan carefully.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly engage in detailed planning for my tasks.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly emphasize careful thought in task management.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very meticulous and thorough in my planning.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always think through every detail with great care.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I enjoy being around large groups of people.",
+    },
+    {
+      "text": "I derive energy from being in large social gatherings.",
       "trait": "extraversion",
       "weight": 1.1,
+      "aspect": "Enthusiasm",
       "subtext": {
-          "0-10": {
-              "text": "I prefer being alone or with a few close friends.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally don't mind being in a crowd.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy being in large groups.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy social gatherings.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often enjoy being around many people.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently seek out social situations with large groups.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly enjoy and feel energized by large gatherings.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy being in the company of many people.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very comfortable and happy in large groups.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always feel energized and happy when surrounded by many people.",
-              "weight": 1
-          }
-      },
-      "aspect": "Enthusiasm"
-  },
-  {
-      "text": "I often feel cheerful and optimistic.",
+        "0-10": {
+          "text": "I prefer solitude over large groups.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally join a crowd, though with reservation.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes enjoy being with many people.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy social gatherings.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel energized in groups.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently seek out large social events.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly thrive in large group settings.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly enjoy the energy of social gatherings.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very enthusiastic about being in large groups.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel invigorated when surrounded by many people.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently maintain a cheerful and optimistic outlook.",
       "trait": "extraversion",
       "weight": 1.2,
+      "aspect": "Enthusiasm",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel cheerful or optimistic.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel a bit cheerful.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel optimistic about things.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel cheerful and hopeful.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel cheerful and optimistic.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel positive and upbeat.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly have a cheerful and optimistic outlook.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly often in a good mood.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very consistently cheerful and optimistic.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always feel cheerful, positive, and optimistic.",
-              "weight": 1
-          }
-      },
-      "aspect": "Enthusiasm"
-  },
-  {
-      "text": "I find it easy to make new friends.",
+        "0-10": {
+          "text": "I rarely feel cheerful or optimistic.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally experience brief moments of cheer.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel moderately positive.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately maintain a cheerful mood.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel optimistic.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently experience a positive outlook.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel upbeat and cheerful.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly energetic and optimistic.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very consistently cheerful.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always maintain a highly positive and optimistic mood.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I readily form new friendships.",
       "trait": "extraversion",
       "weight": 1,
+      "aspect": "Enthusiasm",
       "subtext": {
-          "0-10": {
-              "text": "I find it difficult to make new friends.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally make a new acquaintance.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes find it easy to make new friends.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately find it easy to connect with new people.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often make new friends without much effort.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently find it easy to form new friendships.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly connect with new people and make friends.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly skilled at making new friends.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very good at forming new friendships.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always find it very easy and natural to make new friends.",
-              "weight": 1
-          }
-      },
-      "aspect": "Enthusiasm"
-  },
-  {
-      "text": "I am a warm and friendly person.",
+        "0-10": {
+          "text": "I find it difficult to make new friends.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally make a new acquaintance.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes find it easy to connect with new people.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately establish new social contacts.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often make new friends without much difficulty.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently form new friendships easily.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly connect with new people.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly effective at making friends.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very skilled at initiating friendships.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always find it remarkably easy to make new friends.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently display warmth and friendliness.",
       "trait": "extraversion",
       "weight": 1.3,
+      "aspect": "Enthusiasm",
       "subtext": {
-          "0-10": {
-              "text": "I am often perceived as cold or distant.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I am occasionally friendly.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes try to be warm and friendly.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately warm and approachable.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often act warm and friendly towards others.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently display warmth and friendliness.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly show warmth and am considered friendly.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly regarded as a warm and friendly person.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very consistently warm and friendly in my interactions.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I am always warm, friendly, and approachable.",
-              "weight": 1
-          }
-      },
-      "aspect": "Enthusiasm"
-  },
-  {
-      "text": "I enjoy parties and social gatherings.",
+        "0-10": {
+          "text": "I am often perceived as cold or distant.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally appear friendly.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes show warmth in social settings.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately act in a warm, approachable manner.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often display friendliness towards others.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently exude warmth and approachability.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly project a warm and friendly demeanor.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly regarded for my warmth and friendliness.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very consistently warm and affable.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I am always remarkably warm, friendly, and approachable.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I actively seek and enjoy social events and parties.",
       "trait": "extraversion",
       "weight": 1,
+      "aspect": "Enthusiasm",
       "subtext": {
-          "0-10": {
-              "text": "I generally avoid parties and social gatherings.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally attend social events out of obligation.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy parties and gatherings.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy social events.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often enjoy going to parties and gatherings.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently attend and enjoy social events.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly seek out parties and social gatherings.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy and feel energized by parties.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very enthusiastic about attending social events.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always look forward to and thoroughly enjoy parties and social gatherings.",
-              "weight": 1
-          }
-      },
-      "aspect": "Enthusiasm"
-  },
-  {
-      "text": "I often take the lead in group activities.",
+        "0-10": {
+          "text": "I generally avoid parties and social events.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally attend events out of necessity.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes enjoy attending parties.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy social gatherings.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often take pleasure in parties.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently attend and enjoy social events.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly look forward to social gatherings.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly enjoy being at parties and gatherings.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very enthusiastic about attending social events.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always eagerly anticipate and thoroughly enjoy parties and gatherings.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I frequently assume leadership roles in group settings.",
       "trait": "extraversion",
       "weight": 1.1,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely take the lead in groups.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally contribute but don't lead.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes take initiative in group settings.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately take the lead when necessary.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often step up to lead group activities.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently take charge in group situations.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly assume a leadership role in groups.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy taking the lead.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very comfortable being in charge.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always naturally take the lead in group activities.",
-              "weight": 1
-          }
-      },
-      "aspect": "Assertiveness"
-  },
-  {
-      "text": "I am comfortable expressing my opinions.",
+        "0-10": {
+          "text": "I rarely take the lead in groups.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally contribute but seldom lead.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes take initiative in groups.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately assume leadership when needed.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often step up to lead group activities.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently take charge in group situations.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly exhibit leadership in groups.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly enjoy assuming leadership roles.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very comfortable and effective as a leader.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always naturally take the lead and inspire others.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I confidently articulate my opinions.",
       "trait": "extraversion",
       "weight": 1.2,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely express my opinions.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally share my views if asked.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel comfortable expressing my opinions.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately share my opinions.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often express my opinions openly.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently voice my opinions and ideas.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly and confidently express my opinions.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly comfortable expressing what I think.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very outspoken and share my opinions freely.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always feel very comfortable and readily express my opinions.",
-              "weight": 1
-          }
-      },
-      "aspect": "Assertiveness"
-  },
-  {
-      "text": "I enjoy being active and on the go.",
+        "0-10": {
+          "text": "I rarely express my opinions.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally share my views when prompted.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes express my opinions.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately share my opinions in conversation.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often speak my mind openly.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently voice my opinions with confidence.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly express my views assertively.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly comfortable and clear in expressing my opinions.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very outspoken and direct.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always express my opinions in a confident and assertive manner.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I thrive on an active, energetic lifestyle.",
       "trait": "extraversion",
       "weight": 1,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I prefer a slower pace and less activity.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally engage in physical activity.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy being active.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy being active and busy.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often seek out active pursuits.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy being on the move and active.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly engage in activities and stay busy.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy a fast-paced and active lifestyle.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very energetic and enjoy being active.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always feel best when I am active and on the go.",
-              "weight": 1
-          }
-      },
-      "aspect": "Assertiveness"
-  },
-  {
-      "text": "I don't mind being the center of attention.",
+        "0-10": {
+          "text": "I prefer a calm and sedentary lifestyle.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally engage in physical activities.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes enjoy being physically active.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy staying active.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often seek out active pursuits.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently maintain a high level of physical activity.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly embrace an energetic and active lifestyle.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly energetic and active.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very enthusiastic about being active.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel my best when I am actively on the move.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I am comfortable being the focal point in social situations.",
       "trait": "extraversion",
       "weight": 0.9,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I strongly dislike being the center of attention.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally find myself in the spotlight but don't enjoy it.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes don't mind being the center of attention.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel comfortable with attention.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often don't mind being noticed.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel comfortable being the center of attention.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly find myself in the spotlight and don't mind it.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy being the center of attention.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very comfortable and enjoy being the focus of attention.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always enjoy and seek out being the center of attention.",
-              "weight": 1
-          }
-      },
-      "aspect": "Assertiveness"
-  },
-  {
-      "text": "I am assertive and stand up for myself.",
+        "0-10": {
+          "text": "I strongly dislike being the center of attention.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally find myself in the spotlight, but with discomfort.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes don’t mind being noticed.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately tolerate being the center of attention.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel at ease when I am noticed.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently feel comfortable in the spotlight.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly enjoy being the focus of attention.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly appreciate being in the center of attention.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very comfortable and relish being noticed.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always enjoy and seek out being the center of attention.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I reliably assert my rights and stand up for myself.",
       "trait": "extraversion",
       "weight": 1.3,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely stand up for myself.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally try to be assertive.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes stand up for my beliefs.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately assertive when necessary.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often assert myself in situations.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently stand up for my rights and opinions.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly act assertively when needed.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly assertive and confident in standing up for myself.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very assertive and direct in my communication.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always act assertively and confidently in all situations.",
-              "weight": 1
-          }
-      },
-      "aspect": "Assertiveness"
-  },
-  {
-      "text": "I feel energized by engaging with new people and building connections.",
+        "0-10": {
+          "text": "I rarely stand up for myself.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally try to be assertive.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes assert myself when needed.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately stand up for my beliefs.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often assert myself in situations.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently stand up for my rights and opinions.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly act assertively in challenging situations.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly assertive and confident in standing up for myself.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very assertive and direct in my communication.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always act with unwavering assertiveness and confidence.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I gain energy from connecting with new people and forming relationships.",
       "trait": "extraversion",
       "weight": 1.1,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel energized by meeting new people.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally enjoy meeting new people but prefer to keep to myself.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel energized by engaging with new people.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy meeting new people and making connections.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel energized by social interactions.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy meeting new people and forming connections.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly feel energized by engaging with new people.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly enjoy building connections with new people.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly energized by meeting and connecting with others.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always feel invigorated by engaging with new people and building connections.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely feel energized by meeting new people.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally enjoy meeting someone new.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel upbeat after social interactions.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy building new connections.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel energized by engaging with others.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently derive energy from making new connections.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel invigorated by engaging with new people.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly enjoy and actively seek new social connections.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly energized by forming new relationships.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel deeply invigorated by engaging with new people.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I often take charge in group settings and feel confident in leadership roles.",
+    },
+    {
+      "text": "I consistently assume charge in group settings and exude leadership confidence.",
       "trait": "extraversion",
       "weight": 1,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely take charge in groups and avoid leadership roles.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally take charge but prefer to follow in group settings.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel comfortable taking charge in group settings.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy taking charge and leading in group settings.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel confident leading in group settings.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently take charge and feel comfortable leading.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly feel confident and effective in leadership roles.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly enjoy leading and taking charge in group settings.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly confident and capable in leadership roles.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I thrive on taking charge and feel fully confident in leadership roles.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely take charge in groups.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally take charge but prefer to follow.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel comfortable taking charge.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately assume leadership when necessary.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often take charge in group settings.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently lead groups with confidence.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel confident when taking charge.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly embrace leadership roles in group settings.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly confident and effective in leadership roles.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always thrive as a natural leader in any group setting.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I enjoy discussing ideas and debating with others.",
+    },
+    {
+      "text": "I relish engaging in discussions and debates on various ideas.",
       "trait": "extraversion",
       "weight": 0.9,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely enjoy discussing ideas or debating with others.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally engage in discussions but avoid debates.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy discussing ideas with others.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy debating and discussing topics.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often engage in debates and discussions.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy sharing ideas and debating with others.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly discuss and debate ideas enthusiastically.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly enjoy sharing ideas and engaging in debates.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly energized by discussing and debating ideas.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always thrive on discussing ideas with others.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely enjoy discussing ideas with others.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally engage in discussions, but avoid debates.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes share my ideas in discussions.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy debating and discussing ideas.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often engage in debates with others.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently relish sharing ideas and debating topics.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly participate in lively debates about ideas.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly enjoy and seek out intellectual debates.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly energized by discussing and debating ideas.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always thrive on in-depth discussions and debates about ideas.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I tend to stay calm and assertive when solving problems.",
+    },
+    {
+      "text": "I remain composed and assertive when addressing challenges.",
       "trait": "extraversion",
       "weight": 1.3,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely stay calm or assertive when facing problems.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally remain calm but struggle with assertiveness.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes stay calm and assertive in difficult situations.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately stay calm and focused under pressure.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often stay calm and assertive when solving problems.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently stay calm and assertive under stress.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly remain calm and focused when solving problems.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly stay composed and assertive when faced with problems.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly calm and assertive under pressure.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always stay calm, composed, and assertive when facing problems.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely stay calm in problem situations.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally manage to remain calm.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes stay composed under pressure.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately remain calm and assertive in problems.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often stay calm when solving problems.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently remain composed under stress.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly solve problems while staying calm and assertive.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly maintain composure and assertiveness in challenges.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly calm and assertive when addressing issues.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always remain remarkably calm, composed, and assertive in all challenges.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I’m known for being bold and independent in my approach to problems.",
+    },
+    {
+      "text": "I am recognized for my bold and independent problem-solving approach.",
       "trait": "extraversion",
       "weight": 1,
+      "aspect": "Assertiveness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely act independently or boldly when solving problems.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally act independently but rarely take bold steps.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes approach problems boldly and independently.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately act boldly and independently in problem-solving.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often show independence and boldness.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently solve problems independently and boldly.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly take bold and independent approaches to problems.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly demonstrate boldness and independence.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly bold and independent in my approach to challenges.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always act boldly and independently when solving problems.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely act independently or boldly.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally act independently, but rarely boldly.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes approach problems with independence.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately demonstrate bold, independent thinking.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often take an independent and bold approach.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently solve problems in a bold and independent manner.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly take independent and daring approaches to challenges.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly exhibit boldness and independence in problem-solving.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly recognized for my bold, independent methods.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always act boldly and independently when facing challenges.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I feel sympathy for those who are less fortunate.",
+    },
+    {
+      "text": "I deeply empathize with those who are less fortunate.",
       "trait": "agreeableness",
       "weight": 1.2,
+      "aspect": "Compassion",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel sympathy for others.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel a little sympathy.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel bad for those less fortunate.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel sympathy for others' struggles.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel sympathy for those in need.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel compassion for those less fortunate.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly feel sympathy for people facing hardship.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly feel compassion for those less fortunate.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very empathetic towards those struggling.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always feel deep sympathy for those who are less fortunate.",
-              "weight": 1
-          }
-      },
-      "aspect": "Compassion"
-  },
-  {
-      "text": "I enjoy helping others.",
+        "0-10": {
+          "text": "I rarely feel empathy for others.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel a tinge of sympathy.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel concerned for those in need.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately feel empathy towards others' struggles.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often empathize with those less fortunate.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently feel compassion for people in need.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly experience deep empathy for others.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly attuned to the suffering of others.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very empathetic towards those who struggle.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel profound empathy for those less fortunate.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I derive satisfaction from assisting others.",
       "trait": "agreeableness",
       "weight": 1.3,
+      "aspect": "Compassion",
       "subtext": {
-          "0-10": {
-              "text": "I rarely go out of my way to help others.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally help if it's convenient.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy helping people out.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy assisting others.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often offer help to those in need.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy helping others.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly look for opportunities to help people.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy being helpful to others.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very willing to help people.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always enjoy helping others and will go out of my way to do so.",
-              "weight": 1
-          }
-      },
-      "aspect": "Compassion"
-  },
-  {
-      "text": "I tend to trust people.",
+        "0-10": {
+          "text": "I rarely go out of my way to help others.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally lend a helping hand if convenient.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes enjoy helping those around me.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately take pleasure in assisting others.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often offer help to those in need.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently derive satisfaction from helping others.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly look for opportunities to assist people.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly enjoy being helpful and supportive.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very willing to help others.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always eagerly seek out ways to assist those around me.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I generally extend trust towards others.",
       "trait": "agreeableness",
       "weight": 1,
+      "aspect": "Compassion",
       "subtext": {
-          "0-10": {
-              "text": "I am generally suspicious of people.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally trust someone after getting to know them.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes tend to trust people initially.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately tend to trust others.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often trust people until they give me a reason not to.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently tend to trust people.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly give people the benefit of the doubt.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly tend to trust others.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very trusting of people.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always tend to trust people.",
-              "weight": 1
-          }
-      },
-      "aspect": "Compassion"
-  },
-  {
-      "text": "I am interested in the well-being of others.",
+        "0-10": {
+          "text": "I am usually suspicious of people.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally trust someone after getting to know them.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes tend to trust people readily.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately give others the benefit of the doubt.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often trust people until proven otherwise.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently extend trust to those around me.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly trust people in general.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly tend to trust others.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very trusting by nature.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always naturally trust other people.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I actively care about the welfare of others.",
       "trait": "agreeableness",
       "weight": 1.1,
+      "aspect": "Compassion",
       "subtext": {
-          "0-10": {
-              "text": "I am rarely concerned about others' well-being.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally think about how others are doing.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes wonder about the well-being of people I know.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately interested in others' well-being.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often think about the well-being of those around me.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently show interest in the well-being of others.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly inquire about the well-being of people I care about.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly interested in the well-being of others.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very concerned about the well-being of people.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always prioritize the well-being of others.",
-              "weight": 1
-          }
-      },
-      "aspect": "Compassion"
-  },
-  {
-      "text": "I try to be kind to everyone I meet.",
+        "0-10": {
+          "text": "I rarely concern myself with the well-being of others.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally notice how others are doing.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes show interest in others’ welfare.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately care about the well-being of people.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often consider the welfare of those around me.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently pay attention to others’ well-being.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly show care for people’s welfare.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly prioritize the well-being of others.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very concerned about the welfare of those around me.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always actively care for and prioritize others’ well-being.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently strive to treat everyone with kindness.",
       "trait": "agreeableness",
       "weight": 1,
+      "aspect": "Compassion",
       "subtext": {
-          "0-10": {
-              "text": "I am not always kind to everyone.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally try to be polite.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes make an effort to be kind.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately try to be kind to people.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often try to be kind in my interactions.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently aim to be kind to everyone.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly make an effort to be kind in all my interactions.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value being kind to others.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very intentional about being kind.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always strive to be kind and considerate to everyone I meet.",
-              "weight": 1
-          }
-      },
-      "aspect": "Compassion"
-  },
-  {
-      "text": "I avoid imposing my will on others.",
+        "0-10": {
+          "text": "I am not always kind in my interactions.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally try to be polite.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes make an effort to be kind.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately try to be kind to people.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often strive to be kind in my interactions.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently make an effort to treat everyone kindly.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly seek to be kind and considerate.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value treating everyone with kindness.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very intentional about being kind to everyone.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always strive to treat everyone with unwavering kindness.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I conscientiously refrain from imposing my preferences on others.",
       "trait": "agreeableness",
       "weight": 1.1,
+      "aspect": "Politeness",
       "subtext": {
-          "0-10": {
-              "text": "I often try to get my way.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally try to influence others.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes try to persuade others to my point of view.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately avoid forcing my opinions on others.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often let others make their own choices.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently avoid imposing my will on others.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly respect others' autonomy.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value letting others make their own decisions.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very careful not to impose my will on others.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always avoid imposing my will and respect others' choices completely.",
-              "weight": 1
-          }
-      },
-      "aspect": "Politeness"
-  },
-  {
-      "text": "I am generally modest about my achievements.",
+        "0-10": {
+          "text": "I often try to get my way.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally attempt to influence others.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes try to persuade others to my viewpoint.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately avoid imposing my will on others.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often allow others to make their own choices.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently refrain from forcing my preferences on others.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly respect others’ autonomy.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value letting others decide for themselves.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very careful not to impose my will.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always completely refrain from imposing my will on others.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I habitually exhibit modesty regarding my accomplishments.",
       "trait": "agreeableness",
       "weight": 1,
+      "aspect": "Politeness",
       "subtext": {
-          "0-10": {
-              "text": "I often boast about my achievements.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally talk about my successes.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes mention my achievements.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately modest about my accomplishments.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often downplay my achievements.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently am modest about my successes.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly avoid bragging about my achievements.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value humility regarding my achievements.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very modest about what I have accomplished.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I am always very modest and humble about my achievements.",
-              "weight": 1
-          }
-      },
-      "aspect": "Politeness"
-  },
-  {
-      "text": "I try to be straightforward and honest in my communication.",
+        "0-10": {
+          "text": "I often boast about my achievements.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally mention my successes.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes talk about my achievements.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately downplay my accomplishments.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often present myself modestly.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently refrain from bragging about my successes.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly maintain a humble attitude about my achievements.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value humility regarding what I accomplish.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very modest about my achievements.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always remain extremely modest and humble about my accomplishments.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently communicate in an honest and direct manner.",
       "trait": "agreeableness",
       "weight": 1.2,
+      "aspect": "Politeness",
       "subtext": {
-          "0-10": {
-              "text": "I am not always straightforward in my communication.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally am direct when speaking.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes try to be honest in what I say.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately try to be straightforward.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often communicate directly and honestly.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently try to be straightforward and honest.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly communicate in a direct and honest manner.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value honesty and straightforwardness.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very committed to being straightforward and honest.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always strive to be completely straightforward and honest in my communication.",
-              "weight": 1
-          }
-      },
-      "aspect": "Politeness"
-  },
-  {
-      "text": "I am respectful of authority.",
+        "0-10": {
+          "text": "I am not always straightforward.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally speak directly.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes attempt to be honest in my communication.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately strive to be straightforward.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often express myself directly and honestly.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently communicate in a frank manner.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly speak in a clear and honest way.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value clear and honest communication.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very committed to speaking straightforwardly.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always communicate in an unwaveringly honest and direct manner.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I reliably demonstrate respect for authority figures.",
       "trait": "agreeableness",
       "weight": 1,
+      "aspect": "Politeness",
       "subtext": {
-          "0-10": {
-              "text": "I often question authority.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally show respect for authority.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes try to be respectful of authority figures.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately respectful of authority.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often show respect for those in authority.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently am respectful of authority.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly show deference to authority figures.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value respecting authority.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very respectful of people in positions of authority.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always show great respect for authority.",
-              "weight": 1
-          }
-      },
-      "aspect": "Politeness"
-  },
-  {
-      "text": "I tend to avoid confrontation.",
-      "trait": "agreeableness",
-      "weight": 1.1,
-      "subtext": {
-          "0-10": {
-              "text": "I often engage in confrontations.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally stand my ground in disagreements.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes try to avoid arguments.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately try to avoid confrontations.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often try to smooth things over in disagreements.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently avoid confrontational situations.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly try to find peaceful resolutions.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value avoiding confrontation.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very averse to confrontational situations.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always try to avoid any form of confrontation.",
-              "weight": 1
-          }
-      },
-      "aspect": "Politeness"
-  },
-  {
-      "text": "I enjoy supporting my friends and helping them succeed.",
-      "trait": "agreeableness",
-      "weight": 1.1,
-      "subtext": {
-          "0-10": {
-              "text": "I rarely enjoy helping or supporting my friends.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally help friends but don’t enjoy it much.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes support my friends and their goals.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy supporting and helping friends.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often support my friends and enjoy their success.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy helping my friends succeed.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly support and enjoy helping my friends.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly enjoy supporting and encouraging friends.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly focused on supporting my friends and their goals.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always prioritize supporting my friends and celebrating their successes.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I often question authority.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally show respect for authority.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes acknowledge authority figures.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately respect authority.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often show deference to authority figures.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently respect and follow authority.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly honor the guidance of authority figures.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value respect for authority.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very respectful of those in authority.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always show profound respect for authority.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I often prioritize harmony and avoid conflict in my relationships.",
+    },
+    {
+      "text": "I typically steer clear of confrontational interactions.",
+      "trait": "agreeableness",
+      "weight": 1.1,
+      "aspect": "Politeness",
+      "subtext": {
+        "0-10": {
+          "text": "I often engage in confrontations.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally stand my ground in disagreements.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes try to avoid arguments.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately try to avoid confrontations.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often attempt to diffuse conflicts.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently avoid getting into confrontational situations.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly seek peaceful resolutions in conflicts.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value harmony and avoid confrontations.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very averse to confrontation.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always strive to completely avoid any form of confrontation.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I take pleasure in supporting my friends and contributing to their success.",
+      "trait": "agreeableness",
+      "weight": 1.1,
+      "aspect": "Politeness",
+      "subtext": {
+        "0-10": {
+          "text": "I rarely enjoy helping my friends.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally support friends when needed.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes lend support to my friends.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy supporting my friends.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often take time to help my friends succeed.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently enjoy being supportive of my friends.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly prioritize supporting my friends.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly enjoy and actively support my friends.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly focused on helping my friends succeed.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always make it a priority to support and celebrate my friends’ successes.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently prioritize harmony and avoid relational conflicts.",
       "trait": "agreeableness",
       "weight": 1,
+      "aspect": "Politeness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely prioritize harmony and may engage in conflicts.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally try to avoid conflict but don’t always prioritize harmony.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes try to maintain harmony in my relationships.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately prioritize harmony and avoid conflicts when possible.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often strive to maintain harmony in my relationships.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently avoid conflict and prioritize harmonious relationships.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly make efforts to maintain harmony and avoid disagreements.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly prioritize harmony in my relationships.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly committed to avoiding conflicts and fostering harmony.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always prioritize harmony and work tirelessly to avoid conflicts.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely prioritize harmony and may engage in conflicts.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally try to avoid conflict, but not consistently.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes make an effort to maintain harmony.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately strive to avoid conflict in relationships.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often prioritize harmony over conflict.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently avoid conflict to maintain harmony.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly take steps to keep my relationships harmonious.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value and actively preserve harmony in my relationships.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very committed to avoiding conflict.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always prioritize harmony and work tirelessly to prevent conflicts.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I strive to be understanding and supportive towards others.",
+    },
+    {
+      "text": "I endeavor to be understanding and supportive in my interactions.",
       "trait": "agreeableness",
       "weight": 1.2,
+      "aspect": "Politeness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely try to understand or support others.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally make an effort to be supportive.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes try to understand and support others.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately strive to show understanding.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often make an effort to be supportive.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently try to understand and support others.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly strive to show understanding and support.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly strive to be understanding and supportive.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly focused on understanding and supporting others.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always prioritize being understanding and supportive.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely make an effort to understand others.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally try to be supportive.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes attempt to understand and support others.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately strive to be understanding.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often make an effort to support others.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently endeavor to understand and support those around me.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly seek to be empathetic and supportive.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly strive to be understanding and supportive.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly dedicated to being empathetic and supportive.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always prioritize being deeply understanding and supportive.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I’m sensitive to other people’s feelings and try to meet their needs.",
+    },
+    {
+      "text": "I am attuned to others' feelings and actively seek to meet their needs.",
       "trait": "agreeableness",
       "weight": 1,
+      "aspect": "Politeness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely notice or care about others’ feelings.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally pay attention to others’ feelings.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes try to be sensitive to others’ needs.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately notice and respond to others’ feelings.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often try to meet others’ emotional needs.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently notice and respond to others’ feelings.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly make an effort to meet others’ needs.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly focus on being sensitive and supportive.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly aware of others’ emotions and try to meet their needs.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always prioritize being sensitive and supportive to others.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely notice others’ feelings.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally become aware of others’ emotions.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes try to be responsive to others’ feelings.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately notice and respond to others’ emotions.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often make an effort to meet others’ emotional needs.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently pay attention to and act on others’ feelings.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly strive to be sensitive and responsive.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly focus on understanding and meeting others’ needs.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly aware of others’ emotions and respond accordingly.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always make it a top priority to be sensitive and responsive to others.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I prefer to work as part of a team and value cooperation.",
+    },
+    {
+      "text": "I strongly value teamwork and cooperative collaboration.",
       "trait": "agreeableness",
       "weight": 0.9,
+      "aspect": "Politeness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely value cooperation or enjoy working in a team.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally work in teams but don’t always value cooperation.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes prefer working as part of a team.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately value cooperation and teamwork.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often enjoy working in teams and value cooperation.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently prefer teamwork and cooperative efforts.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly work well in teams and value cooperation.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly prefer teamwork and emphasize cooperation.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly inclined to work as part of a team and value cooperation.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always value teamwork and prioritize cooperation in group settings.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely enjoy working as part of a team.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally work in teams.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes prefer team settings.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately appreciate cooperative work.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often value working in teams.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently prefer collaboration and teamwork.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly thrive in cooperative environments.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly prioritize team cooperation.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very inclined to work as part of a team.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always actively seek out collaborative, team-based work.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I often get irritated easily.",
+    },
+    {
+      "text": "I am prone to experiencing irritation quickly.",
       "trait": "neuroticism",
       "weight": 1.2,
+      "aspect": "Volatility",
       "subtext": {
-          "0-10": {
-              "text": "I rarely get irritated.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally get a little annoyed.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes find myself getting irritated.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately get irritated by small things.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often find myself getting easily irritated.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently get irritated by minor things.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly find myself feeling irritated.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly prone to getting irritated easily.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very easily irritated by small things.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always get irritated very easily.",
-              "weight": 1
-          }
-      },
-      "aspect": "Volatility"
-  },
-  {
-      "text": "I tend to act impulsively.",
+        "0-10": {
+          "text": "I rarely get irritated.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel a slight irritation.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes get annoyed by minor things.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately experience irritation over small issues.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often get irritated easily.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently become irritated by trivial matters.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly experience rapid irritation.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly prone to quick irritation.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very easily irritated by small things.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always get irritated very quickly and intensely.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I frequently act on impulse.",
       "trait": "neuroticism",
       "weight": 1.1,
+      "aspect": "Volatility",
       "subtext": {
-          "0-10": {
-              "text": "I rarely act without thinking.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally act on a whim.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes act without fully thinking things through.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately act impulsively at times.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often act on impulse.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently act impulsively without much thought.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly act on sudden urges.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly prone to acting impulsively.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very impulsive in my actions.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always tend to act very impulsively.",
-              "weight": 1
-          }
-      },
-      "aspect": "Volatility"
-  },
-  {
-      "text": "I often feel anxious.",
+        "0-10": {
+          "text": "I rarely act without thinking.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally act on a whim.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes act impulsively without full consideration.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately act on impulse at times.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often make decisions impulsively.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently act without much thought.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly give in to impulsive urges.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly prone to impulsive actions.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very impulsive in my behavior.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always act in a highly impulsive manner.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I regularly experience feelings of anxiety.",
       "trait": "neuroticism",
       "weight": 1.3,
+      "aspect": "Volatility",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel anxious.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel a bit nervous.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel anxious about things.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel anxious at times.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel anxious or worried.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel anxious.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly experience feelings of anxiety.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly prone to feeling anxious.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very often anxious.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always seem to feel anxious.",
-              "weight": 1
-          }
-      },
-      "aspect": "Volatility"
-  },
-  {
-      "text": "I have a quick temper.",
+        "0-10": {
+          "text": "I rarely feel anxious.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel a slight nervousness.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes experience mild anxiety.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately feel anxious at times.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel anxious or worried.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently experience anxiety.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel a significant degree of anxiety.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly prone to feeling anxious.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very often overwhelmed by anxiety.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel intensely anxious.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I am known to have a short fuse.",
       "trait": "neuroticism",
       "weight": 1,
+      "aspect": "Volatility",
       "subtext": {
-          "0-10": {
-              "text": "I rarely get angry.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally get a little frustrated.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes find myself getting angry.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately have a quick temper.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often get angry quickly.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently lose my temper easily.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly find myself getting angry quickly.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly prone to having a quick temper.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I have a very quick temper.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always tend to get angry very quickly.",
-              "weight": 1
-          }
-      },
-      "aspect": "Volatility"
-  },
-  {
-      "text": "I often feel agitated or restless.",
+        "0-10": {
+          "text": "I rarely get angry.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel a little frustrated.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes experience a quick temper.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately lose my temper at times.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often get angry quickly.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently lose my temper easily.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly experience a very short fuse.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly prone to getting angry rapidly.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I have a very quick temper.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always get angry almost instantaneously.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I frequently experience agitation and restlessness.",
       "trait": "neuroticism",
       "weight": 0.9,
+      "aspect": "Volatility",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel agitated or restless.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel a bit restless.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel agitated.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel restless at times.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel agitated or restless.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel on edge or restless.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly experience feelings of agitation.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly prone to feeling agitated or restless.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I very often feel restless and on edge.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always seem to feel agitated or restless.",
-              "weight": 1
-          }
-      },
-      "aspect": "Volatility"
-  },
-  {
-      "text": "I often feel sad or down.",
+        "0-10": {
+          "text": "I rarely feel agitated or restless.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel a bit on edge.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes experience mild restlessness.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately feel agitated at times.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel restless.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently experience agitation.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel on edge and restless.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly prone to feeling agitated.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I very often feel restless and uneasy.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel deeply agitated and restless.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I regularly experience feelings of sadness or low mood.",
       "trait": "neuroticism",
       "weight": 1.1,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel sad.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel a bit down.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel sad or blue.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel down at times.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel sad or down.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel unhappy or sad.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly experience feelings of sadness.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly prone to feeling sad or down.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I very often feel sad.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always seem to feel sad or down.",
-              "weight": 1
-          }
-      },
-      "aspect": "Withdrawal"
-  },
-  {
-      "text": "I am often worried about what others think of me.",
+        "0-10": {
+          "text": "I rarely feel sad.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel a little down.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel a bit blue.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately experience occasional sadness.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel sad or down.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently experience feelings of unhappiness.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel noticeably low in mood.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly prone to feelings of sadness.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I very often feel deeply sad.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always seem to feel profoundly sad or down.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I frequently concern myself with others' evaluations of me.",
       "trait": "neuroticism",
       "weight": 1,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely worry about others' opinions.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally think about what others might think.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes worry about others' judgments.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately worry about others' opinions of me.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often worry about what others think.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently worry about others' perceptions of me.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly feel self-conscious about others' opinions.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly concerned about what others think of me.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I very often worry about others' judgments.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I am always worried about what others think of me.",
-              "weight": 1
-          }
-      },
-      "aspect": "Withdrawal"
-  },
-  {
-      "text": "I feel easily overwhelmed by stress.",
+        "0-10": {
+          "text": "I rarely worry about what others think.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally notice others' opinions.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes worry about others’ judgments.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately feel self-conscious about others’ views.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often worry about how others perceive me.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently become preoccupied with others' opinions.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly concern myself with others' evaluations.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly troubled by what others think of me.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very often anxious about others' judgments.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always worry profoundly about how others view me.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I often feel overwhelmed when confronted with stress.",
       "trait": "neuroticism",
       "weight": 1.2,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel overwhelmed by stress.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel a bit stressed.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel overwhelmed when things get tough.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel overwhelmed under pressure.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel easily overwhelmed by stress.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel overwhelmed when facing challenges.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly feel overwhelmed by stressful situations.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly prone to feeling overwhelmed by stress.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I very easily get overwhelmed by stressful situations.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always feel very easily overwhelmed by stress.",
-              "weight": 1
-          }
-      },
-      "aspect": "Withdrawal"
-  },
-  {
-      "text": "I tend to blame myself when things go wrong.",
+        "0-10": {
+          "text": "I rarely feel overwhelmed by stress.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel mildly stressed.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes experience moderate stress.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately feel overwhelmed under pressure.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel easily overwhelmed by stress.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently feel inundated when facing stress.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel heavily burdened by stress.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly prone to feeling overwhelmed by stressful situations.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I very often feel overwhelmed by stress.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel deeply overwhelmed by stress.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I habitually attribute failures to my own shortcomings.",
       "trait": "neuroticism",
       "weight": 1,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely blame myself.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally wonder if I could have done things differently.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes blame myself when things don't go as planned.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately tend to blame myself.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often blame myself when things go wrong.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently take personal responsibility for negative outcomes.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly find myself blaming myself when things don't work out.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I have a strong tendency to blame myself.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I very often blame myself when things go wrong.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always tend to blame myself when things go wrong.",
-              "weight": 1
-          }
-      },
-      "aspect": "Withdrawal"
-  },
-  {
-      "text": "I often feel insecure about myself.",
+        "0-10": {
+          "text": "I rarely blame myself for things going wrong.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally wonder if I could have done better.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes blame myself when things fail.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately tend to take personal responsibility for failures.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often blame myself when things go wrong.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently attribute negative outcomes to my own faults.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly blame myself for setbacks.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I have a strong tendency to blame myself.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I very often internalize blame when things go wrong.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always unequivocally blame myself for any failure.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently struggle with feelings of insecurity.",
       "trait": "neuroticism",
       "weight": 0.9,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel insecure.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel a bit unsure of myself.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel insecure about my abilities.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel insecure at times.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel insecure about myself.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel insecure about my worth.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly experience feelings of insecurity.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly prone to feeling insecure.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I very often feel insecure about myself.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always seem to feel insecure.",
-              "weight": 1
-          }
-      },
-      "aspect": "Withdrawal"
-  },
-  {
-      "text": "I often feel overwhelmed when dealing with multiple responsibilities at once.",
+        "0-10": {
+          "text": "I rarely feel insecure about myself.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel a bit unsure of myself.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes question my self-worth.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately experience feelings of insecurity.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel insecure about my abilities.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently struggle with insecurity.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly experience deep feelings of insecurity.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly prone to feeling insecure.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I very often feel extremely insecure.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel overwhelmingly insecure about myself.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I regularly feel inundated when managing several responsibilities simultaneously.",
       "trait": "neuroticism",
       "weight": 1.1,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel overwhelmed by multiple responsibilities at once.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel overwhelmed but manage well.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel overwhelmed with multiple responsibilities.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel overwhelmed under pressure.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel overwhelmed by multiple responsibilities.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel overwhelmed when managing tasks.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly feel overwhelmed with multiple responsibilities at once.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly feel overwhelmed when under pressure.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly prone to feeling overwhelmed by multiple responsibilities at once.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always feel deeply overwhelmed when managing many tasks.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely feel overwhelmed by multiple responsibilities.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally manage multiple tasks without issue.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel a bit overwhelmed with many tasks.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately feel overwhelmed under multiple responsibilities.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel burdened by multiple tasks.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently feel overwhelmed when juggling responsibilities.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly feel inundated by numerous responsibilities.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly feel overwhelmed when under heavy responsibilities.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly prone to feeling overwhelmed by multiple duties.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always feel deeply overwhelmed when managing many tasks.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I tend to feel anxious or worried in stressful situations.",
+    },
+    {
+      "text": "I typically experience anxiety in high-pressure situations.",
       "trait": "neuroticism",
       "weight": 1,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel anxious or worried, even in stressful situations.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel mild anxiety in stress-inducing situations.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel worried or anxious under stress.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately experience anxiety in stressful scenarios.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel worried when faced with stress.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel anxious during stressful situations.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly experience worry or anxiety in stressful circumstances.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly feel anxious and worried in stressful situations.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly prone to anxiety and worry under stress.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I almost always feel deeply anxious or worried in stressful situations.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely feel anxious even under stress.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel mild anxiety in pressure situations.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel somewhat anxious in stressful conditions.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately experience anxiety when stressed.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel anxious in high-pressure scenarios.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently feel anxious during stressful times.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly experience significant anxiety under pressure.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly feel anxious in challenging situations.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly prone to anxiety in stressful contexts.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I almost always feel deeply anxious in stressful situations.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I often feel uneasy or second-guess myself when making decisions.",
+    },
+    {
+      "text": "I frequently experience uncertainty and self-doubt during decision-making.",
       "trait": "neuroticism",
       "weight": 0.9,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely feel uneasy or second-guess my decisions.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally second-guess myself when deciding.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes feel unsure when making decisions.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately feel uneasy when deciding.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often second-guess my decisions.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently feel uneasy when making decisions.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly second-guess myself when deciding.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly feel uneasy about making decisions.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly prone to second-guessing myself.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I almost always feel uneasy and second-guess my decisions.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely feel uneasy about my decisions.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally second-guess myself.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes feel uncertain when making decisions.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately experience self-doubt during decision-making.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often second-guess my decisions.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently feel uneasy when deciding.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly experience uncertainty in decision-making.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly tend to doubt my choices.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly prone to second-guessing myself.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I almost always feel deeply uncertain and second-guess every decision.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I often dwell on past mistakes and think about possible outcomes.",
+    },
+    {
+      "text": "I habitually ruminate on past errors and their potential consequences.",
       "trait": "neuroticism",
       "weight": 0.95,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely think about past mistakes or think about the possible outcomes.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally reflect on past mistakes and consider possible outcomes.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes dwell on mistakes and worry about outcomes.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately worry about past and possible outcomes.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often dwell on past mistakes and outcomes.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently reflect on past mistakes and worry about outcomes.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly dwell on mistakes and stress about what could have happened.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly focus on past mistakes and worry about what could have happened.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly prone to dwelling on past mistakes and worries.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I almost always dwell on the past and stress about what could have happened.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely dwell on past mistakes.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally reflect on past errors.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes think about past mistakes and outcomes.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately worry about past errors and potential consequences.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often ruminate on past mistakes.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently reflect on past errors and their outcomes.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly dwell on my past mistakes.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly focus on past mistakes and worry about what could have been.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly prone to overthinking past errors and consequences.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I almost always ruminate intensely on past mistakes and potential outcomes.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I tend to overthink situations and feel uneasy about the unknown.",
+    },
+    {
+      "text": "I am prone to overthinking and experiencing unease about uncertain outcomes.",
       "trait": "neuroticism",
       "weight": 1,
+      "aspect": "Withdrawal",
       "subtext": {
-          "0-10": {
-              "text": "I rarely overthink or feel uneasy about the unknown.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel uneasy when faced with the unknown.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes overthink and feel uneasy about uncertainty.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately overthink situations and feel uneasy about the unknown.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel uneasy about uncertain situations.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently overthink and feel uneasy about uncertainty.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly overthink situations and stress about the unknown.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly feel uneasy and overthink unknown scenarios.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly prone to overthinking and feeling uneasy about the unknown.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always overthink situations and feel deeply uneasy about uncertainty.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely overthink or worry about the unknown.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel uneasy in uncertain situations.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes overthink and feel a bit uneasy about uncertainty.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately experience overthinking and unease about the unknown.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel uneasy about uncertain outcomes.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently overthink and worry about the unknown.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly experience deep unease about uncertain outcomes.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly tend to overthink and feel uneasy about the unknown.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly prone to overthinking and feeling uneasy about uncertainty.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always overthink situations and feel profoundly uneasy about the unknown.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I appreciate beauty in art, nature, and ideas.",
+    },
+    {
+      "text": "I have a deep appreciation for the beauty in art, nature, and innovative ideas.",
       "trait": "openness",
       "weight": 1.3,
+      "aspect": "Aesthetic Openness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely notice beauty around me.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally appreciate beauty.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes find beauty in things.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately appreciate beauty in various forms.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often notice beauty in art and nature.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently appreciate beauty in different aspects of life.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly notice and appreciate beauty.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value beauty in art, nature, and ideas.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very sensitive to beauty in my surroundings.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I have a deep appreciation for beauty in all its forms.",
-              "weight": 1
-          }
-      },
-      "aspect": "Aesthetic Openness"
-  },
-  {
-      "text": "I enjoy letting my imagination run wild.",
+        "0-10": {
+          "text": "I rarely notice beauty around me.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally appreciate beauty in small doses.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes find beauty in art or nature.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately appreciate beauty in various forms.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often recognize beauty in art and nature.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently value the beauty found in art, nature, and ideas.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly have a deep appreciation for aesthetic beauty.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value and seek out artistic beauty.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very sensitive to the beauty in art, nature, and ideas.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I have an intense and profound appreciation for aesthetic beauty in all forms.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I frequently allow my imagination to flourish.",
       "trait": "openness",
       "weight": 1,
+      "aspect": "Aesthetic Openness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely use my imagination.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally daydream.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes let my imagination wander.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy using my imagination.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often let my imagination run wild.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy using my imagination.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly engage in imaginative thinking.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly enjoy letting my imagination soar.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I have a very vivid imagination.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I have a boundless and active imagination.",
-              "weight": 1
-          }
-      },
-      "aspect": "Aesthetic Openness"
-  },
-  {
-      "text": "I am often moved by emotional experiences in music and movies.",
+        "0-10": {
+          "text": "I rarely use my imagination.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally daydream.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes let my mind wander.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy creative daydreaming.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often allow my imagination to run wild.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently engage in imaginative thinking.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly let my creativity flourish.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly enjoy expansive imaginative thinking.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very adept at unleashing my imagination.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I have a boundless and vivid imagination at all times.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I am profoundly affected by the emotional depth in music and films.",
       "trait": "openness",
       "weight": 1.1,
+      "aspect": "Aesthetic Openness",
       "subtext": {
-          "0-10": {
-              "text": "I am rarely moved by music or movies.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally feel touched by emotional scenes.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes get emotional during movies or music.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I am moderately moved by emotional content.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel emotional during music and movies.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently get moved by emotional experiences.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly feel strong emotions when listening to music or watching movies.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly sensitive to emotional content in art.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very easily moved by emotional experiences.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I am deeply and profoundly moved by emotional experiences in art.",
-              "weight": 1
-          }
-      },
-      "aspect": "Aesthetic Openness"
-  },
-  {
-      "text": "I value artistic and aesthetic experiences.",
+        "0-10": {
+          "text": "I am rarely moved by music or movies.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally feel a slight emotional response.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes get mildly moved by art.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately feel emotional reactions to music and films.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often experience emotional responses to art.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently feel deeply moved by music and movies.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly experience profound emotions from art.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly sensitive to the emotional qualities of music and films.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very easily moved by emotional artistic experiences.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I am deeply and profoundly affected by the emotional power of music and movies.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I consistently value rich artistic and aesthetic experiences.",
       "trait": "openness",
       "weight": 1.2,
+      "aspect": "Aesthetic Openness",
       "subtext": {
-          "0-10": {
-              "text": "I do not value artistic experiences much.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally appreciate artistic things.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes value aesthetic experiences.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately value artistic and aesthetic experiences.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often seek out artistic experiences.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently value and appreciate artistic experiences.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly prioritize artistic and aesthetic experiences.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value artistic and aesthetic experiences.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I consider artistic experiences to be very important.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I deeply value and prioritize artistic and aesthetic experiences in my life.",
-              "weight": 1
-          }
-      },
-      "aspect": "Aesthetic Openness"
-  },
-  {
-      "text": "I enjoy spending time in beautiful environments.",
+        "0-10": {
+          "text": "I do not value artistic experiences much.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally appreciate art and aesthetics.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes enjoy artistic experiences.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately value aesthetic experiences.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often seek out artistic encounters.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently appreciate rich artistic experiences.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly prioritize aesthetic experiences in my life.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value the impact of art and aesthetics.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I consider artistic experiences very important.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I deeply value and actively pursue artistic and aesthetic experiences.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I actively seek out and enjoy beautiful environments.",
       "trait": "openness",
       "weight": 0.9,
+      "aspect": "Aesthetic Openness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely pay attention to my surroundings.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally notice if an environment is nice.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy being in beautiful places.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy spending time in pleasant environments.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often seek out beautiful environments.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently enjoy being in beautiful surroundings.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly seek out and enjoy beautiful environments.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly value spending time in beautiful places.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I find great pleasure in beautiful environments.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I have a deep appreciation for and actively seek out beautiful environments.",
-              "weight": 1
-          }
-      },
-      "aspect": "Aesthetic Openness"
-  },
-  {
-      "text": "I find beauty in unexpected places.",
+        "0-10": {
+          "text": "I rarely notice the beauty of my surroundings.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally appreciate a pleasant environment.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes enjoy being in beautiful places.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy spending time in attractive settings.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often seek out environments that are aesthetically pleasing.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently find joy in beautiful surroundings.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly immerse myself in aesthetically pleasing environments.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value spending time in beautiful settings.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I find great pleasure in being in beautiful places.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always actively seek out and revel in beautiful environments.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I possess a keen ability to recognize beauty in unforeseen contexts.",
       "trait": "openness",
       "weight": 1,
+      "aspect": "Aesthetic Openness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely notice beauty in unexpected places.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally notice something beautiful unexpectedly.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes find beauty in unusual places.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately appreciate beauty in unexpected things.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often find beauty in unexpected places.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently notice beauty in unusual things.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly discover beauty in unexpected places.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I highly appreciate finding beauty in the ordinary.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am very good at finding beauty in unexpected things.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I have a keen eye for finding beauty in the most unexpected places.",
-              "weight": 1
-          }
-      },
-      "aspect": "Aesthetic Openness"
-  },
-  {
-      "text": "I am open to exploring new ideas and perspectives.",
+        "0-10": {
+          "text": "I rarely notice beauty in unexpected places.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally spot a touch of beauty unexpectedly.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes notice beauty in unusual contexts.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately appreciate unexpected beauty.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often recognize beauty in unanticipated places.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently discover beauty in the unexpected.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly find beauty in places others might overlook.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I highly value recognizing beauty in ordinary settings.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am very adept at seeing beauty in unexpected contexts.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always keenly perceive beauty in the most unforeseen places.",
+          "weight": 1
+        }
+      }
+    },
+    {
+      "text": "I eagerly embrace new ideas and diverse perspectives.",
       "trait": "openness",
       "weight": 1.2,
+      "aspect": "Intellectual Openness",
       "subtext": {
-          "0-10": {
-              "text": "I am slightly open to new ideas.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I have a mild interest in exploring new perspectives.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes consider new ideas.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately explore new perspectives.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I am fairly open to exploring different ideas.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I am quite open to considering new perspectives.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly explore new ideas and perspectives.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly open to trying different approaches.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am extremely open to all kinds of ideas.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I am exceptionally open to exploring and embracing new perspectives.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I am slightly open to new ideas.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I have a mild interest in exploring new perspectives.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes consider new ideas.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately explore different perspectives.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I am fairly open to diverse ideas.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I often welcome new perspectives.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly embrace a variety of ideas.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly open to trying different approaches.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am extremely receptive to all kinds of ideas.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I am exceptionally open to exploring and embracing new perspectives.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I often think about abstract concepts and like to ponder deep questions.",
+    },
+    {
+      "text": "I habitually contemplate abstract concepts and explore profound questions.",
       "trait": "openness",
       "weight": 0.9,
+      "aspect": "Intellectual Openness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely think about abstract concepts.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally consider simple abstract ideas.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes think about abstract questions.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately enjoy pondering deep ideas.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often engage with abstract concepts.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently think about profound and complex questions.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly engage with complex abstract thoughts.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I consistently think deeply about abstract questions.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I almost always consider profound and abstract ideas.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I perpetually ponder the deepest and most abstract concepts.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely think about abstract concepts.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally consider simple abstract ideas.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes ponder abstract questions.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately enjoy contemplating deep ideas.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often reflect on abstract concepts.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently engage in deep, abstract thought.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly explore profound questions.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I consistently think deeply about abstract matters.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I almost always ponder profound and abstract ideas.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I perpetually explore the deepest and most abstract concepts.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I am comfortable with change and easily adapt to new situations.",
+    },
+    {
+      "text": "I readily adapt to change and find comfort in new situations.",
       "trait": "openness",
       "weight": 0.9,
+      "aspect": "Intellectual Openness",
       "subtext": {
-          "0-10": {
-              "text": "I struggle with change and prefer stability.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally adapt to small changes.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes embrace change with some hesitation.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately adapt to new situations.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often feel comfortable with changes.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I frequently embrace change and adapt quickly.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly handle change with ease.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I am highly comfortable adapting to new situations.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am extremely adept at managing changes.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I thrive on change and effortlessly adapt to new situations.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I struggle with change and prefer stability.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally adapt to minor changes.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes embrace change with hesitation.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately adapt to new situations.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often feel comfortable with change.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I frequently adapt quickly to new situations.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly handle change with ease.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I am highly comfortable with adapting to change.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am extremely adept at managing change.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I thrive on change and effortlessly adjust to new situations.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I eagerly seek out new experiences and relish the unknown.",
+    },
+    {
+      "text": "I actively pursue novel experiences and welcome the unfamiliar.",
       "trait": "openness",
       "weight": 1.1,
+      "aspect": "Intellectual Openness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely seek new experiences.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I sometimes avoid stepping outside my comfort zone.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I occasionally try something new when prompted.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately explore new experiences.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I am fairly interested in trying new activities.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I often venture into unfamiliar experiences.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly embrace opportunities to try new things.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I actively pursue new adventures and experiences.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly driven to explore novel experiences.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always seek out and embrace new, exciting experiences.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely seek out new experiences.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I sometimes avoid stepping out of my comfort zone.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I occasionally try something new when prompted.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately explore new experiences.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often seek out novel activities.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I often venture into unfamiliar experiences.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly embrace opportunities to try new things.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I actively pursue new adventures.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly driven to explore the unknown.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always eagerly seek and relish new, exciting experiences.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I appreciate art, culture, and diverse perspectives.",
+    },
+    {
+      "text": "I have an enduring appreciation for art, culture, and varied perspectives.",
       "trait": "openness",
       "weight": 1,
+      "aspect": "Intellectual Openness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely notice art or diverse cultural ideas.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I occasionally encounter art and cultural elements.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I sometimes enjoy artistic expressions.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately appreciate art and cultural diversity.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often engage with art and diverse cultures.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I regularly enjoy art and explore different cultural expressions.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I consistently seek out artistic and cultural experiences.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I actively embrace a variety of artistic and cultural perspectives.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly appreciative of art, culture, and diverse ideas.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always immerse myself in art, culture, and diverse perspectives.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely notice art or cultural diversity.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I occasionally encounter art and cultural ideas.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I sometimes enjoy artistic expressions.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately appreciate art and diverse cultures.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often engage with art and cultural diversity.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I regularly immerse myself in art and diverse perspectives.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I consistently seek out cultural and artistic experiences.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I actively value art, culture, and diverse viewpoints.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly appreciative of artistic and cultural diversity.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always immerse myself in art, culture, and varied perspectives.",
+          "weight": 1
+        }
       }
-  },
-  {
-      "text": "I thrive on creative challenges and innovative problem-solving.",
+    },
+    {
+      "text": "I excel in creative challenges and embrace innovative problem-solving.",
       "trait": "openness",
       "weight": 1.2,
+      "aspect": "Intellectual Openness",
       "subtext": {
-          "0-10": {
-              "text": "I rarely engage in creative challenges or innovative problem-solving.",
-              "weight": 0.1
-          },
-          "10-20": {
-              "text": "I sometimes shy away from creative problem-solving.",
-              "weight": 0.2
-          },
-          "20-30": {
-              "text": "I occasionally try to think creatively when necessary.",
-              "weight": 0.3
-          },
-          "30-40": {
-              "text": "I moderately engage with creative challenges.",
-              "weight": 0.4
-          },
-          "40-50": {
-              "text": "I fairly often attempt to solve problems in innovative ways.",
-              "weight": 0.5
-          },
-          "50-60": {
-              "text": "I often use creative approaches to tackle challenges.",
-              "weight": 0.6
-          },
-          "60-70": {
-              "text": "I regularly embrace creative and innovative problem-solving.",
-              "weight": 0.7
-          },
-          "70-80": {
-              "text": "I strongly seek out creative challenges and innovative solutions.",
-              "weight": 0.8
-          },
-          "80-90": {
-              "text": "I am highly engaged in finding innovative approaches to problems.",
-              "weight": 0.9
-          },
-          "90-100": {
-              "text": "I always thrive on creative challenges and embrace innovation.",
-              "weight": 1
-          }
+        "0-10": {
+          "text": "I rarely engage in creative challenges.",
+          "weight": 0.1
+        },
+        "10-20": {
+          "text": "I sometimes shy away from innovative approaches.",
+          "weight": 0.2
+        },
+        "20-30": {
+          "text": "I occasionally try to solve problems creatively.",
+          "weight": 0.3
+        },
+        "30-40": {
+          "text": "I moderately engage in creative problem-solving.",
+          "weight": 0.4
+        },
+        "40-50": {
+          "text": "I fairly often approach challenges in innovative ways.",
+          "weight": 0.5
+        },
+        "50-60": {
+          "text": "I often use creative solutions to tackle challenges.",
+          "weight": 0.6
+        },
+        "60-70": {
+          "text": "I regularly embrace creative and innovative problem-solving.",
+          "weight": 0.7
+        },
+        "70-80": {
+          "text": "I strongly seek out creative challenges and innovative solutions.",
+          "weight": 0.8
+        },
+        "80-90": {
+          "text": "I am highly engaged in finding innovative approaches to problems.",
+          "weight": 0.9
+        },
+        "90-100": {
+          "text": "I always thrive on creative challenges and embrace innovation.",
+          "weight": 1
+        }
       }
-  }
-]
+    }
+  ]
+  
 export const statements = selectStatements(allStatements)
 
 export const longStatements = selectMoreStatements(allStatements);

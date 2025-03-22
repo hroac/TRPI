@@ -17,7 +17,9 @@ const PrivacyPolicy = () => {
 
         <Typography variant="h6" sx={{ mt: 4, fontWeight: 'bold' }}>2. Data Usage</Typography>
         <Typography variant="body1" sx={{ mt: 1 }}>
-          Your data is used to generate personalized insights and improve the TRPI framework. Aggregate, non-identifiable data may be used for research purposes.
+          Your data is used to generate personalized insights and improve the TRPI framework.
+          By using our service, you consent to your anonymized data being used for research purposes aimed at improving the TRPI framework and contributing to the field of personality research
+
         </Typography>
 
         <Typography variant="h6" sx={{ mt: 4, fontWeight: 'bold' }}>3. Data Security</Typography>

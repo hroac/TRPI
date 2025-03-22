@@ -1,44 +1,102 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
+import { Autoplay, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 interface Slide {
-  content: React.ReactNode; // Allows passing any React component or JSX
+  content: React.ReactNode;
 }
 
 interface CarouselProps {
   slides: Slide[];
-  settings?: any; // Use `any` for flexibility; alternatively, define a strict type for settings
+  settings?: any;
+  arrows?: boolean;
 }
 
-// Default Swiper settings
 const defaultSettings = {
   spaceBetween: 50,
   slidesPerView: 1,
-  autoplay: { delay: 3000 },
   slidesPerGroup: 1,
   loop: true,
+  autoplay: {
+    delay: 3000,
+    disableOnInteraction: false,
+    pauseOnMouseEnter: true,
+  },
 };
 
-const Carousel: React.FC<CarouselProps> = ({ slides, settings = defaultSettings }) => {
-  // Merge custom settings with default settings
+const Carousel: React.FC<CarouselProps> = ({ slides, settings = {}, arrows = false}) => {
   const mergedSettings = { ...defaultSettings, ...settings };
+  const swiperRef = useRef<any>(null);
+
+  const handlePrev = () => {
+    swiperRef.current?.slidePrev();
+  };
+
+  const handleNext = () => {
+    swiperRef.current?.slideNext();
+  };
 
   return (
-    <Box sx={{ width: '100%', margin: 'auto', paddingTop: '20px' }}>
-      <Swiper  {...mergedSettings}>
+    <Box sx={{ width: '100%', position: 'relative', pt: 2 }}>
+      <Swiper
+        {...mergedSettings}
+        modules={[Autoplay, Navigation]}
+        onSwiper={(swiper: any) => (swiperRef.current = swiper)}
+      >
         {slides.map((slide, index) => (
-          <SwiperSlide key={index}>
-            <Box sx={{ padding: '20px', backgroundColor: 'background', borderRadius: '8px' }}>
-              {slide.content}
-            </Box>
-          </SwiperSlide>
+          <SwiperSlide key={index}>{slide.content}</SwiperSlide>
         ))}
       </Swiper>
+
+      {/* Left Arrow */}
+     { arrows && (
+       <IconButton
+       onClick={handlePrev}
+       sx={{
+         position: 'absolute',
+         top: '50%',
+         left: '20px',
+         transform: 'translateY(-50%)',
+         backgroundColor: 'primary',
+         color: '#fff',
+         zIndex: 2,
+         '&:hover': { backgroundColor: 'secondary' },
+         width: 60,
+         height: 60,
+       }}
+     >
+       <ArrowBackIosNewIcon fontSize="large" />
+     </IconButton>
+     )}
+      {/* Right Arrow */}
+     {arrows && (
+       <IconButton
+       onClick={handleNext}
+       sx={{
+         position: 'absolute',
+         top: '50%',
+         right: '20px',
+         transform: 'translateY(-50%)',
+         backgroundColor: 'primary',
+         color: '#fff',
+         zIndex: 2,
+         '&:hover': { backgroundColor: 'secondary' },
+         width: 60,
+         height: 60,
+       }}
+     >
+       <ArrowForwardIosIcon fontSize="large" />
+     </IconButton>
+     )}
     </Box>
   );
 };
 
 export default Carousel;
+

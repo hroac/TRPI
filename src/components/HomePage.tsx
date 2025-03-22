@@ -184,8 +184,10 @@ const HeroSection = () => {
       <Carousel
         slides={slides}
         settings={{
-          autoplay: { delay: 5000, disableOnInteraction: false },
-          pagination: { clickable: true },
+          slidesToShow: 3,
+          speed: 500,
+          autoplay: true,
+          autoplaySpeed: 2000
         }}
       />
     </Box>

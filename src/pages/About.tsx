@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
-import { functionPairings, MBTIProfiles, stages } from '../utils/mbtiMapping';
+import { functionPairings, MBTIProfiles } from '../utils/mbtiMapping';
 import {
   Box,
   Grid,
@@ -36,9 +36,10 @@ const AboutPage: React.FC<{
   description?: string;
   allResponses?: any;
   statements?: any[];
+  stages?: any[];
   list?: Record<any, any>;
   handleReloadBin?: () => void;
-}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = {}, statements = [], list={}, handleReloadBin = null }) => {
+}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = {}, statements = [], stages = [], list={}, handleReloadBin = null }) => {
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t) => t.type === type || t.type === mbtiType);
   const profile = MBTIProfiles.find((p) => p.name === type || p.name === mbtiType);

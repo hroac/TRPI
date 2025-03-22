@@ -27,7 +27,7 @@ import { useParams } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import RatingComponent from '../components/RatingComponent';
 import { Helmet } from 'react-helmet';
-import { stages } from '../utils/mbtiMapping';
+import { longStages, stages } from '../utils/mbtiMapping';
 import { Share as ShareIcon, Close as CloseIcon } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import RedditIcon from '@mui/icons-material/Reddit';
@@ -298,6 +298,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
           description={description}
           allResponses={responses}
           statements={statements}
+          stages={statements.length > 26 ? longStages : stages}
           list={list}
           handleReloadBin={() => setDate(new Date())}
         />

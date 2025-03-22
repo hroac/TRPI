@@ -23,15 +23,15 @@ const sources = [
       This research leverages GPT-2 to quantify the brain's window size for context integration.
     `,
   },
-  {
-    src: '/pdfs/The Trauma Response Personality Indicator.pdf',
-    link: 'https://osf.io/r2eux',
-    title: 'The Trauma Response Personality Indicator (TRPI)',
-    description: `
-      Introduces TRPI, a dynamic framework for understanding personality through trauma responses, cognitive functions,
-      and the Big Five traits. It emphasizes adaptability and nuanced alternatives to traditional models like MBTI.
-    `,
-  },
+  // {
+  //   src: '/pdfs/The Trauma Response Personality Indicator.pdf',
+  //   link: 'https://osf.io/r2eux',
+  //   title: 'The Trauma Response Personality Indicator (TRPI)',
+  //   description: `
+  //     Introduces TRPI, a dynamic framework for understanding personality through trauma responses, cognitive functions,
+  //     and the Big Five traits. It emphasizes adaptability and nuanced alternatives to traditional models like MBTI.
+  //   `,
+  // },
   {
     src: '/pdfs/Validating the Myers-Briggs-Types.pdf',
     link: 'https://osf.io/7hzjn',

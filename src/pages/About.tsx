@@ -235,7 +235,7 @@ const AboutPage: React.FC<{
         settings={{
           spaceBetween: 50,
           slidesPerView: 1,
-          autoplay: { delay: 2000 },
+          autoplay: { delay: 6000 },
           loop: true,
           autoHeight: true,
         }}

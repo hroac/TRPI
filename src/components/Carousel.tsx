@@ -24,7 +24,7 @@ const defaultSettings = {
   slidesPerGroup: 1,
   loop: true,
   autoplay: {
-    delay: 3000,
+    delay: 5000,
     disableOnInteraction: false,
     pauseOnMouseEnter: true,
   },

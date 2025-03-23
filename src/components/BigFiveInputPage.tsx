@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Typography,
   Box,
@@ -28,6 +28,7 @@ import { useNavigate } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import { typesData } from './typesData';
 import Matrix from './Matrix';
+import MBTISphereVisualization from './MBTISphereVisualization';
 
 type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
 
@@ -234,6 +235,27 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
     setAccuracy((calculatedType.scores as any)[calculatedType.type].score);
   };
 
+
+    // Callback for when a type marker is clicked in the sphere.
+    const handleTypeClick = useCallback((type: string) => {
+      // Find the corresponding profile from MBTIProfiles and update slider values.
+      const profile = MBTIProfiles.find(p => p.name === type)?.traits;
+      if (profile) {
+        const updatedTraits: Record<Trait, number> = {
+          Openness: Math.round(profile.openness * 100),
+          Conscientiousness: Math.round(profile.conscientiousness * 100),
+          Extraversion: Math.round(profile.extraversion * 100),
+          Agreeableness: Math.round(profile.agreeableness * 100),
+          Neuroticism: Math.round(profile.neuroticism * 100),
+        };
+        setTraits(updatedTraits);
+        const primary4F = determinePrimary4FType(profile);
+        const calculatedType = matchMBTI(profile);
+        setMbtiType(calculatedType.type);
+      }
+    }, []);
+
+
   // Handle selection from matrix modal
   const handleMatrixSelect = (selected: string) => {
     console.log('Selected Type:', selected);
@@ -321,6 +343,9 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
           </Box>
         </Box>
 
+        <Box>
+          <MBTISphereVisualization currentTraits={getBigFiveData()} onTypeClick={handleTypeClick} />
+        </Box>
         <Typography variant="body1" sx={{ marginBottom: '30px', color: 'text.secondary' }}>
           Adjust the sliders to reflect your personality on each Big Five trait. These values help us determine your unique profile.
         </Typography>

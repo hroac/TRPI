@@ -1,3 +1,4 @@
+
 // public/service-worker.js
 
 // Import Workbox from the CDN.
@@ -5,6 +6,9 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox
 
 if (workbox) {
     console.log("Workbox is loaded");
+
+    // Clean up any caches that are no longer present in the precache manifest.
+    workbox.precaching.cleanupOutdatedCaches();
 
     // Precache assets. In a production build, your bundler would replace __WB_MANIFEST with the list of files.
     workbox.precaching.precacheAndRoute(
@@ -15,6 +19,8 @@ if (workbox) {
         // add other files as needed
       ]
     );
+
+    // Force the waiting service worker to become the active service worker.
     workbox.core.skipWaiting();
     workbox.core.clientsClaim();
 

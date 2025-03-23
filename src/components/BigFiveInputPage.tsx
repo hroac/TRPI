@@ -28,7 +28,9 @@ import { useNavigate } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import { typesData } from './typesData';
 import Matrix from './Matrix';
-import MBTISphereVisualization from './MBTISphereVisualization';
+import MBTISphereVisualization from './TypeSphereVisualizer';
+import TypeSphereVisualization from './TypeSphereVisualizer';
+import TypeSphereVisualizer from './TypeSphereVisualizer';
 
 type Trait = 'Openness' | 'Conscientiousness' | 'Extraversion' | 'Agreeableness' | 'Neuroticism';
 
@@ -343,13 +345,11 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
           </Box>
         </Box>
 
-        <Box>
-          <MBTISphereVisualization currentTraits={getBigFiveData()} onTypeClick={handleTypeClick} />
-        </Box>
+        
         <Typography variant="body1" sx={{ marginBottom: '30px', color: 'text.secondary' }}>
           Adjust the sliders to reflect your personality on each Big Five trait. These values help us determine your unique profile.
         </Typography>
-
+        
         <Grid container spacing={4}>
           {traitInfo.map(({ label, icon, color }) => (
             <Grid item xs={12} key={label}>
@@ -382,6 +382,9 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
           ))}
         </Grid>
 
+        <Box display={'flex'} justifyContent={'center'}>
+          <TypeSphereVisualizer currentTraits={getBigFiveData()} onTypeClick={handleTypeClick} />
+        </Box>
         <Box display={'flex'} justifyContent={'center'} my={3}>
         {/* Display matched MBTI type or anything else as needed */}
         <Typography variant='h6' fontWeight='bold' gutterBottom>

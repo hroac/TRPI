@@ -13,12 +13,12 @@ interface BigFiveValues {
     neuroticism: number;
   }
 
-interface MBTISphereProps {
+interface TypeSphereProps {
     currentTraits: BigFiveValues;
     onTypeClick: (type: string) => void;
   }
   
-  const MBTISphereVisualization: React.FC<MBTISphereProps> = ({ currentTraits, onTypeClick }) => {
+  const TypeSphereVisualizer: React.FC<TypeSphereProps> = ({ currentTraits, onTypeClick }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const markersRef = useRef<THREE.Object3D[]>([]);
   
@@ -212,4 +212,4 @@ interface MBTISphereProps {
     );
   };
 
-  export default MBTISphereVisualization;
+  export default TypeSphereVisualizer;

@@ -359,18 +359,11 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const statement = stage[i]
 
 
+    console.log(trait, i, statement, stage)
     return statement
     
   }
 
-  const determineStage = (index: number) => {
-    if(index > 0 && 3) {
-      return 1
-    }
-    if(index > 0 && 3) {
-      return 1
-    }
-  }
 
   const determineIndex = (currentStage: number, trait: string, index: number) : number => {
    if(trait === 'openness') {

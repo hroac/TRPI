@@ -495,7 +495,7 @@ const determineIndex = (currentStage: number, trait: string, index: number) : nu
         <Button onClick={handleBack} disabled={currentStage === 0}>
           Back
         </Button>
-        {lastStage >= 7 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
+        {lastStage >= 11 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
           <Tooltip title={`${type.mode} \n ${(accuracy).toFixed(1)}%`}>
             <Box
               bgcolor={type.bgColor}

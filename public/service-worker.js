@@ -1,4 +1,3 @@
-
 // public/service-worker.js
 
 // Import Workbox from the CDN.
@@ -27,13 +26,30 @@ if (workbox) {
     // Example runtime caching: Use Stale-While-Revalidate for JS, CSS, and HTML files.
     workbox.routing.registerRoute(
         ({ request }) =>
-        request.destination === 'script' ||
-        request.destination === 'style' ||
-        request.destination === 'document',
+            request.destination === 'script' ||
+            request.destination === 'style' ||
+            request.destination === 'document',
         new workbox.strategies.StaleWhileRevalidate({
             cacheName: 'static-resources',
         })
     );
+    
+    // ----- Development-only: Unregister service worker to clear stale caches -----
+    // This block unregisters the service worker on activation so that old caches
+    // are removed. Remove or disable this code for production.
+    self.addEventListener('activate', event => {
+        event.waitUntil(
+            self.registration.unregister().then(() => {
+                console.log("Service worker unregistered");
+                return self.clients.matchAll();
+            }).then(clients => {
+                // Force a reload on all controlled clients to fetch fresh assets.
+                console.log('refreshing page ', clients.url)
+                clients.forEach(client => client.navigate(client.url));
+            })
+        );
+    });
+    // -----------------------------------------------------------------------------
 } else {
     console.log("Workbox didn't load");
 }

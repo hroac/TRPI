@@ -78,7 +78,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   onComplete,
 }) => {
   const navigate = useNavigate();
-  const [statements, setStatements] = useState<any[]>(JSON.parse(localStorage.getItem('statements') || '') || fixedStatements)
+  const [statements, setStatements] = useState<any[]>(JSON.parse(localStorage.getItem('statements') || '[]') || fixedStatements)
   const initialResponses = () => {
     if(localStorage.getItem('responses')) {
       return JSON.parse(localStorage.getItem('responses')  || '')

@@ -78,7 +78,14 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   onComplete,
 }) => {
   const navigate = useNavigate();
-  const [statements, setStatements] = useState<any[]>(JSON.parse(localStorage.getItem('statements') || '[]') || fixedStatements)
+  const initialStatements = () => {
+    const statements = localStorage.getItem('statements')
+    if(statements && statements.length) {
+      return JSON.parse(statements)
+    }
+    return fixedStatements
+  }
+  const [statements, setStatements] = useState<any[]>(initialStatements)
   const initialResponses = () => {
     if(localStorage.getItem('responses')) {
       return JSON.parse(localStorage.getItem('responses')  || '')
@@ -89,6 +96,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     return acc;
   }, {} as { [trait: string]: number[] })
 };
+
+
 
   const [responses, setResponses] = useState(initialResponses)
   const [currentStage, setCurrentStage] = useState(parseInt(localStorage.getItem('lastStage') || "0"));
@@ -197,7 +206,6 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         setSelectedStatement(sub)
 
         localStorage.setItem('responses', JSON.stringify(updatedResponses))
-        localStorage.setItem('statements', JSON.stringify(statements))
         return updatedResponses;
       });
     };

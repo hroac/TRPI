@@ -42,10 +42,6 @@ if (workbox) {
             self.registration.unregister().then(() => {
                 console.log("Service worker unregistered");
                 return self.clients.matchAll();
-            }).then(clients => {
-                // Force a reload on all controlled clients to fetch fresh assets.
-                console.log('refreshing page ', clients.url)
-                clients.forEach(client => client.navigate(client.url));
             })
         );
     });

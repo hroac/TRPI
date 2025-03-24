@@ -43,7 +43,7 @@ import { guid } from '../utils/guid';
 import { typesData } from '../utils/typesData';
 import { Helmet } from 'react-helmet';
 import PremiumModal from './PremiumModal';
-import { statements, stages } from '../utils/mbtiMapping';
+import { statements as fixedStatements, stages } from '../utils/mbtiMapping';
 
 const BigFiveQuestionnaireHelmet: React.FC = () => (
   <Helmet>
@@ -78,7 +78,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   onComplete,
 }) => {
   const navigate = useNavigate();
-
+  const [statements, setStatements] = useState<any[]>(JSON.parse(localStorage.getItem('statements') || '') || fixedStatements)
   const initialResponses = () => {
     if(localStorage.getItem('responses')) {
       return JSON.parse(localStorage.getItem('responses')  || '')
@@ -197,6 +197,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         setSelectedStatement(sub)
 
         localStorage.setItem('responses', JSON.stringify(updatedResponses))
+        localStorage.setItem('statements', JSON.stringify(statements))
         return updatedResponses;
       });
     };

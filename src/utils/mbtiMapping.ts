@@ -1321,7 +1321,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I habitually deliberate before taking action.",
+      "text": "I deliberate before taking action.",
       "trait": "conscientiousness",
       "weight": 1.1,
       "aspect": "Industriousness",
@@ -3956,7 +3956,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I habitually ruminate on past errors and their potential consequences.",
+      "text": "I ruminate on past errors and their potential consequences.",
       "trait": "neuroticism",
       "weight": 0.95,
       "aspect": "Withdrawal",

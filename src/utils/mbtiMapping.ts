@@ -3428,7 +3428,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I regularly experience feelings of anxiety.",
+      "text": "I experience feelings of anxiety.",
       "trait": "neuroticism",
       "weight": 1.3,
       "aspect": "Volatility",
@@ -3572,7 +3572,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I regularly experience feelings of sadness or low mood.",
+      "text": "I experience feelings of sadness or low mood.",
       "trait": "neuroticism",
       "weight": 1.1,
       "aspect": "Withdrawal",

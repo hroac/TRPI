@@ -246,7 +246,7 @@ export const MBTIProfiles = [
   {
       "name": "INFP",
       "traits": {
-          "openness": 0.55,
+          "openness": 0.7,
           "conscientiousness": 0.45,
           "extraversion": 0.4,
           "agreeableness": 0.6,
@@ -1225,7 +1225,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I reliably perceive myself as capable and competent.",
+      "text": "I perceive myself as capable and competent.",
       "trait": "conscientiousness",
       "weight": 1.1,
       "aspect": "Industriousness",
@@ -1273,7 +1273,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I effectively resist impulses and temptations.",
+      "text": "I resist impulses and temptations.",
       "trait": "conscientiousness",
       "weight": 1,
       "aspect": "Industriousness",
@@ -1657,7 +1657,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I consistently remain organized and focused when juggling tasks.",
+      "text": "I remain organized and focused when juggling tasks.",
       "trait": "conscientiousness",
       "weight": 1,
       "subtext": {
@@ -1798,7 +1798,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I predominantly base my decisions on factual evidence rather than emotions.",
+      "text": "I base my decisions on factual evidence rather than emotions.",
       "trait": "conscientiousness",
       "weight": 1.3,
       "subtext": {
@@ -2084,7 +2084,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I actively seek and enjoy social events and parties.",
+      "text": "I actively seek out and enjoy social events and parties.",
       "trait": "extraversion",
       "weight": 1,
       "aspect": "Enthusiasm",
@@ -2420,7 +2420,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I consistently assume charge in group settings and exude leadership confidence.",
+      "text": "I consistently assume charge in group settings and show leadership confidence.",
       "trait": "extraversion",
       "weight": 1,
       "aspect": "Assertiveness",
@@ -2468,7 +2468,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I relish engaging in discussions and debates on various ideas.",
+      "text": "I love engaging in discussions and debates on various ideas.",
       "trait": "extraversion",
       "weight": 0.9,
       "aspect": "Assertiveness",
@@ -2804,7 +2804,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I consistently strive to treat everyone with kindness.",
+      "text": "I strive to treat everyone with kindness.",
       "trait": "agreeableness",
       "weight": 1,
       "aspect": "Compassion",
@@ -2852,7 +2852,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I conscientiously refrain from imposing my preferences on others.",
+      "text": "I refrain from imposing my preferences on others.",
       "trait": "agreeableness",
       "weight": 1.1,
       "aspect": "Politeness",
@@ -2900,7 +2900,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I habitually exhibit modesty regarding my accomplishments.",
+      "text": "I often exhibit modesty regarding my accomplishments.",
       "trait": "agreeableness",
       "weight": 1,
       "aspect": "Politeness",
@@ -3620,7 +3620,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I frequently concern myself with others' evaluations of me.",
+      "text": "I concern myself with others' evaluations of me.",
       "trait": "neuroticism",
       "weight": 1,
       "aspect": "Withdrawal",
@@ -3716,7 +3716,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I habitually attribute failures to my own shortcomings.",
+      "text": "I attribute failures to my own shortcomings.",
       "trait": "neuroticism",
       "weight": 1,
       "aspect": "Withdrawal",
@@ -3812,7 +3812,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I regularly feel inundated when managing several responsibilities simultaneously.",
+      "text": "I regularly feel overwhelmed when managing several responsibilities simultaneously.",
       "trait": "neuroticism",
       "weight": 1.1,
       "aspect": "Withdrawal",
@@ -4388,7 +4388,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I habitually contemplate abstract concepts and explore profound questions.",
+      "text": "I often contemplate abstract concepts and explore profound questions.",
       "trait": "openness",
       "weight": 0.9,
       "aspect": "Intellectual Openness",

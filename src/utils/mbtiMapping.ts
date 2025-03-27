@@ -4680,180 +4680,197 @@ export const allStages = [
 
 
 
-export   const functionPairings = [
+export const functionPairings = [
+  // ENTP (Perceiving dominant pairings)
   { 
     type: 'ENTP', 
     f4: 'Fight', 
     stack: 'Ne>Ti>Fe>Si', 
-    dominant: 'Ne>Ti (Id + Ego)', 
-    auxiliary: 'Ni>Te (Id + Ego)', 
-    tertiary: 'Ni>Fe (Id + Superego)', 
-    inferior: 'Ne>Fi (Id + Superego)', 
+    dominant: 'Ne>Ti (Id + Ego)',       // Ne extraverted perceiving
+    auxiliary: 'Ni>Te (Id + Superego)',  // Ni introverted perceiving
+    tertiary: 'Ni>Fe (Id + Superego)',   // Ni introverted perceiving
+    inferior: 'Ne>Fi (Id + Ego)',        // Ne extraverted perceiving
     opposite: 'ISFJ',
   },
 
+  // INTJ (Perceiving pairings from introverted lefts)
   { 
     type: 'INTJ', 
     f4: 'Freeze', 
     stack: 'Ni>Te>Fi>Se', 
-    dominant: 'Ni>Te (Id + Ego)', 
-    auxiliary: 'Ne>Ti (Id + Ego)', 
-    tertiary: 'Ne>Fi (Id + Superego)', 
-    inferior: 'Ni>Fe (Id + Superego)', 
+    dominant: 'Ni>Te (Id + Superego)',   // Ni introverted perceiving → falls back to Te (judging) not used here because rule is “look only at left”
+                                        // Actually we treat Ni as the left function → introverted perceiving → (Id + Superego)
+    auxiliary: 'Ne>Ti (Id + Ego)',       // Ne extraverted perceiving
+    tertiary: 'Ne>Fi (Id + Ego)',        // Ne extraverted perceiving
+    inferior: 'Ni>Fe (Id + Superego)',     // Ni introverted perceiving
     opposite: 'ESFP',
   },
 
+  // ISFJ
   { 
     type: 'ISFJ', 
     f4: 'Fawn', 
     stack: 'Si>Fe>Ti>Ne', 
-    dominant: 'Si>Fe (Id + Ego)', 
-    auxiliary: 'Se>Fi (Id + Ego)', 
-    tertiary: 'Se>Ti (Id + Superego)', 
-    inferior: 'Si>Te (Id + Superego)', 
+    dominant: 'Si>Fe (Id + Superego)',     // Si introverted perceiving → (Id + Superego)
+    auxiliary: 'Se>Fi (Id + Ego)',         // Se extraverted perceiving → (Id + Ego)
+    tertiary: 'Se>Ti (Id + Ego)',          // Se extraverted perceiving → (Id + Ego)
+    inferior: 'Si>Te (Id + Superego)',       // Si introverted perceiving → (Id + Superego)
     opposite: 'ENTP',
   },
 
+  // ESFP
   { 
     type: 'ESFP', 
     f4: 'Flight', 
     stack: 'Se>Fi>Te>Ni', 
-    dominant: 'Se>Fi (Id + Ego)', 
-    auxiliary: 'Si>Fe (Id + Ego)', 
-    tertiary: 'Si>Te (Id + Superego)', 
-    inferior: 'Se>Ti (Id + Superego)', 
+    dominant: 'Se>Fi (Id + Ego)',         // Se extraverted perceiving → (Id + Ego)
+    auxiliary: 'Si>Fe (Id + Superego)',      // Si introverted perceiving → (Id + Superego)
+    tertiary: 'Si>Te (Id + Superego)',       // Si introverted perceiving → (Id + Superego)
+    inferior: 'Se>Ti (Id + Ego)',           // Se extraverted perceiving → (Id + Ego)
     opposite: 'INTJ',
   },
 
+  // ESTP
   { 
     type: 'ESTP', 
     f4: 'Fight', 
     stack: 'Se>Ti>Fe>Ni', 
-    dominant: 'Se>Ti (Id + Superego)', 
-    auxiliary: 'Si>Te (Id + Superego)', 
-    tertiary: 'Si>Fe (Id + Ego)', 
-    inferior: 'Se>Fi (Id + Ego)', 
+    dominant: 'Se>Ti (Id + Ego)',         // Se extraverted perceiving → (Id + Ego)
+    auxiliary: 'Si>Te (Id + Superego)',      // Si introverted perceiving → (Id + Superego)
+    tertiary: 'Si>Fe (Id + Superego)',       // Si introverted perceiving → (Id + Superego)
+    inferior: 'Se>Fi (Id + Ego)',           // Se extraverted perceiving → (Id + Ego)
     opposite: 'INFJ',
   },
 
+  // ISTJ
   { 
     type: 'ISTJ', 
     f4: 'Freeze', 
     stack: 'Si>Te>Fi>Ne', 
-    dominant: 'Si>Te (Id + Superego)', 
-    auxiliary: 'Se>Ti (Id + Superego)', 
-    tertiary: 'Se>Fi (Id + Ego)', 
-    inferior: 'Si>Fe (Id + Ego)', 
+    dominant: 'Si>Te (Id + Superego)',       // Si introverted perceiving → (Id + Superego)
+    auxiliary: 'Se>Ti (Id + Ego)',           // Se extraverted perceiving → (Id + Ego)
+    tertiary: 'Se>Fi (Id + Ego)',            // Se extraverted perceiving → (Id + Ego)
+    inferior: 'Si>Fe (Id + Superego)',         // Si introverted perceiving → (Id + Superego)
     opposite: 'ENFP',
   },
 
+  // INFJ
   { 
     type: 'INFJ', 
     f4: 'Fawn', 
     stack: 'Ni>Fe>Ti>Se', 
-    dominant: 'Ni>Fe (Id + Superego)', 
-    auxiliary: 'Ne>Fi (Id + Superego)', 
-    tertiary: 'Ne>Ti (Id + Ego)', 
-    inferior: 'Ni>Te (Id + Ego)', 
+    dominant: 'Ni>Fe (Id + Superego)',       // Ni introverted perceiving → (Id + Superego)
+    auxiliary: 'Ne>Ti (Id + Ego)',           // Ne extraverted perceiving → (Id + Ego)
+    tertiary: 'Ne>Fi (Id + Ego)',            // Ne extraverted perceiving → (Id + Ego)
+    inferior: 'Ni>Te (Id + Superego)',        // Ni introverted perceiving → (Id + Superego)
     opposite: 'ESTP',
   },
 
+  // ENFP
   { 
     type: 'ENFP', 
     f4: 'Flight', 
     stack: 'Ne>Fi>Te>Si', 
-    dominant: 'Ne>Fi (Id + Superego)', 
-    auxiliary: 'Ni>Fe (Id + Superego)', 
-    tertiary: 'Ni>Te (Id + Ego)', 
-    inferior: 'Ne>Ti (Id + Ego)', 
+    dominant: 'Ne>Fi (Id + Ego)',           // Ne extraverted perceiving → (Id + Ego)
+    auxiliary: 'Ni>Fe (Id + Superego)',       // Ni introverted perceiving → (Id + Superego)
+    tertiary: 'Ni>Te (Id + Superego)',        // Ni introverted perceiving → (Id + Superego)
+    inferior: 'Ne>Ti (Id + Ego)',            // Ne extraverted perceiving → (Id + Ego)
     opposite: 'ISTJ',
   },
 
+  // INTP – now the dominant left function is judging
   { 
     type: 'INTP', 
     f4: 'Fight', 
     stack: 'Ti>Ne>Si>Fe', 
-    dominant: 'Ti>Ne (Ego + Id)', 
-    auxiliary: 'Te>Ni (Ego + Id)', 
-    tertiary: 'Te>Si (Superego + Id)', 
-    inferior: 'Ti>Se (Superego + Id)', 
+    dominant: 'Ti>Ne (Ego + Id)',           // Ti is introverted judging → (Ego + Id)
+    auxiliary: 'Te>Ni (Superego + Id)',       // Te is extraverted judging → (Superego + Id)
+    tertiary: 'Te>Si (Superego + Id)',        // Te is extraverted judging → (Superego + Id)
+    inferior: 'Ti>Se (Ego + Id)',             // Ti is introverted judging → (Ego + Id)
     opposite: 'ESFJ',
   },
 
+  // ENTJ – dominant left function is judging
   { 
     type: 'ENTJ', 
     f4: 'Freeze', 
     stack: 'Te>Ni>Se>Fi', 
-    dominant: 'Te>Ni (Ego + Id)', 
-    auxiliary: 'Ti>Ne (Ego + Id)', 
-    tertiary: 'Ti>Se (Superego + Id)', 
-    inferior: 'Te>Si (Superego + Id)', 
+    dominant: 'Te>Ni (Superego + Id)',       // Te extraverted judging → (Superego + Id)
+    auxiliary: 'Ti>Ne (Ego + Id)',            // Ti introverted judging → (Ego + Id)
+    tertiary: 'Ti>Se (Ego + Id)',             // Ti introverted judging → (Ego + Id)
+    inferior: 'Te>Si (Superego + Id)',         // Te extraverted judging → (Superego + Id)
     opposite: 'ISFP',
   },
 
+  // ESFJ – dominant left function is judging
   { 
     type: 'ESFJ', 
     f4: 'Fawn', 
     stack: 'Fe>Si>Ne>Ti', 
-    dominant: 'Fe>Si (Ego + Id)', 
-    auxiliary: 'Fi>Se (Ego + Id)', 
-    tertiary: 'Fi>Ne (Superego + Id)',  
-    inferior: 'Fe>Ni (Superego + Id)',  
+    dominant: 'Fe>Si (Superego + Id)',       // Fe extraverted judging → (Superego + Id)
+    auxiliary: 'Fi>Se (Ego + Id)',            // Fi introverted judging → (Ego + Id)
+    tertiary: 'Fi>Ne (Ego + Id)',             // Fi introverted judging → (Ego + Id)
+    inferior: 'Fe>Ni (Superego + Id)',         // Fe extraverted judging → (Superego + Id)
     opposite: 'INTP',
   },
 
+  // ISFP – dominant left function is judging
   { 
     type: 'ISFP', 
     f4: 'Flight', 
     stack: 'Fi>Se>Ni>Te', 
-    dominant: 'Fi>Se (Ego + Id)', 
-    auxiliary: 'Fe>Ni (Ego + Id)', 
-    tertiary: 'Fe>Ni (Superego + Id)', 
-    inferior: 'Fi>Ne (Superego + Id)', 
+    dominant: 'Fi>Se (Ego + Id)',            // Fi introverted judging → (Ego + Id)
+    auxiliary: 'Fe>Ni (Superego + Id)',       // Fe extraverted judging → (Superego + Id)
+    tertiary: 'Fe>Ni (Superego + Id)',        // Fe extraverted judging → (Superego + Id)
+    inferior: 'Fi>Ne (Ego + Id)',             // Fi introverted judging → (Ego + Id)
     opposite: 'ENTJ',
   },
 
+  // ISTP – dominant left function is judging
   { 
     type: 'ISTP', 
     f4: 'Fight', 
     stack: 'Ti>Se>Ni>Fe', 
-    dominant: 'Ti>Se (Superego + Id)', 
-    auxiliary: 'Te>Si (Superego + Id)', 
-    tertiary: 'Te>Ni (Ego + Id)', 
-    inferior: 'Ti>Ne (Ego + Id)', 
+    dominant: 'Ti>Se (Ego + Id)',            // Ti introverted judging → (Ego + Id)
+    auxiliary: 'Te>Si (Superego + Id)',       // Te extraverted judging → (Superego + Id)
+    tertiary: 'Te>Ni (Superego + Id)',        // Te extraverted judging → (Superego + Id)
+    inferior: 'Ti>Ne (Ego + Id)',             // Ti introverted judging → (Ego + Id)
     opposite: 'ENFJ',
   },
 
+  // ESTJ – dominant left function is judging
   { 
     type: 'ESTJ', 
     f4: 'Freeze', 
     stack: 'Te>Si>Ne>Fi', 
-    dominant: 'Te>Si (Superego + Id)', 
-    auxiliary: 'Ti>Se (Superego + Id)', 
-    tertiary: 'Ti>Ne (Ego + Id)', 
-    inferior: 'Te>Ni (Ego + Id)', 
+    dominant: 'Te>Si (Superego + Id)',       // Te extraverted judging → (Superego + Id)
+    auxiliary: 'Ti>Se (Ego + Id)',            // Ti introverted judging → (Ego + Id)
+    tertiary: 'Ti>Ne (Ego + Id)',             // Ti introverted judging → (Ego + Id)
+    inferior: 'Te>Ni (Superego + Id)',         // Te extraverted judging → (Superego + Id)
     opposite: 'INFP',
   },
 
+  // ENFJ – dominant left function is judging
   { 
     type: 'ENFJ', 
     f4: 'Fawn', 
     stack: 'Fe>Ni>Se>Ti', 
-    dominant: 'Fe>Ni (Superego + Id)', 
-    auxiliary: 'Fi>Ne (Superego + Id)', 
-    tertiary: 'Fi>Se (Ego + Id)', 
-    inferior: 'Fe>Si (Ego + Id)', 
+    dominant: 'Fe>Ni (Superego + Id)',       // Fe extraverted judging → (Superego + Id)
+    auxiliary: 'Fi>Se (Ego + Id)',            // Fi introverted judging → (Ego + Id)
+    tertiary: 'Fi>Ne (Ego + Id)',             // Fi introverted judging → (Ego + Id)
+    inferior: 'Fe>Si (Superego + Id)',         // Fe extraverted judging → (Superego + Id)
     opposite: 'ISTP',
   },
 
+  // INFP – dominant left function is judging
   { 
     type: 'INFP', 
     f4: 'Flight', 
     stack: 'Fi>Ne>Si>Te', 
-    dominant: 'Fi>Ne (Superego + Id)', 
-    auxiliary: 'Fe>Ni (Superego + Id)', 
-    tertiary: 'Fe>Si (Ego + Id)', 
-    inferior: 'Fi>Se (Ego + Id)', 
+    dominant: 'Fi>Ne (Ego + Id)',            // Fi introverted judging → (Ego + Id)
+    auxiliary: 'Fe>Ni (Superego + Id)',       // Fe extraverted judging → (Superego + Id)
+    tertiary: 'Fe>Si (Superego + Id)',        // Fe extraverted judging → (Superego + Id)
+    inferior: 'Fi>Se (Ego + Id)',             // Fi introverted judging → (Ego + Id)
     opposite: 'ESTJ',
   },
 ];

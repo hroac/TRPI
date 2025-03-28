@@ -161,7 +161,7 @@ const TRPIExplanation: React.FC = () => {
           </Typography> */}
 
           <Typography variant="body2" paragraph>
-            <strong>The Ego: Judging and Organizing (Ti, Fi) For Perceiving Types</strong>
+            <strong>The Ego: Internal Demands (Ti, Fi) For Perceiving Types</strong>
           </Typography>
           <Typography variant="body2" paragraph>
             <em>Role:</em> For Perceiving types, the Ego consists of their subjective judging functions, guiding decision-making and structuring perceptions.
@@ -186,7 +186,7 @@ const TRPIExplanation: React.FC = () => {
           </Typography>
 
           <Typography variant="body2" paragraph>
-            <strong>The Superego: Defensive Mechanisms (Te, Fe) for Judging Types</strong>
+            <strong>The Superego: External Rules (Te, Fe) for Judging Types</strong>
           </Typography>
           <Typography variant="body2" paragraph>
             <em>Role:</em> For Judging types, the Superego comprises their objective judging functions, activating defensive mechanisms under stress.

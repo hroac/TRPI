@@ -161,10 +161,10 @@ const TRPIExplanation: React.FC = () => {
           </Typography> */}
 
           <Typography variant="body2" paragraph>
-            <strong>The Ego: Judging and Organizing (Te, Ti, Fe, Fi) for SF and NT Types</strong>
+            <strong>The Ego: Judging and Organizing (Ti, Fi) For Perceiving Types</strong>
           </Typography>
           <Typography variant="body2" paragraph>
-            <em>Role:</em> For SF (Sensing Feeling) and NT (Intuitive Thinking) types, the Ego consists of their judging functions, guiding decision-making and structuring perceptions.
+            <em>Role:</em> For Perceiving types, the Ego consists of their subjective judging functions, guiding decision-making and structuring perceptions.
           </Typography>
           <Typography variant="body2" paragraph>
             <em>Functions:</em>
@@ -172,17 +172,7 @@ const TRPIExplanation: React.FC = () => {
           <Box component="ul" sx={{ paddingLeft: '20px' }}>
             <li>
               <Typography variant="body2">
-                <strong>Te (Extraverted Thinking):</strong> Organizes and structures the external world logically.
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
                 <strong>Ti (Introverted Thinking):</strong> Analyzes and categorizes concepts internally.
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                <strong>Fe (Extraverted Feeling):</strong> Seeks harmony and connection in external relationships.
               </Typography>
             </li>
             <li>
@@ -192,14 +182,14 @@ const TRPIExplanation: React.FC = () => {
             </li>
           </Box>
           <Typography variant="body2" paragraph>
-            <em>Trauma Effect:</em> When the Ego is overwhelmed, judgment functions may become rigid or unbalanced, leading to overreliance on external rules or withdrawal into internal logic or emotions.
+            <em>Trauma Effect:</em> When the Ego is overwhelmed, judgment functions may become rigid or unbalanced, leading to overreliance on the superego or withdrawal into concrete logic or abstract values.
           </Typography>
 
           <Typography variant="body2" paragraph>
-            <strong>The Superego: Defensive Mechanisms (Te, Ti, Fe, Fi) for ST and NF Types</strong>
+            <strong>The Superego: Defensive Mechanisms (Te, Fe) for Judging Types</strong>
           </Typography>
           <Typography variant="body2" paragraph>
-            <em>Role:</em> For ST (Sensing Thinking) and NF (Intuitive Feeling) types, the Superego comprises their judging functions, activating defensive mechanisms under stress.
+            <em>Role:</em> For Judging types, the Superego comprises their objective judging functions, activating defensive mechanisms under stress.
           </Typography>
           <Typography variant="body2" paragraph>
             <em>Functions:</em>
@@ -212,17 +202,7 @@ const TRPIExplanation: React.FC = () => {
             </li>
             <li>
               <Typography variant="body2">
-                <strong>Ti (Introverted Thinking):</strong> Can become overly analytical or self-critical.
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
                 <strong>Fe (Extraverted Feeling):</strong> Might seek approval excessively or over-adapt to others.
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                <strong>Fi (Introverted Feeling):</strong> Could withdraw deeply into personal values, becoming inflexible.
               </Typography>
             </li>
           </Box>
@@ -280,7 +260,7 @@ const TRPIExplanation: React.FC = () => {
             Under stress or trauma, our natural way of interacting with the world can invert, causing reliance on less effective cognitive processes.
           </Typography>
           <Typography variant="body2" paragraph>
-            <strong>Adaptive Mechanism:</strong> This inversion represents a shift from proactive engagement to a defensive stance.
+            <strong>Adaptive Mechanism:</strong> This inversion represents a shift from concrete values and abstract logic to abstract values and concrete logic and vice versa.
           </Typography>
           <Typography variant="body2" paragraph>
             <strong>Perception Shift:</strong> Involves shifts between Sensing and Intuition functions (Se ↔ Si, Ne ↔ Ni), altering how we perceive information.

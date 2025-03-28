@@ -131,9 +131,6 @@ const TRPIExplanation: React.FC = () => {
           <Typography variant="body2" paragraph>
             <em>Role:</em> The Id represents our instinctual way of taking in information and experiencing the world through perceiving functions.
           </Typography>
-          <Typography variant="body2" paragraph>
-            <em>Functions:</em>
-          </Typography>
           <Box component="ul" sx={{ paddingLeft: '20px' }}>
             <li>
               <Typography variant="body2">
@@ -157,17 +154,14 @@ const TRPIExplanation: React.FC = () => {
             </li>
           </Box>
          {/*  <Typography variant="body2" paragraph>
-            <em>Trauma Effect:</em> If the Id is disrupted, perception may become distorted, causing stress on the individual's ability to process information effectively.
+            <em>Trauma:</em> If the Id is disrupted, perception may become distorted, causing stress on the individual's ability to process information effectively.
           </Typography> */}
 
-          <Typography variant="body2" paragraph>
+          <Typography sx={{mt: 2}} variant="body2" paragraph>
             <strong>The Ego: Internal Demands (Ti, Fi) For Perceiving Types</strong>
           </Typography>
           <Typography variant="body2" paragraph>
             <em>Role:</em> For Perceiving types, the Ego consists of their subjective judging functions, guiding decision-making and structuring perceptions.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <em>Functions:</em>
           </Typography>
           <Box component="ul" sx={{ paddingLeft: '20px' }}>
             <li>
@@ -181,8 +175,8 @@ const TRPIExplanation: React.FC = () => {
               </Typography>
             </li>
           </Box>
-          <Typography variant="body2" paragraph>
-            <em>Trauma Effect:</em> When the Ego is overwhelmed, judgment functions may become rigid or unbalanced, leading to overreliance on the superego or withdrawal into concrete logic or abstract values.
+          <Typography sx={{mt: 2}} variant="body2" paragraph>
+            <em>Trauma:</em> When the Ego is overwhelmed, judgment functions may become rigid or unbalanced, leading to overreliance on the superego or withdrawal into concrete logic or abstract values.
           </Typography>
 
           <Typography variant="body2" paragraph>
@@ -190,9 +184,6 @@ const TRPIExplanation: React.FC = () => {
           </Typography>
           <Typography variant="body2" paragraph>
             <em>Role:</em> For Judging types, the Superego comprises their objective judging functions, activating defensive mechanisms under stress.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <em>Functions:</em>
           </Typography>
           <Box component="ul" sx={{ paddingLeft: '20px' }}>
             <li>
@@ -206,8 +197,8 @@ const TRPIExplanation: React.FC = () => {
               </Typography>
             </li>
           </Box>
-          <Typography variant="body2" paragraph>
-            <em>Trauma Effect:</em> The Superego reflects unresolved trauma, leading to exaggerated or maladaptive responses.
+          <Typography sx={{mt: 2}} variant="body2" paragraph>
+            <em>Trauma:</em> The Superego reflects unresolved trauma, leading to exaggerated or maladaptive responses.
           </Typography>
         </AccordionDetails>
       </Accordion>

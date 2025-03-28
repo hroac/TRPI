@@ -24,7 +24,7 @@ class JsonBinApi {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Master-Key': API_KEY,
-                        'X-Collection-Id': state.allResponses.length ? COLLECTION_ID_TRPI : COLLECTION_ID_BIGFIVE,
+                        'X-Collection-Id': state.responses.length ? COLLECTION_ID_TRPI : COLLECTION_ID_BIGFIVE,
                         'X-Bin-Name': state.type,
                     },
                 }

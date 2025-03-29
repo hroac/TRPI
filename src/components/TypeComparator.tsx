@@ -112,6 +112,7 @@ async function fetchBinDataById(binId: string): Promise<BinData> {
       bigFiveResponses: { ...defaultTraits },
       binId,
       responses: {},
+      statements,
     };
   }
 }

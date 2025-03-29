@@ -68,7 +68,8 @@ interface BinData {
   primary4FType: string;
   bigFiveResponses: BigFiveValues;
   description?: string;
-  responses?: number[];
+  responses?: Record<any, number[]>;
+  statements array<any>;
   date?: string;
   userId?: string;
   binId?: string; // Optional, used for updates

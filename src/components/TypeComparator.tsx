@@ -565,7 +565,8 @@ const flattenResponses = (responses: any) : number[] => {
         (1 - Math.abs(response - flattenResponses(userBData.responses)![idx])) * 100
       );
       return {
-        question: statement.text,
+        statementA: statementA.text,
+        statementB: statementB.text,
         trait: statement.trait,
         userAResponse: response,
         userBResponse: flattenResponses(userBData.responses)![idx],
@@ -951,7 +952,7 @@ const flattenResponses = (responses: any) : number[] => {
               slides={isMobile ? slides.flat().map(slide => ({ content: (
                 <Box> 
                      <Typography variant="h6" gutterBottom>
-                      {slide.question}
+                      {slide.statementA}
                     </Typography>
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}
@@ -1043,7 +1044,7 @@ const flattenResponses = (responses: any) : number[] => {
                    {slide.map(item => (
                     <Box>
                          <Typography variant="h6" gutterBottom>
-                      {item.question}
+                      {item.statementB}
                     </Typography>
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}

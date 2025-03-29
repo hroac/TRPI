@@ -69,7 +69,7 @@ interface BinData {
   bigFiveResponses: BigFiveValues;
   description?: string;
   responses?: Record<any, number[]>;
-  statements array<any>;
+  statements: array<any>;
   date?: string;
   userId?: string;
   binId?: string; // Optional, used for updates

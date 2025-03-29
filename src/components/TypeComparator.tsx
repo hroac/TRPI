@@ -567,7 +567,7 @@ const flattenResponses = (responses: any) : number[] => {
       return {
         statementA: statementA.text,
         statementB: statementB.text,
-        trait: statement.trait,
+        trait: statementA.trait,
         userAResponse: response,
         userBResponse: flattenResponses(userBData.responses)![idx],
         subtextA,

@@ -111,7 +111,7 @@ async function fetchBinDataById(binId: string): Promise<BinData> {
       primary4FType: profile.mode,
       bigFiveResponses: { ...defaultTraits },
       binId,
-      responses: [],
+      responses: {},
     };
   }
 }

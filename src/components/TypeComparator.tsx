@@ -68,7 +68,8 @@ interface BinData {
   primary4FType: string;
   bigFiveResponses: BigFiveValues;
   description?: string;
-  responses?: number[];
+  responses?: Record<any, number[]>;
+  statements?: Array<any>;
   date?: string;
   userId?: string;
   binId?: string; // Optional, used for updates
@@ -110,7 +111,8 @@ async function fetchBinDataById(binId: string): Promise<BinData> {
       primary4FType: profile.mode,
       bigFiveResponses: { ...defaultTraits },
       binId,
-      responses: [],
+      responses: {},
+      statements,
     };
   }
 }
@@ -555,15 +557,17 @@ const flattenResponses = (responses: any) : number[] => {
       return [];
 
     const userData = flattenResponses(userAData.responses).map((response, idx) => {
-      const statement = statements[idx];
-      const subtextA = getSubtext(statement.trait, idx, response);
-      const subtextB = getSubtext(statement.trait, idx, flattenResponses(userBData.responses)![idx]);
+      const statementA = (userAData.statements || statements)[idx];
+      const statementB = (userBData.statements || statements)[idx]
+      const subtextA = getSubtext(statementA.trait, idx, response);
+      const subtextB = getSubtext(statementB.trait, idx, flattenResponses(userBData.responses)![idx]);
       const compatibilityPercent = Math.round(
         (1 - Math.abs(response - flattenResponses(userBData.responses)![idx])) * 100
       );
       return {
-        question: statement.text,
-        trait: statement.trait,
+        statementA: statementA.text,
+        statementB: statementB.text,
+        trait: statementA.trait,
         userAResponse: response,
         userBResponse: flattenResponses(userBData.responses)![idx],
         subtextA,
@@ -948,7 +952,7 @@ const flattenResponses = (responses: any) : number[] => {
               slides={isMobile ? slides.flat().map(slide => ({ content: (
                 <Box> 
                      <Typography variant="h6" gutterBottom>
-                      {slide.question}
+                      {slide.statementA}
                     </Typography>
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}
@@ -1040,7 +1044,7 @@ const flattenResponses = (responses: any) : number[] => {
                    {slide.map(item => (
                     <Box>
                          <Typography variant="h6" gutterBottom>
-                      {item.question}
+                      {item.statementB}
                     </Typography>
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}

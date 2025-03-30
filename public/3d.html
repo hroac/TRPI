@@ -4,12 +4,7 @@
   <meta charset="UTF-8">
   <title>SpeedX 3D</title>
   <style>
-    html, body { 
-      margin: 0; 
-      padding: 0; 
-      overflow: hidden; 
-      background: #000; 
-    }
+    html, body { margin: 0; padding: 0; overflow: hidden; background: #000; }
     canvas { display: block; }
     #scoreContainer {
       position: fixed;
@@ -61,7 +56,8 @@
 </head>
 <body>
   <div id="scoreContainer">
-    
+    <div id="score">Score: 0</div>
+    <div id="highScore">High Score: 0</div>
   </div>
   <div id="menu">
     <h1>SpeedX 3D</h1>
@@ -75,7 +71,7 @@
     let tunnelRadius = 150;
     let tunnelLength = 10000;
     let numTunnelSegments = 2;
-    let forwardSpeedInitial = 40;
+    let forwardSpeedInitial = 20;
     let forwardSpeed = forwardSpeedInitial;
     let lateralSpeed = 10;
     let cornersPerRing = 16;
@@ -92,8 +88,7 @@
     const menuEl = document.getElementById("menu");
     const finalScoreEl = document.getElementById("finalScore");
     const finalHighScoreEl = document.getElementById("finalHighScore");
-
-    // Get highscore from localStorage
+    
     let storedHighScore = localStorage.getItem("highscore");
     if(storedHighScore === null) {
       storedHighScore = 0;
@@ -101,8 +96,8 @@
     } else {
       storedHighScore = parseInt(storedHighScore);
     }
-    //highScoreEl.innerHTML = "High Score: " + storedHighScore;
-
+    highScoreEl.innerHTML = "High Score: " + storedHighScore;
+    
     function init(){
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x000000);
@@ -122,7 +117,7 @@
       window.addEventListener("keydown", onKeyDown, false);
       window.addEventListener("resize", onResize, false);
       requestGyroPermission();
-      setInterval(generateCubesBatch,1000);
+      setInterval(generateCubesBatch,5000);
     }
     function createTunnelSegments(){
       for(let i=0;i<numTunnelSegments;i++){
@@ -309,17 +304,17 @@
     }
     initScene();
     animate();
-</script>
-<div id="scoreContainer">
-  <div id="score">Score: 0</div>
-  <div id="highScore">High Score: 0</div>
-</div>
-<div id="menu" style="display:none;">
-  <h1>SpeedX 3D</h1>
-  <h2>Game Over</h2>
-  <h3 id="finalScore">Score: 0</h3>
-  <h3 id="finalHighScore">High Score: 0</h3>
-  <button onclick="restartGame()">Restart</button>
-</div>
+  </script>
+  <div id="scoreContainer">
+    <div id="score">Score: 0</div>
+    <div id="highScore">High Score: 0</div>
+  </div>
+  <div id="menu" style="display:none;">
+    <h1>SpeedX 3D</h1>
+    <h2>Game Over</h2>
+    <h3 id="finalScore">Score: 0</h3>
+    <h3 id="finalHighScore">High Score: 0</h3>
+    <button onclick="restartGame()">Restart</button>
+  </div>
 </body>
 </html>

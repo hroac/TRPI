@@ -43,7 +43,7 @@ function init(){
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("resize", onResize);
   requestGyroPermission();
-  setInterval(generateCubesBatch,5000);
+  setInterval(generateCubesBatch,1000);
 }
 function createTunnelSegments(){
   for(let i=0;i<numTunnelSegments;i++){
@@ -113,13 +113,13 @@ function generateCubeOnVertex(){
   let rg = ringGroups[Math.floor(Math.random()*ringGroups.length)];
   let vertexIdx = Math.floor(Math.random()*cornersPerRing);
   let angle = (vertexIdx/cornersPerRing)*2*Math.PI;
-  // Fixed z offset: always 5000 ahead of camera
+  // Always generate at z = camera.position.z + 5000
   let z = camera.position.z + 5000;
   let type = Math.random() < 0.5 ? "across" : "cube";
   let tronColor = tronColors[Math.floor(Math.random()*tronColors.length)];
   let mesh, offset;
   if(type==="across"){
-    let width = 300, height = 50, depth = 50;
+    let width = 200, height = 50, depth = 50;
     let geo = new THREE.BoxGeometry(width, height, depth);
     geo.translate(depth/2, 0, 0);
     let mat = new THREE.MeshBasicMaterial({color: tronColor});
@@ -135,19 +135,18 @@ function generateCubeOnVertex(){
   }
   let wire = new THREE.LineSegments(new THREE.WireframeGeometry(mesh.geometry), new THREE.LineBasicMaterial({color:0x000000, linewidth:3}));
   mesh.add(wire);
-  // Position: set radial distance to tunnelRadius+offset so that its flush with the wall.
   let r = tunnelRadius + offset;
   let x = r * Math.cos(angle);
   let y = r * Math.sin(angle);
   mesh.position.set(x, y, z);
-  // Align so that the object's +X (the flush face) faces radially outward.
+  // Align the object's front face (local +X) flush with the wall.
   mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0));
   cubeGroup.add(mesh);
   cubes.push(mesh);
 }
 function generateCubesBatch(){
-  for(let i=0;i<5;i++){
-    let candidate = generateCubeOnVertex();
+  for(let i=0;i<3;i++){
+    generateCubeOnVertex();
   }
 }
 function updateCubes(){
@@ -160,11 +159,11 @@ function updateCubes(){
   }
 }
 function collisionDetected(){
-  // Create a small box around the camera.
-  let camBox = new THREE.Box3().setFromCenterAndSize(camera.position, new THREE.Vector3(1,1,1));
+  // For each cube, compute its world bounding box and check if it contains the camera position.
+  let camPos = camera.position.clone();
   for(let cube of cubes){
-    let cubeBox = new THREE.Box3().setFromObject(cube);
-    if(camBox.intersectsBox(cubeBox)){
+    let box = new THREE.Box3().setFromObject(cube);
+    if(box.containsPoint(camPos)){
       return true;
     }
   }
@@ -174,7 +173,6 @@ function handleOrientation(event){
   console.log(event.gamma, event.beta, event.alpha);
   let gamma = event.gamma || 0;
   tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
-  camera.position.x += THREE.MathUtils.degToRad(gamma)*0.5;
 }
 function requestGyroPermission(){
   if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
@@ -182,7 +180,9 @@ function requestGyroPermission(){
       if(permissionState==='granted'){
         window.addEventListener("deviceorientation", handleOrientation, true);
       }
-    }).catch(console.error);
+    }).catch(console.error).then(() =>{ 
+    window.addEventListener("deviceorientation", handleOrientation, true);
+    });
   } else {
     window.addEventListener("deviceorientation", handleOrientation, true);
   }
@@ -206,7 +206,7 @@ function onResize(){
 function initScene(){
   init();
   requestGyroPermission();
-  setInterval(generateCubesBatch,1000);
+  setInterval(generateCubesBatch,5000);
 }
 function animate(){
   requestAnimationFrame(animate);

@@ -2,25 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Infinite Tunnel with Collision and Flashy Cubes</title>
+  <title>Infinite Tunnel with Box Collision & Aligned Cubes</title>
   <style>
-    html, body { margin:0; padding:0; overflow:hidden; background:#000; }
-    canvas { display:block; }
+    html, body { margin: 0; padding: 0; overflow: hidden; background: #000; }
+    canvas { display: block; }
   </style>
 </head>
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script>
-const tunnelRadius = 150, tunnelLength = 10000, numTunnelSegments = 2, forwardSpeedInitial = 20, lateralSpeed = 10;
-const cornersPerRing = 16, ringSpacing = 300, ringCount = 20, ringGroupLength = ringSpacing*(ringCount-1), ringGroupCopies = 10;
-let forwardSpeed = forwardSpeedInitial;
+let tunnelRadius = 150;
+let tunnelLength = 10000;
+let numTunnelSegments = 2;
+let forwardSpeed = 20;
+let lateralSpeed = 10;
+let cornersPerRing = 16;
+let ringSpacing = 300;
+let ringCount = 20;
+let ringGroupLength = ringSpacing * (ringCount - 1);
+let ringGroupCopies = 10;
+let tronColors = [0x00ffff, 0xff00ff, 0xffff00, 0x00ff00, 0xff6600];
 let tunnelSegments = [], ringGroups = [], cubes = [];
 let scene, camera, renderer, tunnelContainer, cubeGroup;
-const tronColors = [0x00ffff, 0xff00ff, 0xffff00, 0x00ff00, 0xff6600];
 function init(){
-  scene = new THREE.Scene(); scene.background = new THREE.Color(0x000000);
-  tunnelContainer = new THREE.Group(); scene.add(tunnelContainer);
-  cubeGroup = new THREE.Group(); tunnelContainer.add(cubeGroup);
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x000000);
+  tunnelContainer = new THREE.Group();
+  scene.add(tunnelContainer);
+  cubeGroup = new THREE.Group();
+  tunnelContainer.add(cubeGroup);
   camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 20000);
   camera.position.set(0, -100, -100);
   camera.lookAt(new THREE.Vector3(0, -100, 1));
@@ -44,7 +54,8 @@ function createTunnelSegments(){
     let edges = new THREE.EdgesGeometry(geom);
     let wireframe = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
     wireframe.scale.set(1.1,1.1,1.1);
-    segGroup.add(paneMesh); segGroup.add(wireframe);
+    segGroup.add(paneMesh);
+    segGroup.add(wireframe);
     segGroup.position.z = i * tunnelLength;
     tunnelSegments.push(segGroup);
     tunnelContainer.add(segGroup);
@@ -61,8 +72,7 @@ function createRingGroups(){
 function createRingsGroup(){
   let group = new THREE.Group();
   for(let i=0;i<ringCount;i++){
-    let ringZ = i * ringSpacing;
-    let ringPoints = [];
+    let ringZ = i * ringSpacing, ringPoints = [];
     for(let c=0;c<cornersPerRing;c++){
       let theta = (c/cornersPerRing)*2*Math.PI;
       let x = tunnelRadius*Math.cos(theta), y = tunnelRadius*Math.sin(theta);
@@ -101,42 +111,46 @@ function moveSegments(arr, segLength, totalCount){
 }
 function generateCubeOnVertex(){
   let rg = ringGroups[Math.floor(Math.random()*ringGroups.length)];
-  let ringIdx = Math.floor(Math.random()*ringCount);
   let vertexIdx = Math.floor(Math.random()*cornersPerRing);
   let angle = (vertexIdx/cornersPerRing)*2*Math.PI;
-  let x = tunnelRadius * Math.cos(angle);
-  let y = tunnelRadius * Math.sin(angle);
-  let z = rg.position.z + ringIdx * ringSpacing;
+  // Fixed z offset: always 5000 ahead of camera
+  let z = camera.position.z + 5000;
   let type = Math.random() < 0.5 ? "across" : "cube";
   let tronColor = tronColors[Math.floor(Math.random()*tronColors.length)];
-  let mesh;
+  let mesh, offset;
   if(type==="across"){
-    let width = 2*tunnelRadius, height = 50, depth = 50;
+    let width = 300, height = 50, depth = 50;
     let geo = new THREE.BoxGeometry(width, height, depth);
+    geo.translate(depth/2, 0, 0);
     let mat = new THREE.MeshBasicMaterial({color: tronColor});
     mesh = new THREE.Mesh(geo, mat);
+    offset = depth/2;
   } else {
-    let size = 50;
+    let size = 100;
     let geo = new THREE.BoxGeometry(size, size, size);
+    geo.translate(size/2, 0, 0);
     let mat = new THREE.MeshBasicMaterial({color: tronColor});
     mesh = new THREE.Mesh(geo, mat);
+    offset = size/2;
   }
   let wire = new THREE.LineSegments(new THREE.WireframeGeometry(mesh.geometry), new THREE.LineBasicMaterial({color:0x000000, linewidth:3}));
   mesh.add(wire);
-  mesh.position.set(x + 50, y + 50, z);
-  mesh.rotation.z = angle;
+  // Position: set radial distance to tunnelRadius+offset so that its flush with the wall.
+  let r = tunnelRadius + offset;
+  let x = r * Math.cos(angle);
+  let y = r * Math.sin(angle);
+  mesh.position.set(x, y, z);
+  // Align so that the object's +X (the flush face) faces radially outward.
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0));
   cubeGroup.add(mesh);
   cubes.push(mesh);
 }
- cubes = [];
 function generateCubesBatch(){
-  if(collisionDetected()) return;
   for(let i=0;i<5;i++){
-    generateCubeOnVertex();
+    let candidate = generateCubeOnVertex();
   }
 }
 function updateCubes(){
-  if(collisionDetected()) return;
   for(let i=cubes.length-1;i>=0;i--){
     cubes[i].position.z -= forwardSpeed;
     if(cubes[i].position.z < camera.position.z - 200){
@@ -146,13 +160,11 @@ function updateCubes(){
   }
 }
 function collisionDetected(){
-  const cameraRadius = 20;
+  // Create a small box around the camera.
+  let camBox = new THREE.Box3().setFromCenterAndSize(camera.position, new THREE.Vector3(1,1,1));
   for(let cube of cubes){
-    cube.updateMatrixWorld();
-    let pos = new THREE.Vector3();
-    cube.getWorldPosition(pos);
-    let cubeRadius = 0.5 * Math.sqrt(50*50+50*50+50*50);
-    if(pos.distanceTo(camera.position) < (cameraRadius + cubeRadius)){
+    let cubeBox = new THREE.Box3().setFromObject(cube);
+    if(camBox.intersectsBox(cubeBox)){
       return true;
     }
   }
@@ -162,7 +174,7 @@ function handleOrientation(event){
   console.log(event.gamma, event.beta, event.alpha);
   let gamma = event.gamma || 0;
   tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
-  camera.position.x += THREE.MathUtils.degToRad(gamma) * 0.5;
+  camera.position.x += THREE.MathUtils.degToRad(gamma)*0.5;
 }
 function requestGyroPermission(){
   if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
@@ -194,7 +206,7 @@ function onResize(){
 function initScene(){
   init();
   requestGyroPermission();
-  setInterval(generateCubesBatch,5000);
+  setInterval(generateCubesBatch,1000);
 }
 function animate(){
   requestAnimationFrame(animate);

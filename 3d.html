@@ -2,222 +2,324 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Infinite Tunnel with Box Collision & Aligned Cubes</title>
+  <title>SpeedX 3D</title>
   <style>
-    html, body { margin: 0; padding: 0; overflow: hidden; background: #000; }
+    html, body { 
+      margin: 0; 
+      padding: 0; 
+      overflow: hidden; 
+      background: #000; 
+    }
     canvas { display: block; }
+    #scoreContainer {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      text-align: right;
+      font-family: "Orbitron", sans-serif;
+      color: #00ffff;
+      z-index: 10;
+    }
+    #score {
+      font-size: 24px;
+      text-shadow: 0 0 5px #00ffff;
+    }
+    #highScore {
+      font-size: 16px;
+      opacity: 0.8;
+      text-shadow: 0 0 3px #00ffff;
+    }
+    #menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      color: #00ffff;
+      font-family: "Orbitron", sans-serif;
+      text-align: center;
+      z-index: 20;
+      padding-top: 200px;
+    }
+    #menu h1 { font-size: 48px; margin-bottom: 20px; text-shadow: 0 0 10px #00ffff; }
+    #menu h3 { font-size: 24px; margin: 5px; text-shadow: 0 0 5px #00ffff; }
+    #menu button {
+      font-family: "Orbitron", sans-serif;
+      font-size: 24px;
+      padding: 10px 20px;
+      background: #000;
+      color: #00ffff;
+      border: 2px solid #00ffff;
+      cursor: pointer;
+      text-shadow: 0 0 5px #00ffff;
+    }
+    #menu button:hover {
+      background: #00ffff;
+      color: #000;
+    }
   </style>
 </head>
 <body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script>
-let tunnelRadius = 150;
-let tunnelLength = 10000;
-let numTunnelSegments = 2;
-let forwardSpeed = 20;
-let lateralSpeed = 10;
-let cornersPerRing = 16;
-let ringSpacing = 300;
-let ringCount = 20;
-let ringGroupLength = ringSpacing * (ringCount - 1);
-let ringGroupCopies = 10;
-let tronColors = [0x00ffff, 0xff00ff, 0xffff00, 0x00ff00, 0xff6600];
-let tunnelSegments = [], ringGroups = [], cubes = [];
-let scene, camera, renderer, tunnelContainer, cubeGroup;
-function init(){
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000000);
-  tunnelContainer = new THREE.Group();
-  scene.add(tunnelContainer);
-  cubeGroup = new THREE.Group();
-  tunnelContainer.add(cubeGroup);
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 20000);
-  camera.position.set(0, -100, -100);
-  camera.lookAt(new THREE.Vector3(0, -100, 1));
-  scene.add(camera);
-  renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
-  createTunnelSegments();
-  createRingGroups();
-  window.addEventListener("keydown", onKeyDown);
-  window.addEventListener("resize", onResize);
-  requestGyroPermission();
-  setInterval(generateCubesBatch,1000);
-}
-function createTunnelSegments(){
-  for(let i=0;i<numTunnelSegments;i++){
-    let segGroup = new THREE.Group();
-    let geom = new THREE.CylinderGeometry(tunnelRadius, tunnelRadius, tunnelLength, 16, 16, true);
-    geom.rotateX(Math.PI/2);
-    let paneMesh = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.BackSide}));
-    let edges = new THREE.EdgesGeometry(geom);
-    let wireframe = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
-    wireframe.scale.set(1.1,1.1,1.1);
-    segGroup.add(paneMesh);
-    segGroup.add(wireframe);
-    segGroup.position.z = i * tunnelLength;
-    tunnelSegments.push(segGroup);
-    tunnelContainer.add(segGroup);
-  }
-}
-function createRingGroups(){
-  for(let i=0;i<ringGroupCopies;i++){
-    let group = createRingsGroup();
-    group.position.z = i * ringGroupLength;
-    ringGroups.push(group);
-    tunnelContainer.add(group);
-  }
-}
-function createRingsGroup(){
-  let group = new THREE.Group();
-  for(let i=0;i<ringCount;i++){
-    let ringZ = i * ringSpacing, ringPoints = [];
-    for(let c=0;c<cornersPerRing;c++){
-      let theta = (c/cornersPerRing)*2*Math.PI;
-      let x = tunnelRadius*Math.cos(theta), y = tunnelRadius*Math.sin(theta);
-      ringPoints.push(new THREE.Vector3(x,y,ringZ));
+  <div id="scoreContainer">
+    
+  </div>
+  <div id="menu">
+    <h1>SpeedX 3D</h1>
+    <h2>Game Over</h2>
+    <h3 id="finalScore">Score: 0</h3>
+    <h3 id="finalHighScore">High Score: 0</h3>
+    <button onclick="restartGame()">Restart</button>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script>
+    let tunnelRadius = 150;
+    let tunnelLength = 10000;
+    let numTunnelSegments = 2;
+    let forwardSpeedInitial = 20;
+    let forwardSpeed = forwardSpeedInitial;
+    let lateralSpeed = 10;
+    let cornersPerRing = 16;
+    let ringSpacing = 300;
+    let ringCount = 20;
+    let ringGroupLength = ringSpacing * (ringCount - 1);
+    let ringGroupCopies = 10;
+    let tronColors = [0x00ffff, 0xff00ff, 0xffff00, 0x00ff00, 0xff6600];
+    let tunnelSegments = [], ringGroups = [], cubes = [];
+    let scene, camera, renderer, tunnelContainer, cubeGroup;
+    let score = 0;
+    const scoreEl = document.getElementById("score");
+    const highScoreEl = document.getElementById("highScore");
+    const menuEl = document.getElementById("menu");
+    const finalScoreEl = document.getElementById("finalScore");
+    const finalHighScoreEl = document.getElementById("finalHighScore");
+
+    // Get highscore from localStorage
+    let storedHighScore = localStorage.getItem("highscore");
+    if(storedHighScore === null) {
+      storedHighScore = 0;
+      localStorage.setItem("highscore", 0);
+    } else {
+      storedHighScore = parseInt(storedHighScore);
     }
-    for(let c=0;c<cornersPerRing;c++){
-      let nextC = (c+1)%cornersPerRing;
-      let geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], ringPoints[nextC]]);
-      let line = new THREE.Line(geom, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
-      group.add(line);
+    //highScoreEl.innerHTML = "High Score: " + storedHighScore;
+
+    function init(){
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x000000);
+      tunnelContainer = new THREE.Group();
+      scene.add(tunnelContainer);
+      cubeGroup = new THREE.Group();
+      tunnelContainer.add(cubeGroup);
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 20000);
+      camera.position.set(0, -100, -100);
+      camera.lookAt(new THREE.Vector3(0, -100, 1));
+      scene.add(camera);
+      renderer = new THREE.WebGLRenderer({antialias:true});
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+      createTunnelSegments();
+      createRingGroups();
+      window.addEventListener("keydown", onKeyDown, false);
+      window.addEventListener("resize", onResize, false);
+      requestGyroPermission();
+      setInterval(generateCubesBatch,1000);
     }
-    if(i < ringCount-1){
-      let nextPoints = [];
-      let nextZ = (i+1)*ringSpacing;
-      for(let c=0;c<cornersPerRing;c++){
-        let theta = (c/cornersPerRing)*2*Math.PI;
-        let x = tunnelRadius*Math.cos(theta), y = tunnelRadius*Math.sin(theta);
-        nextPoints.push(new THREE.Vector3(x,y,nextZ));
-      }
-      for(let c=0;c<cornersPerRing;c++){
-        let geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], nextPoints[c]]);
-        let line = new THREE.Line(geom, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
-        group.add(line);
+    function createTunnelSegments(){
+      for(let i=0;i<numTunnelSegments;i++){
+        let segGroup = new THREE.Group();
+        let geom = new THREE.CylinderGeometry(tunnelRadius, tunnelRadius, tunnelLength, 16, 16, true);
+        geom.rotateX(Math.PI/2);
+        let paneMesh = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.BackSide}));
+        let edges = new THREE.EdgesGeometry(geom);
+        let wireframe = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
+        wireframe.scale.set(1.1,1.1,1.1);
+        segGroup.add(paneMesh);
+        segGroup.add(wireframe);
+        segGroup.position.z = i * tunnelLength;
+        tunnelSegments.push(segGroup);
+        tunnelContainer.add(segGroup);
       }
     }
-  }
-  return group;
-}
-function moveSegments(arr, segLength, totalCount){
-  for(let seg of arr) seg.position.z -= forwardSpeed;
-  if(arr[0].position.z < camera.position.z - segLength){
-    let seg = arr.shift();
-    seg.position.z += totalCount * segLength;
-    arr.push(seg);
-  }
-}
-function generateCubeOnVertex(){
-  let rg = ringGroups[Math.floor(Math.random()*ringGroups.length)];
-  let vertexIdx = Math.floor(Math.random()*cornersPerRing);
-  let angle = (vertexIdx/cornersPerRing)*2*Math.PI;
-  let z = camera.position.z + 5000;
-  let type = Math.random() < 0.5 ? "across" : "cube";
-  let tronColor = tronColors[Math.floor(Math.random()*tronColors.length)];
-  let mesh, offset;
-  if(type==="across"){
-    let width = 200, height = 50, depth = 50;
-    let geo = new THREE.BoxGeometry(width, height, depth);
-    geo.translate(depth/2, 0, 0);
-    let mat = new THREE.MeshBasicMaterial({color: tronColor});
-    mesh = new THREE.Mesh(geo, mat);
-    offset = depth/2;
-  } else {
-    let size = 100;
-    let geo = new THREE.BoxGeometry(size, size, size);
-    geo.translate(size/2, 0, 0);
-    let mat = new THREE.MeshBasicMaterial({color: tronColor});
-    mesh = new THREE.Mesh(geo, mat);
-    offset = size/2;
-  }
-  let wire = new THREE.LineSegments(new THREE.WireframeGeometry(mesh.geometry), new THREE.LineBasicMaterial({color:0x000000, linewidth:3}));
-  mesh.add(wire);
-  let r = tunnelRadius + offset;
-  let x = r * Math.cos(angle);
-  let y = r * Math.sin(angle);
-  mesh.position.set(x, y, z);
-  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0));
-  cubeGroup.add(mesh);
-  cubes.push(mesh);
-}
-function generateCubesBatch(){
-  for(let i=0;i<3;i++){
-    generateCubeOnVertex();
-  }
-}
-function updateCubes(){
-  for(let i=cubes.length-1;i>=0;i--){
-    cubes[i].position.z -= forwardSpeed;
-    if(cubes[i].position.z < camera.position.z - 200){
-      cubeGroup.remove(cubes[i]);
-      cubes.splice(i,1);
+    function createRingGroups(){
+      for(let i=0;i<ringGroupCopies;i++){
+        let group = createRingsGroup();
+        group.position.z = i * ringGroupLength;
+        ringGroups.push(group);
+        tunnelContainer.add(group);
+      }
     }
-  }
-}
-function collisionDetected(){
-  let camBox = new THREE.Box3().setFromCenterAndSize(camera.position, new THREE.Vector3(0.5,0.5,0.5));
-  for(let cube of cubes){
-    let cubeBox = new THREE.Box3().setFromObject(cube);
-    if(camBox.intersectsBox(cubeBox)){
-      return true;
+    function createRingsGroup(){
+      let group = new THREE.Group();
+      for(let i=0;i<ringCount;i++){
+        let ringZ = i * ringSpacing, ringPoints = [];
+        for(let c=0;c<cornersPerRing;c++){
+          let theta = (c/cornersPerRing)*2*Math.PI;
+          let x = tunnelRadius*Math.cos(theta), y = tunnelRadius*Math.sin(theta);
+          ringPoints.push(new THREE.Vector3(x,y,ringZ));
+        }
+        for(let c=0;c<cornersPerRing;c++){
+          let nextC = (c+1)%cornersPerRing;
+          let geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], ringPoints[nextC]]);
+          let line = new THREE.Line(geom, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
+          group.add(line);
+        }
+        if(i < ringCount-1){
+          let nextPoints = [];
+          let nextZ = (i+1)*ringSpacing;
+          for(let c=0;c<cornersPerRing;c++){
+            let theta = (c/cornersPerRing)*2*Math.PI;
+            let x = tunnelRadius*Math.cos(theta), y = tunnelRadius*Math.sin(theta);
+            nextPoints.push(new THREE.Vector3(x,y,nextZ));
+          }
+          for(let c=0;c<cornersPerRing;c++){
+            let geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], nextPoints[c]]);
+            let line = new THREE.Line(geom, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
+            group.add(line);
+          }
+        }
+      }
+      return group;
     }
-  }
-  return false;
-}
-function handleOrientation(event){
-  console.log(event.gamma, event.beta, event.alpha);
-  let gamma = event.gamma || 0;
-  tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
-  camera.position.x += THREE.MathUtils.degToRad(gamma)*0.5;
-}
-function requestGyroPermission(){
-  if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
-    DeviceOrientationEvent.requestPermission().then(permissionState=>{
-      if(permissionState==='granted'){
+    function moveSegments(arr, segLength, totalCount){
+      for(let seg of arr) seg.position.z -= forwardSpeed;
+      if(arr[0].position.z < camera.position.z - segLength){
+        let seg = arr.shift();
+        seg.position.z += totalCount * segLength;
+        arr.push(seg);
+      }
+    }
+    function generateCubeOnVertex(){
+      let rg = ringGroups[Math.floor(Math.random()*ringGroups.length)];
+      let vertexIdx = Math.floor(Math.random()*cornersPerRing);
+      let angle = (vertexIdx/cornersPerRing)*2*Math.PI;
+      let z = camera.position.z + 5000;
+      let type = Math.random() < 0.5 ? "across" : "cube";
+      let tronColor = tronColors[Math.floor(Math.random()*tronColors.length)];
+      let mesh, offset;
+      if(type==="across"){
+        let width = 200, height = 50, depth = 50;
+        let geo = new THREE.BoxGeometry(width, height, depth);
+        geo.translate(depth/2, 0, 0);
+        let mat = new THREE.MeshBasicMaterial({color: tronColor});
+        mesh = new THREE.Mesh(geo, mat);
+        offset = depth/2;
+      } else {
+        let size = 100;
+        let geo = new THREE.BoxGeometry(size, size, size);
+        geo.translate(size/2, 0, 0);
+        let mat = new THREE.MeshBasicMaterial({color: tronColor});
+        mesh = new THREE.Mesh(geo, mat);
+        offset = size/2;
+      }
+      let wire = new THREE.LineSegments(new THREE.WireframeGeometry(mesh.geometry), new THREE.LineBasicMaterial({color:0x000000, linewidth:3}));
+      mesh.add(wire);
+      let r = tunnelRadius + offset;
+      let x = r * Math.cos(angle);
+      let y = r * Math.sin(angle);
+      mesh.position.set(x, y, z);
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0));
+      cubeGroup.add(mesh);
+      cubes.push(mesh);
+    }
+    function generateCubesBatch(){
+      for(let i=0;i<3;i++){
+        generateCubeOnVertex();
+      }
+    }
+    function updateCubes(){
+      for(let i=cubes.length-1;i>=0;i--){
+        cubes[i].position.z -= forwardSpeed;
+        if(cubes[i].position.z < camera.position.z - 200){
+          cubeGroup.remove(cubes[i]);
+          cubes.splice(i,1);
+        }
+      }
+    }
+    function collisionDetected(){
+      let camBox = new THREE.Box3().setFromCenterAndSize(camera.position, new THREE.Vector3(0.5,0.5,0.5));
+      for(let cube of cubes){
+        let cubeBox = new THREE.Box3().setFromObject(cube);
+        if(camBox.intersectsBox(cubeBox)){
+          return true;
+        }
+      }
+      return false;
+    }
+    function handleOrientation(event){
+      console.log(event.gamma, event.beta, event.alpha);
+      let gamma = event.gamma || 0;
+      tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
+      camera.position.x += THREE.MathUtils.degToRad(gamma)*0.5;
+    }
+    function requestGyroPermission(){
+      if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
+        DeviceOrientationEvent.requestPermission().then(permissionState=>{
+          if(permissionState==='granted'){
+            window.addEventListener("deviceorientation", handleOrientation, false);
+          }
+        }).catch(console.error);
+      } else {
         window.addEventListener("deviceorientation", handleOrientation, false);
       }
-    }).catch(console.error);
-  } else {
-    window.addEventListener("deviceorientation", handleOrientation, false);
-  }
-}
-function onKeyDown(e){
-  if(e.key.toLowerCase()==="a"){
-    tunnelContainer.rotation.z += 0.05;
-  } else if(e.key.toLowerCase()==="d"){
-    tunnelContainer.rotation.z -= 0.05;
-  } else if(e.key==="ArrowLeft"){
-    camera.position.x -= lateralSpeed;
-  } else if(e.key==="ArrowRight"){
-    camera.position.x += lateralSpeed;
-  }
-}
-function onResize(){
-  camera.aspect = window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
-function initScene(){
-  init();
-  requestGyroPermission();
-  setInterval(generateCubesBatch,5000);
-}
-function animate(){
-  requestAnimationFrame(animate);
-  if(!collisionDetected()){
-    moveSegments(tunnelSegments, tunnelLength, numTunnelSegments);
-    moveSegments(ringGroups, ringGroupLength, ringGroupCopies);
-    updateCubes();
-  } else {
-    forwardSpeed = 0;
-    console.log("Collision detected! Stopping movement.");
-  }
-  renderer.render(scene, camera);
-}
-initScene();
-animate();
+    }
+    function onKeyDown(e){
+      if(e.key.toLowerCase()==="a"){
+        tunnelContainer.rotation.z += 0.05;
+      } else if(e.key.toLowerCase()==="d"){
+        tunnelContainer.rotation.z -= 0.05;
+      } else if(e.key==="ArrowLeft"){
+        camera.position.x -= lateralSpeed;
+      } else if(e.key==="ArrowRight"){
+        camera.position.x += lateralSpeed;
+      }
+    }
+    function onResize(){
+      camera.aspect = window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    function restartGame(){
+      location.reload();
+    }
+    function initScene(){
+      init();
+      requestGyroPermission();
+      setInterval(generateCubesBatch,5000);
+    }
+    function animate(){
+      requestAnimationFrame(animate);
+      if(!collisionDetected()){
+        moveSegments(tunnelSegments, tunnelLength, numTunnelSegments);
+        moveSegments(ringGroups, ringGroupLength, ringGroupCopies);
+        updateCubes();
+        score++;
+        document.getElementById("score").innerHTML = "Score: " + score;
+        if(score > parseInt(localStorage.getItem("highscore"))){
+          localStorage.setItem("highscore", score);
+        }
+        document.getElementById("highScore").innerHTML = "High Score: " + localStorage.getItem("highscore");
+      } else {
+        forwardSpeed = 0;
+        document.getElementById("menu").style.display = "block";
+        document.getElementById("finalScore").innerHTML = "Score: " + score;
+        document.getElementById("finalHighScore").innerHTML = "High Score: " + localStorage.getItem("highscore");
+        console.log("Collision detected! Stopping movement.");
+      }
+      renderer.render(scene, camera);
+    }
+    initScene();
+    animate();
 </script>
+<div id="scoreContainer">
+  <div id="score">Score: 0</div>
+  <div id="highScore">High Score: 0</div>
+</div>
+<div id="menu" style="display:none;">
+  <h1>SpeedX 3D</h1>
+  <h2>Game Over</h2>
+  <h3 id="finalScore">Score: 0</h3>
+  <h3 id="finalHighScore">High Score: 0</h3>
+  <button onclick="restartGame()">Restart</button>
+</div>
 </body>
 </html>

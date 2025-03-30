@@ -1,195 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-<title>Infinite Tunnel (Rotating, Camera at Bottom, No Comments)</title>
-
-    <style>
-html, body { margin: 0; padding: 0; overflow: hidden; background: #000; }
-
-      canvas { display: block; }
-    </style>
-  </head>
-<body></body>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script>
-      const tunnelRadius = 150;
-const tunnelLength = 10000; const numTunnelSegments = 2; const forwardSpeed =
-20; const lateralSpeed = 10;
-
-      const cornersPerRing = 16;
-      const ringSpacing = 300;
-      const ringCount = 20;
-      const ringGroupLength = ringSpacing * (ringCount - 1);
-      const ringGroupCopies = 10;
-let tunnelSegments = []; let ringGroups = [];
-
-
-      let scene, camera, renderer;
-let tunnelContainer;
-
-      function init() {
-        scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
-
-        tunnelContainer = new THREE.Group();
-        scene.add(tunnelContainer);
-const cameraHeight = -tunnelRadius; camera = new THREE.PerspectiveCamera(75,
-window.innerWidth/window.innerHeight, 0.1, 20000);
-
-
-camera.position.set(0, -100, -100);
-
-
-        camera.lookAt(new THREE.Vector3(0, -100, 1));
-scene.add(camera);
-
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
-createTunnelSegments();
-
-createRingGroups();
-
-        window.addEventListener("keydown", onKeyDown);
-        window.addEventListener("resize", onResize);
-requestGyroPermission(); }
-
-
-      function createTunnelSegments() {
-        for (let i = 0; i < numTunnelSegments; i++) {
-const segGroup = new THREE.Group();
-
-          const geom = new THREE.CylinderGeometry(tunnelRadius, tunnelRadius, tunnelLength, 16, 16, true);
-geom.rotateX(Math.PI / 2);
-
-          const paneMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.BackSide });
-const paneMesh = new THREE.Mesh(geom, paneMat);
-
-          const edges = new THREE.EdgesGeometry(geom);
-const wireMat = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 10 });
-
-          const wireframe = new THREE.LineSegments(edges, wireMat);
-wireframe.scale.set(1.1, 1.1, 1.1);
-
-          segGroup.add(paneMesh);
-segGroup.add(wireframe);
-
-          segGroup.position.z = i * tunnelLength;
-          tunnelSegments.push(segGroup);
-          tunnelContainer.add(segGroup);
-        }
+<head>
+  <meta charset="UTF-8">
+  <title>Infinite Tunnel with Collision and Flashy Cubes</title>
+  <style>
+    html, body { margin:0; padding:0; overflow:hidden; background:#000; }
+    canvas { display:block; }
+  </style>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script>
+const tunnelRadius = 150, tunnelLength = 10000, numTunnelSegments = 2, forwardSpeedInitial = 20, lateralSpeed = 10;
+const cornersPerRing = 16, ringSpacing = 300, ringCount = 20, ringGroupLength = ringSpacing*(ringCount-1), ringGroupCopies = 10;
+let forwardSpeed = forwardSpeedInitial;
+let tunnelSegments = [], ringGroups = [], cubes = [];
+let scene, camera, renderer, tunnelContainer, cubeGroup;
+const tronColors = [0x00ffff, 0xff00ff, 0xffff00, 0x00ff00, 0xff6600];
+function init(){
+  scene = new THREE.Scene(); scene.background = new THREE.Color(0x000000);
+  tunnelContainer = new THREE.Group(); scene.add(tunnelContainer);
+  cubeGroup = new THREE.Group(); tunnelContainer.add(cubeGroup);
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 20000);
+  camera.position.set(0, -100, -100);
+  camera.lookAt(new THREE.Vector3(0, -100, 1));
+  scene.add(camera);
+  renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+  createTunnelSegments();
+  createRingGroups();
+  window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("resize", onResize);
+  requestGyroPermission();
+  setInterval(generateCubesBatch,5000);
 }
-
-      function createRingGroups() {
-        for (let i = 0; i < ringGroupCopies; i++) {
-          const group = createRingsGroup();
-          group.position.z = i * ringGroupLength;
-          ringGroups.push(group);
-          tunnelContainer.add(group);
-        }
+function createTunnelSegments(){
+  for(let i=0;i<numTunnelSegments;i++){
+    let segGroup = new THREE.Group();
+    let geom = new THREE.CylinderGeometry(tunnelRadius, tunnelRadius, tunnelLength, 16, 16, true);
+    geom.rotateX(Math.PI/2);
+    let paneMesh = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.BackSide}));
+    let edges = new THREE.EdgesGeometry(geom);
+    let wireframe = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
+    wireframe.scale.set(1.1,1.1,1.1);
+    segGroup.add(paneMesh); segGroup.add(wireframe);
+    segGroup.position.z = i * tunnelLength;
+    tunnelSegments.push(segGroup);
+    tunnelContainer.add(segGroup);
+  }
 }
-
-      function createRingsGroup() {
-        const group = new THREE.Group();
-        for (let i = 0; i < ringCount; i++) {
-          const ringZ = i * ringSpacing;
-          let ringPoints = [];
-          for (let c = 0; c < cornersPerRing; c++) {
-            const theta = (c / cornersPerRing) * 2 * Math.PI;
-            const x = tunnelRadius * Math.cos(theta);
-            const y = tunnelRadius * Math.sin(theta);
-            ringPoints.push(new THREE.Vector3(x, y, ringZ));
-          }
-          for (let c = 0; c < cornersPerRing; c++) {
-            const nextC = (c + 1) % cornersPerRing;
-            const geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], ringPoints[nextC]]);
-const line = new THREE.Line(geom, new THREE.LineBasicMaterial({ color: 0x000000,
-linewidth: 10 }));
-
-            group.add(line);
-          }
-          if (i < ringCount - 1) {
-            let nextPoints = [];
-            const nextZ = (i + 1) * ringSpacing;
-            for (let c = 0; c < cornersPerRing; c++) {
-              const theta = (c / cornersPerRing) * 2 * Math.PI;
-              const x = tunnelRadius * Math.cos(theta);
-              const y = tunnelRadius * Math.sin(theta);
-              nextPoints.push(new THREE.Vector3(x, y, nextZ));
-            }
-            for (let c = 0; c < cornersPerRing; c++) {
-              const geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], nextPoints[c]]);
-const line = new THREE.Line(geom, new THREE.LineBasicMaterial({ color: 0x000000,
-linewidth: 10 }));
-
-              group.add(line);
-            }
-          }
-        }
-        return group;
+function createRingGroups(){
+  for(let i=0;i<ringGroupCopies;i++){
+    let group = createRingsGroup();
+    group.position.z = i * ringGroupLength;
+    ringGroups.push(group);
+    tunnelContainer.add(group);
+  }
 }
-
-      function moveSegments(arr, segLength, totalCount) {
-for (let seg of arr) { seg.position.z -= forwardSpeed; }
-
-        if (arr[0].position.z < camera.position.z - segLength) {
-          let seg = arr.shift();
-          seg.position.z += totalCount * segLength;
-          arr.push(seg);
-        }
-}
-
-      function handleOrientation(event) {
-console.log("Device orientation:", event.gamma, event.beta, event.alpha); let
-gamma = event.gamma || 0;
-
-        tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
-camera.position.x += THREE.MathUtils.degToRad(gamma) * 0.5;
-
+function createRingsGroup(){
+  let group = new THREE.Group();
+  for(let i=0;i<ringCount;i++){
+    let ringZ = i * ringSpacing;
+    let ringPoints = [];
+    for(let c=0;c<cornersPerRing;c++){
+      let theta = (c/cornersPerRing)*2*Math.PI;
+      let x = tunnelRadius*Math.cos(theta), y = tunnelRadius*Math.sin(theta);
+      ringPoints.push(new THREE.Vector3(x,y,ringZ));
+    }
+    for(let c=0;c<cornersPerRing;c++){
+      let nextC = (c+1)%cornersPerRing;
+      let geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], ringPoints[nextC]]);
+      let line = new THREE.Line(geom, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
+      group.add(line);
+    }
+    if(i < ringCount-1){
+      let nextPoints = [];
+      let nextZ = (i+1)*ringSpacing;
+      for(let c=0;c<cornersPerRing;c++){
+        let theta = (c/cornersPerRing)*2*Math.PI;
+        let x = tunnelRadius*Math.cos(theta), y = tunnelRadius*Math.sin(theta);
+        nextPoints.push(new THREE.Vector3(x,y,nextZ));
       }
-function requestGyroPermission() { if (typeof DeviceOrientationEvent !==
-'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-DeviceOrientationEvent.requestPermission() .then(permissionState => { if
-(permissionState === 'granted') { window.addEventListener("deviceorientation",
-handleOrientation, true); console.log("Gyro permission granted."); } })
-.catch(console.error); } else { window.addEventListener("deviceorientation",
-handleOrientation, true); } }
-
-
-      function onKeyDown(e) {
-        if (e.key.toLowerCase() === "a") {
-          tunnelContainer.rotation.z += 0.05;
-        } else if (e.key.toLowerCase() === "d") {
-          tunnelContainer.rotation.z -= 0.05;
-        } else if (e.key === "ArrowLeft") {
-          camera.position.x -= lateralSpeed;
-        } else if (e.key === "ArrowRight") {
-          camera.position.x += lateralSpeed;
-        }
-}
-
-      function onResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+      for(let c=0;c<cornersPerRing;c++){
+        let geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], nextPoints[c]]);
+        let line = new THREE.Line(geom, new THREE.LineBasicMaterial({color:0x000000, linewidth:10}));
+        group.add(line);
       }
-function initScene() { init(); requestGyroPermission(); }
-
-
-      function animate() {
-requestAnimationFrame(animate);
-
-        moveSegments(tunnelSegments, tunnelLength, numTunnelSegments);
-moveSegments(ringGroups, ringGroupLength, ringGroupCopies);
-
-        renderer.render(scene, camera);
+    }
+  }
+  return group;
 }
-
-      initScene();
-      animate();
-    </script>
-  </body>
+function moveSegments(arr, segLength, totalCount){
+  for(let seg of arr) seg.position.z -= forwardSpeed;
+  if(arr[0].position.z < camera.position.z - segLength){
+    let seg = arr.shift();
+    seg.position.z += totalCount * segLength;
+    arr.push(seg);
+  }
+}
+function generateCubeOnVertex(){
+  let rg = ringGroups[Math.floor(Math.random()*ringGroups.length)];
+  let ringIdx = Math.floor(Math.random()*ringCount);
+  let vertexIdx = Math.floor(Math.random()*cornersPerRing);
+  let angle = (vertexIdx/cornersPerRing)*2*Math.PI;
+  let x = tunnelRadius * Math.cos(angle);
+  let y = tunnelRadius * Math.sin(angle);
+  let z = rg.position.z + ringIdx * ringSpacing;
+  let type = Math.random() < 0.5 ? "across" : "cube";
+  let tronColor = tronColors[Math.floor(Math.random()*tronColors.length)];
+  let mesh;
+  if(type==="across"){
+    let width = 2*tunnelRadius, height = 50, depth = 50;
+    let geo = new THREE.BoxGeometry(width, height, depth);
+    let mat = new THREE.MeshBasicMaterial({color: tronColor});
+    mesh = new THREE.Mesh(geo, mat);
+  } else {
+    let size = 50;
+    let geo = new THREE.BoxGeometry(size, size, size);
+    let mat = new THREE.MeshBasicMaterial({color: tronColor});
+    mesh = new THREE.Mesh(geo, mat);
+  }
+  let wire = new THREE.LineSegments(new THREE.WireframeGeometry(mesh.geometry), new THREE.LineBasicMaterial({color:0x000000, linewidth:3}));
+  mesh.add(wire);
+  mesh.position.set(x + 50, y + 50, z);
+  mesh.rotation.z = angle;
+  cubeGroup.add(mesh);
+  cubes.push(mesh);
+}
+ cubes = [];
+function generateCubesBatch(){
+  if(collisionDetected()) return;
+  for(let i=0;i<5;i++){
+    generateCubeOnVertex();
+  }
+}
+function updateCubes(){
+  if(collisionDetected()) return;
+  for(let i=cubes.length-1;i>=0;i--){
+    cubes[i].position.z -= forwardSpeed;
+    if(cubes[i].position.z < camera.position.z - 200){
+      cubeGroup.remove(cubes[i]);
+      cubes.splice(i,1);
+    }
+  }
+}
+function collisionDetected(){
+  const cameraRadius = 20;
+  for(let cube of cubes){
+    cube.updateMatrixWorld();
+    let pos = new THREE.Vector3();
+    cube.getWorldPosition(pos);
+    let cubeRadius = 0.5 * Math.sqrt(50*50+50*50+50*50);
+    if(pos.distanceTo(camera.position) < (cameraRadius + cubeRadius)){
+      return true;
+    }
+  }
+  return false;
+}
+function handleOrientation(event){
+  console.log(event.gamma, event.beta, event.alpha);
+  let gamma = event.gamma || 0;
+  tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
+  camera.position.x += THREE.MathUtils.degToRad(gamma) * 0.5;
+}
+function requestGyroPermission(){
+  if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
+    DeviceOrientationEvent.requestPermission().then(permissionState=>{
+      if(permissionState==='granted'){
+        window.addEventListener("deviceorientation", handleOrientation, true);
+      }
+    }).catch(console.error);
+  } else {
+    window.addEventListener("deviceorientation", handleOrientation, true);
+  }
+}
+function onKeyDown(e){
+  if(e.key.toLowerCase()==="a"){
+    tunnelContainer.rotation.z += 0.05;
+  } else if(e.key.toLowerCase()==="d"){
+    tunnelContainer.rotation.z -= 0.05;
+  } else if(e.key==="ArrowLeft"){
+    camera.position.x -= lateralSpeed;
+  } else if(e.key==="ArrowRight"){
+    camera.position.x += lateralSpeed;
+  }
+}
+function onResize(){
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+function initScene(){
+  init();
+  requestGyroPermission();
+  setInterval(generateCubesBatch,5000);
+}
+function animate(){
+  requestAnimationFrame(animate);
+  if(!collisionDetected()){
+    moveSegments(tunnelSegments, tunnelLength, numTunnelSegments);
+    moveSegments(ringGroups, ringGroupLength, ringGroupCopies);
+    updateCubes();
+  } else {
+    forwardSpeed = 0;
+    console.log("Collision detected! Stopping movement.");
+  }
+  renderer.render(scene, camera);
+}
+initScene();
+animate();
+</script>
+</body>
 </html>

@@ -2,122 +2,87 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Infinite Tunnel (Rotating Around 0,0,0; Camera at Bottom)</title>
+<title>Infinite Tunnel (Rotating, Camera at Bottom, No Comments)</title>
+
     <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background: #000;
-      }
+html, body { margin: 0; padding: 0; overflow: hidden; background: #000; }
+
       canvas { display: block; }
     </style>
   </head>
-  <body>
-    <!-- Include Three.js from CDN -->
+<body></body>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script>
-      // -----------------------------------------------------
-      // PARAMETERS
-      // -----------------------------------------------------
       const tunnelRadius = 150;
-      const tunnelLength = 10000;    // Each tunnel segment is 10,000 units long.
-      const numTunnelSegments = 2;   // Number of tunnel segments.
-      const forwardSpeed = 20;       // Forward speed (units per frame).
-      const lateralSpeed = 10;       // Lateral camera movement speed.
-      
-      // Ring (wireframe grid) parameters
+const tunnelLength = 10000; const numTunnelSegments = 2; const forwardSpeed =
+20; const lateralSpeed = 10;
+
       const cornersPerRing = 16;
       const ringSpacing = 300;
       const ringCount = 20;
       const ringGroupLength = ringSpacing * (ringCount - 1);
       const ringGroupCopies = 10;
-      
-      // -----------------------------------------------------
-      // GLOBAL ARRAYS & OBJECTS
-      // -----------------------------------------------------
-      let tunnelSegments = []; // Array for tunnel segments (nearest segment at index 0)
-      let ringGroups = [];     // Array for ring groups
+let tunnelSegments = []; let ringGroups = [];
+
+
       let scene, camera, renderer;
-      let tunnelContainer;     // Container that holds the tunnel segments and ring groups
-      
-      // -----------------------------------------------------
-      // INITIALIZATION
-      // -----------------------------------------------------
+let tunnelContainer;
+
       function init() {
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x000000);
-      
-        // Create a container for the tunnel. Its pivot is at (0,0,0),
-        // so rotations applied to this container occur about the world origin.
+scene.background = new THREE.Color(0x000000);
+
         tunnelContainer = new THREE.Group();
         scene.add(tunnelContainer);
-      
-        // Set up the camera.
-        // Place the camera at the bottom of the tunnel.
-        // For a tunnelRadius of 150, the bottom is at y = -150.
-        // We'll place the camera at (0, -150, -100) so it's inside the tunnel.
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 20000);
-        camera.position.set(0, -100, -100);
-        // Ensure the camera looks straight ahead (along negative z) at the bottom.
+const cameraHeight = -tunnelRadius; camera = new THREE.PerspectiveCamera(75,
+window.innerWidth/window.innerHeight, 0.1, 20000);
+
+
+camera.position.set(0, -100, -100);
+
+
         camera.lookAt(new THREE.Vector3(0, -100, 1));
-        scene.add(camera);
-      
+scene.add(camera);
+
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-      
-        // Create tunnel segments and add them to the tunnel container.
-        createTunnelSegments();
-        // Create ring groups and add them to the tunnel container.
-        createRingGroups();
-      
-        // Set up event listeners.
+document.body.appendChild(renderer.domElement);
+
+createTunnelSegments();
+
+createRingGroups();
+
         window.addEventListener("keydown", onKeyDown);
         window.addEventListener("resize", onResize);
-      
-        // If available, add gyro controls.
-        if (window.DeviceOrientationEvent) {
-          window.addEventListener("deviceorientation", handleOrientation, true);
-        }
-      }
-      
-      // -----------------------------------------------------
-      // CREATE TUNNEL SEGMENTS (Centered & Recycled)
-      // -----------------------------------------------------
+requestGyroPermission(); }
+
+
       function createTunnelSegments() {
         for (let i = 0; i < numTunnelSegments; i++) {
-          const segGroup = new THREE.Group();
-      
-          // Create a cylinder geometry (open-ended) for the tunnel slice.
-          // The geometry is centered at (0,0,0) so it spans from -tunnelLength/2 to +tunnelLength/2.
+const segGroup = new THREE.Group();
+
           const geom = new THREE.CylinderGeometry(tunnelRadius, tunnelRadius, tunnelLength, 16, 16, true);
-          geom.rotateX(Math.PI / 2);
-      
-          // White interior pane (using BackSide to view the inside).
+geom.rotateX(Math.PI / 2);
+
           const paneMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.BackSide });
-          const paneMesh = new THREE.Mesh(geom, paneMat);
-      
-          // Black wireframe.
+const paneMesh = new THREE.Mesh(geom, paneMat);
+
           const edges = new THREE.EdgesGeometry(geom);
-          const wireMat = new THREE.LineBasicMaterial({ color: 0x000000 });
+const wireMat = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 10 });
+
           const wireframe = new THREE.LineSegments(edges, wireMat);
-          wireframe.scale.set(1.1, 1.1, 1.1);
-      
+wireframe.scale.set(1.1, 1.1, 1.1);
+
           segGroup.add(paneMesh);
-          segGroup.add(wireframe);
-      
-          // Position segments so that segment 0 is centered at z = 0,
-          // segment 1 at z = tunnelLength, etc.
+segGroup.add(wireframe);
+
           segGroup.position.z = i * tunnelLength;
           tunnelSegments.push(segGroup);
           tunnelContainer.add(segGroup);
         }
-      }
-      
-      // -----------------------------------------------------
-      // CREATE RING GROUPS (Interior Grid)
-      // -----------------------------------------------------
+}
+
       function createRingGroups() {
         for (let i = 0; i < ringGroupCopies; i++) {
           const group = createRingsGroup();
@@ -125,8 +90,8 @@
           ringGroups.push(group);
           tunnelContainer.add(group);
         }
-      }
-      
+}
+
       function createRingsGroup() {
         const group = new THREE.Group();
         for (let i = 0; i < ringCount; i++) {
@@ -141,7 +106,9 @@
           for (let c = 0; c < cornersPerRing; c++) {
             const nextC = (c + 1) % cornersPerRing;
             const geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], ringPoints[nextC]]);
-            const line = new THREE.Line(geom, new THREE.LineBasicMaterial({ color: 0x000000 }));
+const line = new THREE.Line(geom, new THREE.LineBasicMaterial({ color: 0x000000,
+linewidth: 10 }));
+
             group.add(line);
           }
           if (i < ringCount - 1) {
@@ -155,44 +122,43 @@
             }
             for (let c = 0; c < cornersPerRing; c++) {
               const geom = new THREE.BufferGeometry().setFromPoints([ringPoints[c], nextPoints[c]]);
-              const line = new THREE.Line(geom, new THREE.LineBasicMaterial({ color: 0x000000 }));
+const line = new THREE.Line(geom, new THREE.LineBasicMaterial({ color: 0x000000,
+linewidth: 10 }));
+
               group.add(line);
             }
           }
         }
         return group;
-      }
-      
-      // -----------------------------------------------------
-      // RECYCLING FUNCTION (Shift/Push)
-      // -----------------------------------------------------
-      // Moves every object in the given array in negative z by forwardSpeed.
-      // When the first object's center goes behind the camera by more than one segment length,
-      // remove it using shift() and reposition it at the back using push().
+}
+
       function moveSegments(arr, segLength, totalCount) {
-        for (let seg of arr) {
-          seg.position.z -= forwardSpeed;
-        }
+for (let seg of arr) { seg.position.z -= forwardSpeed; }
+
         if (arr[0].position.z < camera.position.z - segLength) {
           let seg = arr.shift();
           seg.position.z += totalCount * segLength;
           arr.push(seg);
         }
-      }
-      
-      // -----------------------------------------------------
-      // GYRO CONTROLS: Rotate the tunnel container based on device orientation.
-      // -----------------------------------------------------
+}
+
       function handleOrientation(event) {
-        // Use event.gamma (left/right tilt) to rotate the tunnel container.
-        let gamma = event.gamma || 0; // gamma is in degrees.
-        // Map gamma to rotation around z. Adjust sensitivity as desired.
+console.log("Device orientation:", event.gamma, event.beta, event.alpha); let
+gamma = event.gamma || 0;
+
         tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
+camera.position.x += THREE.MathUtils.degToRad(gamma) * 0.5;
+
       }
-      
-      // -----------------------------------------------------
-      // KEYBOARD CONTROLS: Rotate tunnel container using A and D keys.
-      // -----------------------------------------------------
+function requestGyroPermission() { if (typeof DeviceOrientationEvent !==
+'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+DeviceOrientationEvent.requestPermission() .then(permissionState => { if
+(permissionState === 'granted') { window.addEventListener("deviceorientation",
+handleOrientation, true); console.log("Gyro permission granted."); } })
+.catch(console.error); } else { window.addEventListener("deviceorientation",
+handleOrientation, true); } }
+
+
       function onKeyDown(e) {
         if (e.key.toLowerCase() === "a") {
           tunnelContainer.rotation.z += 0.05;
@@ -203,40 +169,25 @@
         } else if (e.key === "ArrowRight") {
           camera.position.x += lateralSpeed;
         }
-      }
-      
-      // -----------------------------------------------------
-      // RESIZE HANDLER
-      // -----------------------------------------------------
+}
+
       function onResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
-      
-      // -----------------------------------------------------
-      // ANIMATION LOOP
-      // -----------------------------------------------------
+function initScene() { init(); requestGyroPermission(); }
+
+
       function animate() {
-        requestAnimationFrame(animate);
-      
-        // Move (recycle) tunnel segments and ring groups.
+requestAnimationFrame(animate);
+
         moveSegments(tunnelSegments, tunnelLength, numTunnelSegments);
-        moveSegments(ringGroups, ringGroupLength, ringGroupCopies);
-      
+moveSegments(ringGroups, ringGroupLength, ringGroupCopies);
+
         renderer.render(scene, camera);
-      }
-      
-      // -----------------------------------------------------
-      // START
-      // -----------------------------------------------------
-      function initScene() {
-        init();
-        if (window.DeviceOrientationEvent) {
-          window.addEventListener("deviceorientation", handleOrientation, true);
-        }
-      }
-      
+}
+
       initScene();
       animate();
     </script>

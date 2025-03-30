@@ -110,6 +110,7 @@ function moveSegments(arr, segLength, totalCount){
   }
 }
 function generateCubeOnVertex(){
+  if(collisionDetected()) return;
   let rg = ringGroups[Math.floor(Math.random()*ringGroups.length)];
   let vertexIdx = Math.floor(Math.random()*cornersPerRing);
   let angle = (vertexIdx/cornersPerRing)*2*Math.PI;

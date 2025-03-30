@@ -40,8 +40,8 @@ function init(){
   document.body.appendChild(renderer.domElement);
   createTunnelSegments();
   createRingGroups();
-  window.addEventListener("keydown", onKeyDown, false);
-  window.addEventListener("resize", onResize, false);
+  window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("resize", onResize);
   requestGyroPermission();
   setInterval(generateCubesBatch,1000);
 }
@@ -110,7 +110,6 @@ function moveSegments(arr, segLength, totalCount){
   }
 }
 function generateCubeOnVertex(){
-  if(collisionDetected()) return;
   let rg = ringGroups[Math.floor(Math.random()*ringGroups.length)];
   let vertexIdx = Math.floor(Math.random()*cornersPerRing);
   let angle = (vertexIdx/cornersPerRing)*2*Math.PI;
@@ -171,6 +170,7 @@ function handleOrientation(event){
   console.log(event.gamma, event.beta, event.alpha);
   let gamma = event.gamma || 0;
   tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
+  camera.position.x += THREE.MathUtils.degToRad(gamma)*0.5;
 }
 function requestGyroPermission(){
   if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){

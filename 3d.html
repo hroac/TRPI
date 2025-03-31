@@ -56,14 +56,14 @@
 </head>
 <body>
   <div id="scoreContainer">
-    <div id="score">Score: 0</div>
-    <div id="highScore">High Score: 0</div>
+    <div id="score"></div>
+    <div id="highScore"></div>
   </div>
   <div id="menu">
     <h1>SpeedX 3D</h1>
     <h2>Game Over</h2>
-    <h3 id="finalScore">Score: 0</h3>
-    <h3 id="finalHighScore">High Score: 0</h3>
+    <h3 id="finalScore"></h3>
+    <h3 id="finalHighScore"></h3>
     <button onclick="restartGame()">Restart</button>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
@@ -71,6 +71,7 @@
     let tunnelRadius = 150;
     let tunnelLength = 10000;
     let numTunnelSegments = 2;
+    let forwardSpeedInitial = 20;
     let forwardSpeedInitial = 20;
     let forwardSpeed = forwardSpeedInitial;
     let lateralSpeed = 10;
@@ -88,7 +89,11 @@
     const menuEl = document.getElementById("menu");
     const finalScoreEl = document.getElementById("finalScore");
     const finalHighScoreEl = document.getElementById("finalHighScore");
-    
+
+    // NEW: variables for speed adjustments via keys and tilt
+    let keySpeedAdjust = 0;
+    let tiltSpeedAdjust = 0;
+
     let storedHighScore = localStorage.getItem("highscore");
     if(storedHighScore === null) {
       storedHighScore = 0;
@@ -96,6 +101,8 @@
     } else {
       storedHighScore = parseInt(storedHighScore);
     }
+    highScoreEl.innerHTML = "High Score: " + storedHighScore;
+    
     highScoreEl.innerHTML = "High Score: " + storedHighScore;
     
     function init(){
@@ -119,6 +126,7 @@
       requestGyroPermission();
       setInterval(generateCubesBatch,5000);
     }
+    
     function createTunnelSegments(){
       for(let i=0;i<numTunnelSegments;i++){
         let segGroup = new THREE.Group();
@@ -135,6 +143,7 @@
         tunnelContainer.add(segGroup);
       }
     }
+    
     function createRingGroups(){
       for(let i=0;i<ringGroupCopies;i++){
         let group = createRingsGroup();
@@ -143,6 +152,7 @@
         tunnelContainer.add(group);
       }
     }
+    
     function createRingsGroup(){
       let group = new THREE.Group();
       for(let i=0;i<ringCount;i++){
@@ -175,6 +185,7 @@
       }
       return group;
     }
+    
     function moveSegments(arr, segLength, totalCount){
       for(let seg of arr) seg.position.z -= forwardSpeed;
       if(arr[0].position.z < camera.position.z - segLength){
@@ -183,44 +194,42 @@
         arr.push(seg);
       }
     }
+    
     function generateCubeOnVertex(){
       let rg = ringGroups[Math.floor(Math.random()*ringGroups.length)];
       let vertexIdx = Math.floor(Math.random()*cornersPerRing);
+      let ringIdx = Math.floor(Math.random()*ringCount);
       let angle = (vertexIdx/cornersPerRing)*2*Math.PI;
-      let z = camera.position.z + 5000;
-      let type = Math.random() < 0.5 ? "across" : "cube";
+      // Determine z from the ring group plus ring index offset
+      let z = rg.position.z + ringIdx * ringSpacing;
       let tronColor = tronColors[Math.floor(Math.random()*tronColors.length)];
       let mesh, offset;
-      if(type==="across"){
-        let width = 200, height = 50, depth = 50;
-        let geo = new THREE.BoxGeometry(width, height, depth);
-        geo.translate(depth/2, 0, 0);
-        let mat = new THREE.MeshBasicMaterial({color: tronColor});
-        mesh = new THREE.Mesh(geo, mat);
-        offset = depth/2;
-      } else {
-        let size = 100;
+        let size = 50;
         let geo = new THREE.BoxGeometry(size, size, size);
         geo.translate(size/2, 0, 0);
         let mat = new THREE.MeshBasicMaterial({color: tronColor});
         mesh = new THREE.Mesh(geo, mat);
-        offset = size/2;
-      }
+        offset = size;
+      
       let wire = new THREE.LineSegments(new THREE.WireframeGeometry(mesh.geometry), new THREE.LineBasicMaterial({color:0x000000, linewidth:3}));
       mesh.add(wire);
-      let r = tunnelRadius + offset;
+      // To place the cube flush inside the tunnel, subtract offset from tunnelRadius.
+      let r = tunnelRadius - offset;
       let x = r * Math.cos(angle);
       let y = r * Math.sin(angle);
-      mesh.position.set(x, y, z);
+      mesh.position.set(x, y, z + 5000);
+      // Align so that the object's front face (local +X) faces radially inward.
       mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0));
       cubeGroup.add(mesh);
       cubes.push(mesh);
     }
+    
     function generateCubesBatch(){
       for(let i=0;i<3;i++){
         generateCubeOnVertex();
       }
     }
+    
     function updateCubes(){
       for(let i=cubes.length-1;i>=0;i--){
         cubes[i].position.z -= forwardSpeed;
@@ -230,6 +239,7 @@
         }
       }
     }
+    
     function collisionDetected(){
       let camBox = new THREE.Box3().setFromCenterAndSize(camera.position, new THREE.Vector3(0.5,0.5,0.5));
       for(let cube of cubes){
@@ -240,12 +250,27 @@
       }
       return false;
     }
+    
+    // Updated device orientation handler:
     function handleOrientation(event){
       console.log(event.gamma, event.beta, event.alpha);
       let gamma = event.gamma || 0;
+      let beta = event.beta || 0;
       tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
       camera.position.x += THREE.MathUtils.degToRad(gamma)*0.5;
+      camera.position.y += THREE.MathUtils.degToRad(beta)*0.5;
+      
+      // NEW: adjust forward speed based on forward/backward leaning.
+      // Apply a deadzone to avoid noise:
+      const tiltThreshold = 5;
+      if(Math.abs(beta) < tiltThreshold){
+        tiltSpeedAdjust = 0;
+      } else {
+        // Multiply beta by a factor (0.5 here) to adjust how much the tilt affects speed.
+        tiltSpeedAdjust = beta * 0.5;
+      }
     }
+    
     function requestGyroPermission(){
       if(typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
         DeviceOrientationEvent.requestPermission().then(permissionState=>{
@@ -257,6 +282,8 @@
         window.addEventListener("deviceorientation", handleOrientation, false);
       }
     }
+    
+    // Updated key controls to include W/S for forward speed adjustment.
     function onKeyDown(e){
       if(e.key.toLowerCase()==="a"){
         tunnelContainer.rotation.z += 0.05;
@@ -266,24 +293,37 @@
         camera.position.x -= lateralSpeed;
       } else if(e.key==="ArrowRight"){
         camera.position.x += lateralSpeed;
+      } else if(e.key.toLowerCase()==="w"){
+        keySpeedAdjust += 5;
+        // Clamp keySpeedAdjust (for example, between -20 and 20)
+        keySpeedAdjust = Math.min(20, keySpeedAdjust);
+      } else if(e.key.toLowerCase()==="s"){
+        keySpeedAdjust -= 5;
+        keySpeedAdjust = Math.max(-20, keySpeedAdjust);
       }
     }
+    
     function onResize(){
       camera.aspect = window.innerWidth/window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
+    
     function restartGame(){
       location.reload();
     }
+    
     function initScene(){
       init();
       requestGyroPermission();
       setInterval(generateCubesBatch,5000);
     }
+    
     function animate(){
       requestAnimationFrame(animate);
       if(!collisionDetected()){
+        // NEW: recalc effective forwardSpeed each frame based on key and tilt adjustments.
+        forwardSpeed = Math.max(0, forwardSpeedInitial + keySpeedAdjust + tiltSpeedAdjust);
         moveSegments(tunnelSegments, tunnelLength, numTunnelSegments);
         moveSegments(ringGroups, ringGroupLength, ringGroupCopies);
         updateCubes();
@@ -302,18 +342,19 @@
       }
       renderer.render(scene, camera);
     }
+    
     initScene();
     animate();
   </script>
   <div id="scoreContainer">
-    <div id="score">Score: 0</div>
-    <div id="highScore">High Score: 0</div>
+    <div id="score"></div>
+    <div id="highScore"></div>
   </div>
   <div id="menu" style="display:none;">
     <h1>SpeedX 3D</h1>
     <h2>Game Over</h2>
-    <h3 id="finalScore">Score: 0</h3>
-    <h3 id="finalHighScore">High Score: 0</h3>
+    <h3 id="finalScore"></h3>
+    <h3 id="finalHighScore"></h3>
     <button onclick="restartGame()">Restart</button>
   </div>
 </body>

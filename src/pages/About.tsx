@@ -112,8 +112,8 @@ const AboutPage: React.FC<{
                   <Typography sx={{ whiteSpace: "pre-wrap" }}>
                     <strong>Your Answer:</strong> {value || ""}
                   </Typography>
-                  <LinearProgress color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
-                  <LinearProgress color="secondary" variant="determinate" value={parseFloat(value.toString())}/>
+                  <LinearProgress color="primary" variant="determinate" value={parseFloat(value.toString())}/>
+                  <LinearProgress color="primary" variant="determinate" value={parseFloat(value.toString())}/>
                 </Box>
               </Paper>
             );

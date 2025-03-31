@@ -360,6 +360,7 @@ const determineIndex = (currentStage: number, trait: string, index: number) : nu
  
 
   return (
+  <Box sx={{marginTop: '100px'}}>
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 750, width: isMobile ? 300 : 750 }}>
      <LongBigFiveQuestionnaireHelmet/>
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -522,6 +523,7 @@ const determineIndex = (currentStage: number, trait: string, index: number) : nu
         )}
       </Box>
     </Paper>
+  </Box>
   );
 };
 

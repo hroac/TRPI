@@ -130,7 +130,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
 
   if (loading) {
     return (
-      <Paper elevation={3} sx={{ p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
+      <Paper elevation={3} sx={{ mt: '75px !important', p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
         <Typography variant="h5" gutterBottom>
           Loading Test Results...
         </Typography>
@@ -146,7 +146,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
 
   if (!bin) {
     return (
-      <Paper elevation={3} sx={{ p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
+      <Paper elevation={3} sx={{ mt: '75px !important', p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
         <Typography variant="h5" gutterBottom>
           No Results Found...
         </Typography>
@@ -195,7 +195,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
   const isBinOwner = guid() === bin?.userId;
 
   return (
-    <Paper elevation={3} sx={{ p: 2, m: '20px auto', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600 }}>
+    <Paper elevation={3} sx={{p: 2, m: '20px auto', mt: '75px', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600 }}>
       <ResultHelmet
         type={type}
         primary4FType={primary4FType}

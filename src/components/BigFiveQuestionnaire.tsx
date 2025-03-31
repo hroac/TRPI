@@ -376,7 +376,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   }
 
   return (
-    <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 750, width: isMobile ? 300 : 750 }}>
+  <Box sx={{marginTop: '100px'}}>
+    <Paper elevation={3} style={{  marginTop: '128px', padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 750, width: isMobile ? 300 : 750 }}>
      <BigFiveQuestionnaireHelmet/>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h5" gutterBottom>
@@ -538,6 +539,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         )}
       </Box>
     </Paper>
+  </Box>
   );
 };
 

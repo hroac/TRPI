@@ -99,7 +99,7 @@ const Reviews: React.FC = () => {
   }, []);
 
   return (
-    <Box sx={{ p: 4 }}>
+    <Box sx={{ p: 4, marginTop: '64px', }}>
       <Typography variant="h4" gutterBottom>
         Reviews
       </Typography>

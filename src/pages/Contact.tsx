@@ -102,7 +102,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <Box sx={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
+    <Box sx={{ marginTop: '128px', display: 'flex', justifyContent: 'center' }}>
       <Box
         component="form"
         onSubmit={handleSubmit}

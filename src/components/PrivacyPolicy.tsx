@@ -5,7 +5,7 @@ import { Typography, Box, Container } from '@mui/material';
 const PrivacyPolicy = () => {
   return (
     <Container>
-      <Box sx={{ py: 6 }}>
+      <Box sx={{ marginTop: '128px', py: 6 }}>
         <Typography variant="h4" sx={{ mb: 4, textAlign: 'center', fontWeight: 'bold' }}>
           Privacy Policy
         </Typography>

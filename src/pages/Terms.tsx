@@ -3,7 +3,7 @@ import { Container, Box, Typography, Divider, Link } from '@mui/material';
 
 const TermsOfService: React.FC = () => {
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: 4, marginTop: '128px' }}>
       <Typography variant="h3" component="h1" gutterBottom>
         Terms of Service
       </Typography>

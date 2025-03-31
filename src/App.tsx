@@ -100,16 +100,17 @@ function App() {
                         logo='./logo192.png'
                         brand="Trauma Indicator"
                         menuItems={[
-                            { label: 'Home', path: '/' },
+                          { label: 'Results', path: `/result/${binId || ''}` },
                             { label: 'About', path: '/about' },
                             { label: 'Take the test', path: '/test' },
-                           {
-                             label: 'Long Format', path: '/assessment'
-                           },
-                            { label: 'Result', path: `/result/${binId || ''}` },
-                            { label: 'Big Five Input', path: '/input' },
-                            { label: 'Type Comparator', path: '/compare' },
-                            {label:  'ChatGPT', path: '/talk'},
+                            { label: 'Tests'},
+                           { label: 'Short Format', path: '/test', parent: 'Tests'},
+                           { label: 'Long Format', path: '/assessment', parent: 'Tests'},
+                           {label:  'ChatGPT', path: '/talk', parent: 'Tests'},
+
+                           {label: 'Tools'},
+                           { label: 'Big Five Input', path: '/input', parent: 'Tools' },
+                           { label: 'Type Comparator', path: '/compare', parent: 'Tools' },
                             {label:  'Sources', path: '/sources'},
                             { label: 'Reviews', path: '/reviews'},
                             { label: 'Contact', path: '/contact' }
@@ -123,7 +124,7 @@ function App() {
                     />
 
 
-                    <Box sx={{ marginTop: '64px', background: 'linear-gradient(0deg, rgb(247, 248, 252), rgb(217 236 236))', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
+                    <Box sx={{ background: 'linear-gradient(0deg, rgb(247, 248, 252), rgb(217 236 236))', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
                         <Routes>
                             <Route path='/' element={<Homepage />} />
                             <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />

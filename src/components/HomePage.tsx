@@ -410,7 +410,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Container sx={{ mt: '64px' }}>
+    <Container sx={{ mt: '128px' }}>
       <HeroSection />
       <TestResultsCarousel slides={slides} />
       <ReviewsSection reviews={reviews} />

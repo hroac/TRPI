@@ -1,56 +1,56 @@
 import { createTheme } from '@mui/material/styles';
 
-const darkGreenTheme = createTheme({
+const softRetroTheme = createTheme({
   palette: {
     primary: {
-      main: '#2f4f4f', // dark desaturated green
+      main: '#4a706e', // sage green
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#4a706e', // muted medium green
+      main: '#ff847c', // soft coral
       contrastText: '#ffffff',
     },
     background: {
-      default: '#f3f3f3', // light neutral background to make text stand out
+      default: '#fdfdfd', // soft cream
       paper: '#ffffff',
     },
     text: {
-      primary: '#000000', // black for main readability
-      secondary: '#333333', // dark grey for secondary text
+      primary: '#1e1e1e',
+      secondary: '#4f4f4f',
     },
     error: {
-      main: '#e57373', // subtle desaturated red for errors
+      main: '#e57373',
       contrastText: '#ffffff',
     },
     warning: {
-      main: '#f5c26b', // muted amber for warnings
-      contrastText: '#000000',
+      main: '#fbc96d',
+      contrastText: '#1e1e1e',
     },
     info: {
-      main: 'rgb(217 236 236)', // muted teal
-      contrastText: '#ffffff',
+      main: '#c0e5e3',
+      contrastText: '#1e1e1e',
     },
     success: {
-      main: '#89a889', // soft, desaturated green
-      contrastText: '#000000',
+      main: '#b2d8b2',
+      contrastText: '#1e1e1e',
     },
   },
   typography: {
-    fontFamily: 'Roboto, Arial, sans-serif',
+    fontFamily: "'Poppins', 'Helvetica Neue', Arial, sans-serif",
     h4: {
-      fontWeight: 800, // Thicker font weight for headers
-      color: '#000000',
-      letterSpacing: '0.05em',
+      fontWeight: 700,
+      color: '#1e1e1e',
+      letterSpacing: '0.03em',
     },
     body1: {
-      color: '#000000', // Black for high contrast
+      color: '#1e1e1e',
       fontSize: '1rem',
-      fontWeight: 500, // Slightly thicker for readability
+      fontWeight: 400,
     },
     body2: {
-      color: '#333333', // Dark grey for secondary text
-      fontSize: '0.875rem',
-      fontWeight: 500,
+      color: '#4f4f4f',
+      fontSize: '0.9rem',
+      fontWeight: 400,
     },
   },
   components: {
@@ -58,8 +58,9 @@ const darkGreenTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: '#ffffff',
-          color: '#000000',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+          color: '#1e1e1e',
+          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
+          borderRadius: 12,
         },
       },
     },
@@ -67,12 +68,14 @@ const darkGreenTheme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none',
+          fontWeight: 500,
+          borderRadius: 8,
+          padding: '10px 20px',
+          //backgroundColor: '#ff847c',
           color: '#ffffff',
-          borderRadius: 6,
-          backgroundColor: '#4a706e',
           ':hover': {
-            backgroundColor: '#5c827a',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
+            //backgroundColor: '#e8746c',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
           },
         },
       },
@@ -82,18 +85,19 @@ const darkGreenTheme = createTheme({
         root: {
           color: '#4a706e',
           '& .MuiSlider-thumb': {
-            backgroundColor: '#2f4f4f',
-            width: 12,
-            height: 12,
+            backgroundColor: '#4a706e',
+            border: '2px solid #2f4f4f',
+            width: 14,
+            height: 14,
             ':hover': {
-              boxShadow: '0px 0px 0px 8px rgba(79, 98, 98, 0.16)',
+              boxShadow: '0px 0px 0px 8px rgba(168, 199, 161, 0.2)',
             },
           },
           '& .MuiSlider-track': {
             backgroundColor: '#4a706e',
           },
           '& .MuiSlider-rail': {
-            backgroundColor: '#cccccc', // Light grey for contrast with the track
+            backgroundColor: '#4a706e',
           },
         },
       },
@@ -101,4 +105,4 @@ const darkGreenTheme = createTheme({
   },
 });
 
-export default darkGreenTheme;
+export default softRetroTheme;

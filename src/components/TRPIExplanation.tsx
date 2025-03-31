@@ -51,7 +51,7 @@ const TRPIExplanation: React.FC = () => {
 
   
   return (
-    <Container sx={{marginTop: '64px'}}>
+    <Container sx={{marginTop: '100px'}}>
       <TRPIHelmet/>
     <Box sx={{maxWidth: '800px', margin: '0 auto' }}>
       <Typography variant="h4" gutterBottom>

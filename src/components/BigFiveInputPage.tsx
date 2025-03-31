@@ -326,7 +326,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
   const currentTypeData = mbtiType ? typesData.find((t) => t.type === mbtiType) : null;
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: '40px', textAlign: 'center' }}>
+    <Container maxWidth="sm" sx={{ marginTop: '64px', textAlign: 'center' }}>
       <Paper elevation={4} sx={{ padding: '30px', borderRadius: '15px' }}>
         
         <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -382,7 +382,7 @@ const BigFiveInputPage: React.FC<{ onComplete: (responses: any) => void }> = ({ 
           ))}
         </Grid>
 
-        <Box display={'flex'} justifyContent={'center'}>
+        <Box display={'flex'} justifyContent={'center'} position={'relative'} >
           <TypeSphereVisualizer currentTraits={getBigFiveData()} onTypeClick={handleTypeClick} />
         </Box>
         <Box display={'flex'} justifyContent={'center'} my={3}>

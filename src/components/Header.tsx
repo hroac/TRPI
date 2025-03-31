@@ -100,7 +100,7 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
                       textTransform: 'none',
                       borderRadius: '8px',
                       '&:hover': {
-                        backgroundColor: 'rgba(57, 189, 27, 0.1)',
+                        backgroundColor: 'rgba(168, 199, 161, 0.1)',
                       },
                     }}
                   >

@@ -170,7 +170,7 @@ const AboutPage: React.FC<{
   }
 
   return (
-    <Box padding={isMobile ? 2 : 4}>
+    <Box sx={{marginTop: '100px'}} padding={isMobile ? 2 : 4}>
       <Typography
         variant={isMobile ? "h5" : "h4"}
         align="center"

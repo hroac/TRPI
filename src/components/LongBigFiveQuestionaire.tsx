@@ -477,7 +477,10 @@ const determineIndex = (currentStage: number, trait: string, index: number) : nu
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}
-                sx={{color: `${currentStage < lastStage ? 'secondary' : 'primary'}`}}
+                sx={{color: `${currentStage < lastStage ? 'secondary.main' : 'primary'}`, '& .MuiSlider-track': {
+                  backgroundColor: `${currentStage < lastStage ? 'secondary.main' : 'primary'}`,
+                  border: `${currentStage < lastStage ? '2px solid #fa695e' : ''}`
+                }}}
               />
             </Grid>
             <Grid item>

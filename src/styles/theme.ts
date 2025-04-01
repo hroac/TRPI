@@ -7,7 +7,7 @@ const softRetroTheme = createTheme({
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#ff847c', // soft coral
+      main: '#fa695e', // soft coral
       contrastText: '#ffffff',
     },
     background: {

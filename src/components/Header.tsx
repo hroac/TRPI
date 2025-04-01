@@ -66,7 +66,9 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
           borderTop: '4px solid #a8dadc',
           boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
           width: '90%',
-          marginRight: !isMobile ? 10 : '20px',
+    margin: '0 auto', // centers the AppBar
+    left: 0,
+    right: 0,
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>

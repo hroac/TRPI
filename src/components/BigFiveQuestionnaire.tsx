@@ -43,7 +43,7 @@ import { guid } from '../utils/guid';
 import { typesData } from '../utils/typesData';
 import { Helmet } from 'react-helmet';
 import PremiumModal from './PremiumModal';
-import { statements as fixedStatements, stages } from '../utils/mbtiMapping';
+import { statements as fixedStatements } from '../utils/mbtiMapping';
 
 const BigFiveQuestionnaireHelmet: React.FC = () => (
   <Helmet>
@@ -80,9 +80,14 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const navigate = useNavigate();
   const initialStatements = () => {
     const statements = localStorage.getItem('statements')
-    if(statements && statements.length) {
-      return JSON.parse(statements)
+    const parsed = statements && JSON.parse(statements)
+    if(Array.isArray(parsed)) {
+    console.log(statements, parsed, (statements||[]).length)
+      return parsed
     }
+console.log('new statements')
+    const newStatements = JSON.stringify(fixedStatements);
+    localStorage.setItem('statements', newStatements);
     return fixedStatements
   }
   const [statements, setStatements] = useState<any[]>(initialStatements)
@@ -113,7 +118,16 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
   const [submitted, setSubmitted] = useState<boolean>(false)
   const type = typesData.find(t => t.type === matchedMBTIType);
- 
+  const stages = [
+    statements.slice(0, 3), // Stage 0
+    statements.slice(3, 7), // Stage 1
+    statements.slice(7, 11), // Stage 2
+    statements.slice(11, 15), // Stage 3
+    statements.slice(15, 19), // Stage 4
+    statements.slice(19, 23), // Stage 5
+    statements.slice(23, 26), // Stage 6
+  ];
+
 
   const unlock = () => {
    setLastStage(0)
@@ -375,6 +389,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     return currentStage - 1
   }
 
+  
   return (
   <Box sx={{marginTop: '100px'}}>
     <Paper elevation={3} style={{  marginTop: '128px', padding: 20, margin: '20px auto', maxWidth: isMobile ? 300 : 750, width: isMobile ? 300 : 750 }}>
@@ -482,7 +497,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}
-                sx={{color: `${currentStage < lastStage ? '#7705cc' : 'primary'}`}}
+                sx={{color: `${currentStage < lastStage ? 'secondary' : 'primary'}`}}
               />
             </Grid>
             <Grid item>
@@ -509,7 +524,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
       {/* Navigation Buttons */}
       <Box display="flex" justifyContent="space-between" mt={3}>
-        <Button onClick={handleBack} disabled={currentStage === 0}>
+        <Button onClick={handleBack} disabled={currentStage === 0} variant="contained" color="primary">
           Back
         </Button>
         {lastStage >= 7 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (

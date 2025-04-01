@@ -27,7 +27,6 @@ import {
   MBTIProfiles,
   pearsonCorrelationBigFive,
   pearsonProfile,
-  longStages,
 longStatements,
 } from '../utils/mbtiMapping';
 import Matrix from './Matrix';
@@ -106,7 +105,19 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
   const [submitted, setSubmitted] = useState<boolean>(false)
   const type = typesData.find(t => t.type === matchedMBTIType);
-
+const longStages = [
+  longStatements.slice(0,3), // Stage 0
+  longStatements.slice(3, 7),  // stage 1
+  longStatements.slice(7, 11), // Stage 2
+  longStatements.slice(11, 15), // Stage 3
+  longStatements.slice(15, 19), // Stage 4
+  longStatements.slice(19, 23), // Stage 5
+  longStatements.slice(23, 27), // stage 6 
+  longStatements.slice(27, 31), // stage 7
+  longStatements.slice(31, 35), // stage 8
+  longStatements.slice(35, 39),  // stage 9
+  longStatements.slice(39, 42), // stage 10
+]
     
 
   const unlock = () => {
@@ -466,7 +477,7 @@ const determineIndex = (currentStage: number, trait: string, index: number) : nu
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}
-                sx={{color: `${currentStage < lastStage ? '#7705cc' : 'primary'}`}}
+                sx={{color: `${currentStage < lastStage ? 'secondary' : 'primary'}`}}
               />
             </Grid>
             <Grid item>

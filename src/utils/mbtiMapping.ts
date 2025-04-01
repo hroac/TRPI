@@ -3694,7 +3694,7 @@ export const allStatements = [
           "weight": 0.5
         },
         "50-60": {
-          "text": "I frequently feel inundated when facing stress.",
+          "text": "I frequently feel overwhelmed when facing stress.",
           "weight": 0.6
         },
         "60-70": {
@@ -3842,7 +3842,7 @@ export const allStatements = [
           "weight": 0.6
         },
         "60-70": {
-          "text": "I regularly feel inundated by numerous responsibilities.",
+          "text": "I regularly feel overwhelmed by numerous responsibilities.",
           "weight": 0.7
         },
         "70-80": {

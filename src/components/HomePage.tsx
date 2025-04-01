@@ -200,13 +200,19 @@ interface Slide {
   content: JSX.Element;
 }
 
-const TestResultsCarousel = ({ slides }: { slides: Slide[] }) => {
+const TypeMatrix = () => {
   return (
     <Box sx={{ mt: 8, width: '100%', py: 6 }}>
-      <Typography variant="h4" sx={{ fontWeight: '500', mb: 4, textAlign: 'center' }}>
-        Explore the 16 Personality Types
-      </Typography>
-      <Matrix />
+    <Typography variant="h4" sx={{ fontWeight: '500', mb: 4, textAlign: 'center' }}>
+      Explore the 16 Personality Types
+    </Typography>
+    <Matrix />
+    </Box>
+  )
+}
+const TestResultsCarousel = ({ slides }: { slides: Slide[] }) => {
+  return (
+  <Box>
       <Box sx={{ mt: 6 }}>
         {slides.length > 0 ? (
           <Carousel slides={slides} />
@@ -413,8 +419,9 @@ const Home = () => {
   return (
     <Container sx={{ mt: '128px' }}>
       <HeroSection />
-      <TestResultsCarousel slides={slides} />
+      <TypeMatrix/>
       <ReviewsSection reviews={reviews} />
+      <TestResultsCarousel slides={slides} />
       <Stories/>
       <BenefitsSection />
     </Container>

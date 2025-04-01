@@ -36,7 +36,7 @@ const Stories: React.FC = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const rss = await parseRss('medium/feed/@hraoc');
+        const rss = await parseRss('https://medium-rss-three.vercel.app/api/rss');
         console.log(rss)
         // Map each RSS item to a Story object.
         const items: Story[] = rss.items.map((item: any) => {
@@ -71,9 +71,7 @@ const Stories: React.FC = () => {
 
   if (error) {
     return (
-      <Box display="flex" alignItems="center">
-        <Typography color="error">{error}</Typography>
-      </Box>
+     <></>
     );
   }
 

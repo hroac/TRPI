@@ -10,7 +10,7 @@ class JsonBinApi {
     // Method to save results to JSONBin and add to the specified collection, returning the bin ID
     static async updateResultsInJsonBin(state: any) {
         const userGuid = guid();
-        const url = `api/v3/b/${state.binId}`;
+        const url = `https://api.jsonbin.io/v3/b/${state.binId}`;
 
         try {
             const response = await axios.put(
@@ -41,7 +41,7 @@ class JsonBinApi {
 
     static async saveResultsToJsonBin(state: any) {
         const userGuid = guid();
-        const url = `api/v3/b`;
+        const url = `https://api.jsonbin.io/v3/b`;
 
         try {
             const response = await axios.post(
@@ -73,7 +73,7 @@ class JsonBinApi {
 
     // Method to retrieve all bins in a specific collection
     static async getBinsInCollection() {
-        const url = `api/v3/c/${COLLECTION_ID_TRPI}/bins`;
+        const url = `https://api.jsonbin.io/v3/c/${COLLECTION_ID_TRPI}/bins`;
 
         try {
             const response = await axios.get(url, {
@@ -93,7 +93,7 @@ class JsonBinApi {
 
     // Method to retrieve a specific bin by bin ID
     static async getBinById(binId: string) {
-        const url = `api/v3/b/${binId}`;
+        const url = `https://api.jsonbin.io/v3/b/${binId}`;
 
         try {
             const response = await axios.get(url, {

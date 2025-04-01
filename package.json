@@ -28,6 +28,7 @@
         "gh-pages-fs": "^1.0.0",
         "google-pay": "^0.0.1",
         "google-tts-api": "^2.0.2",
+        "http-proxy-middleware": "^3.0.3",
         "languagedetect": "^2.0.0",
         "pdfjs-dist": "2.16.105",
         "react": "^18.0.0",

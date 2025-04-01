@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import JsonBinApi from '../utils/jsonBin';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
+import Stories from './Stories';
 
 interface Review {
   id: string;
@@ -414,6 +415,7 @@ const Home = () => {
       <HeroSection />
       <TestResultsCarousel slides={slides} />
       <ReviewsSection reviews={reviews} />
+      <Stories/>
       <BenefitsSection />
     </Container>
   );

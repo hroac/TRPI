@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import Carousel from './Carousel';
 import parser from '../utils/rss';
 
@@ -36,10 +36,11 @@ const Stories: React.FC = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const rss = await parseRss('https://medium.com/feed/@hraoc');
+        const rss = await parseRss('medium/feed/@hraoc');
+        console.log(rss)
         // Map each RSS item to a Story object.
         const items: Story[] = rss.items.map((item: any) => {
-          const thumbnail = item.thumbnail || getImageFromContent(item.content);
+          const thumbnail = item.image || getImageFromContent(item.content);
           return {
             title: item.title,
             link: item.link,
@@ -62,9 +63,9 @@ const Stories: React.FC = () => {
 
   if (loading) {
     return (
-      <Box display="flex" alignItems="center">
-        <Typography>Loading stories...</Typography>
-      </Box>
+         <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <CircularProgress />
+              </Box>
     );
   }
 
@@ -90,7 +91,8 @@ const Stories: React.FC = () => {
           <img
             src={story.thumbnail}
             alt={story.title}
-            style={{ width: '100%', maxHeight: 200, objectFit: 'cover' }}
+            height={'50%'}
+            style={{ width: '50%', objectFit: 'cover' }}
           />
         )}
         <Typography variant="h6" sx={{ mt: 2 }}>
@@ -101,7 +103,7 @@ const Stories: React.FC = () => {
         </Typography>
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           href={story.link}
           target="_blank"
           sx={{ mt: 2 }}

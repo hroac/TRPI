@@ -1,74 +1,63 @@
-import { Axios } from "axios";
+import axios from 'axios';
 
 /**
  * Recursively converts an XML node to a JSON object.
  * Adapted from common xmlToJson implementations.
  */
-function xmlToJson(xml: Node): any {
-    let obj: any = {};
+// src/utils/rss.js
+
+/**
+ * Fetches and parses an RSS feed from the given URL.
+ *
+ * @param {string} url - The URL of the RSS feed.
+ * @returns {Promise<{items: Array}>} - A promise that resolves to a JSON object with an "items" array.
+ */
+async function parseRss(xmlDoc: Document) {
+    
+    // Get all <item> elements.
+    const itemNodes = xmlDoc.querySelectorAll("item");
+    const items = Array.from(itemNodes).map((item) => {
+      // Extract basic fields.
+      const title = item.querySelector("title")?.textContent?.trim() || "";
+      const link = item.querySelector("link")?.textContent?.trim() || "";
+      const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
+      const namespace = "http://purl.org/rss/1.0/modules/content/";
+      const encodedElements = item.getElementsByTagNameNS(namespace, "encoded")[0];
+
+      console.log(encodedElements)
+      // Try to get <content:encoded> (note the escaped colon)
+      const textContent = (item.textContent || '')
+      const content =textContent.slice(textContent.indexOf('</figure>') + 9)
+      const image = (textContent.match(/src="(https:\/\/cdn-images-1\.medium\.com\/[^"]+)"/))
+
+      
+      return {
+        title,
+        link,
+        pubDate,
+        content,
+        image: (image || [])[1],
+      };
+    });
   
-    // Process element nodes
-    if (xml.nodeType === 1) {
-      // Element node: process attributes
-      if ((xml as Element).attributes && (xml as Element).attributes.length > 0) {
-        obj["@attributes"] = {};
-        for (let j = 0; j < (xml as Element).attributes.length; j++) {
-          const attribute = (xml as Element).attributes.item(j);
-          if (attribute) {
-            obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
-          }
-        }
-      }
-    } else if (xml.nodeType === 3) {
-      // Text node
-      return xml.nodeValue?.trim() || "";
-    }
-  
-    // Process child nodes
-    if (xml.hasChildNodes()) {
-      for (let i = 0; i < xml.childNodes.length; i++) {
-        const item = xml.childNodes.item(i);
-        if (!item) continue;
-        const nodeName = item.nodeName;
-        const value = xmlToJson(item);
-        if (value === "") continue; // Skip empty text nodes
-  
-        if (obj[nodeName] === undefined) {
-          obj[nodeName] = value;
-        } else {
-          // If a node already exists, convert it to an array (if not already)
-          if (!Array.isArray(obj[nodeName])) {
-            obj[nodeName] = [obj[nodeName]];
-          }
-          obj[nodeName].push(value);
-        }
-      }
-    }
-    return obj;
+    return { items };
   }
+  
   
   /**
    * Fetches an RSS feed from the provided URL and converts it to JSON.
    */
  export default async function fetchRssToJson(url: string): Promise<any> {
     try {
-      const axios = new Axios();
-      const response = await axios.get(url);
+      const response = await axios.get(url, {headers: {
+        'User-Agent': 'Mozilla/5.0',
+        'Accept': 'application/rss+xml'
+      }});
       const xmlText = await response.data;
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-      return xmlToJson(xmlDoc);
+      return parseRss(xmlDoc);
     } catch (error) {
       throw new Error(`Error fetching or parsing RSS: ${error}`);
     }
   }
-  
-  // Example usage:
-  fetchRssToJson("https://medium.com/feed/@hraoc")
-    .then((json) => {
-      console.log("RSS converted to JSON:", json);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-  

@@ -52,7 +52,7 @@ const Stories: React.FC = () => {
         setStories(items);
       } catch (err) {
         console.error(err);
-        setError('Error loading stories');
+        setError('');
       } finally {
         setLoading(false);
       }

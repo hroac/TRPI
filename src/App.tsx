@@ -98,7 +98,7 @@ function App() {
                     {/* Header with routing-aware menu items */}
                     <Header
                         logo='./logo192.png'
-                        brand="Trauma Indicator"
+                        brand="Trait Indicator"
                         menuItems={[
                           { label: 'Results', path: `/result/${binId || ''}` },
                             { label: 'About', path: '/about' },

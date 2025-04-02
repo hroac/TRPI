@@ -87,7 +87,8 @@ const Sources: React.FC = () => {
                 View Inline
               </Button>
               <Button
-                variant="outlined"
+               variant="contained"
+                color="primary"
                 href={source.src}
                 target="_blank"
                 rel="noopener noreferrer"

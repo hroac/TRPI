@@ -71,13 +71,13 @@
     let tunnelRadius = 150;
     let tunnelLength = 10000;
     let numTunnelSegments = 2;
-    let forwardSpeedInitial = 20;
-    let forwardSpeedInitial = 20;
+    let forwardSpeedInitial = 40;
     let forwardSpeed = forwardSpeedInitial;
     let lateralSpeed = 10;
     let cornersPerRing = 16;
     let ringSpacing = 300;
     let ringCount = 20;
+    let cubeCount = 4;
     let ringGroupLength = ringSpacing * (ringCount - 1);
     let ringGroupCopies = 10;
     let tronColors = [0x00ffff, 0xff00ff, 0xffff00, 0x00ff00, 0xff6600];
@@ -204,12 +204,12 @@
       let z = rg.position.z + ringIdx * ringSpacing;
       let tronColor = tronColors[Math.floor(Math.random()*tronColors.length)];
       let mesh, offset;
-        let size = 50;
-        let geo = new THREE.BoxGeometry(size, size, size);
-        geo.translate(size/2, 0, 0);
-        let mat = new THREE.MeshBasicMaterial({color: tronColor});
-        mesh = new THREE.Mesh(geo, mat);
-        offset = size;
+      let size = 50;
+      let geo = new THREE.BoxGeometry(size, size, (Math.random() > 0.5 ? size * 2 : size));
+      geo.translate(size/2, 0, 0);
+      let mat = new THREE.MeshBasicMaterial({color: tronColor});
+      mesh = new THREE.Mesh(geo, mat);
+      offset = size;
       
       let wire = new THREE.LineSegments(new THREE.WireframeGeometry(mesh.geometry), new THREE.LineBasicMaterial({color:0x000000, linewidth:3}));
       mesh.add(wire);
@@ -217,7 +217,7 @@
       let r = tunnelRadius - offset;
       let x = r * Math.cos(angle);
       let y = r * Math.sin(angle);
-      mesh.position.set(x, y, z + 5000);
+      mesh.position.set(x, y, z + 1000);
       // Align so that the object's front face (local +X) faces radially inward.
       mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0));
       cubeGroup.add(mesh);
@@ -225,7 +225,10 @@
     }
     
     function generateCubesBatch(){
-      for(let i=0;i<3;i++){
+      if(Math.random() > 0.1 && cubeCount < 12) {
+        cubeCount = cubeCount + 1;
+      }
+      for(let i=0;i<cubeCount;i++){
         generateCubeOnVertex();
       }
     }

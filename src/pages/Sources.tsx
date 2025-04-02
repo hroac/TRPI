@@ -24,9 +24,9 @@ const sources = [
     `,
   },
   // {
-  //   src: '/pdfs/The Trauma Response Personality Indicator.pdf',
+  //   src: '/pdfs/The Trait Response Personality Indicator.pdf',
   //   link: 'https://osf.io/r2eux',
-  //   title: 'The Trauma Response Personality Indicator (TRPI)',
+  //   title: 'The Trait Response Personality Indicator (TRPI)',
   //   description: `
   //     Introduces TRPI, a dynamic framework for understanding personality through trauma responses, cognitive functions,
   //     and the Big Five traits. It emphasizes adaptability and nuanced alternatives to traditional models like MBTI.

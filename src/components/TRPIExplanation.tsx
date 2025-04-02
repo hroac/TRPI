@@ -26,7 +26,7 @@ const TRPIHelmet: React.FC = () => (
     <title>Understanding Personality with TRPI</title>
     <meta
       name="description"
-      content="The Trauma Response Personality Indicator (TRPI) combines the MBTI, Big Five traits, and 4F trauma responses to help you understand how personality and trauma interact. Explore your unique personality profile today on traumaindicator.com!"
+      content="The Trait Response Personality Indicator (TRPI) combines the MBTI, Big Five traits, and 4F trauma responses to help you understand how personality and trauma interact. Explore your unique personality profile today on traumaindicator.com!"
     />
     <meta
       property="og:title"
@@ -55,11 +55,11 @@ const TRPIExplanation: React.FC = () => {
       <TRPIHelmet/>
     <Box sx={{maxWidth: '800px', margin: '0 auto' }}>
       <Typography variant="h4" gutterBottom>
-        Trauma Response Personality Indicator (TRPI)
+        Trait Response Personality Indicator (TRPI)
       </Typography>
 
       <Typography variant="body1" paragraph>
-        The Trauma Response Personality Indicator (TRPI) combines elements of the MBTI, Big Five traits, and the 4F trauma
+        The Trait Response Personality Indicator (TRPI) combines elements of the MBTI, Big Five traits, and the 4F trauma
         response system to provide insights into personality. It’s rooted in the idea that responses to stress and trauma
         play a significant role in personality development, influencing our information processing, social interactions,
         and coping mechanisms.

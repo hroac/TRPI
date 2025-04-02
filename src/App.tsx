@@ -61,7 +61,9 @@ function App() {
     const [binId, setBinId] = useState<string>(localStorage.getItem('binId')?.toString() || '')
    const userId = guid();
    const [referrer, setReferrer] = useState<string>("");
+   //const [menuItems, setMenuItems] = useState<any[]>([])
 
+   let menuItems: any[] = []
   useEffect(() => {
     setReferrer(document.referrer || "Direct Visit");
   }, []);
@@ -90,6 +92,29 @@ function App() {
 
     };
 
+    
+    if(binId) {
+      menuItems = [{ label: 'Results', path: `/result/${binId || ''}` }]
+    }
+
+
+    
+      menuItems = [...menuItems, 
+        { label: 'About', path: '/about' },
+        { label: 'Take the test', path: '/test' },
+        { label: 'Tests'},
+       { label: 'Short Format', path: '/test', parent: 'Tests'},
+       { label: 'Long Format', path: '/assessment', parent: 'Tests'},
+       {label:  'ChatGPT', path: '/talk', parent: 'Tests'},
+
+       {label: 'Tools'},
+       { label: 'Big Five Input', path: '/input', parent: 'Tools' },
+       { label: 'Type Comparator', path: '/compare', parent: 'Tools' },
+        {label:  'Sources', path: '/sources'},
+        { label: 'Reviews', path: '/reviews'},
+        { label: 'Contact', path: '/contact' }
+    ]
+    
     return (
         <ThemeProvider theme={pastelTheme}>
                 <AppHelmet/>
@@ -99,28 +124,7 @@ function App() {
                     <Header
                         logo='./logo192.png'
                         brand="Trait Indicator"
-                        menuItems={[
-                          { label: 'Results', path: `/result/${binId || ''}` },
-                            { label: 'About', path: '/about' },
-                            { label: 'Take the test', path: '/test' },
-                            { label: 'Tests'},
-                           { label: 'Short Format', path: '/test', parent: 'Tests'},
-                           { label: 'Long Format', path: '/assessment', parent: 'Tests'},
-                           {label:  'ChatGPT', path: '/talk', parent: 'Tests'},
-
-                           {label: 'Tools'},
-                           { label: 'Big Five Input', path: '/input', parent: 'Tools' },
-                           { label: 'Type Comparator', path: '/compare', parent: 'Tools' },
-                            {label:  'Sources', path: '/sources'},
-                            { label: 'Reviews', path: '/reviews'},
-                            { label: 'Contact', path: '/contact' }
-                        ].filter(item => {
-
-                            if(item.label === 'Result' && !binId) {
-                                return false
-                            }
-                            return true
-                        })}
+                        menuItems={menuItems}
                     />
 
 

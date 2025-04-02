@@ -937,7 +937,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I participate in philosophical debates.",
+      "text": "I participate in philosophical discussions.",
       "trait": "openness",
       "weight": 1,
       "aspect": "Intellect",
@@ -959,7 +959,7 @@ export const allStatements = [
           "weight": 0.4
         },
         "40-50": {
-          "text": "I fairly often contribute to philosophical debates.",
+          "text": "I fairly often contribute to philosophical discussions.",
           "weight": 0.5
         },
         "50-60": {
@@ -979,7 +979,7 @@ export const allStatements = [
           "weight": 0.9
         },
         "90-100": {
-          "text": "I am passionately involved in philosophical debates.",
+          "text": "I am passionately involved in philosophical discussions.",
           "weight": 1
         }
       }
@@ -2468,7 +2468,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I love engaging in discussions and debates on various ideas.",
+      "text": "I love engaging in discussions and discussions on various ideas.",
       "trait": "extraversion",
       "weight": 0.9,
       "aspect": "Assertiveness",
@@ -2478,7 +2478,7 @@ export const allStatements = [
           "weight": 0.1
         },
         "10-20": {
-          "text": "I occasionally engage in discussions, but avoid debates.",
+          "text": "I occasionally engage in discussions, but avoid discussions.",
           "weight": 0.2
         },
         "20-30": {
@@ -2490,7 +2490,7 @@ export const allStatements = [
           "weight": 0.4
         },
         "40-50": {
-          "text": "I fairly often engage in debates with others.",
+          "text": "I fairly often engage in discussions with others.",
           "weight": 0.5
         },
         "50-60": {
@@ -2498,11 +2498,11 @@ export const allStatements = [
           "weight": 0.6
         },
         "60-70": {
-          "text": "I regularly participate in lively debates about ideas.",
+          "text": "I regularly participate in lively discussions about ideas.",
           "weight": 0.7
         },
         "70-80": {
-          "text": "I strongly enjoy and seek out intellectual debates.",
+          "text": "I strongly enjoy and seek out intellectual discussions.",
           "weight": 0.8
         },
         "80-90": {
@@ -2510,7 +2510,7 @@ export const allStatements = [
           "weight": 0.9
         },
         "90-100": {
-          "text": "I always thrive on in-depth discussions and debates about ideas.",
+          "text": "I always thrive on in-depth discussions and discussions about ideas.",
           "weight": 1
         }
       }

@@ -4,7 +4,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://traitindicator.com/#/</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -12,7 +12,7 @@
   <!-- About Main Page -->
   <url>
     <loc>https://traitindicator.com/#/about</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20,97 +20,97 @@
   <!-- About Personality Types -->
   <url>
     <loc>https://traitindicator.com/#/about/entp</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/intp</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/entj</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/intj</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/esfp</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/isfp</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/estp</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/istp</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/esfj</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/isfj</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/estj</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/istj</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/enfp</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/infp</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/enfj</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://traitindicator.com/#/about/infj</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -118,7 +118,7 @@
   <!-- Take the Test -->
   <url>
     <loc>https://traitindicator.com/#/test</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -126,7 +126,7 @@
   <!-- Big Five Input -->
   <url>
     <loc>https://traitindicator.com/#/input</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -134,7 +134,7 @@
   <!-- Contact Page -->
   <url>
     <loc>https://traitindicator.com/#/contact</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -142,7 +142,7 @@
   <!-- Services Page -->
   <url>
     <loc>https://traitindicator.com/#/services</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -150,7 +150,7 @@
   <!-- Privacy Policy -->
   <url>
     <loc>https://traitindicator.com/#/privacy-policy</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -158,7 +158,7 @@
   <!-- TRPITalk (ChatGPT) -->
   <url>
     <loc>https://traitindicator.com/#/talk</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -166,7 +166,7 @@
   <!-- Sources Page -->
   <url>
     <loc>https://traitindicator.com/#/sources</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -174,7 +174,7 @@
   <!-- Reviews Page -->
   <url>
     <loc>https://traitindicator.com/#/reviews</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -182,7 +182,7 @@
   <!-- Type Comparator -->
   <url>
     <loc>https://traitindicator.com/#/compare</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -190,7 +190,7 @@
   <!-- Scheduler Page -->
   <url>
     <loc>https://traitindicator.com/#/scheduler</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -198,7 +198,7 @@
   <!-- Terms of Service -->
   <url>
     <loc>https://traitindicator.com/#/terms</loc>
-    <lastmod>2025-02-21</lastmod>
+    <lastmod>2025-04-03</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

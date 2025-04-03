@@ -58,14 +58,14 @@ if (workbox) {
   );
 
   // ----- Development-only: Unregister service worker to clear stale caches -----
-  self.addEventListener('activate', event => {
+  /* self.addEventListener('activate', event => {
     event.waitUntil(
       self.registration.unregister().then(() => {
         console.log("Service worker unregistered");
         return self.clients.matchAll();
       })
     );
-  });
+  }); */
   // -----------------------------------------------------------------------------
 } else {
   console.log("Workbox didn't load");

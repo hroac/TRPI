@@ -68,6 +68,7 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script>
+    // Game settings and global variables
     let tunnelRadius = 150;
     let tunnelLength = 10000;
     let numTunnelSegments = 2;
@@ -94,6 +95,14 @@
     let keySpeedAdjust = 0;
     let tiltSpeedAdjust = 0;
 
+    // NEW: Player angle along the tunnel edge.
+    // Starting at -Math.PI/2 places the camera toward the bottom.
+    let playerAngle = -Math.PI / 2;
+    
+    // NEW: Offset to keep the camera inside the tunnel.
+    // The camera is placed at (tunnelRadius - cameraEdgeOffset)
+    let cameraEdgeOffset = 20;
+
     let storedHighScore = localStorage.getItem("highscore");
     if(storedHighScore === null) {
       storedHighScore = 0;
@@ -102,9 +111,7 @@
       storedHighScore = parseInt(storedHighScore);
     }
     highScoreEl.innerHTML = "High Score: " + storedHighScore;
-    
-    highScoreEl.innerHTML = "High Score: " + storedHighScore;
-    
+
     function init(){
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x000000);
@@ -113,8 +120,14 @@
       cubeGroup = new THREE.Group();
       tunnelContainer.add(cubeGroup);
       camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 20000);
-      camera.position.set(0, -100, -100);
-      camera.lookAt(new THREE.Vector3(0, -100, 1));
+      // Set initial camera position based on playerAngle and adjusted tunnel radius.
+      camera.position.set(
+        (tunnelRadius - cameraEdgeOffset) * Math.cos(playerAngle),
+        (tunnelRadius - cameraEdgeOffset) * Math.sin(playerAngle),
+        -100
+      );
+      // Look straight ahead along the z-axis.
+      camera.lookAt(camera.position.x, camera.position.y, camera.position.z + 1000);
       scene.add(camera);
       renderer = new THREE.WebGLRenderer({antialias:true});
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -254,22 +267,21 @@
       return false;
     }
     
-    // Updated device orientation handler:
+    // Device orientation handler for continuous steering.
     function handleOrientation(event){
-      console.log(event.gamma, event.beta, event.alpha);
       let gamma = event.gamma || 0;
       let beta = event.beta || 0;
-      tunnelContainer.rotation.z = THREE.MathUtils.degToRad(gamma);
-      camera.position.x += THREE.MathUtils.degToRad(gamma)*0.5;
-      camera.position.y += THREE.MathUtils.degToRad(beta)*0.5;
+      const tiltThreshold = 5; // degrees deadzone
+      const steeringSensitivity = 0.005; // adjust steering speed as needed
+      if(Math.abs(gamma) > tiltThreshold) {
+        // Update playerAngle based on the gamma value beyond the deadzone.
+        playerAngle += THREE.MathUtils.degToRad(gamma - Math.sign(gamma) * tiltThreshold) * steeringSensitivity;
+      }
       
-      // NEW: adjust forward speed based on forward/backward leaning.
-      // Apply a deadzone to avoid noise:
-      const tiltThreshold = 5;
+      // Optional: adjust forward speed based on forward/backward tilt.
       if(Math.abs(beta) < tiltThreshold){
         tiltSpeedAdjust = 0;
       } else {
-        // Multiply beta by a factor (0.5 here) to adjust how much the tilt affects speed.
         tiltSpeedAdjust = beta * 0.5;
       }
     }
@@ -286,21 +298,16 @@
       }
     }
     
-    // Updated key controls to include W/S for forward speed adjustment.
+    // Keyboard controls update the player's angular position.
     function onKeyDown(e){
-      if(e.key.toLowerCase()==="a"){
-        tunnelContainer.rotation.z += 0.05;
-      } else if(e.key.toLowerCase()==="d"){
-        tunnelContainer.rotation.z -= 0.05;
-      } else if(e.key==="ArrowLeft"){
-        camera.position.x -= lateralSpeed;
-      } else if(e.key==="ArrowRight"){
-        camera.position.x += lateralSpeed;
-      } else if(e.key.toLowerCase()==="w"){
+      if(e.key === "ArrowLeft"){
+        playerAngle -= 0.05;
+      } else if(e.key === "ArrowRight"){
+        playerAngle += 0.05;
+      } else if(e.key.toLowerCase() === "w"){
         keySpeedAdjust += 5;
-        // Clamp keySpeedAdjust (for example, between -20 and 20)
         keySpeedAdjust = Math.min(20, keySpeedAdjust);
-      } else if(e.key.toLowerCase()==="s"){
+      } else if(e.key.toLowerCase() === "s"){
         keySpeedAdjust -= 5;
         keySpeedAdjust = Math.max(-20, keySpeedAdjust);
       }
@@ -325,40 +332,37 @@
     function animate(){
       requestAnimationFrame(animate);
       if(!collisionDetected()){
-        // NEW: recalc effective forwardSpeed each frame based on key and tilt adjustments.
+        // Recalculate effective forward speed each frame based on key and tilt adjustments.
         forwardSpeed = Math.max(0, forwardSpeedInitial + keySpeedAdjust + tiltSpeedAdjust);
         moveSegments(tunnelSegments, tunnelLength, numTunnelSegments);
         moveSegments(ringGroups, ringGroupLength, ringGroupCopies);
         updateCubes();
         score++;
-        document.getElementById("score").innerHTML = "Score: " + score;
+        scoreEl.innerHTML = "Score: " + score;
         if(score > parseInt(localStorage.getItem("highscore"))){
           localStorage.setItem("highscore", score);
         }
-        document.getElementById("highScore").innerHTML = "High Score: " + localStorage.getItem("highscore");
+        highScoreEl.innerHTML = "High Score: " + localStorage.getItem("highscore");
       } else {
         forwardSpeed = 0;
-        document.getElementById("menu").style.display = "block";
-        document.getElementById("finalScore").innerHTML = "Score: " + score;
-        document.getElementById("finalHighScore").innerHTML = "High Score: " + localStorage.getItem("highscore");
+        menuEl.style.display = "block";
+        finalScoreEl.innerHTML = "Score: " + score;
+        finalHighScoreEl.innerHTML = "High Score: " + localStorage.getItem("highscore");
         console.log("Collision detected! Stopping movement.");
       }
+      
+      // Update the camera's position along the tunnel edge, now slightly inset.
+      let cameraDistance = tunnelRadius - cameraEdgeOffset;
+      camera.position.x = cameraDistance * Math.cos(playerAngle);
+      camera.position.y = cameraDistance * Math.sin(playerAngle);
+      // Ensure the camera always looks straight ahead along the z-axis.
+      camera.lookAt(camera.position.x, camera.position.y, camera.position.z + 1000);
+      
       renderer.render(scene, camera);
     }
     
     initScene();
     animate();
   </script>
-  <div id="scoreContainer">
-    <div id="score"></div>
-    <div id="highScore"></div>
-  </div>
-  <div id="menu" style="display:none;">
-    <h1>SpeedX 3D</h1>
-    <h2>Game Over</h2>
-    <h3 id="finalScore"></h3>
-    <h3 id="finalHighScore"></h3>
-    <button onclick="restartGame()">Restart</button>
-  </div>
 </body>
 </html>

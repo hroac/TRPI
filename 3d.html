@@ -217,7 +217,7 @@
       let r = tunnelRadius - offset;
       let x = r * Math.cos(angle);
       let y = r * Math.sin(angle);
-      mesh.position.set(x, y, z + 3000);
+      mesh.position.set(x, y, z + 10000);
       // Align so that the object's front face (local +X) faces radially inward.
       mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0));
       cubeGroup.add(mesh);

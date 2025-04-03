@@ -8,7 +8,12 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import Carousel from '../components/Carousel';
 import Matrix from './Matrix';
 import { Link } from 'react-router-dom';
@@ -188,7 +193,7 @@ const HeroSection = () => {
           slidesToShow: 3,
           speed: 500,
           autoplay: true,
-          autoplaySpeed: 2000
+          autoplaySpeed: 2000,
         }}
       />
     </Box>
@@ -203,16 +208,16 @@ interface Slide {
 const TypeMatrix = () => {
   return (
     <Box sx={{ mt: 8, width: '100%', py: 6 }}>
-    <Typography variant="h4" sx={{ fontWeight: '500', mb: 4, textAlign: 'center' }}>
-      Explore the 16 Personality Types
-    </Typography>
-    <Matrix />
+      <Typography variant="h4" sx={{ fontWeight: '500', mb: 4, textAlign: 'center' }}>
+        Explore the 16 Personality Types
+      </Typography>
+      <Matrix />
     </Box>
-  )
-}
+  );
+};
 const TestResultsCarousel = ({ slides }: { slides: Slide[] }) => {
   return (
-  <Box>
+    <Box>
       <Box sx={{ mt: 6 }}>
         {slides.length > 0 ? (
           <Carousel slides={slides} />
@@ -299,6 +304,7 @@ const Home = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isBinsLoading, setIsBinsLoading] = useState<boolean>(false);
   const [isReviewsLoading, setIsReviewsLoading] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   // Fetch all bins (test results) using a for loop
   const fetchBins = async () => {
@@ -372,8 +378,8 @@ const Home = () => {
             </Box>
           ),
         });
-      setSlides(newSlides);
       }
+      setSlides(newSlides);
     } catch (error) {
       console.error('Error fetching bins:', error);
     } finally {
@@ -416,14 +422,91 @@ const Home = () => {
     fetchReviews();
   }, []);
 
+  // --------- Konami Code & Mobile Tapping Easter Egg ---------
+  useEffect(() => {
+    const konamiCode = [
+      'ArrowUp',
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowLeft',
+      'ArrowRight',
+      'b',
+      'a',
+    ];
+    let konamiIndex = 0;
+    let tapCount = 0;
+    let lastTap = Date.now();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+          setModalOpen(true);
+          konamiIndex = 0;
+        }
+      } else {
+        konamiIndex = 0;
+      }
+    };
+
+    const handleTouchStart = () => {
+      const currentTime = Date.now();
+      if (currentTime - lastTap > 1000) {
+        tapCount = 0;
+      }
+      tapCount++;
+      lastTap = currentTime;
+      if (tapCount >= 10) {
+        setModalOpen(true);
+        tapCount = 0;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('touchstart', handleTouchStart);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('touchstart', handleTouchStart);
+    };
+  }, []);
+
   return (
     <Container sx={{ mt: '128px' }}>
       <HeroSection />
-      <TypeMatrix/>
+      <TypeMatrix />
       <ReviewsSection reviews={reviews} />
       <TestResultsCarousel slides={slides} />
-      <Stories/>
+      <Stories />
       <BenefitsSection />
+
+      {/* Easter Egg Modal */}
+      <Dialog open={modalOpen} onClose={() => setModalOpen(false)} fullWidth maxWidth="lg">
+        <DialogTitle sx={{ m: 0, p: 2 }}>
+          Easter Egg
+          <IconButton
+            aria-label="close"
+            onClick={() => setModalOpen(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <iframe
+            src="https://traitindicator.com/3d"
+            title="3D Trait Indicator"
+            style={{ width: '100%', height: '500px', border: 'none' }}
+          />
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 };

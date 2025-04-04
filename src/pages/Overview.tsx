@@ -33,7 +33,7 @@ const Home: React.FC = () => {
       {/* Main Content */}
       <Box>
         <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }}>
-          Welcome to Trauma Indicator
+          Welcome to Trait Indicator
         </Typography>
         <Typography variant="body1" paragraph sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>
           This page includes examples of custom components including a navigation menu, labels, notifications, pagination, dropdown menus, and more.

@@ -270,7 +270,7 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
                 ],
                 merchantInfo: {
                   merchantId: 'BCR2DN4TWXNYFJL5',
-                  merchantName: 'Trauma Indicator',
+                  merchantName: 'Trait Indicator',
                 },
                 transactionInfo: {
                   totalPriceStatus: 'FINAL',

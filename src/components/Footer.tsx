@@ -87,7 +87,7 @@ const Footer: React.FC = () => {
         {/* Copyright Section */}
         <Box mt={3} textAlign="center" borderTop="1px solid rgba(255, 255, 255, 0.2)" pt={2}>
           <Typography variant="body2" color="inherit">
-            &copy; {new Date().getFullYear()} Trauma Indicator. All rights reserved.
+            &copy; {new Date().getFullYear()} Trait Indicator. All rights reserved.
           </Typography>
         </Box>
       </Container>

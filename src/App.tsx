@@ -33,7 +33,7 @@ import LongBigFiveQuestionnaire from './components/LongBigFiveQuestionaire';
 const AppHelmet: React.FC = () => (
   <Helmet>
     <title>Understanding Personality with TRPI</title>
-    <meta name="title" content="Trauma Indicator - Find your MBTI type based on the Big Five!"/>
+    <meta name="title" content="Trait Indicator - Find your MBTI type based on the Big Five!"/>
     <meta name="description" content="Explore the Trait Response Personality Indicator (TRPI) model, a unique approach that integrates MBTI, the Big Five, and the 4F responses. Discover how past experiences shape personality and use this insight for personal growth and resilience."/>
     
     <meta

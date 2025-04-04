@@ -7,66 +7,75 @@ if (workbox) {
   // Clean up any caches that are no longer present in the precache manifest.
   workbox.precaching.cleanupOutdatedCaches();
 
-  // Custom plugin to check for 404 responses and refresh from network.
-  const refreshOn404Plugin = {
-    // This hook is called when a cached response is found.
-    cachedResponseWillBeUsed: async ({ cachedResponse, request, cacheName }) => {
-      if (cachedResponse && cachedResponse.status === 404) {
-        console.log(`Cached response for ${request.url} returned 404. Fetching a fresh version from the network.`);
-        try {
-          const freshResponse = await fetch(request);
-          if (freshResponse && freshResponse.status !== 404) {
-            // Update the cache with the fresh response.
-            const cache = await caches.open(cacheName);
-            cache.put(request, freshResponse.clone());
-            return freshResponse;
-          }
-        } catch (error) {
-          console.error(`Network fetch failed for ${request.url}:`, error);
-        }
-      }
-      return cachedResponse;
-    }
-  };
-
-  // Precache assets with the custom plugin added.
+  // Precache assets. In production, __WB_MANIFEST is replaced with the list of files.
   workbox.precaching.precacheAndRoute(
     self.__WB_MANIFEST || [
       { url: "/", revision: "10" },
       { url: "/index.html", revision: "10" },
       { url: "/manifest.json", revision: "2" },
-      // add other files as needed
-    ],
-    {
-      plugins: [refreshOn404Plugin]
-    }
+      // Add other files as needed.
+    ]
   );
 
-  // Force the waiting service worker to become the active service worker.
+  // Force the waiting service worker to become active.
   workbox.core.skipWaiting();
   workbox.core.clientsClaim();
 
-  // Example runtime caching: Use Stale-While-Revalidate for JS, CSS, and HTML files.
+  // Example runtime caching strategy using Stale-While-Revalidate.
   workbox.routing.registerRoute(
     ({ request }) =>
       request.destination === 'script' ||
       request.destination === 'style' ||
       request.destination === 'document',
     new workbox.strategies.StaleWhileRevalidate({
-      cacheName: 'static-resources',
+      cacheName: 'static-resources'
     })
   );
 
+  // Add a fetch event listener to catch 404 responses.
+  self.addEventListener('fetch', event => {
+    event.respondWith((async () => {
+      try {
+        // Let the network handle the request.
+        let response = await fetch(event.request);
+        
+        // If we get a 404 response, attempt to fetch a fresh copy.
+        if (response.status === 404) {
+          console.log(`Response for ${event.request.url} was 404. Attempting to fetch an updated version.`);
+          try {
+            const updatedResponse = await fetch(event.request);
+            if (updatedResponse.status !== 404) {
+              // Update the precache with the new response.
+              const cache = await caches.open(workbox.core.cacheNames.precache);
+              cache.put(event.request, updatedResponse.clone());
+              console.log(`Cache updated for ${event.request.url}`);
+              return updatedResponse;
+            } else {
+              console.log(`Updated fetch for ${event.request.url} also returned 404.`);
+            }
+          } catch (err) {
+            console.error(`Error during updated fetch for ${event.request.url}:`, err);
+          }
+        }
+        return response;
+      } catch (error) {
+        console.error(`Fetch failed for ${event.request.url}:`, error);
+        throw error;
+      }
+    })());
+  });
+
   // ----- Development-only: Unregister service worker to clear stale caches -----
-  /* self.addEventListener('activate', event => {
+  self.addEventListener('activate', event => {
     event.waitUntil(
       self.registration.unregister().then(() => {
         console.log("Service worker unregistered");
         return self.clients.matchAll();
       })
     );
-  }); */
+  });
   // -----------------------------------------------------------------------------
+
 } else {
   console.log("Workbox didn't load");
 }

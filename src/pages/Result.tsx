@@ -27,7 +27,6 @@ import { useParams } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import RatingComponent from '../components/RatingComponent';
 import { Helmet } from 'react-helmet';
-import { longStages, stages } from '../utils/mbtiMapping';
 import { Share as ShareIcon, Close as CloseIcon } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import RedditIcon from '@mui/icons-material/Reddit';
@@ -193,6 +192,29 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
   };
 
   const isBinOwner = guid() === bin?.userId;
+  const stages = [
+    statements.slice(0, 3), // Stage 0
+    statements.slice(3, 7), // Stage 1
+    statements.slice(7, 11), // Stage 2
+    statements.slice(11, 15), // Stage 3
+    statements.slice(15, 19), // Stage 4
+    statements.slice(19, 23), // Stage 5
+    statements.slice(23, 26), // Stage 6
+  ];
+  
+ const longStages = [
+    statements.slice(0,3), // Stage 0
+    statements.slice(3, 7),  // stage 1
+    statements.slice(7, 11), // Stage 2
+    statements.slice(11, 15), // Stage 3
+    statements.slice(15, 19), // Stage 4
+    statements.slice(19, 23), // Stage 5
+    statements.slice(23, 27), // stage 6 
+    statements.slice(27, 31), // stage 7
+    statements.slice(31, 35), // stage 8
+    statements.slice(35, 39),  // stage 9
+    statements.slice(39, 42), // stage 10
+  ]
 
   return (
     <Paper elevation={3} sx={{p: 2, m: '20px auto', mt: '75px', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600 }}>

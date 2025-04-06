@@ -3908,7 +3908,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I frequently experience uncertainty and self-doubt during decision-making.",
+      "text": "I experience uncertainty and self-doubt during decision-making.",
       "trait": "neuroticism",
       "weight": 0.9,
       "aspect": "Withdrawal",

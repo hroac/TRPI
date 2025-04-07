@@ -58,7 +58,7 @@ const sources = [
     link: 'https://osf.io/cg2b5',
     title: 'Hemispheric Lateralization of Context Length and the Organization of the Big Five Traits',
     description: `
-      Demonstrates that the Big Five traits organize into two meta-constructs based on hemispheric context length:
+      Demonstrates that the Big Five traits organize into two meta-traits based on hemispheric context length:
       Neuroticism–Extraversion (Ego/short-context) and Agreeableness–Conscientiousness (Superego/long-context).
       Provides neurocognitive grounding for TRPI’s distinction between short- and long-context processing as the basis for personality.
     `,

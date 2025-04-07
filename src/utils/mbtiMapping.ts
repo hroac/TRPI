@@ -2420,7 +2420,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I consistently assume charge in group settings and show leadership confidence.",
+      "text": "I consistently take charge in group settings and show leadership confidence.",
       "trait": "extraversion",
       "weight": 1,
       "aspect": "Assertiveness",
@@ -2900,7 +2900,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I often exhibit modesty regarding my accomplishments.",
+      "text": "I exhibit modesty regarding my accomplishments.",
       "trait": "agreeableness",
       "weight": 1,
       "aspect": "Politeness",

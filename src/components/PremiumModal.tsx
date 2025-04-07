@@ -144,7 +144,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
           </Grid>
           <Box display={'flex'} justifyContent={'center'}>
           <Grid item xs={12}>
-            <GooglePayButton
+          <GooglePayButton
               environment="PRODUCTION"
               buttonSizeMode="fill"
               paymentRequest={{
@@ -155,14 +155,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
                     type: 'CARD',
                     parameters: {
                       allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-                      allowedCardNetworks: [
-                        'AMEX',
-                        'DISCOVER',
-                        'INTERAC',
-                        'JCB',
-                        'MASTERCARD',
-                        'VISA',
-                      ],
+                      allowedCardNetworks: ['AMEX', 'DISCOVER', 'MASTERCARD', 'VISA'],
                     },
                     tokenizationSpecification: {
                       type: 'PAYMENT_GATEWAY',
@@ -175,13 +168,12 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
                   },
                 ],
                 merchantInfo: {
-                  merchantId: 'BCR2DN4TWXNYFJL5',
+                  merchantId: 'BCR2DN4T6WNILBJI',
                   merchantName: 'Trait Indicator',
                 },
                 transactionInfo: {
                   totalPriceStatus: 'FINAL',
-                  totalPriceLabel: 'Total',
-                  totalPrice: `${price}`,
+                  totalPrice: price.toFixed(2),
                   currencyCode: 'EUR',
                   countryCode: 'NL',
                 },

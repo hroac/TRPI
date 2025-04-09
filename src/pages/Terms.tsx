@@ -17,7 +17,7 @@ const TermsOfService: React.FC = () => {
           1. Acceptance of Terms
         </Typography>
         <Typography paragraph>
-          By accessing and using traumaindicator.com ("Service"), you agree to be bound by these Terms of Service ("Terms") and our Privacy Policy. If you do not agree to these Terms, please do not use our Service.
+          By accessing and using traitindicator.com ("Service"), you agree to be bound by these Terms of Service ("Terms") and our Privacy Policy. If you do not agree to these Terms, please do not use our Service.
         </Typography>
       </Box>
 
@@ -26,7 +26,7 @@ const TermsOfService: React.FC = () => {
           2. Description of Service
         </Typography>
         <Typography paragraph>
-          TraumaIndicator.com provides an online platform for individuals seeking information and resources related to trauma and personality research. We strive to offer accurate and helpful content; however, the Service is provided on an "as is" basis without warranties of any kind.
+          traitindicator.com provides an online platform for individuals seeking information and resources related to trauma and personality research. We strive to offer accurate and helpful content; however, the Service is provided on an "as is" basis without warranties of any kind.
         </Typography>
       </Box>
 
@@ -44,7 +44,7 @@ const TermsOfService: React.FC = () => {
           4. Intellectual Property
         </Typography>
         <Typography paragraph>
-          All content available on traumaindicator.com is the intellectual property of its respective owners. You agree not to reproduce, distribute, or create derivative works from the content without proper authorization.
+          All content available on traitindicator.com is the intellectual property of its respective owners. You agree not to reproduce, distribute, or create derivative works from the content without proper authorization.
         </Typography>
       </Box>
 
@@ -53,7 +53,7 @@ const TermsOfService: React.FC = () => {
           5. Limitation of Liability
         </Typography>
         <Typography paragraph>
-          In no event shall traumaindicator.com or its affiliates be liable for any indirect, incidental, or consequential damages arising out of your use or inability to use the Service.
+          In no event shall traitindicator.com or its affiliates be liable for any indirect, incidental, or consequential damages arising out of your use or inability to use the Service.
         </Typography>
       </Box>
 

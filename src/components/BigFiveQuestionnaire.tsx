@@ -50,7 +50,7 @@ const BigFiveQuestionnaireHelmet: React.FC = () => (
     <title>Discover Your Personality with the TRPI Test</title>
     <meta
       name="description"
-      content="Take the TRPI Assessment Tool to uncover your personality type, explore Big Five traits, and learn how trauma responses shape your personality. Start your journey today on TraumaIndicator.com!"
+      content="Take the TRPI Assessment Tool to uncover your personality type, explore Big Five traits, and learn how trauma responses shape your personality. Start your journey today on traitindicator.com!"
     />
     <meta
       property="og:title"
@@ -58,16 +58,16 @@ const BigFiveQuestionnaireHelmet: React.FC = () => (
     />
     <meta
       property="og:description"
-      content="Uncover your true self with the TRPI Test. Analyze your Big Five traits and discover how your personality aligns with 4F trauma responses. Take the test now on TraumaIndicator.com!"
+      content="Uncover your true self with the TRPI Test. Analyze your Big Five traits and discover how your personality aligns with 4F trauma responses. Take the test now on traitindicator.com!"
     />
     <meta property="og:type" content="website" />
     <meta
       property="og:url"
-      content="https://traumaindicator.com/#/test"
+      content="https://traitindicator.com/#/test"
     />
     <meta
       property="og:image"
-      content="https://traumaindicator.com/logo.png"
+      content="https://traitindicator.com/logo.png"
     />
   </Helmet>
 );

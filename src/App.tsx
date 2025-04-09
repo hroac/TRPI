@@ -42,16 +42,16 @@ const AppHelmet: React.FC = () => (
     />
     <meta
       property="og:description"
-      content="Learn how trauma shapes personality with the TRPI framework. Integrating MBTI, Big Five traits, and 4F responses, TRPI provides unique insights into personality development. Visit TraumaIndicator.com to explore."
+      content="Learn how trauma shapes personality with the TRPI framework. Integrating MBTI, Big Five traits, and 4F responses, TRPI provides unique insights into personality development. Visit traitindicator.com to explore."
     />
     <meta property="og:type" content="website" />
     <meta
       property="og:url"
-      content="https://traumaindicator.com/#/explanation"
+      content="https://traitindicator.com/#/explanation"
     />
     <meta
       property="og:image"
-      content="https://traumaindicator.com/logo.png"
+      content="https://traitindicator.com/logo.png"
     />
   </Helmet>
 );

@@ -126,7 +126,7 @@ const LinkSharing: React.FC<{
     userBId?: string;
   }> = ({ userAId, userBId }) => {
     // Construct a share link including bin IDs if they exist
-    const shareLink = `https://traumaindicator.com/#/check/${userAId || ''}/${userBId || ''}`;
+    const shareLink = `https://traitindicator.com/#/check/${userAId || ''}/${userBId || ''}`;
   
     const copyToClipboard = async () => {
       try {

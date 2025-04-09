@@ -18,6 +18,7 @@ import {
   LinearProgress,
   Slider,
   Modal,
+  Stack,
 } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import Carousel from './Carousel';
@@ -126,7 +127,7 @@ const LinkSharing: React.FC<{
     userBId?: string;
   }> = ({ userAId, userBId }) => {
     // Construct a share link including bin IDs if they exist
-    const shareLink = `https://traitindicator.com/#/check/${userAId || ''}/${userBId || ''}`;
+    const shareLink = `https://traitindicator.com/#/compare/${userAId || ''}/${userBId || ''}`;
   
     const copyToClipboard = async () => {
       try {
@@ -554,97 +555,135 @@ const flattenResponses = (responses: any) : number[] => {
  * 3. Grouping the common slides by their associated trait in the fixed order: Openness, Conscientiousness,
  *    Extraversion, Agreeableness, Neuroticism.
  */
-const prepareCarouselSlides = () => {
-  if (
-    !userAData ||
-    !userBData ||
-    !userAData.responses ||
-    !userBData.responses ||
-    !userAData.statements ||
-    !userBData.statements
-  )
-    return [];
-
-  const aStatements = userAData.statements;
-  const bStatements = userBData.statements;
-  const aResponses = flattenResponses(userAData.responses);
-  const bResponses = flattenResponses(userBData.responses);
-
-  if (
-    aStatements.length === 0 ||
-    bStatements.length === 0 ||
-    aResponses.length === 0 ||
-    bResponses.length === 0
-  )
-    return [];
-
-  // Build a lookup map for User B's statements (using statement text as key)
-  const bLookup = new Map<string, number>();
-  bStatements.forEach((stmt, index) => {
-    bLookup.set(stmt.text, index);
-  });
-
-  // Create an array for common slides
-  interface CommonSlide {
-    statement: string;
-    trait: string;
-    userAResponse: number;
-    userBResponse: number;
-    subtextA: string;
-    subtextB: string;
-    compatibilityPercent: number;
-  }
-  const commonSlides: CommonSlide[] = [];
-
-  // Find overlapping statements by comparing each statement from User A against User B's lookup.
-  aStatements.forEach((stmtA, indexA) => {
-    if (bLookup.has(stmtA.text)) {
-      const indexB = bLookup.get(stmtA.text)!;
-      if (indexA < aResponses.length && indexB < bResponses.length) {
-        const respA = aResponses[indexA];
-        const respB = bResponses[indexB];
-        const subtextA = getSubtext(stmtA.trait, indexA, respA);
-        const subtextB = getSubtext(stmtA.trait, indexB, respB);
-        const compatibilityPercent = Math.round((1 - Math.abs(respA - respB)) * 100);
-        commonSlides.push({
-          statement: stmtA.text,
-          trait: stmtA.trait,
-          userAResponse: respA,
-          userBResponse: respB,
-          subtextA,
-          subtextB,
-          compatibilityPercent,
-        });
+  const prepareCarouselSlides = () => {
+    // Ensure both users have the required data.
+    if (
+      !userAData ||
+      !userBData ||
+      !userAData.responses ||
+      !userBData.responses ||
+      !userAData.statements ||
+      !userBData.statements
+    )
+      return [];
+  
+    // Define the structure for a common slide.
+    interface CommonSlide {
+      statement: string;
+      trait: string;
+      userAResponse: number;
+      userBResponse: number;
+      subtextA: string;
+      subtextB: string;
+      compatibilityPercent: number;
+    }
+  
+    // We assume responses are stored by trait.
+    // We'll use per-trait counters to align the responses for each user.
+    const aTraitCounter: { [trait: string]: number } = {};
+    const bTraitCounter: { [trait: string]: number } = {};
+  
+    // Build an ordinal lookup map for User B's statements.
+    // For each statement in User B's list, record the trait (as lowercase) and its occurrence.
+    const bOrdinalMap = new Map<string, { trait: string; ordinal: number }>();
+    userBData.statements.forEach((stmt) => {
+      const trait = stmt.trait.toLowerCase();
+      if (!(trait in bTraitCounter)) {
+        bTraitCounter[trait] = 0;
+      }
+      bOrdinalMap.set(stmt.text, { trait, ordinal: bTraitCounter[trait] });
+      bTraitCounter[trait] += 1;
+    });
+  
+    // Process User A's statements and, for each overlapping statement in User B,
+    // determine the matching response using per-trait occurrence.
+    const commonSlides: CommonSlide[] = [];
+    userAData.statements.forEach((stmtA) => {
+      const trait = stmtA.trait.toLowerCase();
+      // Initialize counter for trait if needed.
+      if (!(trait in aTraitCounter)) {
+        aTraitCounter[trait] = 0;
+      }
+      const ordinalA = aTraitCounter[trait];
+  
+      if (bOrdinalMap.has(stmtA.text)) {
+        const { ordinal: ordinalB } = bOrdinalMap.get(stmtA.text)!;
+        // Assume responses are stored as an object keyed by trait, each with an array.
+        const responsesA = (userAData.responses && userAData.responses[trait] || []) as number[];
+        const responsesB = (userBData.responses && userBData.responses[trait] || []) as number[];
+        if (responsesA && responsesB && ordinalA < responsesA.length && ordinalB < responsesB.length) {
+          const respA = responsesA[ordinalA];
+          const respB = responsesB[ordinalB];
+          const subtextA = getSubtext(stmtA.trait, ordinalA, respA);
+          const subtextB = getSubtext(stmtA.trait, ordinalB, respB);
+          const compatibilityPercent = Math.round((1 - Math.abs(respA - respB)) * 100);
+          commonSlides.push({
+            statement: stmtA.text,
+            trait,
+            userAResponse: respA,
+            userBResponse: respB,
+            subtextA,
+            subtextB,
+            compatibilityPercent,
+          });
+        }
+      }
+      aTraitCounter[trait] += 1;
+    });
+  
+    // Group the overlapping slides by trait.
+    const traitOrder = ["openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism"];
+    const groupedByTrait: { [key: string]: CommonSlide[] } = {};
+  
+    commonSlides.forEach((slide) => {
+      if (traitOrder.includes(slide.trait)) {
+        if (!groupedByTrait[slide.trait]) {
+          groupedByTrait[slide.trait] = [];
+        }
+        groupedByTrait[slide.trait].push(slide);
+      }
+    });
+  
+    // For "openness", if there are at least 6 items, split into two batches:
+    // one containing the first 3, and one containing the last 3.
+    let opennessFirstBatch: CommonSlide[] = [];
+    let opennessLastBatch: CommonSlide[] = [];
+    if (groupedByTrait["openness"]) {
+      const opennessItems = groupedByTrait["openness"];
+      if (opennessItems.length >= 6) {
+        opennessFirstBatch = opennessItems.slice(0, 3);
+        opennessLastBatch = opennessItems.slice(opennessItems.length - 3);
+      } else {
+        // Otherwise, leave the group unsplit.
+        opennessFirstBatch = opennessItems;
       }
     }
-  });
-
-  // Batch the common slides by trait in the fixed order: Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism.
-  const traitOrder = ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"];
-  const groupedByTrait: { [key: string]: CommonSlide[] } = {};
-
-  commonSlides.forEach((slide) => {
-    if (traitOrder.includes(slide.trait)) {
-      if (!groupedByTrait[slide.trait]) {
-        groupedByTrait[slide.trait] = [];
+  
+    // Build the final slides order:
+    // Place the first batch of openness items at the beginning,
+    // then the groups for other traits in the fixed order (excluding "openness"),
+    // then, if available, the openness last batch at the end.
+    const finalSlides: CommonSlide[][] = [];
+    if (opennessFirstBatch.length > 0) {
+      finalSlides.push(opennessFirstBatch);
+    }
+    traitOrder.forEach((trait) => {
+      if (trait !== "openness" && groupedByTrait[trait] && groupedByTrait[trait].length > 0) {
+        finalSlides.push(groupedByTrait[trait]);
       }
-      groupedByTrait[slide.trait].push(slide);
+    });
+    if (opennessLastBatch.length > 0) {
+      finalSlides.push(opennessLastBatch);
     }
-  });
-
-  // Create final grouped slides array in the desired order.
-  const finalSlides = traitOrder.reduce((acc, trait) => {
-    if (groupedByTrait[trait] && groupedByTrait[trait].length > 0) {
-      acc.push(groupedByTrait[trait]);
-    }
-    return acc;
-  }, [] as CommonSlide[][]);
-
-  return finalSlides;
-};
+  
+    return finalSlides;
+  };
+  
+  
 
 
   const slides = prepareCarouselSlides();
+  console.log(slides)
 
   const handleNextStage = () => {
     if (currentStage < stages.length - 1) {
@@ -1006,9 +1045,14 @@ const prepareCarouselSlides = () => {
             <Carousel
               slides={isMobile ? slides.flat().map(slide => ({ content: (
                 <Box> 
-                     <Typography variant="h6" gutterBottom>
+                    <Stack alignItems={'center'}>
+                    <Typography variant="h6" gutterBottom>
                       {slide.statement}
                     </Typography>
+                    <Typography color="text.secondary">
+                      Trait: {slide.trait.toUpperCase()}
+                    </Typography>
+                    </Stack>
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}
                       <Grid item xs={5}>
@@ -1098,6 +1142,14 @@ const prepareCarouselSlides = () => {
                   <Box key={idx} sx={{ padding: '20px' }}>
                    {slide.map(item => (
                     <Box>
+                          <Stack> 
+                          <Typography variant="h6" gutterBottom>
+                      {item.statement}
+                    </Typography>
+                    <Typography color="text.secondary">
+                      Trait: {item.trait.toUpperCase()}
+                    </Typography>
+                          </Stack>
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}
                       <Grid item xs={5}>

@@ -3812,7 +3812,7 @@ export const allStatements = [
       }
     },
     {
-      "text": "I regularly feel overwhelmed when managing several responsibilities simultaneously.",
+      "text": "I feel overwhelmed when managing several responsibilities simultaneously.",
       "trait": "neuroticism",
       "weight": 1.1,
       "aspect": "Withdrawal",

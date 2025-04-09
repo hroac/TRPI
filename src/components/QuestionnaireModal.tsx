@@ -269,7 +269,7 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
                   },
                 ],
                 merchantInfo: {
-                  merchantId: 'BCR2DN4TWXNYFJL5',
+                  merchantId: 'BCR2DN4T6WNILBJI',
                   merchantName: 'Trait Indicator',
                 },
                 transactionInfo: {

@@ -516,9 +516,10 @@ const TypeCompatibilityChecker: React.FC = () => {
         setTraitCorrelation(Math.abs(traitCorr));
 
         // check responses
+        const responses = prepareCarouselSlides() || [];
         const responsesA = flattenResponses(userAData.responses) || [];
         const responsesB = flattenResponses(userBData.responses) || [];
-        if (responsesA.length !== responsesB.length || responsesA.length === 0) {
+        if (!responses.length) {
           // skip if mismatch or empty
           setResponseCorrelation(null);
           setCompatibilityScore(null);
@@ -545,49 +546,103 @@ const flattenResponses = (responses: any) : number[] => {
     return allResponses;
   }
   // Build slides if we have responses in both
-  const prepareCarouselSlides = () => {
-    if (
-      !userAData ||
-      !userBData ||
-      !userAData.responses ||
-      !userBData.responses ||
-      flattenResponses(userAData.responses).length === 0 ||
-      flattenResponses(userBData.responses).length === 0
-    )
-      return [];
+  /**
+ * Prepares carousel slides by:
+ * 1. Finding overlapping statements (by matching statement text) between User A and User B.
+ * 2. For each common statement, using its index in each user's statements array to get the corresponding response,
+ *    compute the subtexts (via getSubtext), and calculate a compatibility percentage.
+ * 3. Grouping the common slides by their associated trait in the fixed order: Openness, Conscientiousness,
+ *    Extraversion, Agreeableness, Neuroticism.
+ */
+const prepareCarouselSlides = () => {
+  if (
+    !userAData ||
+    !userBData ||
+    !userAData.responses ||
+    !userBData.responses ||
+    !userAData.statements ||
+    !userBData.statements
+  )
+    return [];
 
-    const userData = flattenResponses(userAData.responses).map((response, idx) => {
-      const statementA = (userAData.statements || statements)[idx];
-      const statementB = (userBData.statements || statements)[idx]
-      const subtextA = getSubtext(statementA.trait, idx, response);
-      const subtextB = getSubtext(statementB.trait, idx, flattenResponses(userBData.responses)![idx]);
-      const compatibilityPercent = Math.round(
-        (1 - Math.abs(response - flattenResponses(userBData.responses)![idx])) * 100
-      );
-      return {
-        statementA: statementA.text,
-        statementB: statementB.text,
-        trait: statementA.trait,
-        userAResponse: response,
-        userBResponse: flattenResponses(userBData.responses)![idx],
-        subtextA,
-        subtextB,
-        compatibilityPercent,
-      };
-    });
+  const aStatements = userAData.statements;
+  const bStatements = userBData.statements;
+  const aResponses = flattenResponses(userAData.responses);
+  const bResponses = flattenResponses(userBData.responses);
 
-    const stagesA =  [
-        userData.slice(0, 3), // Stage 0
-        userData.slice(3, 7), // Stage 1
-        userData.slice(7, 11), // Stage 2
-        userData.slice(11, 15), // Stage 3
-        userData.slice(15, 19), // Stage 4
-        userData.slice(19, 23), // Stage 5
-        userData.slice(23, 26)
-        ];
+  if (
+    aStatements.length === 0 ||
+    bStatements.length === 0 ||
+    aResponses.length === 0 ||
+    bResponses.length === 0
+  )
+    return [];
 
-      return stagesA;
-  };
+  // Build a lookup map for User B's statements (using statement text as key)
+  const bLookup = new Map<string, number>();
+  bStatements.forEach((stmt, index) => {
+    bLookup.set(stmt.text, index);
+  });
+
+  // Create an array for common slides
+  interface CommonSlide {
+    statement: string;
+    trait: string;
+    userAResponse: number;
+    userBResponse: number;
+    subtextA: string;
+    subtextB: string;
+    compatibilityPercent: number;
+  }
+  const commonSlides: CommonSlide[] = [];
+
+  // Find overlapping statements by comparing each statement from User A against User B's lookup.
+  aStatements.forEach((stmtA, indexA) => {
+    if (bLookup.has(stmtA.text)) {
+      const indexB = bLookup.get(stmtA.text)!;
+      if (indexA < aResponses.length && indexB < bResponses.length) {
+        const respA = aResponses[indexA];
+        const respB = bResponses[indexB];
+        const subtextA = getSubtext(stmtA.trait, indexA, respA);
+        const subtextB = getSubtext(stmtA.trait, indexB, respB);
+        const compatibilityPercent = Math.round((1 - Math.abs(respA - respB)) * 100);
+        commonSlides.push({
+          statement: stmtA.text,
+          trait: stmtA.trait,
+          userAResponse: respA,
+          userBResponse: respB,
+          subtextA,
+          subtextB,
+          compatibilityPercent,
+        });
+      }
+    }
+  });
+
+  // Batch the common slides by trait in the fixed order: Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism.
+  const traitOrder = ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"];
+  const groupedByTrait: { [key: string]: CommonSlide[] } = {};
+
+  commonSlides.forEach((slide) => {
+    if (traitOrder.includes(slide.trait)) {
+      if (!groupedByTrait[slide.trait]) {
+        groupedByTrait[slide.trait] = [];
+      }
+      groupedByTrait[slide.trait].push(slide);
+    }
+  });
+
+  // Create final grouped slides array in the desired order.
+  const finalSlides = traitOrder.reduce((acc, trait) => {
+    if (groupedByTrait[trait] && groupedByTrait[trait].length > 0) {
+      acc.push(groupedByTrait[trait]);
+    }
+    return acc;
+  }, [] as CommonSlide[][]);
+
+  return finalSlides;
+};
+
 
   const slides = prepareCarouselSlides();
 
@@ -952,7 +1007,7 @@ const flattenResponses = (responses: any) : number[] => {
               slides={isMobile ? slides.flat().map(slide => ({ content: (
                 <Box> 
                      <Typography variant="h6" gutterBottom>
-                      {slide.statementA}
+                      {slide.statement}
                     </Typography>
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}
@@ -1043,9 +1098,6 @@ const flattenResponses = (responses: any) : number[] => {
                   <Box key={idx} sx={{ padding: '20px' }}>
                    {slide.map(item => (
                     <Box>
-                         <Typography variant="h6" gutterBottom>
-                      {item.statementB}
-                    </Typography>
                     <Grid container spacing={2} alignItems="center">
                       {/* User A's Answer */}
                       <Grid item xs={5}>

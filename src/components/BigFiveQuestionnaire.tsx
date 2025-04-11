@@ -175,7 +175,8 @@ console.log('new statements')
     const traitScores = responses[trait].map((score: any, i: any) => 
       score * (getStatement(trait, i).weight || 1)
     );
-    acc[trait] = traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
+    const average =  traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
+      acc[trait] = average > 1 ? 1 : average
     return acc;
   }, {} as { [trait: string]: number });
     const primary4F = determinePrimary4FType(weightedScores);
@@ -268,7 +269,8 @@ console.log('new statements')
       const traitScores = responses[trait].map((score: any, i: any) => 
         score * (getStatement(trait, i).weight || 1)
        );
-      acc[trait] = traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
+      const average =  traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
+      acc[trait] = average > 1 ? 1 : average
       return acc;
     }, {} as { [trait: string]: number });
 

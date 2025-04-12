@@ -56,7 +56,7 @@ const RatingComponent: React.FC<RatingProps> = ({ bin, userId, onRatingSaved }) 
 
     setSaving(true);
     try {
-      const updatedState = { ...bin, rating: 1 };
+      const updatedState = {  rating: 1, ...bin };
      // await JsonBinApi.saveResultsToJsonBin(updatedState);
       onRatingSaved(updatedState);
       setRating(1);
@@ -74,7 +74,7 @@ const RatingComponent: React.FC<RatingProps> = ({ bin, userId, onRatingSaved }) 
 
     setSaving(true);
     try {
-      const updatedState = { ...bin, rating: 0 };
+      const updatedState = { rating: 0, ...bin };
      // await JsonBinApi.saveResultsToJsonBin(updatedState);
       onRatingSaved(updatedState);
       setRating(0);

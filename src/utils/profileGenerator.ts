@@ -36,7 +36,7 @@ export interface BigFiveScores {
 
 export interface FullProfile {
   cognitiveProfile: CognitiveProfile;
-  assesment: any,
+  assessment: any,
   scores: BigFiveScores;
   demographics: {
         age: number;
@@ -66,7 +66,7 @@ export const generateProfileAnalysis = async (profile: FullProfile): Promise<str
     - Opposite Type: ${cognitiveProfile.opposite}
 
     **Assessment:** 
-    ${profile.assesment}
+    ${profile.assessment}
 
     **Big Five Scores:**
     - Openness: ${scores.openness.toFixed(2)} (0-1)

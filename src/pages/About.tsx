@@ -81,7 +81,7 @@ const AboutPage: React.FC<{
         cognitiveProfile: profile,
         scores: bin.bigFiveResponses,
         demographics: data.demographics,
-        assesment: descriptionText,
+        assessment: descriptionText,
       });
       JsonBinApi.updateResultsInJsonBin({ ...bin, ...data.demographics, description: descriptionText });
       handleReloadBin && handleReloadBin();

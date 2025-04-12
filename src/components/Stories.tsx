@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
 import Carousel from './Carousel';
 import parser from '../utils/rss';
-
 
 interface Story {
   title: string;
@@ -23,9 +22,8 @@ const getImageFromContent = (content: string): string | null => {
 };
 
 // Wrap the rss-to-json parse method in a Promise.
-// We use require here because rss-to-json is a CommonJS module.
 const parseRss = (url: string): any => {
-    return parser(url);
+  return parser(url);
 };
 
 const Stories: React.FC = () => {
@@ -33,11 +31,13 @@ const Stories: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   useEffect(() => {
     const fetchStories = async () => {
       try {
         const rss = await parseRss('https://medium-rss-three.vercel.app/api/rss');
-        console.log(rss)
         // Map each RSS item to a Story object.
         const items: Story[] = rss.items.map((item: any) => {
           const thumbnail = item.image || getImageFromContent(item.content);
@@ -52,7 +52,7 @@ const Stories: React.FC = () => {
         setStories(items);
       } catch (err) {
         console.error(err);
-        setError('');
+        setError('An error occurred while loading stories.');
       } finally {
         setLoading(false);
       }
@@ -63,56 +63,86 @@ const Stories: React.FC = () => {
 
   if (loading) {
     return (
-         <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <CircularProgress />
-              </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <CircularProgress />
+      </Box>
     );
   }
 
   if (error) {
-    return (
-     <></>
-    );
+    return <Typography color="error">{error}</Typography>;
   }
 
-  // Map stories to slides for the Carousel.
-  const slides: Slide[] = stories.map((story, index) => ({
-    content: (
-      <Box
-        key={index}
-        sx={{
-          p: 2,
-          textAlign: 'center',
-        }}
+  // Render a story "card" as a flex column for consistent button placement.
+  const renderStory = (story: Story, index: number) => (
+    <Box
+      key={index}
+      sx={{
+        p: 2,
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        // Set a minHeight so that all cards have consistent height.
+        minHeight: 300,
+      }}
+    >
+      {story.thumbnail && (
+        <Box
+          component="img"
+          src={story.thumbnail}
+          alt={story.title}
+          sx={{
+            width: '50%',
+            height: 'auto',
+            objectFit: 'cover',
+            alignSelf: 'center',
+          }}
+        />
+      )}
+       <Box sx={{ flexGrow: 1 }} />
+      <Typography variant="h6" sx={{ mt: 2 }} gutterBottom>
+        {story.title}
+      </Typography>
+      <Typography variant="body2" sx={{ mt: 1 }}>
+        {new Date(story.pubDate).toLocaleDateString()}
+      </Typography>
+      {/* This spacer pushes the button to the bottom regardless of the title length */}
+      <Button
+        variant="contained"
+        color="secondary"
+        href={story.link}
+        target="_blank"
+        sx={{ mt: 2}}
       >
-        {story.thumbnail && (
-          <img
-            src={story.thumbnail}
-            alt={story.title}
-            height={'50%'}
-            style={{ width: '50%', objectFit: 'cover' }}
-          />
-        )}
-        <Typography variant="h6" sx={{ mt: 2 }}>
-          {story.title}
-        </Typography>
-        <Typography variant="body2" sx={{ mt: 1 }}>
-          {new Date(story.pubDate).toLocaleDateString()}
-        </Typography>
-        <Button
-          variant="contained"
-          color="secondary"
-          href={story.link}
-          target="_blank"
-          sx={{ mt: 2 }}
-        >
-          Read More
-        </Button>
-      </Box>
-    ),
-  }));
+        Read More
+      </Button>
+    </Box>
+  );
 
-  return <Carousel slides={slides} arrows />;
+  // Render Carousel for mobile devices.
+  if (isMobile) {
+    const slides: Slide[] = stories.map((story, index) => ({
+      content: renderStory(story, index),
+    }));
+    return <Carousel slides={slides} arrows />;
+  }
+
+  // Determine number of columns for grid:
+  // if less than 3 stories, use the exact count and center them.
+  const columns = stories.length < 3 ? stories.length : 3;
+
+  return (
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gap: 2, // this adds padding between both rows and columns
+        justifyContent: stories.length < 3 ? 'center' : 'normal',
+      }}
+    >
+      {stories.map((story, index) => renderStory(story, index))}
+    </Box>
+  );
 };
 
 export default Stories;

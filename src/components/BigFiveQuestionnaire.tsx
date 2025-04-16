@@ -482,8 +482,16 @@ console.log('new statements')
           <Typography variant="body2" gutterBottom>
             Use this as a preset if you already know your type!
           </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Box sx={{ display: 'inline-block' }}>
+<Box
+  sx={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    px: 2, // Add horizontal padding for breathing room
+    width: '100%',
+  }}
+>
+  <Box sx={{ width: '100%', maxWidth: 420 }}>
         <Matrix onSelectType={handleMatrixSelect} width={'100px'}/>
         </Box>
       </Box>

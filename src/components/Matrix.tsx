@@ -8,8 +8,9 @@ interface MatrixProps {
   width?: string;
 }
 
-const Matrix: React.FC<MatrixProps> = ({ onSelectType, width = '75px' }) => {
+const Matrix: React.FC<MatrixProps> = ({ onSelectType, width = '75px' }) => { 
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const cellSize = isMobile ? '18vw' : width || '75px'; // 
   const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
 
   // Common styles for each box, enhanced with conditional opacity
@@ -18,8 +19,8 @@ const Matrix: React.FC<MatrixProps> = ({ onSelectType, width = '75px' }) => {
     pt: '33%',
     textAlign: 'center',
     borderRadius: 2,
-    height: width,
-    width: width,
+    height: cellSize,
+width: cellSize,
     // If no column is hovered, or if this box is in the hovered column, show full opacity.
     // Otherwise, gray it out.
     opacity: hoveredColumn === null || hoveredColumn === colIndex ? 1 : 0.3,

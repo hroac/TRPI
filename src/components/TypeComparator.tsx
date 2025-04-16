@@ -1283,8 +1283,16 @@ const flattenResponses = (responses: any) : number[] => {
             <Typography variant="body2" gutterBottom>
               Use this as a preset if you already know your type!
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Box sx={{ display: 'inline-block' }}>
+  <Box
+  sx={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    px: 2, // Add horizontal padding for breathing room
+    width: '100%',
+  }}
+>
+  <Box sx={{ width: '100%', maxWidth: 420 }}>
         <Matrix onSelectType={handleMatrixSelectA} width={'100px'} />
         </Box>
       </Box>
@@ -1319,8 +1327,15 @@ const flattenResponses = (responses: any) : number[] => {
             <Typography variant="body2" gutterBottom>
               Use this as a preset if you already know your type!
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Box sx={{ display: 'inline-block' }}>
+  <Box
+  sx={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  }}
+>
+  <Box sx={{ width: '100%', maxWidth: 420 }}>
         <Matrix onSelectType={handleMatrixSelectB} width={'100px'} />
         </Box>
       </Box>

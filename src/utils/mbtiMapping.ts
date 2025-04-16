@@ -393,11 +393,11 @@ export const matchMBTIType = (profile: any, primary4F: any, filter: boolean = tr
  * @param profile - User's Big Five profile (BigFiveValues format).
  * @returns An object containing the matched MBTI type and all scores scaled from 0 to 100.
  */
-export const matchMBTI = (profile: Record<any, any>) => {
+export const matchMBTI = (profile: Record<any, any>, exclude?: Array<string>) => {
   const profileArray = Object.values(profile);
 
   // Step 1: Calculate Scores (Pearson Correlation and Weighted Euclidean Distance)
-  const combinedScores = MBTIProfiles.map((candidate) => {
+  const combinedScores = MBTIProfiles.filter(prf => !exclude || !exclude.includes(prf.name)).map((candidate) => {
     // Pearson correlation between the user profile and the candidate traits
     const correlation = pearsonCorrelationBigFive(
       profileArray,
@@ -888,3668 +888,9638 @@ function selectEvenMoreStatements(statements: any[]) {
 }
 
 export const allStatements = [
-    {
-      "text": "I contemplate abstract concepts.",
-      "trait": "openness",
-      "weight": 1.1,
-      "aspect": "Intellect",
-      "subtext": {
-        "0-10": {
-          "text": "I seldom reflect on abstract concepts.",
-                  },
-        "10-20": {
-          "text": "I occasionally consider simple abstract ideas.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes ponder abstract ideas.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately reflect on abstract concepts.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often engage in abstract thought.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently immerse myself in abstract contemplation.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly delve into abstract ideas.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly enjoy exploring abstract concepts.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very drawn to abstract thinking.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I am profoundly absorbed in the world of abstract ideas.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I participate in philosophical discussions.",
-      "trait": "openness",
-      "weight": 1,
-      "aspect": "Intellect",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely engage in philosophical discussions.",
-                  },
-        "10-20": {
-          "text": "I occasionally share a philosophical thought.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes join in on philosophical conversations.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy discussing philosophical topics.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often contribute to philosophical discussions.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently engage in deep philosophical discussions.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly seek out philosophical exchanges.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly enthusiastic about debating philosophical ideas.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very committed to philosophical dialogue.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I am passionately involved in philosophical discussions.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I seek out novel and unconventional experiences.",
-      "trait": "openness",
-      "weight": 0.9,
-      "aspect": "Intellect",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely try new experiences.",
-                  },
-        "10-20": {
-          "text": "I occasionally experiment with something new.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes engage in new activities.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately try out novel experiences.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often embrace new and unusual things.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently pursue novel experiences.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly experiment with unconventional activities.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly enjoy exploring new experiences.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very open to trying unusual things.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I am always eager to embrace novel and unconventional experiences.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I demonstrate curiosity about diverse cultures and lifestyles.",
-      "trait": "openness",
-      "weight": 1.2,
-      "aspect": "Intellect",
-      "subtext": {
-        "0-10": {
-          "text": "I show little interest in different cultures.",
-                  },
-        "10-20": {
-          "text": "I occasionally wonder about other cultures.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes consider different ways of life.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately appreciate diverse cultures.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often reflect on various cultural ways of living.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently show curiosity about different cultures.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly explore information about diverse cultures.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly interested in learning about different lifestyles.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very curious about the variety of cultural expressions.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I am deeply fascinated by diverse cultures and ways of life.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I actively pursue new knowledge and welcome learning in various domains.",
-      "trait": "openness",
-      "weight": 1.3,
-      "aspect": "Intellect",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely seek out new knowledge.",
-                  },
-        "10-20": {
-          "text": "I occasionally learn something new.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes engage in learning new subjects.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately value expanding my knowledge.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often explore new topics.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently pursue opportunities to learn.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly engage in expanding my intellectual horizons.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly interested in acquiring new knowledge.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very eager to learn about a wide range of subjects.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I have an intense passion for learning and broadening my intellectual scope.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I readily update my beliefs when presented with new evidence.",
-      "trait": "openness",
-      "weight": 1,
-      "aspect": "Intellect",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely change my opinions.",
-                  },
-        "10-20": {
-          "text": "I occasionally reconsider my views.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes adjust my opinions based on new facts.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately revise my views when needed.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often reconsider my opinions with new information.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently update my beliefs when confronted with evidence.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly adjust my opinions based on fresh insights.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly open to modifying my views.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very inclined to revise my beliefs with new information.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I readily transform my opinions in light of new evidence.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I consistently exert effort to attain my objectives.",
-      "trait": "conscientiousness",
-      "weight": 1.2,
-      "aspect": "Industriousness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely work hard to reach my goals.",
-                  },
-        "10-20": {
-          "text": "I occasionally put some effort into my goals.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes work hard on my goals.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately strive toward my objectives.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often devote effort to achieve my goals.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently put in considerable effort to reach my aims.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly work with diligence to achieve my objectives.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly prioritize exerting effort to reach my goals.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very dedicated to working hard for my objectives.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I consistently go above and beyond to achieve my goals.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I perceive myself as capable and competent.",
-      "trait": "conscientiousness",
-      "weight": 1.1,
-      "aspect": "Industriousness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel capable.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel somewhat competent.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel capable in certain areas.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately feel competent in my abilities.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel capable and competent.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently feel confident in my abilities.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel capable and effective in what I do.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I have a strong sense of my own competence.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very confident in my abilities.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I possess an unwavering belief in my competence.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I resist impulses and temptations.",
-      "trait": "conscientiousness",
-      "weight": 1,
-      "aspect": "Industriousness",
-      "subtext": {
-        "0-10": {
-          "text": "I often give in to temptations.",
-                  },
-        "10-20": {
-          "text": "I occasionally manage to resist a temptation.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes successfully resist impulses.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately manage to keep my impulses in check.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often resist temptations effectively.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently control my impulses in tempting situations.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly demonstrate strong self-control.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly capable of resisting temptation.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very adept at maintaining self-control.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I consistently and robustly resist all temptations.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I deliberate before taking action.",
-      "trait": "conscientiousness",
-      "weight": 1.1,
-      "aspect": "Industriousness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely think before acting.",
-                  },
-        "10-20": {
-          "text": "I occasionally pause briefly before acting.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes consider my actions beforehand.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately reflect before making decisions.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often think carefully before acting.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently deliberate before taking any action.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly plan my actions carefully.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly methodical in thinking before I act.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very deliberate and thoughtful in my actions.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always think thoroughly before making any decision.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I consistently manage my time efficiently.",
-      "trait": "conscientiousness",
-      "weight": 1,
-      "aspect": "Industriousness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely use my time efficiently.",
-                  },
-        "10-20": {
-          "text": "I occasionally manage my time well.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes use my time in a productive way.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately make good use of my time.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often work efficiently.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently manage my time effectively.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly use my time in a very efficient manner.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly efficient in managing my time.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very skilled at using my time wisely.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always maximize my efficiency in time management.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I maintain a preference for neat and orderly surroundings.",
-      "trait": "conscientiousness",
-      "weight": 1.1,
-      "aspect": "Orderliness",
-      "subtext": {
-        "0-10": {
-          "text": "I do not mind if things are messy.",
-                  },
-        "10-20": {
-          "text": "I occasionally tidy up my space.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes prefer things to be neat.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately favor an orderly environment.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often maintain a tidy space.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently ensure that my surroundings are neat.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly keep my environment orderly.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value order and neatness.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very particular about maintaining order.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always insist on a perfectly neat and orderly environment.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I carefully attend to details.",
-      "trait": "conscientiousness",
-      "weight": 1,
-      "aspect": "Orderliness",
-      "subtext": {
-        "0-10": {
-          "text": "I often overlook important details.",
-                  },
-        "10-20": {
-          "text": "I occasionally notice small details.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes pay attention to details.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately focus on details.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often notice important details.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently attend to even subtle details.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly ensure that no detail is overlooked.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly meticulous about details.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very thorough in noticing every detail.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always pay exceptionally close attention to every detail.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I reliably adhere to established rules and guidelines.",
-      "trait": "conscientiousness",
-      "weight": 1.1,
-      "aspect": "Orderliness",
-      "subtext": {
-        "0-10": {
-          "text": "I often disregard rules and guidelines.",
-                  },
-        "10-20": {
-          "text": "I occasionally follow rules when reminded.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes make an effort to follow rules.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately adhere to rules.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often follow established guidelines.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently abide by rules and regulations.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly conform to established rules.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly respect and follow rules.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very careful to adhere to all rules.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always strictly follow rules and regulations.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I routinely develop plans and adhere to them.",
-      "trait": "conscientiousness",
-      "weight": 1,
-      "aspect": "Orderliness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely make plans.",
-                  },
-        "10-20": {
-          "text": "I occasionally make loose plans.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes plan but don’t always follow through.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately like to plan activities.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often create plans and try to follow them.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently make detailed plans and adhere to them.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly plan ahead and execute my plans.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value planning and stick to my plans.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very committed to following my plans.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always meticulously plan and strictly adhere to my schedule.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I value having a structured schedule and routine.",
-      "trait": "conscientiousness",
-      "weight": 0.9,
-      "aspect": "Orderliness",
-      "subtext": {
-        "0-10": {
-          "text": "I prefer spontaneity over routine.",
-                  },
-        "10-20": {
-          "text": "I occasionally follow a loose schedule.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes appreciate having a general routine.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately value a consistent schedule.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often rely on a set routine.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently adhere to a regular schedule.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly maintain a structured routine.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value having a consistent routine.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very reliant on my schedule.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always strictly adhere to a well-planned routine.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I remain organized and focused when juggling tasks.",
-      "trait": "conscientiousness",
-      "weight": 1,
-      "subtext": {
-        "0-10": {
-          "text": "I rarely stay organized when managing tasks.",
-                  },
-        "10-20": {
-          "text": "I occasionally try to organize my tasks.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes remain focused when handling multiple tasks.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately keep my tasks organized.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often stay organized while managing tasks.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently remain focused and organized during multitasking.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly manage multiple tasks with a clear focus.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly maintain organization and focus when juggling tasks.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly efficient at managing multiple priorities.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always stay exceptionally organized and focused when handling many tasks.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I favor planned and organized activities over spontaneity.",
-      "trait": "conscientiousness",
-      "weight": 0.9,
-      "subtext": {
-        "0-10": {
-          "text": "I rarely prefer organized activities.",
-                  },
-        "10-20": {
-          "text": "I occasionally enjoy planned events.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes choose structured activities over spontaneous ones.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately prefer organized activities.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often choose planned over spontaneous events.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently opt for organized activities.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly plan my activities rather than leaving them to chance.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly favor structured and well-organized events.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly inclined to choose planned activities.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always prioritize meticulously organized and planned events.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I possess a strong sense of duty toward fulfilling my goals and commitments.",
-      "trait": "conscientiousness",
-      "weight": 1.1,
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel responsible for my commitments.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel a mild sense of responsibility.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel responsible for meeting my goals.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately feel accountable for my commitments.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel a strong duty to meet commitments.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently ensure that I meet my goals.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel deeply responsible for my commitments.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly prioritize fulfilling my obligations.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very dedicated to meeting my goals and commitments.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel an intense responsibility to achieve my goals.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I base my decisions on factual evidence rather than emotions.",
-      "trait": "conscientiousness",
-      "weight": 1.3,
-      "subtext": {
-        "0-10": {
-          "text": "I almost always decide based on feelings.",
-                  },
-        "10-20": {
-          "text": "I mostly rely on emotions when deciding.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes consider facts, but feelings often guide me.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I occasionally let facts influence my decisions.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I try to balance facts with emotions when deciding.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I usually lean toward making decisions based on facts.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I frequently base my decisions on objective evidence.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I consistently prioritize facts over feelings in my decision-making.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I almost always rely on factual information when deciding.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always base my decisions solely on factual evidence.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I systematically focus on details and thoughtfully plan my tasks.",
-      "trait": "conscientiousness",
-      "weight": 0.9,
-      "subtext": {
-        "0-10": {
-          "text": "I rarely think through details when completing tasks.",
-                  },
-        "10-20": {
-          "text": "I occasionally reflect on task details.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes consider details when working.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately plan my tasks with attention to details.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often ensure my tasks are well thought out.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently focus on details and plan carefully.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly engage in detailed planning for my tasks.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly emphasize careful thought in task management.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very meticulous and thorough in my planning.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always think through every detail with great care.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I derive energy from being in large social gatherings.",
-      "trait": "extraversion",
-      "weight": 1.1,
-      "aspect": "Enthusiasm",
-      "subtext": {
-        "0-10": {
-          "text": "I prefer solitude over large groups.",
-                  },
-        "10-20": {
-          "text": "I occasionally join a crowd, though with reservation.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes enjoy being with many people.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy social gatherings.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel energized in groups.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently seek out large social events.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly thrive in large group settings.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly enjoy the energy of social gatherings.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very enthusiastic about being in large groups.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel invigorated when surrounded by many people.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I consistently maintain a cheerful and optimistic outlook.",
-      "trait": "extraversion",
-      "weight": 1.2,
-      "aspect": "Enthusiasm",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel cheerful or optimistic.",
-                  },
-        "10-20": {
-          "text": "I occasionally experience brief moments of cheer.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel moderately positive.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately maintain a cheerful mood.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel optimistic.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently experience a positive outlook.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel upbeat and cheerful.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly energetic and optimistic.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very consistently cheerful.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always maintain a highly positive and optimistic mood.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I readily form new friendships.",
-      "trait": "extraversion",
-      "weight": 1,
-      "aspect": "Enthusiasm",
-      "subtext": {
-        "0-10": {
-          "text": "I find it difficult to make new friends.",
-                  },
-        "10-20": {
-          "text": "I occasionally make a new acquaintance.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes find it easy to connect with new people.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately establish new social contacts.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often make new friends without much difficulty.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently form new friendships easily.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly connect with new people.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly effective at making friends.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very skilled at initiating friendships.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always find it remarkably easy to make new friends.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I consistently display warmth and friendliness.",
-      "trait": "extraversion",
-      "weight": 1.3,
-      "aspect": "Enthusiasm",
-      "subtext": {
-        "0-10": {
-          "text": "I am often perceived as cold or distant.",
-                  },
-        "10-20": {
-          "text": "I occasionally appear friendly.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes show warmth in social settings.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately act in a warm, approachable manner.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often display friendliness towards others.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently exude warmth and approachability.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly project a warm and friendly demeanor.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly regarded for my warmth and friendliness.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very consistently warm and affable.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I am always remarkably warm, friendly, and approachable.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I actively seek out and enjoy social events and parties.",
-      "trait": "extraversion",
-      "weight": 1,
-      "aspect": "Enthusiasm",
-      "subtext": {
-        "0-10": {
-          "text": "I generally avoid parties and social events.",
-                  },
-        "10-20": {
-          "text": "I occasionally attend events out of necessity.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes enjoy attending parties.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy social gatherings.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often take pleasure in parties.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently attend and enjoy social events.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly look forward to social gatherings.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly enjoy being at parties and gatherings.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very enthusiastic about attending social events.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always eagerly anticipate and thoroughly enjoy parties and gatherings.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I frequently assume leadership roles in group settings.",
-      "trait": "extraversion",
-      "weight": 1.1,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely take the lead in groups.",
-                  },
-        "10-20": {
-          "text": "I occasionally contribute but seldom lead.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes take initiative in groups.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately assume leadership when needed.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often step up to lead group activities.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently take charge in group situations.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly exhibit leadership in groups.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly enjoy assuming leadership roles.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very comfortable and effective as a leader.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always naturally take the lead and inspire others.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I confidently articulate my opinions.",
-      "trait": "extraversion",
-      "weight": 1.2,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely express my opinions.",
-                  },
-        "10-20": {
-          "text": "I occasionally share my views when prompted.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes express my opinions.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately share my opinions in conversation.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often speak my mind openly.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently voice my opinions with confidence.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly express my views assertively.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly comfortable and clear in expressing my opinions.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very outspoken and direct.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always express my opinions in a confident and assertive manner.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I thrive on an active, energetic lifestyle.",
-      "trait": "extraversion",
-      "weight": 1,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I prefer a calm and sedentary lifestyle.",
-                  },
-        "10-20": {
-          "text": "I occasionally engage in physical activities.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes enjoy being physically active.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy staying active.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often seek out active pursuits.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently maintain a high level of physical activity.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly embrace an energetic and active lifestyle.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly energetic and active.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very enthusiastic about being active.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel my best when I am actively on the move.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I am comfortable being the focal point in social situations.",
-      "trait": "extraversion",
-      "weight": 0.9,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I strongly dislike being the center of attention.",
-                  },
-        "10-20": {
-          "text": "I occasionally find myself in the spotlight, but with discomfort.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes don’t mind being noticed.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately tolerate being the center of attention.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel at ease when I am noticed.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently feel comfortable in the spotlight.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly enjoy being the focus of attention.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly appreciate being in the center of attention.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very comfortable and relish being noticed.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always enjoy and seek out being the center of attention.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I reliably assert my rights and stand up for myself.",
-      "trait": "extraversion",
-      "weight": 1.3,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely stand up for myself.",
-                  },
-        "10-20": {
-          "text": "I occasionally try to be assertive.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes assert myself when needed.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately stand up for my beliefs.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often assert myself in situations.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently stand up for my rights and opinions.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly act assertively in challenging situations.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly assertive and confident in standing up for myself.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very assertive and direct in my communication.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always act with unwavering assertiveness and confidence.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I gain energy from connecting with new people and forming relationships.",
-      "trait": "extraversion",
-      "weight": 1.1,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel energized by meeting new people.",
-                  },
-        "10-20": {
-          "text": "I occasionally enjoy meeting someone new.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel upbeat after social interactions.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy building new connections.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel energized by engaging with others.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently derive energy from making new connections.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel invigorated by engaging with new people.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly enjoy and actively seek new social connections.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly energized by forming new relationships.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel deeply invigorated by engaging with new people.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I consistently take charge in group settings and show leadership confidence.",
-      "trait": "extraversion",
-      "weight": 1,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely take charge in groups.",
-                  },
-        "10-20": {
-          "text": "I occasionally take charge but prefer to follow.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel comfortable taking charge.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately assume leadership when necessary.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often take charge in group settings.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently lead groups with confidence.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel confident when taking charge.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly embrace leadership roles in group settings.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly confident and effective in leadership roles.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always thrive as a natural leader in any group setting.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I love engaging in discussions and discussions on various ideas.",
-      "trait": "extraversion",
-      "weight": 0.9,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely enjoy discussing ideas with others.",
-                  },
-        "10-20": {
-          "text": "I occasionally engage in discussions, but avoid discussions.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes share my ideas in discussions.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy debating and discussing ideas.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often engage in discussions with others.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently relish sharing ideas and debating topics.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly participate in lively discussions about ideas.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly enjoy and seek out intellectual discussions.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly energized by discussing and debating ideas.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always thrive on in-depth discussions and discussions about ideas.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I remain composed and assertive when addressing challenges.",
-      "trait": "extraversion",
-      "weight": 1.3,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely stay calm in problem situations.",
-                  },
-        "10-20": {
-          "text": "I occasionally manage to remain calm.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes stay composed under pressure.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately remain calm and assertive in problems.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often stay calm when solving problems.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently remain composed under stress.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly solve problems while staying calm and assertive.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly maintain composure and assertiveness in challenges.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly calm and assertive when addressing issues.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always remain remarkably calm, composed, and assertive in all challenges.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I am recognized for my bold and independent problem-solving approach.",
-      "trait": "extraversion",
-      "weight": 1,
-      "aspect": "Assertiveness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely act independently or boldly.",
-                  },
-        "10-20": {
-          "text": "I occasionally act independently, but rarely boldly.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes approach problems with independence.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately demonstrate bold, independent thinking.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often take an independent and bold approach.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently solve problems in a bold and independent manner.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly take independent and daring approaches to challenges.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly exhibit boldness and independence in problem-solving.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly recognized for my bold, independent methods.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always act boldly and independently when facing challenges.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I deeply empathize with those who are less fortunate.",
-      "trait": "agreeableness",
-      "weight": 1.2,
-      "aspect": "Compassion",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel empathy for others.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel a tinge of sympathy.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel concerned for those in need.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately feel empathy towards others' struggles.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often empathize with those less fortunate.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently feel compassion for people in need.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly experience deep empathy for others.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly attuned to the suffering of others.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very empathetic towards those who struggle.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel profound empathy for those less fortunate.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I derive satisfaction from assisting others.",
-      "trait": "agreeableness",
-      "weight": 1.3,
-      "aspect": "Compassion",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely go out of my way to help others.",
-                  },
-        "10-20": {
-          "text": "I occasionally lend a helping hand if convenient.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes enjoy helping those around me.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately take pleasure in assisting others.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often offer help to those in need.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently derive satisfaction from helping others.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly look for opportunities to assist people.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly enjoy being helpful and supportive.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very willing to help others.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always eagerly seek out ways to assist those around me.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I generally extend trust towards others.",
-      "trait": "agreeableness",
-      "weight": 1,
-      "aspect": "Compassion",
-      "subtext": {
-        "0-10": {
-          "text": "I am usually suspicious of people.",
-                  },
-        "10-20": {
-          "text": "I occasionally trust someone after getting to know them.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes tend to trust people readily.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately give others the benefit of the doubt.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often trust people until proven otherwise.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently extend trust to those around me.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly trust people in general.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly tend to trust others.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very trusting by nature.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always naturally trust other people.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I actively care about the welfare of others.",
-      "trait": "agreeableness",
-      "weight": 1.1,
-      "aspect": "Compassion",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely concern myself with the well-being of others.",
-                  },
-        "10-20": {
-          "text": "I occasionally notice how others are doing.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes show interest in others’ welfare.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately care about the well-being of people.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often consider the welfare of those around me.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently pay attention to others’ well-being.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly show care for people’s welfare.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly prioritize the well-being of others.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very concerned about the welfare of those around me.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always actively care for and prioritize others’ well-being.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I strive to treat everyone with kindness.",
-      "trait": "agreeableness",
-      "weight": 1,
-      "aspect": "Compassion",
-      "subtext": {
-        "0-10": {
-          "text": "I am not always kind in my interactions.",
-                  },
-        "10-20": {
-          "text": "I occasionally try to be polite.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes make an effort to be kind.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately try to be kind to people.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often strive to be kind in my interactions.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently make an effort to treat everyone kindly.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly seek to be kind and considerate.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value treating everyone with kindness.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very intentional about being kind to everyone.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always strive to treat everyone with unwavering kindness.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I refrain from imposing my preferences on others.",
-      "trait": "agreeableness",
-      "weight": 1.1,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I often try to get my way.",
-                  },
-        "10-20": {
-          "text": "I occasionally attempt to influence others.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes try to persuade others to my viewpoint.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately avoid imposing my will on others.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often allow others to make their own choices.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently refrain from forcing my preferences on others.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly respect others’ autonomy.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value letting others decide for themselves.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very careful not to impose my will.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always completely refrain from imposing my will on others.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I exhibit modesty regarding my accomplishments.",
-      "trait": "agreeableness",
-      "weight": 1,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I often boast about my achievements.",
-                  },
-        "10-20": {
-          "text": "I occasionally mention my successes.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes talk about my achievements.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately downplay my accomplishments.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often present myself modestly.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently refrain from bragging about my successes.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly maintain a humble attitude about my achievements.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value humility regarding what I accomplish.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very modest about my achievements.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always remain extremely modest and humble about my accomplishments.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I consistently communicate in an honest and direct manner.",
-      "trait": "agreeableness",
-      "weight": 1.2,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I am not always straightforward.",
-                  },
-        "10-20": {
-          "text": "I occasionally speak directly.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes attempt to be honest in my communication.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately strive to be straightforward.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often express myself directly and honestly.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently communicate in a frank manner.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly speak in a clear and honest way.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value clear and honest communication.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very committed to speaking straightforwardly.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always communicate in an unwaveringly honest and direct manner.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I reliably demonstrate respect for authority figures.",
-      "trait": "agreeableness",
-      "weight": 1,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I often question authority.",
-                  },
-        "10-20": {
-          "text": "I occasionally show respect for authority.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes acknowledge authority figures.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately respect authority.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often show deference to authority figures.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently respect and follow authority.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly honor the guidance of authority figures.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value respect for authority.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very respectful of those in authority.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always show profound respect for authority.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I typically steer clear of confrontational interactions.",
-      "trait": "agreeableness",
-      "weight": 1.1,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I often engage in confrontations.",
-                  },
-        "10-20": {
-          "text": "I occasionally stand my ground in disagreements.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes try to avoid arguments.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately try to avoid confrontations.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often attempt to diffuse conflicts.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently avoid getting into confrontational situations.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly seek peaceful resolutions in conflicts.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value harmony and avoid confrontations.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very averse to confrontation.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always strive to completely avoid any form of confrontation.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I take pleasure in supporting my friends and contributing to their success.",
-      "trait": "agreeableness",
-      "weight": 1.1,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely enjoy helping my friends.",
-                  },
-        "10-20": {
-          "text": "I occasionally support friends when needed.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes lend support to my friends.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy supporting my friends.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often take time to help my friends succeed.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently enjoy being supportive of my friends.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly prioritize supporting my friends.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly enjoy and actively support my friends.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly focused on helping my friends succeed.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always make it a priority to support and celebrate my friends’ successes.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I consistently prioritize harmony and avoid relational conflicts.",
-      "trait": "agreeableness",
-      "weight": 1,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely prioritize harmony and may engage in conflicts.",
-                  },
-        "10-20": {
-          "text": "I occasionally try to avoid conflict, but not consistently.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes make an effort to maintain harmony.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately strive to avoid conflict in relationships.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often prioritize harmony over conflict.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently avoid conflict to maintain harmony.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly take steps to keep my relationships harmonious.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value and actively preserve harmony in my relationships.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very committed to avoiding conflict.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always prioritize harmony and work tirelessly to prevent conflicts.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I endeavor to be understanding and supportive in my interactions.",
-      "trait": "agreeableness",
-      "weight": 1.2,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely make an effort to understand others.",
-                  },
-        "10-20": {
-          "text": "I occasionally try to be supportive.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes attempt to understand and support others.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately strive to be understanding.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often make an effort to support others.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently endeavor to understand and support those around me.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly seek to be empathetic and supportive.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly strive to be understanding and supportive.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly dedicated to being empathetic and supportive.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always prioritize being deeply understanding and supportive.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I am attuned to others' feelings and actively seek to meet their needs.",
-      "trait": "agreeableness",
-      "weight": 1,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely notice others’ feelings.",
-                  },
-        "10-20": {
-          "text": "I occasionally become aware of others’ emotions.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes try to be responsive to others’ feelings.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately notice and respond to others’ emotions.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often make an effort to meet others’ emotional needs.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently pay attention to and act on others’ feelings.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly strive to be sensitive and responsive.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly focus on understanding and meeting others’ needs.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly aware of others’ emotions and respond accordingly.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always make it a top priority to be sensitive and responsive to others.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I strongly value teamwork and cooperative collaboration.",
-      "trait": "agreeableness",
-      "weight": 0.9,
-      "aspect": "Politeness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely enjoy working as part of a team.",
-                  },
-        "10-20": {
-          "text": "I occasionally work in teams.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes prefer team settings.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately appreciate cooperative work.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often value working in teams.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently prefer collaboration and teamwork.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly thrive in cooperative environments.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly prioritize team cooperation.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very inclined to work as part of a team.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always actively seek out collaborative, team-based work.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I am prone to experiencing irritation quickly.",
-      "trait": "neuroticism",
-      "weight": 1.2,
-      "aspect": "Volatility",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely get irritated.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel a slight irritation.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes get annoyed by minor things.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately experience irritation over small issues.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often get irritated easily.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently become irritated by trivial matters.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly experience rapid irritation.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly prone to quick irritation.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very easily irritated by small things.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always get irritated very quickly and intensely.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I frequently act on impulse.",
-      "trait": "neuroticism",
-      "weight": 1.1,
-      "aspect": "Volatility",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely act without thinking.",
-                  },
-        "10-20": {
-          "text": "I occasionally act on a whim.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes act impulsively without full consideration.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately act on impulse at times.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often make decisions impulsively.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently act without much thought.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly give in to impulsive urges.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly prone to impulsive actions.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very impulsive in my behavior.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always act in a highly impulsive manner.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I experience feelings of anxiety.",
-      "trait": "neuroticism",
-      "weight": 1.3,
-      "aspect": "Volatility",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel anxious.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel a slight nervousness.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes experience mild anxiety.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately feel anxious at times.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel anxious or worried.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently experience anxiety.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel a significant degree of anxiety.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly prone to feeling anxious.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very often overwhelmed by anxiety.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel intensely anxious.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I am known to have a short fuse.",
-      "trait": "neuroticism",
-      "weight": 1,
-      "aspect": "Volatility",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely get angry.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel a little frustrated.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes experience a quick temper.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately lose my temper at times.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often get angry quickly.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently lose my temper easily.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly experience a very short fuse.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly prone to getting angry rapidly.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I have a very quick temper.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always get angry almost instantaneously.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I frequently experience agitation and restlessness.",
-      "trait": "neuroticism",
-      "weight": 0.9,
-      "aspect": "Volatility",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel agitated or restless.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel a bit on edge.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes experience mild restlessness.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately feel agitated at times.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel restless.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently experience agitation.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel on edge and restless.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly prone to feeling agitated.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I very often feel restless and uneasy.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel deeply agitated and restless.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I experience feelings of sadness or low mood.",
-      "trait": "neuroticism",
-      "weight": 1.1,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel sad.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel a little down.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel a bit blue.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately experience occasional sadness.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel sad or down.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently experience feelings of unhappiness.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel noticeably low in mood.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly prone to feelings of sadness.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I very often feel deeply sad.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always seem to feel profoundly sad or down.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I concern myself with others' evaluations of me.",
-      "trait": "neuroticism",
-      "weight": 1,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely worry about what others think.",
-                  },
-        "10-20": {
-          "text": "I occasionally notice others' opinions.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes worry about others’ judgments.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately feel self-conscious about others’ views.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often worry about how others perceive me.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently become preoccupied with others' opinions.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly concern myself with others' evaluations.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly troubled by what others think of me.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very often anxious about others' judgments.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always worry profoundly about how others view me.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I often feel overwhelmed when confronted with stress.",
-      "trait": "neuroticism",
-      "weight": 1.2,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel overwhelmed by stress.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel mildly stressed.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes experience moderate stress.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately feel overwhelmed under pressure.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel easily overwhelmed by stress.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently feel overwhelmed when facing stress.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel heavily burdened by stress.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly prone to feeling overwhelmed by stressful situations.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I very often feel overwhelmed by stress.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel deeply overwhelmed by stress.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I attribute failures to my own shortcomings.",
-      "trait": "neuroticism",
-      "weight": 1,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely blame myself for things going wrong.",
-                  },
-        "10-20": {
-          "text": "I occasionally wonder if I could have done better.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes blame myself when things fail.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately tend to take personal responsibility for failures.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often blame myself when things go wrong.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently attribute negative outcomes to my own faults.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly blame myself for setbacks.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I have a strong tendency to blame myself.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I very often internalize blame when things go wrong.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always unequivocally blame myself for any failure.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I consistently struggle with feelings of insecurity.",
-      "trait": "neuroticism",
-      "weight": 0.9,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel insecure about myself.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel a bit unsure of myself.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes question my self-worth.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately experience feelings of insecurity.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel insecure about my abilities.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently struggle with insecurity.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly experience deep feelings of insecurity.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly prone to feeling insecure.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I very often feel extremely insecure.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel overwhelmingly insecure about myself.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I feel overwhelmed when managing several responsibilities simultaneously.",
-      "trait": "neuroticism",
-      "weight": 1.1,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel overwhelmed by multiple responsibilities.",
-                  },
-        "10-20": {
-          "text": "I occasionally manage multiple tasks without issue.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel a bit overwhelmed with many tasks.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately feel overwhelmed under multiple responsibilities.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel burdened by multiple tasks.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently feel overwhelmed when juggling responsibilities.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly feel overwhelmed by numerous responsibilities.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly feel overwhelmed when under heavy responsibilities.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly prone to feeling overwhelmed by multiple duties.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always feel deeply overwhelmed when managing many tasks.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I typically experience anxiety in high-pressure situations.",
-      "trait": "neuroticism",
-      "weight": 1,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel anxious even under stress.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel mild anxiety in pressure situations.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel somewhat anxious in stressful conditions.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately experience anxiety when stressed.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel anxious in high-pressure scenarios.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently feel anxious during stressful times.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly experience significant anxiety under pressure.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly feel anxious in challenging situations.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly prone to anxiety in stressful contexts.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I almost always feel deeply anxious in stressful situations.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I experience uncertainty and self-doubt during decision-making.",
-      "trait": "neuroticism",
-      "weight": 0.9,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely feel uneasy about my decisions.",
-                  },
-        "10-20": {
-          "text": "I occasionally second-guess myself.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes feel uncertain when making decisions.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately experience self-doubt during decision-making.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often second-guess my decisions.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently feel uneasy when deciding.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly experience uncertainty in decision-making.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly tend to doubt my choices.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly prone to second-guessing myself.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I almost always feel deeply uncertain and second-guess every decision.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I ruminate on past errors and their potential consequences.",
-      "trait": "neuroticism",
-      "weight": 0.95,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely dwell on past mistakes.",
-                  },
-        "10-20": {
-          "text": "I occasionally reflect on past errors.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes think about past mistakes and outcomes.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately worry about past errors and potential consequences.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often ruminate on past mistakes.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently reflect on past errors and their outcomes.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly dwell on my past mistakes.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly focus on past mistakes and worry about what could have been.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly prone to overthinking past errors and consequences.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I almost always ruminate intensely on past mistakes and potential outcomes.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I am prone to overthinking and experiencing unease about uncertain outcomes.",
-      "trait": "neuroticism",
-      "weight": 1,
-      "aspect": "Withdrawal",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely overthink or worry about the unknown.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel uneasy in uncertain situations.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes overthink and feel a bit uneasy about uncertainty.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately experience overthinking and unease about the unknown.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel uneasy about uncertain outcomes.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently overthink and worry about the unknown.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly experience deep unease about uncertain outcomes.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly tend to overthink and feel uneasy about the unknown.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly prone to overthinking and feeling uneasy about uncertainty.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always overthink situations and feel profoundly uneasy about the unknown.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I have a deep appreciation for the beauty in art, nature, and innovative ideas.",
-      "trait": "openness",
-      "weight": 1.3,
-      "aspect": "Aesthetic Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely notice beauty around me.",
-                  },
-        "10-20": {
-          "text": "I occasionally appreciate beauty in small doses.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes find beauty in art or nature.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately appreciate beauty in various forms.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often recognize beauty in art and nature.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently value the beauty found in art, nature, and ideas.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly have a deep appreciation for aesthetic beauty.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value and seek out artistic beauty.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very sensitive to the beauty in art, nature, and ideas.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I have an intense and profound appreciation for aesthetic beauty in all forms.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I frequently allow my imagination to flourish.",
-      "trait": "openness",
-      "weight": 1,
-      "aspect": "Aesthetic Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely use my imagination.",
-                  },
-        "10-20": {
-          "text": "I occasionally daydream.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes let my mind wander.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy creative daydreaming.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often allow my imagination to run wild.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently engage in imaginative thinking.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly let my creativity flourish.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly enjoy expansive imaginative thinking.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very adept at unleashing my imagination.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I have a boundless and vivid imagination at all times.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I am profoundly affected by the emotional depth in music and films.",
-      "trait": "openness",
-      "weight": 1.1,
-      "aspect": "Aesthetic Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I am rarely moved by music or movies.",
-                  },
-        "10-20": {
-          "text": "I occasionally feel a slight emotional response.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes get mildly moved by art.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately feel emotional reactions to music and films.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often experience emotional responses to art.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently feel deeply moved by music and movies.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly experience profound emotions from art.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly sensitive to the emotional qualities of music and films.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very easily moved by emotional artistic experiences.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I am deeply and profoundly affected by the emotional power of music and movies.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I consistently value rich artistic and aesthetic experiences.",
-      "trait": "openness",
-      "weight": 1.2,
-      "aspect": "Aesthetic Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I do not value artistic experiences much.",
-                  },
-        "10-20": {
-          "text": "I occasionally appreciate art and aesthetics.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes enjoy artistic experiences.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately value aesthetic experiences.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often seek out artistic encounters.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently appreciate rich artistic experiences.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly prioritize aesthetic experiences in my life.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value the impact of art and aesthetics.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I consider artistic experiences very important.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I deeply value and actively pursue artistic and aesthetic experiences.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I actively seek out and enjoy beautiful environments.",
-      "trait": "openness",
-      "weight": 0.9,
-      "aspect": "Aesthetic Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely notice the beauty of my surroundings.",
-                  },
-        "10-20": {
-          "text": "I occasionally appreciate a pleasant environment.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes enjoy being in beautiful places.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy spending time in attractive settings.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often seek out environments that are aesthetically pleasing.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently find joy in beautiful surroundings.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly immerse myself in aesthetically pleasing environments.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value spending time in beautiful settings.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I find great pleasure in being in beautiful places.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always actively seek out and revel in beautiful environments.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I possess a keen ability to recognize beauty in unforeseen contexts.",
-      "trait": "openness",
-      "weight": 1,
-      "aspect": "Aesthetic Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely notice beauty in unexpected places.",
-                  },
-        "10-20": {
-          "text": "I occasionally spot a touch of beauty unexpectedly.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes notice beauty in unusual contexts.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately appreciate unexpected beauty.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often recognize beauty in unanticipated places.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently discover beauty in the unexpected.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly find beauty in places others might overlook.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I highly value recognizing beauty in ordinary settings.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am very adept at seeing beauty in unexpected contexts.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always keenly perceive beauty in the most unforeseen places.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I eagerly embrace new ideas and diverse perspectives.",
-      "trait": "openness",
-      "weight": 1.2,
-      "aspect": "Intellectual Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I am slightly open to new ideas.",
-                  },
-        "10-20": {
-          "text": "I have a mild interest in exploring new perspectives.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes consider new ideas.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately explore different perspectives.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I am fairly open to diverse ideas.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I often welcome new perspectives.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly embrace a variety of ideas.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly open to trying different approaches.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am extremely receptive to all kinds of ideas.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I am exceptionally open to exploring and embracing new perspectives.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I often contemplate abstract concepts and explore profound questions.",
-      "trait": "openness",
-      "weight": 0.9,
-      "aspect": "Intellectual Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely think about abstract concepts.",
-                  },
-        "10-20": {
-          "text": "I occasionally consider simple abstract ideas.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes ponder abstract questions.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately enjoy contemplating deep ideas.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often reflect on abstract concepts.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently engage in deep, abstract thought.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly explore profound questions.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I consistently think deeply about abstract matters.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I almost always ponder profound and abstract ideas.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I perpetually explore the deepest and most abstract concepts.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I readily adapt to change and find comfort in new situations.",
-      "trait": "openness",
-      "weight": 0.9,
-      "aspect": "Intellectual Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I struggle with change and prefer stability.",
-                  },
-        "10-20": {
-          "text": "I occasionally adapt to minor changes.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes embrace change with hesitation.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately adapt to new situations.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often feel comfortable with change.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I frequently adapt quickly to new situations.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly handle change with ease.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I am highly comfortable with adapting to change.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am extremely adept at managing change.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I thrive on change and effortlessly adjust to new situations.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I actively pursue novel experiences and welcome the unfamiliar.",
-      "trait": "openness",
-      "weight": 1.1,
-      "aspect": "Intellectual Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely seek out new experiences.",
-                  },
-        "10-20": {
-          "text": "I sometimes avoid stepping out of my comfort zone.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I occasionally try something new when prompted.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately explore new experiences.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often seek out novel activities.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I often venture into unfamiliar experiences.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly embrace opportunities to try new things.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I actively pursue new adventures.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly driven to explore the unknown.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always eagerly seek and relish new, exciting experiences.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I have an enduring appreciation for art, culture, and varied perspectives.",
-      "trait": "openness",
-      "weight": 1,
-      "aspect": "Intellectual Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely notice art or cultural diversity.",
-                  },
-        "10-20": {
-          "text": "I occasionally encounter art and cultural ideas.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I sometimes enjoy artistic expressions.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately appreciate art and diverse cultures.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often engage with art and cultural diversity.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I regularly immerse myself in art and diverse perspectives.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I consistently seek out cultural and artistic experiences.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I actively value art, culture, and diverse viewpoints.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly appreciative of artistic and cultural diversity.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always immerse myself in art, culture, and varied perspectives.",
-          "weight": 1
-        }
-      }
-    },
-    {
-      "text": "I excel in creative challenges and embrace innovative problem-solving.",
-      "trait": "openness",
-      "weight": 1.2,
-      "aspect": "Intellectual Openness",
-      "subtext": {
-        "0-10": {
-          "text": "I rarely engage in creative challenges.",
-                  },
-        "10-20": {
-          "text": "I sometimes shy away from innovative approaches.",
-          "weight": 0.2
-        },
-        "20-30": {
-          "text": "I occasionally try to solve problems creatively.",
-          "weight": 0.3
-        },
-        "30-40": {
-          "text": "I moderately engage in creative problem-solving.",
-          "weight": 0.4
-        },
-        "40-50": {
-          "text": "I fairly often approach challenges in innovative ways.",
-          "weight": 0.5
-        },
-        "50-60": {
-          "text": "I often use creative solutions to tackle challenges.",
-          "weight": 0.6
-        },
-        "60-70": {
-          "text": "I regularly embrace creative and innovative problem-solving.",
-          "weight": 0.7
-        },
-        "70-80": {
-          "text": "I strongly seek out creative challenges and innovative solutions.",
-          "weight": 0.8
-        },
-        "80-90": {
-          "text": "I am highly engaged in finding innovative approaches to problems.",
-          "weight": 0.9
-        },
-        "90-100": {
-          "text": "I always thrive on creative challenges and embrace innovation.",
-          "weight": 1
-        }
+  {
+    "text": "I contemplate abstract concepts.",
+    "trait": "openness",
+    "weight": 1.1,
+    "aspect": "Intellect",
+    "subtext": {
+      "0-10": {
+        "text": "I seldom reflect on abstract concepts.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally consider simple abstract ideas.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes ponder abstract ideas.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately reflect on abstract concepts.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often engage in abstract thought.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently immerse myself in abstract contemplation.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly delve into abstract ideas.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly enjoy exploring abstract concepts.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very drawn to abstract thinking.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I am profoundly absorbed in the world of abstract ideas.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
       }
     }
-  ]
+  },
+  {
+    "text": "I participate in philosophical discussions.",
+    "trait": "openness",
+    "weight": 1,
+    "aspect": "Intellect",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely engage in philosophical discussions.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally share a philosophical thought.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes join in on philosophical conversations.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy discussing philosophical topics.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often contribute to philosophical discussions.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently engage in deep philosophical discussions.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly seek out philosophical exchanges.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly enthusiastic about debating philosophical ideas.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very committed to philosophical dialogue.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I am passionately involved in philosophical discussions.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I seek out novel and unconventional experiences.",
+    "trait": "openness",
+    "weight": 0.9,
+    "aspect": "Intellect",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely try new experiences.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally experiment with something new.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes engage in new activities.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately try out novel experiences.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often embrace new and unusual things.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently pursue novel experiences.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly experiment with unconventional activities.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly enjoy exploring new experiences.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very open to trying unusual things.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I am always eager to embrace novel and unconventional experiences.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I demonstrate curiosity about diverse cultures and lifestyles.",
+    "trait": "openness",
+    "weight": 1.2,
+    "aspect": "Intellect",
+    "subtext": {
+      "0-10": {
+        "text": "I show little interest in different cultures.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally wonder about other cultures.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes consider different ways of life.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately appreciate diverse cultures.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often reflect on various cultural ways of living.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently show curiosity about different cultures.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly explore information about diverse cultures.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly interested in learning about different lifestyles.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very curious about the variety of cultural expressions.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I am deeply fascinated by diverse cultures and ways of life.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I actively pursue new knowledge and welcome learning in various domains.",
+    "trait": "openness",
+    "weight": 1.3,
+    "aspect": "Intellect",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely seek out new knowledge.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally learn something new.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes engage in learning new subjects.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately value expanding my knowledge.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often explore new topics.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently pursue opportunities to learn.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly engage in expanding my intellectual horizons.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly interested in acquiring new knowledge.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very eager to learn about a wide range of subjects.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I have an intense passion for learning and broadening my intellectual scope.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I readily update my beliefs when presented with new evidence.",
+    "trait": "openness",
+    "weight": 1,
+    "aspect": "Intellect",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely change my opinions.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally reconsider my views.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes adjust my opinions based on new facts.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately revise my views when needed.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often reconsider my opinions with new information.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently update my beliefs when confronted with evidence.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly adjust my opinions based on fresh insights.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly open to modifying my views.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very inclined to revise my beliefs with new information.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I readily transform my opinions in light of new evidence.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I consistently exert effort to attain my objectives.",
+    "trait": "conscientiousness",
+    "weight": 1.2,
+    "aspect": "Industriousness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely work hard to reach my goals.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally put some effort into my goals.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes work hard on my goals.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately strive toward my objectives.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often devote effort to achieve my goals.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently put in considerable effort to reach my aims.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly work with diligence to achieve my objectives.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I highly prioritize exerting effort to reach my goals.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very dedicated to working hard for my objectives.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I consistently go above and beyond to achieve my goals.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I perceive myself as capable and competent.",
+    "trait": "conscientiousness",
+    "weight": 1.1,
+    "aspect": "Industriousness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel capable.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel somewhat competent.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel capable in certain areas.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately feel competent in my abilities.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel capable and competent.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently feel confident in my abilities.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly feel capable and effective in what I do.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I have a strong sense of my own competence.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very confident in my abilities.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I possess an unwavering belief in my competence.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I resist impulses and temptations.",
+    "trait": "conscientiousness",
+    "weight": 1,
+    "aspect": "Industriousness",
+    "subtext": {
+      "0-10": {
+        "text": "I often give in to temptations.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally manage to resist a temptation.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes successfully resist impulses.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately manage to keep my impulses in check.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often resist temptations effectively.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently control my impulses in tempting situations.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly demonstrate strong self-control.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly capable of resisting temptation.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very adept at maintaining self-control.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I consistently and robustly resist all temptations.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I deliberate before taking action.",
+    "trait": "conscientiousness",
+    "weight": 1.1,
+    "aspect": "Industriousness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely think before acting.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally pause briefly before acting.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes consider my actions beforehand.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately reflect before making decisions.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often think carefully before acting.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently deliberate before taking any action.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly plan my actions carefully.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly methodical in thinking before I act.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very deliberate and thoughtful in my actions.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always think thoroughly before making any decision.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I consistently manage my time efficiently.",
+    "trait": "conscientiousness",
+    "weight": 1,
+    "aspect": "Industriousness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely use my time efficiently.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally manage my time well.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes use my time in a productive way.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately make good use of my time.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often work efficiently.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently manage my time effectively.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly use my time in a very efficient manner.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly efficient in managing my time.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very skilled at using my time wisely.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always maximize my efficiency in time management.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I maintain a preference for neat and orderly surroundings.",
+    "trait": "conscientiousness",
+    "weight": 1.1,
+    "aspect": "Orderliness",
+    "subtext": {
+      "0-10": {
+        "text": "I do not mind if things are messy.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally tidy up my space.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes prefer things to be neat.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately favor an orderly environment.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often maintain a tidy space.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently ensure that my surroundings are neat.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly keep my environment orderly.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value order and neatness.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very particular about maintaining order.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always insist on a perfectly neat and orderly environment.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I carefully attend to details.",
+    "trait": "conscientiousness",
+    "weight": 1,
+    "aspect": "Orderliness",
+    "subtext": {
+      "0-10": {
+        "text": "I often overlook important details.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally notice small details.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes pay attention to details.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately focus on details.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often notice important details.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently attend to even subtle details.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly ensure that no detail is overlooked.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly meticulous about details.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very thorough in noticing every detail.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always pay exceptionally close attention to every detail.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I reliably adhere to established rules and guidelines.",
+    "trait": "conscientiousness",
+    "weight": 1.1,
+    "aspect": "Orderliness",
+    "subtext": {
+      "0-10": {
+        "text": "I often disregard rules and guidelines.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally follow rules when reminded.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes make an effort to follow rules.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately adhere to rules.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often follow established guidelines.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently abide by rules and regulations.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly conform to established rules.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I highly respect and follow rules.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very careful to adhere to all rules.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always strictly follow rules and regulations.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I routinely develop plans and adhere to them.",
+    "trait": "conscientiousness",
+    "weight": 1,
+    "aspect": "Orderliness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely make plans.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally make loose plans.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes plan but don\u2019t always follow through.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately like to plan activities.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often create plans and try to follow them.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently make detailed plans and adhere to them.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly plan ahead and execute my plans.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value planning and stick to my plans.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very committed to following my plans.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always meticulously plan and strictly adhere to my schedule.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I value having a structured schedule and routine.",
+    "trait": "conscientiousness",
+    "weight": 0.9,
+    "aspect": "Orderliness",
+    "subtext": {
+      "0-10": {
+        "text": "I prefer spontaneity over routine.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally follow a loose schedule.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes appreciate having a general routine.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately value a consistent schedule.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often rely on a set routine.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently adhere to a regular schedule.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly maintain a structured routine.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value having a consistent routine.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very reliant on my schedule.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always strictly adhere to a well-planned routine.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I remain organized and focused when juggling tasks.",
+    "trait": "conscientiousness",
+    "weight": 1,
+    "subtext": {
+      "0-10": {
+        "text": "I rarely stay organized when managing tasks.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally try to organize my tasks.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes remain focused when handling multiple tasks.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately keep my tasks organized.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often stay organized while managing tasks.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently remain focused and organized during multitasking.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly manage multiple tasks with a clear focus.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly maintain organization and focus when juggling tasks.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly efficient at managing multiple priorities.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always stay exceptionally organized and focused when handling many tasks.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I favor planned and organized activities over spontaneity.",
+    "trait": "conscientiousness",
+    "weight": 0.9,
+    "subtext": {
+      "0-10": {
+        "text": "I rarely prefer organized activities.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally enjoy planned events.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes choose structured activities over spontaneous ones.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately prefer organized activities.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often choose planned over spontaneous events.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently opt for organized activities.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly plan my activities rather than leaving them to chance.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly favor structured and well-organized events.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly inclined to choose planned activities.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always prioritize meticulously organized and planned events.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I possess a strong sense of duty toward fulfilling my goals and commitments.",
+    "trait": "conscientiousness",
+    "weight": 1.1,
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel responsible for my commitments.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel a mild sense of responsibility.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel responsible for meeting my goals.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately feel accountable for my commitments.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel a strong duty to meet commitments.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently ensure that I meet my goals.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly feel deeply responsible for my commitments.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly prioritize fulfilling my obligations.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very dedicated to meeting my goals and commitments.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel an intense responsibility to achieve my goals.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I base my decisions on factual evidence rather than emotions.",
+    "trait": "conscientiousness",
+    "weight": 1.3,
+    "subtext": {
+      "0-10": {
+        "text": "I almost always decide based on feelings.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I mostly rely on emotions when deciding.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes consider facts, but feelings often guide me.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I occasionally let facts influence my decisions.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I try to balance facts with emotions when deciding.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I usually lean toward making decisions based on facts.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I frequently base my decisions on objective evidence.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I consistently prioritize facts over feelings in my decision-making.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I almost always rely on factual information when deciding.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always base my decisions solely on factual evidence.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I systematically focus on details and thoughtfully plan my tasks.",
+    "trait": "conscientiousness",
+    "weight": 0.9,
+    "subtext": {
+      "0-10": {
+        "text": "I rarely think through details when completing tasks.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally reflect on task details.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes consider details when working.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately plan my tasks with attention to details.",
+        "exclude": [
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often ensure my tasks are well thought out.",
+        "exclude": [
+          "ENTJ"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently focus on details and plan carefully.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly engage in detailed planning for my tasks.",
+        "exclude": [
+          "INTP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly emphasize careful thought in task management.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very meticulous and thorough in my planning.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ISFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always think through every detail with great care.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I derive energy from being in large social gatherings.",
+    "trait": "extraversion",
+    "weight": 1.1,
+    "aspect": "Enthusiasm",
+    "subtext": {
+      "0-10": {
+        "text": "I prefer solitude over large groups.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally join a crowd, though with reservation.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes enjoy being with many people.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy social gatherings.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel energized in groups.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently seek out large social events.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly thrive in large group settings.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I highly enjoy the energy of social gatherings.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very enthusiastic about being in large groups.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel invigorated when surrounded by many people.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I consistently maintain a cheerful and optimistic outlook.",
+    "trait": "extraversion",
+    "weight": 1.2,
+    "aspect": "Enthusiasm",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel cheerful or optimistic.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally experience brief moments of cheer.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel moderately positive.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately maintain a cheerful mood.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel optimistic.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently experience a positive outlook.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly feel upbeat and cheerful.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly energetic and optimistic.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very consistently cheerful.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always maintain a highly positive and optimistic mood.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I readily form new friendships.",
+    "trait": "extraversion",
+    "weight": 1,
+    "aspect": "Enthusiasm",
+    "subtext": {
+      "0-10": {
+        "text": "I find it difficult to make new friends.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally make a new acquaintance.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes find it easy to connect with new people.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately establish new social contacts.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often make new friends without much difficulty.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently form new friendships easily.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly connect with new people.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly effective at making friends.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very skilled at initiating friendships.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always find it remarkably easy to make new friends.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I consistently display warmth and friendliness.",
+    "trait": "extraversion",
+    "weight": 1.3,
+    "aspect": "Enthusiasm",
+    "subtext": {
+      "0-10": {
+        "text": "I am often perceived as cold or distant.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally appear friendly.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes show warmth in social settings.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately act in a warm, approachable manner.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often display friendliness towards others.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently exude warmth and approachability.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly project a warm and friendly demeanor.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly regarded for my warmth and friendliness.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very consistently warm and affable.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I am always remarkably warm, friendly, and approachable.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I actively seek out and enjoy social events and parties.",
+    "trait": "extraversion",
+    "weight": 1,
+    "aspect": "Enthusiasm",
+    "subtext": {
+      "0-10": {
+        "text": "I generally avoid parties and social events.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally attend events out of necessity.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes enjoy attending parties.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy social gatherings.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often take pleasure in parties.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently attend and enjoy social events.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly look forward to social gatherings.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I highly enjoy being at parties and gatherings.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very enthusiastic about attending social events.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always eagerly anticipate and thoroughly enjoy parties and gatherings.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I frequently assume leadership roles in group settings.",
+    "trait": "extraversion",
+    "weight": 1.1,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely take the lead in groups.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally contribute but seldom lead.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes take initiative in groups.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately assume leadership when needed.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often step up to lead group activities.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently take charge in group situations.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly exhibit leadership in groups.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly enjoy assuming leadership roles.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very comfortable and effective as a leader.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always naturally take the lead and inspire others.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I confidently articulate my opinions.",
+    "trait": "extraversion",
+    "weight": 1.2,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely express my opinions.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally share my views when prompted.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes express my opinions.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately share my opinions in conversation.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often speak my mind openly.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently voice my opinions with confidence.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly express my views assertively.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly comfortable and clear in expressing my opinions.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very outspoken and direct.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always express my opinions in a confident and assertive manner.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I thrive on an active, energetic lifestyle.",
+    "trait": "extraversion",
+    "weight": 1,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I prefer a calm and sedentary lifestyle.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally engage in physical activities.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes enjoy being physically active.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy staying active.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often seek out active pursuits.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently maintain a high level of physical activity.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly embrace an energetic and active lifestyle.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly energetic and active.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very enthusiastic about being active.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel my best when I am actively on the move.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I am comfortable being the focal point in social situations.",
+    "trait": "extraversion",
+    "weight": 0.9,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I strongly dislike being the center of attention.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally find myself in the spotlight, but with discomfort.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes don\u2019t mind being noticed.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately tolerate being the center of attention.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel at ease when I am noticed.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently feel comfortable in the spotlight.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly enjoy being the focus of attention.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I highly appreciate being in the center of attention.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very comfortable and relish being noticed.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always enjoy and seek out being the center of attention.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I reliably assert my rights and stand up for myself.",
+    "trait": "extraversion",
+    "weight": 1.3,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely stand up for myself.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally try to be assertive.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes assert myself when needed.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately stand up for my beliefs.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often assert myself in situations.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently stand up for my rights and opinions.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly act assertively in challenging situations.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly assertive and confident in standing up for myself.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very assertive and direct in my communication.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always act with unwavering assertiveness and confidence.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I gain energy from connecting with new people and forming relationships.",
+    "trait": "extraversion",
+    "weight": 1.1,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel energized by meeting new people.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally enjoy meeting someone new.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel upbeat after social interactions.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy building new connections.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel energized by engaging with others.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently derive energy from making new connections.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly feel invigorated by engaging with new people.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly enjoy and actively seek new social connections.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly energized by forming new relationships.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel deeply invigorated by engaging with new people.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I consistently take charge in group settings and show leadership confidence.",
+    "trait": "extraversion",
+    "weight": 1,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely take charge in groups.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally take charge but prefer to follow.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel comfortable taking charge.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately assume leadership when necessary.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often take charge in group settings.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently lead groups with confidence.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly feel confident when taking charge.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly embrace leadership roles in group settings.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly confident and effective in leadership roles.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always thrive as a natural leader in any group setting.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I love engaging in discussions and discussions on various ideas.",
+    "trait": "extraversion",
+    "weight": 0.9,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely enjoy discussing ideas with others.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally engage in discussions, but avoid discussions.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes share my ideas in discussions.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy debating and discussing ideas.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often engage in discussions with others.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently relish sharing ideas and debating topics.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly participate in lively discussions about ideas.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly enjoy and seek out intellectual discussions.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly energized by discussing and debating ideas.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always thrive on in-depth discussions and discussions about ideas.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I remain composed and assertive when addressing challenges.",
+    "trait": "extraversion",
+    "weight": 1.3,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely stay calm in problem situations.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally manage to remain calm.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes stay composed under pressure.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately remain calm and assertive in problems.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often stay calm when solving problems.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently remain composed under stress.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly solve problems while staying calm and assertive.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly maintain composure and assertiveness in challenges.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly calm and assertive when addressing issues.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always remain remarkably calm, composed, and assertive in all challenges.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I am recognized for my bold and independent problem-solving approach.",
+    "trait": "extraversion",
+    "weight": 1,
+    "aspect": "Assertiveness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely act independently or boldly.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally act independently, but rarely boldly.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes approach problems with independence.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ISTP",
+          "INTJ",
+          "ENTJ",
+          "ESTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately demonstrate bold, independent thinking.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "ENTJ",
+          "ESTJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often take an independent and bold approach.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently solve problems in a bold and independent manner.",
+        "exclude": [
+          "ISFJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly take independent and daring approaches to challenges.",
+        "exclude": [
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly exhibit boldness and independence in problem-solving.",
+        "exclude": [
+          "INTP",
+          "ISTJ",
+          "ISFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly recognized for my bold, independent methods.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always act boldly and independently when facing challenges.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I deeply empathize with those who are less fortunate.",
+    "trait": "agreeableness",
+    "weight": 1.2,
+    "aspect": "Compassion",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel empathy for others.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel a tinge of sympathy.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel concerned for those in need.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately feel empathy towards others' struggles.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often empathize with those less fortunate.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently feel compassion for people in need.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly experience deep empathy for others.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly attuned to the suffering of others.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very empathetic towards those who struggle.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel profound empathy for those less fortunate.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I derive satisfaction from assisting others.",
+    "trait": "agreeableness",
+    "weight": 1.3,
+    "aspect": "Compassion",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely go out of my way to help others.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally lend a helping hand if convenient.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes enjoy helping those around me.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately take pleasure in assisting others.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often offer help to those in need.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently derive satisfaction from helping others.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly look for opportunities to assist people.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly enjoy being helpful and supportive.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very willing to help others.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always eagerly seek out ways to assist those around me.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I generally extend trust towards others.",
+    "trait": "agreeableness",
+    "weight": 1,
+    "aspect": "Compassion",
+    "subtext": {
+      "0-10": {
+        "text": "I am usually suspicious of people.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally trust someone after getting to know them.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes tend to trust people readily.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately give others the benefit of the doubt.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often trust people until proven otherwise.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently extend trust to those around me.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly trust people in general.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly tend to trust others.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very trusting by nature.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always naturally trust other people.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I actively care about the welfare of others.",
+    "trait": "agreeableness",
+    "weight": 1.1,
+    "aspect": "Compassion",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely concern myself with the well-being of others.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally notice how others are doing.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes show interest in others\u2019 welfare.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately care about the well-being of people.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often consider the welfare of those around me.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently pay attention to others\u2019 well-being.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly show care for people\u2019s welfare.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly prioritize the well-being of others.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very concerned about the welfare of those around me.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always actively care for and prioritize others\u2019 well-being.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I strive to treat everyone with kindness.",
+    "trait": "agreeableness",
+    "weight": 1,
+    "aspect": "Compassion",
+    "subtext": {
+      "0-10": {
+        "text": "I am not always kind in my interactions.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally try to be polite.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes make an effort to be kind.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately try to be kind to people.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often strive to be kind in my interactions.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently make an effort to treat everyone kindly.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly seek to be kind and considerate.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value treating everyone with kindness.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very intentional about being kind to everyone.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always strive to treat everyone with unwavering kindness.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I refrain from imposing my preferences on others.",
+    "trait": "agreeableness",
+    "weight": 1.1,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I often try to get my way.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally attempt to influence others.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes try to persuade others to my viewpoint.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately avoid imposing my will on others.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often allow others to make their own choices.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently refrain from forcing my preferences on others.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly respect others\u2019 autonomy.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value letting others decide for themselves.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very careful not to impose my will.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always completely refrain from imposing my will on others.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I exhibit modesty regarding my accomplishments.",
+    "trait": "agreeableness",
+    "weight": 1,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I often boast about my achievements.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally mention my successes.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes talk about my achievements.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately downplay my accomplishments.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often present myself modestly.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently refrain from bragging about my successes.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly maintain a humble attitude about my achievements.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value humility regarding what I accomplish.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very modest about my achievements.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always remain extremely modest and humble about my accomplishments.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I consistently communicate in an honest and direct manner.",
+    "trait": "agreeableness",
+    "weight": 1.2,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I am not always straightforward.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally speak directly.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes attempt to be honest in my communication.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately strive to be straightforward.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often express myself directly and honestly.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently communicate in a frank manner.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly speak in a clear and honest way.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value clear and honest communication.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very committed to speaking straightforwardly.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always communicate in an unwaveringly honest and direct manner.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I reliably demonstrate respect for authority figures.",
+    "trait": "agreeableness",
+    "weight": 1,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I often question authority.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally show respect for authority.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes acknowledge authority figures.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately respect authority.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often show deference to authority figures.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently respect and follow authority.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly honor the guidance of authority figures.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value respect for authority.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very respectful of those in authority.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always show profound respect for authority.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I typically steer clear of confrontational interactions.",
+    "trait": "agreeableness",
+    "weight": 1.1,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I often engage in confrontations.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally stand my ground in disagreements.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes try to avoid arguments.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately try to avoid confrontations.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often attempt to diffuse conflicts.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently avoid getting into confrontational situations.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly seek peaceful resolutions in conflicts.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value harmony and avoid confrontations.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very averse to confrontation.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always strive to completely avoid any form of confrontation.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I take pleasure in supporting my friends and contributing to their success.",
+    "trait": "agreeableness",
+    "weight": 1.1,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely enjoy helping my friends.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally support friends when needed.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes lend support to my friends.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy supporting my friends.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often take time to help my friends succeed.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently enjoy being supportive of my friends.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly prioritize supporting my friends.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly enjoy and actively support my friends.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly focused on helping my friends succeed.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always make it a priority to support and celebrate my friends\u2019 successes.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I consistently prioritize harmony and avoid relational conflicts.",
+    "trait": "agreeableness",
+    "weight": 1,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely prioritize harmony and may engage in conflicts.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally try to avoid conflict, but not consistently.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes make an effort to maintain harmony.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately strive to avoid conflict in relationships.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often prioritize harmony over conflict.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently avoid conflict to maintain harmony.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly take steps to keep my relationships harmonious.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value and actively preserve harmony in my relationships.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very committed to avoiding conflict.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always prioritize harmony and work tirelessly to prevent conflicts.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I endeavor to be understanding and supportive in my interactions.",
+    "trait": "agreeableness",
+    "weight": 1.2,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely make an effort to understand others.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally try to be supportive.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes attempt to understand and support others.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately strive to be understanding.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often make an effort to support others.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently endeavor to understand and support those around me.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly seek to be empathetic and supportive.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly strive to be understanding and supportive.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly dedicated to being empathetic and supportive.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always prioritize being deeply understanding and supportive.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I am attuned to others' feelings and actively seek to meet their needs.",
+    "trait": "agreeableness",
+    "weight": 1,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely notice others\u2019 feelings.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally become aware of others\u2019 emotions.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes try to be responsive to others\u2019 feelings.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately notice and respond to others\u2019 emotions.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often make an effort to meet others\u2019 emotional needs.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently pay attention to and act on others\u2019 feelings.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly strive to be sensitive and responsive.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly focus on understanding and meeting others\u2019 needs.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly aware of others\u2019 emotions and respond accordingly.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always make it a top priority to be sensitive and responsive to others.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I strongly value teamwork and cooperative collaboration.",
+    "trait": "agreeableness",
+    "weight": 0.9,
+    "aspect": "Politeness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely enjoy working as part of a team.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally work in teams.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes prefer team settings.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately appreciate cooperative work.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often value working in teams.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently prefer collaboration and teamwork.",
+        "exclude": [
+          "INTP",
+          "INTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly thrive in cooperative environments.",
+        "exclude": [
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly prioritize team cooperation.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very inclined to work as part of a team.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always actively seek out collaborative, team-based work.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I am prone to experiencing irritation quickly.",
+    "trait": "neuroticism",
+    "weight": 1.2,
+    "aspect": "Volatility",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely get irritated.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel a slight irritation.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes get annoyed by minor things.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately experience irritation over small issues.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often get irritated easily.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently become irritated by trivial matters.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly experience rapid irritation.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly prone to quick irritation.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very easily irritated by small things.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always get irritated very quickly and intensely.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I frequently act on impulse.",
+    "trait": "neuroticism",
+    "weight": 1.1,
+    "aspect": "Volatility",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely act without thinking.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally act on a whim.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes act impulsively without full consideration.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately act on impulse at times.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often make decisions impulsively.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently act without much thought.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly give in to impulsive urges.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly prone to impulsive actions.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very impulsive in my behavior.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always act in a highly impulsive manner.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I experience feelings of anxiety.",
+    "trait": "neuroticism",
+    "weight": 1.3,
+    "aspect": "Volatility",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel anxious.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel a slight nervousness.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes experience mild anxiety.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately feel anxious at times.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel anxious or worried.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently experience anxiety.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly feel a significant degree of anxiety.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly prone to feeling anxious.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very often overwhelmed by anxiety.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel intensely anxious.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I am known to have a short fuse.",
+    "trait": "neuroticism",
+    "weight": 1,
+    "aspect": "Volatility",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely get angry.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel a little frustrated.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes experience a quick temper.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately lose my temper at times.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often get angry quickly.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently lose my temper easily.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly experience a very short fuse.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly prone to getting angry rapidly.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I have a very quick temper.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always get angry almost instantaneously.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I frequently experience agitation and restlessness.",
+    "trait": "neuroticism",
+    "weight": 0.9,
+    "aspect": "Volatility",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel agitated or restless.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel a bit on edge.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes experience mild restlessness.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately feel agitated at times.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel restless.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently experience agitation.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly feel on edge and restless.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly prone to feeling agitated.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I very often feel restless and uneasy.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel deeply agitated and restless.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I experience feelings of sadness or low mood.",
+    "trait": "neuroticism",
+    "weight": 1.1,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel sad.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel a little down.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel a bit blue.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately experience occasional sadness.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel sad or down.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently experience feelings of unhappiness.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly feel noticeably low in mood.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly prone to feelings of sadness.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I very often feel deeply sad.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always seem to feel profoundly sad or down.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I concern myself with others' evaluations of me.",
+    "trait": "neuroticism",
+    "weight": 1,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely worry about what others think.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally notice others' opinions.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes worry about others\u2019 judgments.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately feel self-conscious about others\u2019 views.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often worry about how others perceive me.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently become preoccupied with others' opinions.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly concern myself with others' evaluations.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly troubled by what others think of me.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am very often anxious about others' judgments.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always worry profoundly about how others view me.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I often feel overwhelmed when confronted with stress.",
+    "trait": "neuroticism",
+    "weight": 1.2,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel overwhelmed by stress.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel mildly stressed.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes experience moderate stress.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately feel overwhelmed under pressure.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel easily overwhelmed by stress.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently feel overwhelmed when facing stress.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly feel heavily burdened by stress.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly prone to feeling overwhelmed by stressful situations.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I very often feel overwhelmed by stress.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel deeply overwhelmed by stress.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I attribute failures to my own shortcomings.",
+    "trait": "neuroticism",
+    "weight": 1,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely blame myself for things going wrong.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally wonder if I could have done better.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes blame myself when things fail.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately tend to take personal responsibility for failures.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often blame myself when things go wrong.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently attribute negative outcomes to my own faults.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly blame myself for setbacks.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I have a strong tendency to blame myself.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I very often internalize blame when things go wrong.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always unequivocally blame myself for any failure.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I consistently struggle with feelings of insecurity.",
+    "trait": "neuroticism",
+    "weight": 0.9,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel insecure about myself.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel a bit unsure of myself.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes question my self-worth.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately experience feelings of insecurity.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel insecure about my abilities.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently struggle with insecurity.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly experience deep feelings of insecurity.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly prone to feeling insecure.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I very often feel extremely insecure.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel overwhelmingly insecure about myself.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I feel overwhelmed when managing several responsibilities simultaneously.",
+    "trait": "neuroticism",
+    "weight": 1.1,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel overwhelmed by multiple responsibilities.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally manage multiple tasks without issue.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel a bit overwhelmed with many tasks.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately feel overwhelmed under multiple responsibilities.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel burdened by multiple tasks.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently feel overwhelmed when juggling responsibilities.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly feel overwhelmed by numerous responsibilities.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly feel overwhelmed when under heavy responsibilities.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly prone to feeling overwhelmed by multiple duties.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always feel deeply overwhelmed when managing many tasks.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I typically experience anxiety in high-pressure situations.",
+    "trait": "neuroticism",
+    "weight": 1,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel anxious even under stress.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel mild anxiety in pressure situations.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel somewhat anxious in stressful conditions.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately experience anxiety when stressed.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel anxious in high-pressure scenarios.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently feel anxious during stressful times.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly experience significant anxiety under pressure.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly feel anxious in challenging situations.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly prone to anxiety in stressful contexts.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I almost always feel deeply anxious in stressful situations.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I experience uncertainty and self-doubt during decision-making.",
+    "trait": "neuroticism",
+    "weight": 0.9,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely feel uneasy about my decisions.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally second-guess myself.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes feel uncertain when making decisions.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately experience self-doubt during decision-making.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often second-guess my decisions.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently feel uneasy when deciding.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly experience uncertainty in decision-making.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly tend to doubt my choices.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly prone to second-guessing myself.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I almost always feel deeply uncertain and second-guess every decision.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I ruminate on past errors and their potential consequences.",
+    "trait": "neuroticism",
+    "weight": 0.95,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely dwell on past mistakes.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally reflect on past errors.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes think about past mistakes and outcomes.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately worry about past errors and potential consequences.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often ruminate on past mistakes.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently reflect on past errors and their outcomes.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly dwell on my past mistakes.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly focus on past mistakes and worry about what could have been.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly prone to overthinking past errors and consequences.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I almost always ruminate intensely on past mistakes and potential outcomes.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I am prone to overthinking and experiencing unease about uncertain outcomes.",
+    "trait": "neuroticism",
+    "weight": 1,
+    "aspect": "Withdrawal",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely overthink or worry about the unknown.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel uneasy in uncertain situations.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes overthink and feel a bit uneasy about uncertainty.",
+        "exclude": [
+          "ESTP",
+          "INTJ",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately experience overthinking and unease about the unknown.",
+        "exclude": [
+          "ISFJ",
+          "INFJ",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel uneasy about uncertain outcomes.",
+        "exclude": [
+          "INTP",
+          "ENTJ",
+          "INFP"
+        ]
+      },
+      "50-60": {
+        "text": "I frequently overthink and worry about the unknown.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "60-70": {
+        "text": "I regularly experience deep unease about uncertain outcomes.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ENTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly tend to overthink and feel uneasy about the unknown.",
+        "exclude": [
+          "ENTP",
+          "INTP",
+          "ISTP",
+          "ENTJ",
+          "ESFJ",
+          "ESFP"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly prone to overthinking and feeling uneasy about uncertainty.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always overthink situations and feel profoundly uneasy about the unknown.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "ISTP",
+          "INTJ",
+          "ISTJ",
+          "ENTJ",
+          "ESTJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I have a deep appreciation for the beauty in art, nature, and innovative ideas.",
+    "trait": "openness",
+    "weight": 1.3,
+    "aspect": "Aesthetic Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely notice beauty around me.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally appreciate beauty in small doses.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes find beauty in art or nature.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately appreciate beauty in various forms.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often recognize beauty in art and nature.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently value the beauty found in art, nature, and ideas.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly have a deep appreciation for aesthetic beauty.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value and seek out artistic beauty.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very sensitive to the beauty in art, nature, and ideas.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I have an intense and profound appreciation for aesthetic beauty in all forms.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I frequently allow my imagination to flourish.",
+    "trait": "openness",
+    "weight": 1,
+    "aspect": "Aesthetic Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely use my imagination.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally daydream.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes let my mind wander.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy creative daydreaming.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often allow my imagination to run wild.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently engage in imaginative thinking.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly let my creativity flourish.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly enjoy expansive imaginative thinking.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very adept at unleashing my imagination.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I have a boundless and vivid imagination at all times.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I am profoundly affected by the emotional depth in music and films.",
+    "trait": "openness",
+    "weight": 1.1,
+    "aspect": "Aesthetic Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I am rarely moved by music or movies.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally feel a slight emotional response.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes get mildly moved by art.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately feel emotional reactions to music and films.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often experience emotional responses to art.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently feel deeply moved by music and movies.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly experience profound emotions from art.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly sensitive to the emotional qualities of music and films.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very easily moved by emotional artistic experiences.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I am deeply and profoundly affected by the emotional power of music and movies.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I consistently value rich artistic and aesthetic experiences.",
+    "trait": "openness",
+    "weight": 1.2,
+    "aspect": "Aesthetic Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I do not value artistic experiences much.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally appreciate art and aesthetics.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes enjoy artistic experiences.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately value aesthetic experiences.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often seek out artistic encounters.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently appreciate rich artistic experiences.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly prioritize aesthetic experiences in my life.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value the impact of art and aesthetics.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I consider artistic experiences very important.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I deeply value and actively pursue artistic and aesthetic experiences.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I actively seek out and enjoy beautiful environments.",
+    "trait": "openness",
+    "weight": 0.9,
+    "aspect": "Aesthetic Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely notice the beauty of my surroundings.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally appreciate a pleasant environment.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes enjoy being in beautiful places.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy spending time in attractive settings.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often seek out environments that are aesthetically pleasing.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently find joy in beautiful surroundings.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly immerse myself in aesthetically pleasing environments.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value spending time in beautiful settings.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I find great pleasure in being in beautiful places.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always actively seek out and revel in beautiful environments.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I possess a keen ability to recognize beauty in unforeseen contexts.",
+    "trait": "openness",
+    "weight": 1,
+    "aspect": "Aesthetic Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely notice beauty in unexpected places.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally spot a touch of beauty unexpectedly.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes notice beauty in unusual contexts.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately appreciate unexpected beauty.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often recognize beauty in unanticipated places.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently discover beauty in the unexpected.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly find beauty in places others might overlook.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I highly value recognizing beauty in ordinary settings.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am very adept at seeing beauty in unexpected contexts.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always keenly perceive beauty in the most unforeseen places.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I eagerly embrace new ideas and diverse perspectives.",
+    "trait": "openness",
+    "weight": 1.2,
+    "aspect": "Intellectual Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I am slightly open to new ideas.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I have a mild interest in exploring new perspectives.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes consider new ideas.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately explore different perspectives.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I am fairly open to diverse ideas.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I often welcome new perspectives.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly embrace a variety of ideas.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly open to trying different approaches.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am extremely receptive to all kinds of ideas.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I am exceptionally open to exploring and embracing new perspectives.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I often contemplate abstract concepts and explore profound questions.",
+    "trait": "openness",
+    "weight": 0.9,
+    "aspect": "Intellectual Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely think about abstract concepts.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally consider simple abstract ideas.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes ponder abstract questions.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately enjoy contemplating deep ideas.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often reflect on abstract concepts.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently engage in deep, abstract thought.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly explore profound questions.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I consistently think deeply about abstract matters.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I almost always ponder profound and abstract ideas.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I perpetually explore the deepest and most abstract concepts.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I readily adapt to change and find comfort in new situations.",
+    "trait": "openness",
+    "weight": 0.9,
+    "aspect": "Intellectual Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I struggle with change and prefer stability.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally adapt to minor changes.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes embrace change with hesitation.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately adapt to new situations.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often feel comfortable with change.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I frequently adapt quickly to new situations.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly handle change with ease.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I am highly comfortable with adapting to change.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am extremely adept at managing change.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I thrive on change and effortlessly adjust to new situations.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I actively pursue novel experiences and welcome the unfamiliar.",
+    "trait": "openness",
+    "weight": 1.1,
+    "aspect": "Intellectual Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely seek out new experiences.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I sometimes avoid stepping out of my comfort zone.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I occasionally try something new when prompted.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately explore new experiences.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often seek out novel activities.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I often venture into unfamiliar experiences.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly embrace opportunities to try new things.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I actively pursue new adventures.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly driven to explore the unknown.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always eagerly seek and relish new, exciting experiences.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I have an enduring appreciation for art, culture, and varied perspectives.",
+    "trait": "openness",
+    "weight": 1,
+    "aspect": "Intellectual Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely notice art or cultural diversity.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I occasionally encounter art and cultural ideas.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I sometimes enjoy artistic expressions.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately appreciate art and diverse cultures.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often engage with art and cultural diversity.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I regularly immerse myself in art and diverse perspectives.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I consistently seek out cultural and artistic experiences.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I actively value art, culture, and diverse viewpoints.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly appreciative of artistic and cultural diversity.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always immerse myself in art, culture, and varied perspectives.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  },
+  {
+    "text": "I excel in creative challenges and embrace innovative problem-solving.",
+    "trait": "openness",
+    "weight": 1.2,
+    "aspect": "Intellectual Openness",
+    "subtext": {
+      "0-10": {
+        "text": "I rarely engage in creative challenges.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "10-20": {
+        "text": "I sometimes shy away from innovative approaches.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "20-30": {
+        "text": "I occasionally try to solve problems creatively.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ESFJ",
+          "ENFJ",
+          "ESFP",
+          "ENFP",
+          "ISFP",
+          "INFP"
+        ]
+      },
+      "30-40": {
+        "text": "I moderately engage in creative problem-solving.",
+        "exclude": [
+          "ENTP",
+          "ESTP",
+          "INTJ",
+          "ENTJ",
+          "INFJ",
+          "ENFJ",
+          "ENFP",
+          "INFP"
+        ]
+      },
+      "40-50": {
+        "text": "I fairly often approach challenges in innovative ways.",
+        "exclude": []
+      },
+      "50-60": {
+        "text": "I often use creative solutions to tackle challenges.",
+        "exclude": []
+      },
+      "60-70": {
+        "text": "I regularly embrace creative and innovative problem-solving.",
+        "exclude": [
+          "ISTJ",
+          "ESTJ"
+        ]
+      },
+      "70-80": {
+        "text": "I strongly seek out creative challenges and innovative solutions.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ"
+        ]
+      },
+      "80-90": {
+        "text": "I am highly engaged in finding innovative approaches to problems.",
+        "exclude": [
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ISFP"
+        ]
+      },
+      "90-100": {
+        "text": "I always thrive on creative challenges and embrace innovation.",
+        "exclude": [
+          "INTP",
+          "ISTP",
+          "ISTJ",
+          "ESTJ",
+          "ISFJ",
+          "ESFJ",
+          "ESFP",
+          "ISFP"
+        ]
+      }
+    }
+  }
+]
   
 export const statements = selectStatements(allStatements)
 

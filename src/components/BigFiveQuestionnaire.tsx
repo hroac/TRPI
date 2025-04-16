@@ -114,6 +114,7 @@ console.log('new statements')
   const [matchedType, setMatchedType] = useState<string | null>(null);
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
+  const [excludedTypes, setExludedTypes] = useState<Array<string>>([])
   const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
   const [submitted, setSubmitted] = useState<boolean>(false)
@@ -162,7 +163,7 @@ console.log('new statements')
     console.log(stageResponses)
     const randomResponses = stageResponses.reduce((acc, s) => {
       if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage ? lastStage - 1 : lastStage);
-      acc[s.trait].push(Math.random());
+      acc[s.trait].push(Math.random().toFixed(2));
       return acc;
     }, {} as { [trait: string]: number[] });
     setResponses(((prevResponses: any) => {
@@ -201,7 +202,12 @@ console.log('new statements')
       return percentage >= min && percentage <= max;
     });
 
-    return range ? (statement.subtext as any)[range]?.text : null;
+    if(range) {
+      statement.subtext[range].range = range
+      return (statement.subtext as any)[range];
+    }
+
+    return null;
   };
 
   const handleSliderChange =
@@ -211,14 +217,24 @@ console.log('new statements')
       if(currentStage < lastStage) {
         const sub = getSubtext(trait, index, responses[trait][index] as number);
 
-        setSelectedStatement(sub)
+        setSelectedStatement(sub.text)
         return;
       }
       setResponses((prev: any) => {
         const updatedResponses = { ...prev };
         updatedResponses[trait][index] = value as number;
         const sub = getSubtext(trait, index, value as number);
-        setSelectedStatement(sub)
+        setSelectedStatement(sub.text)
+
+        if(sub.range.includes("10") || sub.range.includes("90")) {
+          setExludedTypes((prev: any) => {
+            const next = new Set<string>(...prev);
+            sub.exclude.forEach((type: string) => next.add(type))
+          
+            console.log(next)
+            return new Array<string>(...next);
+          })
+        }
 
         localStorage.setItem('responses', JSON.stringify(updatedResponses))
         return updatedResponses;
@@ -275,7 +291,7 @@ console.log('new statements')
     }, {} as { [trait: string]: number });
 
     const primary4F = determinePrimary4FType(weightedScores);
-    const mbtiType = matchMBTI(weightedScores)//matchMBTIType(weightedScores, primary4F);
+    const mbtiType = matchMBTI(weightedScores, excludedTypes.filter(x => x.length === 4))//matchMBTIType(weightedScores, primary4F);
     const profile = typesData.find(t => t.type === mbtiType.type);
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
     setAccuracy(accuracy)
@@ -532,7 +548,7 @@ console.log('new statements')
         <Button onClick={handleBack} disabled={currentStage === 0} variant="contained" color="primary">
           Back
         </Button>
-        {lastStage >= 7 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
+        {lastStage >= 8 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
           <Tooltip title={`${type.mode} \n ${(accuracy).toFixed(1)}%`}>
             <Box
               bgcolor={type.bgColor}

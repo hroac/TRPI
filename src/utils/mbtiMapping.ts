@@ -737,8 +737,8 @@ export function calculateCompatibilityScore(profileA: any, profileB: any): numbe
   return compatibility;
 };
  */
-export const getSubtext = (trait: string, index: number, value: number) => {
-  const statement = statements[index];
+export const getSubtext = (trait: string, index: number, value: number, stmnts?: any[]) => {
+  const statement = (stmnts || statements)[index];
   if (!statement) return null;
 
   const percentage = Math.round(value * 100);
@@ -896,8 +896,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I seldom reflect on abstract concepts.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally consider simple abstract ideas.",
           "weight": 0.2
@@ -944,8 +943,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely engage in philosophical discussions.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally share a philosophical thought.",
           "weight": 0.2
@@ -992,8 +990,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely try new experiences.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally experiment with something new.",
           "weight": 0.2
@@ -1040,8 +1037,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I show little interest in different cultures.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally wonder about other cultures.",
           "weight": 0.2
@@ -1088,8 +1084,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely seek out new knowledge.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally learn something new.",
           "weight": 0.2
@@ -1136,8 +1131,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely change my opinions.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally reconsider my views.",
           "weight": 0.2
@@ -1184,8 +1178,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely work hard to reach my goals.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally put some effort into my goals.",
           "weight": 0.2
@@ -1232,8 +1225,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel capable.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel somewhat competent.",
           "weight": 0.2
@@ -1280,8 +1272,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I often give in to temptations.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally manage to resist a temptation.",
           "weight": 0.2
@@ -1328,8 +1319,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely think before acting.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally pause briefly before acting.",
           "weight": 0.2
@@ -1376,8 +1366,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely use my time efficiently.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally manage my time well.",
           "weight": 0.2
@@ -1424,8 +1413,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I do not mind if things are messy.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally tidy up my space.",
           "weight": 0.2
@@ -1472,8 +1460,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I often overlook important details.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally notice small details.",
           "weight": 0.2
@@ -1520,8 +1507,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I often disregard rules and guidelines.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally follow rules when reminded.",
           "weight": 0.2
@@ -1568,8 +1554,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely make plans.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally make loose plans.",
           "weight": 0.2
@@ -1616,8 +1601,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I prefer spontaneity over routine.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally follow a loose schedule.",
           "weight": 0.2
@@ -1663,8 +1647,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely stay organized when managing tasks.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally try to organize my tasks.",
           "weight": 0.2
@@ -1710,8 +1693,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely prefer organized activities.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally enjoy planned events.",
           "weight": 0.2
@@ -1757,8 +1739,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel responsible for my commitments.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel a mild sense of responsibility.",
           "weight": 0.2
@@ -1804,8 +1785,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I almost always decide based on feelings.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I mostly rely on emotions when deciding.",
           "weight": 0.2
@@ -1851,8 +1831,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely think through details when completing tasks.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally reflect on task details.",
           "weight": 0.2
@@ -1899,8 +1878,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I prefer solitude over large groups.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally join a crowd, though with reservation.",
           "weight": 0.2
@@ -1947,8 +1925,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel cheerful or optimistic.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally experience brief moments of cheer.",
           "weight": 0.2
@@ -1995,8 +1972,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I find it difficult to make new friends.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally make a new acquaintance.",
           "weight": 0.2
@@ -2043,8 +2019,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I am often perceived as cold or distant.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally appear friendly.",
           "weight": 0.2
@@ -2091,8 +2066,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I generally avoid parties and social events.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally attend events out of necessity.",
           "weight": 0.2
@@ -2139,8 +2113,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely take the lead in groups.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally contribute but seldom lead.",
           "weight": 0.2
@@ -2187,8 +2160,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely express my opinions.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally share my views when prompted.",
           "weight": 0.2
@@ -2235,8 +2207,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I prefer a calm and sedentary lifestyle.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally engage in physical activities.",
           "weight": 0.2
@@ -2283,8 +2254,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I strongly dislike being the center of attention.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally find myself in the spotlight, but with discomfort.",
           "weight": 0.2
@@ -2331,8 +2301,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely stand up for myself.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally try to be assertive.",
           "weight": 0.2
@@ -2379,8 +2348,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel energized by meeting new people.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally enjoy meeting someone new.",
           "weight": 0.2
@@ -2427,8 +2395,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely take charge in groups.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally take charge but prefer to follow.",
           "weight": 0.2
@@ -2475,8 +2442,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely enjoy discussing ideas with others.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally engage in discussions, but avoid discussions.",
           "weight": 0.2
@@ -2523,8 +2489,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely stay calm in problem situations.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally manage to remain calm.",
           "weight": 0.2
@@ -2571,8 +2536,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely act independently or boldly.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally act independently, but rarely boldly.",
           "weight": 0.2
@@ -2619,8 +2583,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel empathy for others.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel a tinge of sympathy.",
           "weight": 0.2
@@ -2667,8 +2630,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely go out of my way to help others.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally lend a helping hand if convenient.",
           "weight": 0.2
@@ -2715,8 +2677,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I am usually suspicious of people.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally trust someone after getting to know them.",
           "weight": 0.2
@@ -2763,8 +2724,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely concern myself with the well-being of others.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally notice how others are doing.",
           "weight": 0.2
@@ -2811,8 +2771,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I am not always kind in my interactions.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally try to be polite.",
           "weight": 0.2
@@ -2859,8 +2818,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I often try to get my way.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally attempt to influence others.",
           "weight": 0.2
@@ -2907,8 +2865,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I often boast about my achievements.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally mention my successes.",
           "weight": 0.2
@@ -2955,8 +2912,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I am not always straightforward.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally speak directly.",
           "weight": 0.2
@@ -3003,8 +2959,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I often question authority.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally show respect for authority.",
           "weight": 0.2
@@ -3051,8 +3006,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I often engage in confrontations.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally stand my ground in disagreements.",
           "weight": 0.2
@@ -3099,8 +3053,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely enjoy helping my friends.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally support friends when needed.",
           "weight": 0.2
@@ -3147,8 +3100,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely prioritize harmony and may engage in conflicts.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally try to avoid conflict, but not consistently.",
           "weight": 0.2
@@ -3195,8 +3147,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely make an effort to understand others.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally try to be supportive.",
           "weight": 0.2
@@ -3243,8 +3194,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely notice others’ feelings.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally become aware of others’ emotions.",
           "weight": 0.2
@@ -3291,8 +3241,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely enjoy working as part of a team.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally work in teams.",
           "weight": 0.2
@@ -3339,8 +3288,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely get irritated.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel a slight irritation.",
           "weight": 0.2
@@ -3387,8 +3335,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely act without thinking.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally act on a whim.",
           "weight": 0.2
@@ -3435,8 +3382,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel anxious.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel a slight nervousness.",
           "weight": 0.2
@@ -3483,8 +3429,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely get angry.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel a little frustrated.",
           "weight": 0.2
@@ -3531,8 +3476,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel agitated or restless.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel a bit on edge.",
           "weight": 0.2
@@ -3579,8 +3523,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel sad.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel a little down.",
           "weight": 0.2
@@ -3627,8 +3570,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely worry about what others think.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally notice others' opinions.",
           "weight": 0.2
@@ -3675,8 +3617,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel overwhelmed by stress.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel mildly stressed.",
           "weight": 0.2
@@ -3723,8 +3664,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely blame myself for things going wrong.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally wonder if I could have done better.",
           "weight": 0.2
@@ -3771,8 +3711,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel insecure about myself.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel a bit unsure of myself.",
           "weight": 0.2
@@ -3819,8 +3758,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel overwhelmed by multiple responsibilities.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally manage multiple tasks without issue.",
           "weight": 0.2
@@ -3867,8 +3805,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel anxious even under stress.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel mild anxiety in pressure situations.",
           "weight": 0.2
@@ -3915,8 +3852,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely feel uneasy about my decisions.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally second-guess myself.",
           "weight": 0.2
@@ -3963,8 +3899,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely dwell on past mistakes.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally reflect on past errors.",
           "weight": 0.2
@@ -4011,8 +3946,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely overthink or worry about the unknown.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel uneasy in uncertain situations.",
           "weight": 0.2
@@ -4059,8 +3993,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely notice beauty around me.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally appreciate beauty in small doses.",
           "weight": 0.2
@@ -4107,8 +4040,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely use my imagination.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally daydream.",
           "weight": 0.2
@@ -4155,8 +4087,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I am rarely moved by music or movies.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally feel a slight emotional response.",
           "weight": 0.2
@@ -4203,8 +4134,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I do not value artistic experiences much.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally appreciate art and aesthetics.",
           "weight": 0.2
@@ -4251,8 +4181,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely notice the beauty of my surroundings.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally appreciate a pleasant environment.",
           "weight": 0.2
@@ -4299,8 +4228,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely notice beauty in unexpected places.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally spot a touch of beauty unexpectedly.",
           "weight": 0.2
@@ -4347,8 +4275,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I am slightly open to new ideas.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I have a mild interest in exploring new perspectives.",
           "weight": 0.2
@@ -4395,8 +4322,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely think about abstract concepts.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally consider simple abstract ideas.",
           "weight": 0.2
@@ -4443,8 +4369,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I struggle with change and prefer stability.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally adapt to minor changes.",
           "weight": 0.2
@@ -4491,8 +4416,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely seek out new experiences.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I sometimes avoid stepping out of my comfort zone.",
           "weight": 0.2
@@ -4539,8 +4463,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely notice art or cultural diversity.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I occasionally encounter art and cultural ideas.",
           "weight": 0.2
@@ -4587,8 +4510,7 @@ export const allStatements = [
       "subtext": {
         "0-10": {
           "text": "I rarely engage in creative challenges.",
-          "weight": 0.1
-        },
+                  },
         "10-20": {
           "text": "I sometimes shy away from innovative approaches.",
           "weight": 0.2

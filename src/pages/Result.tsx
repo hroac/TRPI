@@ -108,6 +108,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
       title: { display: true, text: 'Big Five Personality Scores' },
     },
     scales: { y: { beginAtZero: true, max: 100 } },
+    maintainAspectRatio: true,
   };
 
   const shareDescription = bin?.description ? bin.description : "Check out my TRPI test results!";

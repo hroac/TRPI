@@ -471,7 +471,7 @@ console.log('new statements')
           }}
         >
           <Box sx={{
-            marginLeft: '10%',
+            marginLeft: '5%',
             marginTop: '5%',
             marginBottom: '5%',
             marginRight: '5%',
@@ -482,7 +482,11 @@ console.log('new statements')
           <Typography variant="body2" gutterBottom>
             Use this as a preset if you already know your type!
           </Typography>
-          <Matrix onSelectType={handleMatrixSelect} width={isMobile ? '60%' : '90%'}/>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Box sx={{ display: 'inline-block' }}>
+        <Matrix onSelectType={handleMatrixSelect} width={'100px'}/>
+        </Box>
+      </Box>
           <Box sx={{position:'relative', right:'50px'}} mt={2} display="flex" justifyContent="center">
             <Button variant="contained" color="secondary" onClick={() => handleMatrixSelect('XXXX')}>
               I (don't) know my type!

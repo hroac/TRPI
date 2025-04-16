@@ -1276,14 +1276,18 @@ const flattenResponses = (responses: any) : number[] => {
             borderRadius: '8px',
           }}
         >
-          <Box sx={{ margin: '5% 10%' }}>
+          <Box sx={{ margin: '5% 5%' }}>
             <Typography variant="h6" gutterBottom>
               Select Your Type Here
             </Typography>
             <Typography variant="body2" gutterBottom>
               Use this as a preset if you already know your type!
             </Typography>
-            <Matrix onSelectType={handleMatrixSelectA} width={isMobile ? '60%' : '90%'} />
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Box sx={{ display: 'inline-block' }}>
+        <Matrix onSelectType={handleMatrixSelectA} width={'100px'} />
+        </Box>
+      </Box>
             <Box mt={2} display="flex" justifyContent="center">
               <Button variant="contained" color="secondary" onClick={() => handleMatrixSelectA('XXXX')}>
                 I (don't) know my type!
@@ -1308,14 +1312,18 @@ const flattenResponses = (responses: any) : number[] => {
             borderRadius: '8px',
           }}
         >
-          <Box sx={{ margin: '5% 10%' }}>
+          <Box sx={{ margin: '5% 5%' }}>
             <Typography variant="h6" gutterBottom>
               Select Your Type Here
             </Typography>
             <Typography variant="body2" gutterBottom>
               Use this as a preset if you already know your type!
             </Typography>
-            <Matrix onSelectType={handleMatrixSelectB} width={isMobile ? '60%' : '90%'} />
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Box sx={{ display: 'inline-block' }}>
+        <Matrix onSelectType={handleMatrixSelectB} width={'100px'} />
+        </Box>
+      </Box>
             <Box mt={2} display="flex" justifyContent="center">
               <Button variant="contained" color="secondary" onClick={() => handleMatrixSelectB('XXXX')}>
                 I (don't) know my type!

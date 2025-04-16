@@ -211,7 +211,11 @@ const TypeMatrix = () => {
       <Typography variant="h4" sx={{ fontWeight: '500', mb: 4, textAlign: 'center' }}>
         Explore the 16 Personality Types
       </Typography>
-      <Matrix />
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Box sx={{ display: 'inline-block' }}>
+          <Matrix width="100px" />
+        </Box>
+      </Box>
     </Box>
   );
 };
@@ -362,6 +366,7 @@ const Home = () => {
               component={Link}
               to={`/result/${item.record}`}
               sx={{
+                width: '80%',
                 textAlign: 'center',
                 textDecoration: 'none',
                 color: 'inherit',

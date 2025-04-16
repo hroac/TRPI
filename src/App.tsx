@@ -142,7 +142,7 @@ function App() {
                             <Route path="/talk" element={<TrpiTalk onComplete={handleComplete}/>} />
                             <Route path='/sources' element={<Sources/>} />
                             <Route path='/reviews' element={<Reviews/>} />
-                            <Route path='/check/:r1/:r2'  element={<TypeComparator/>} />
+                            <Route path='/compare/:r1/:r2'  element={<TypeComparator/>} />
                             <Route path='/compare'  element={<TypeComparator/>} />
                             <Route path='/scheduler' element={<Scheduler/>} />
                             <Route path='/terms' element={<TermsOfService/>} />

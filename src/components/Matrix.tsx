@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Tooltip, useMediaQuery, Theme } from '@mui/material';
 import { typesData } from '../utils/typesData';
 import { Link } from 'react-router-dom';
@@ -8,8 +8,28 @@ interface MatrixProps {
   width?: string;
 }
 
-const Matrix: React.FC<MatrixProps> = ({ onSelectType, width }) => {
+const Matrix: React.FC<MatrixProps> = ({ onSelectType, width = '75px' }) => {
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
+
+  // Common styles for each box, enhanced with conditional opacity
+  const commonBoxSx = (colIndex: number) => ({
+    p: isMobile ? 1 : 2,
+    pt: '33%',
+    textAlign: 'center',
+    borderRadius: 2,
+    height: width,
+    width: width,
+    // If no column is hovered, or if this box is in the hovered column, show full opacity.
+    // Otherwise, gray it out.
+    opacity: hoveredColumn === null || hoveredColumn === colIndex ? 1 : 0.3,
+    fontSize: isMobile ? '0.75rem' : '1rem',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    '&:hover': {
+      transform: 'scale(1.1)',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+    },
+  });
 
   return (
     <Box
@@ -17,12 +37,13 @@ const Matrix: React.FC<MatrixProps> = ({ onSelectType, width }) => {
       gridTemplateColumns="repeat(4, 1fr)"
       gap={isMobile ? 1 : 2}
       mt={4}
-      width={width}
-      maxWidth={width}
-      position="relative"
-      right={width && isMobile ? 30 : 0}
+      width="fit-content" // centers the grid container width-wise
+      mx="auto" // centers the grid horizontally
+      onMouseLeave={() => setHoveredColumn(null)} // clear hoveredColumn when leaving the grid
     >
-      {typesData.map((type) => {
+      {typesData.map((type, index) => {
+        // Calculate which column this cell belongs to (0-based index)
+        const colIndex = index % 4;
         const archetypeDescription = type.description.slice(
           type.description.indexOf(',') + 2,
           type.description.indexOf(':')
@@ -48,22 +69,10 @@ const Matrix: React.FC<MatrixProps> = ({ onSelectType, width }) => {
             {typeof onSelectType === 'function' ? (
               <Box
                 onClick={() => onSelectType(type.type)}
+                onMouseEnter={() => setHoveredColumn(colIndex)}
                 bgcolor={type.bgColor}
                 color="white"
-                p={isMobile ? 1 : 2}
-                textAlign="center"
-                borderRadius={2}
-                height="75px"
-                sx={{
-                  cursor: 'pointer',
-                  fontSize: isMobile ? '0.75rem' : '1rem',
-                  // Hover styling
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'scale(1.1)',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                  },
-                }}
+                sx={commonBoxSx(colIndex)}
               >
                 <Typography sx={{ fontWeight: 'bold' }} variant="h5">
                   {type.type}
@@ -73,22 +82,11 @@ const Matrix: React.FC<MatrixProps> = ({ onSelectType, width }) => {
               <Box
                 component={Link}
                 to={`/about/${type.type}`}
+                onMouseEnter={() => setHoveredColumn(colIndex)}
                 bgcolor={type.bgColor}
                 color="white"
-                p={isMobile ? 1 : 2}
-                textAlign="center"
-                borderRadius={2}
-                height="75px"
                 style={{ textDecoration: 'none' }}
-                sx={{
-                  fontSize: isMobile ? '0.75rem' : '1rem',
-                  // Hover styling
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'scale(1.1)',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                  },
-                }}
+                sx={commonBoxSx(colIndex)}
               >
                 <Typography sx={{ fontWeight: 'bold' }} variant="h5">
                   {type.type}

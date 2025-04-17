@@ -226,7 +226,7 @@ console.log('new statements')
         const sub = getSubtext(trait, index, value as number);
         setSelectedStatement(sub.text)
 
-        if(sub.range.includes("10") || sub.range.includes("90")) {
+        if(sub.range.includes("0-10") || sub.range.includes("90-100")) {
           setExludedTypes((prev: any) => {
             const next = new Set<string>(...prev);
             sub.exclude.forEach((type: string) => next.add(type))

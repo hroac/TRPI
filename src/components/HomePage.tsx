@@ -386,7 +386,7 @@ const Home = () => {
         });
         setSlides((oldSlides: Array<any>) => {
           const allSlides: Set<Slide> = new Set<Slide>(oldSlides);
-          allSlides.add(newSlides[0])
+          allSlides.add(newSlides[newSlides.length - 1])
           if(new Array(...allSlides).length > 0) {
             setIsBinsLoading(false);
           }
@@ -421,7 +421,7 @@ const Home = () => {
         newReviews.push(reviewBin);
         setReviews((oldReviews: Array<any>) => {
           const allReviews: Set<Review> = new Set<Review>(oldReviews);
-          allReviews.add(newReviews[0])
+          allReviews.add(newReviews[newReviews.length - 1])
   
           console.log(allReviews)
           if(allReviews.size > 0) {

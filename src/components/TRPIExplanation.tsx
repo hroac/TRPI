@@ -78,9 +78,19 @@ const TRPIExplanation: React.FC = () => {
       <Box justifyContent={'center'}>
         <ModeSelector/>
       </Box>
-      <Box justifyContent={'center'} sx={{ marginTop: '20px', marginBottom: '20px' }}>
-        <Matrix />
-      </Box>
+        <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          marginBottom: '50px'
+        }}
+      >
+        <Box sx={{ width: '100%', maxWidth: 420 }}>
+              <Matrix width={'100px'} />
+              </Box>
+            </Box>
       <Accordion>
   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
     <Typography variant="h6">Big Five Traits and 4F Trauma Responses</Typography>

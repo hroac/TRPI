@@ -614,8 +614,14 @@ const flattenResponses = (responses: any) : number[] => {
         if (responsesA && responsesB && ordinalA < responsesA.length && ordinalB < responsesB.length) {
           const respA = responsesA[ordinalA];
           const respB = responsesB[ordinalB];
-          const subtextA = getSubtext(stmtA.trait, ordinalA, respA, userAData.statements);
-          const subtextB = getSubtext(stmtA.trait, ordinalB, respB, userBData.statements);
+          const statementsA = (userAData.statements || []).filter(
+            s => s.trait.toLowerCase() === trait
+          );
+          const statementsB = (userBData.statements || []).filter(
+            s => s.trait.toLowerCase() === trait
+          );
+          const subtextA = getSubtext(stmtA.trait, ordinalA, respA, statementsA);
+          const subtextB = getSubtext(stmtA.trait, ordinalB, respB, statementsB);
           const compatibilityPercent = Math.round((1 - Math.abs(respA - respB)) * 100);
           commonSlides.push({
             statement: stmtA.text,

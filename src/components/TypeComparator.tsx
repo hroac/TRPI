@@ -708,7 +708,7 @@ const flattenResponses = (responses: any) : number[] => {
   const typeB = typesData.find((t) => t.type === userBData.type);
 
   return (
-    <Container maxWidth="lg" sx={{ marginTop: '40px', textAlign: 'center' }}>
+    <Container maxWidth="lg" sx={{ marginTop: '100px', textAlign: 'center' }}>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
         Type Comparator
       </Typography>

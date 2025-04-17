@@ -304,8 +304,8 @@ const BenefitsSection = () => {
 
 // --------- HOME COMPONENT ---------
 const Home = () => {
-  const [slides, setSlides] = useState<Slide[]>([]);
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [slides, setSlides] = useState<Array<Slide>>([]);
+  const [reviews, setReviews] = useState<Array<Review>>([]);
   const [isBinsLoading, setIsBinsLoading] = useState<boolean>(false);
   const [isReviewsLoading, setIsReviewsLoading] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -314,9 +314,10 @@ const Home = () => {
   const fetchBins = async () => {
     try {
       const binsCollection = await JsonBinApi.getBinsInCollection();
-      const newSlides: Slide[] = [];
+      
       // Use a for loop to fetch each bin sequentially
       for (const item of binsCollection) {
+        const newSlides: Array<Slide> = [];
         const bin = await JsonBinApi.getBinById(item.record);
 
         // Set up chart options and data
@@ -383,8 +384,16 @@ const Home = () => {
             </Box>
           ),
         });
+        setSlides((oldSlides: Array<any>) => {
+          const allSlides: Set<Slide> = new Set<Slide>(oldSlides);
+          allSlides.add(newSlides[0])
+          if(new Array(...allSlides).length > 0) {
+            setIsBinsLoading(false);
+          }
+          return new Array<Slide>(...allSlides);
+        })
       }
-      setSlides(newSlides);
+      //setSlides(newSlides);
     } catch (error) {
       console.error('Error fetching bins:', error);
     } finally {
@@ -405,13 +414,24 @@ const Home = () => {
         },
       });
       const fetchedReviews = response.data.map((bin: any) => bin.record);
-      const reviewsData: Review[] = [];
+      const newReviews: Review[] = [];
       // Process reviews sequentially
       for (const reviewId of fetchedReviews) {
         const reviewBin = await JsonBinApi.getBinById(reviewId);
-        reviewsData.push(reviewBin);
+        newReviews.push(reviewBin);
+        setReviews((oldReviews: Array<any>) => {
+          const allReviews: Set<Review> = new Set<Review>(oldReviews);
+          allReviews.add(newReviews[0])
+  
+          console.log(allReviews)
+          if(allReviews.size > 0) {
+            setIsReviewsLoading(false);
+          }
+          console.log(allReviews, isReviewsLoading)
+          return new Array<Review>(...allReviews);
+        })
       }
-      setReviews(reviewsData);
+      //setReviews(reviewsData);
     } catch (error) {
       console.error('Error fetching reviews:', error);
     } finally {
@@ -421,10 +441,11 @@ const Home = () => {
 
   // On mount, initiate data fetching
   useEffect(() => {
+    fetchReviews();
+    fetchBins();
+
     setIsBinsLoading(true);
     setIsReviewsLoading(true);
-    fetchBins();
-    fetchReviews();
   }, []);
 
   // --------- Konami Code & Mobile Tapping Easter Egg ---------

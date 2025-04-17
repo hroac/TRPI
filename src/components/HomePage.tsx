@@ -304,8 +304,8 @@ const BenefitsSection = () => {
 
 // --------- HOME COMPONENT ---------
 const Home = () => {
-  const [slides, setSlides] = useState<Array<Slide>>([]);
-  const [reviews, setReviews] = useState<Array<Review>>([]);
+  const [slides, setSlides] = useState<Record<string, Slide>>({});
+  const [reviews, setReviews] = useState<Record<string, Review>>({});
   const [isBinsLoading, setIsBinsLoading] = useState<boolean>(false);
   const [isReviewsLoading, setIsReviewsLoading] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -384,13 +384,15 @@ const Home = () => {
             </Box>
           ),
         });
-        setSlides((oldSlides: Array<any>) => {
-          const allSlides: Set<Slide> = new Set<Slide>(oldSlides);
-          allSlides.add(newSlides[newSlides.length - 1])
-          if(new Array(...allSlides).length > 0) {
+        setSlides((oldSlides: Record<string, any>) => {
+          const allSlides: Record<string, Slide> = {...oldSlides}
+
+          allSlides[item.record] = newSlides[newSlides.length - 1]
+          //allSlides.add(newSlides[newSlides.length - 1])
+          if(Object.keys(allSlides).length > 0) {
             setIsBinsLoading(false);
           }
-          return new Array<Slide>(...allSlides);
+          return allSlides;
         })
       }
       //setSlides(newSlides);
@@ -419,16 +421,15 @@ const Home = () => {
       for (const reviewId of fetchedReviews) {
         const reviewBin = await JsonBinApi.getBinById(reviewId);
         newReviews.push(reviewBin);
-        setReviews((oldReviews: Array<any>) => {
-          const allReviews: Set<Review> = new Set<Review>(oldReviews);
-          allReviews.add(newReviews[newReviews.length - 1])
-  
-          console.log(allReviews)
-          if(allReviews.size > 0) {
-            setIsReviewsLoading(false);
+        setReviews((oldReviews: Record<string, Review>) => {
+          const allReviews: Record<string, Review> = {...oldReviews}
+
+          allReviews[reviewId] = newReviews[newReviews.length - 1]
+          //allSlides.add(newSlides[newSlides.length - 1])
+          if(Object.keys(allReviews).length > 0) {
+            setIsBinsLoading(false);
           }
-          console.log(allReviews, isReviewsLoading)
-          return new Array<Review>(...allReviews);
+          return allReviews;
         })
       }
       //setReviews(reviewsData);
@@ -504,8 +505,8 @@ const Home = () => {
     <Container sx={{ mt: '128px' }}>
       <HeroSection />
       <TypeMatrix />
-      <ReviewsSection reviews={reviews} />
-      <TestResultsCarousel slides={slides} />
+      <ReviewsSection reviews={Object.values(reviews)} />
+      <TestResultsCarousel slides={Object.values(slides)} />
       <Stories />
       <BenefitsSection />
 

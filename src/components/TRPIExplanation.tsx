@@ -52,6 +52,8 @@ const TRPIExplanation: React.FC = () => {
   
   return (
     <Container sx={{marginTop: '100px'}}>
+                <Paper elevation={3} sx={{ padding: '20px', borderRadius: '10px' }}>
+      
       <TRPIHelmet/>
     <Box sx={{maxWidth: '800px', margin: '0 auto' }}>
       <Typography variant="h4" gutterBottom>
@@ -335,6 +337,7 @@ const TRPIExplanation: React.FC = () => {
         </CardContent>
       </Card>
     </Box>
+    </Paper>
     </Container>
 
   );

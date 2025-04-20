@@ -477,6 +477,92 @@ export function filterTypesByMajorityTraitMatch(
   });
 }
 
+// Utility to flip Extraversion ↔ Introversion
+function flipEI(letter: any) {
+  return letter === 'E' ? 'I' : 'E';
+}
+
+// Utility to flip Judging ↔ Perceiving
+function flipJP(letter: any) {
+  return letter === 'J' ? 'P' : 'J';
+}
+
+// Generate the four TRPI “complement” types for any baseType.
+// e.g. "INTJ" → ["ESTP","ESFP","ENTP","ENFP"]
+const MID_LETTERS = ['ST', 'SF', 'NT', 'NF'];
+export function generateComplements(baseType: any) {
+  const first = flipEI(baseType[0]);
+  const last = flipJP(baseType[3]);
+  return MID_LETTERS.map(mid => first + mid + last);
+}
+
+/**
+ * Compare two Big‑Five profiles while ignoring profileA's dominant non‑openness trait.
+ * Uses a weighted Euclidean distance function (must be available in scope).
+ *
+ * @param {Object} profileA  - { openness, conscientiousness, extraversion, agreeableness, neuroticism }
+ * @param {Object} profileB  - Same shape as profileA
+ * @param {Object} [weights] - Optional per‑trait weights
+ * @returns {number}         - Euclidean distance over the four remaining traits
+ */
+export function compareProfilesIgnoringDominant(profileA: any, profileB: any, weights = {}) {
+  // Identify dominant trait in A, excluding 'openness'
+  const traits = Object.keys(profileA).filter(k => k !== 'openness');
+  let dominant = traits[0];
+  for (const k of traits) {
+    if (profileA[k] > profileA[dominant]) {
+      dominant = k;
+    }
+  }
+
+  // Build reduced copies without that dominant trait
+  const a = {};
+  const b = {};
+  for (const k in profileA) {
+    if (k !== dominant) {
+      (a as any)[k] = profileA[k];
+      (b as any)[k] = profileB[k];
+    }
+  }
+
+  // Compute weighted Euclidean distance
+  const epsilon = 1e-5;
+  return Math.sqrt(
+    Object.keys(a).reduce((sum, key) => {
+      const w = (weights as any)[key] || 1;
+      const diff = (a as any)[key] - (b as any)[key];
+      const d = Math.max(Math.abs(diff), epsilon);
+      return sum + w * d * d;
+    }, 0)
+  );
+}
+
+/**
+ * Find the closest TRPI “complement” for a given base type.
+ *
+ * @param {string} baseType            - Four‑letter MBTI type ("INTJ", "ENTP", etc.)
+ * @param {Object} userProfile         - Big‑Five profile { openness, conscientiousness, extraversion, agreeableness, neuroticism }
+ * @param {Array<{type:string,traits:Object}>} allProfiles
+ * @param {Object} [weights={}]        - Optional per‑trait weights for distance
+ * @returns {{ type: string, distance: number }}
+ */
+export function findClosestComplement(baseType: string, userProfile: any, weights = {}) {
+  const complements = generateComplements(baseType);
+  let best = { type: '', distance: Infinity };
+
+  for (const candidate of MBTIProfiles.filter(prf => complements.includes(prf.name))) {
+    const dist = compareProfilesIgnoringDominant(userProfile, candidate.traits, weights);
+    if (dist < best.distance) {
+      best = { type: candidate.name, distance: dist };
+    }
+  }
+
+  if (best.type === null) {
+    throw new Error(`No complement profiles found for ${baseType}`);
+  }
+
+  return best;
+}
 
   /**
  * Determine the TRPI suffix (ST, SF, NT, or NF) for a given MBTI type,

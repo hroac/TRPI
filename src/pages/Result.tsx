@@ -31,7 +31,7 @@ import { Share as ShareIcon, Close as CloseIcon } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import RedditIcon from '@mui/icons-material/Reddit';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import { determineTRPISuffix } from '../utils/mbtiMapping';
+import { determineTRPISuffix, findClosestComplement } from '../utils/mbtiMapping';
 
 const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number }, binId: string }> = ({
   type,
@@ -164,7 +164,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
   }
 
   const { type, bigFiveResponses, primary4FType, description, responses, statements, accuracy, list, suffix } = bin;
-  const typeSuffix = suffix ?? determineTRPISuffix(type, list)
+  const typeSuffix = suffix ?? findClosestComplement(type, bigFiveResponses)?.type.slice(1,3)
   const data = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
     datasets: [

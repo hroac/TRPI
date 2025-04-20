@@ -171,10 +171,12 @@ console.log(responses)
       acc[trait] = average > 1 ? 1 : average
     return acc;
   }, {} as { [trait: string]: number });
-    const primary4F = determinePrimary4FType(weightedScores);
+    //const primary4F = determinePrimary4FType(weightedScores);
 
     const mbtiType = matchMBTI(weightedScores )//matchMBTIType(weightedScores, primary4F );
-    const type = matchMBTIType(weightedScores, primary4F, false);
+    const primary4F = MBTIProfiles.find(profile => profile.name === mbtiType.type)?.mode || ""
+
+    //const type = matchMBTIType(weightedScores, primary4F, false);
 
     setPrimary4FType(primary4F);
     setMatchedMBTIType(mbtiType.type);
@@ -266,9 +268,10 @@ console.log(responses)
       return acc;
     }, {} as { [trait: string]: number });
 
-    const primary4F = determinePrimary4FType(weightedScores);
+    //const primary4F = determinePrimary4FType(weightedScores);
     const mbtiType = matchMBTI(weightedScores)//matchMBTIType(weightedScores, primary4F);
     const profile = typesData.find(t => t.type === mbtiType.type);
+    const primary4F = profile?.mode || ''
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
     setAccuracy(accuracy)
     setList(mbtiType.scores)
@@ -335,11 +338,13 @@ console.log(responses)
       setResponses({...updatedResponses});
       //setLastStage(0)
 
-      const primary4F = determinePrimary4FType(profile);
+      //const primary4F = determinePrimary4FType(profile);
       const mbtiType = matchMBTI(profile)// matchMBTIType(profile, primary4F);
       //const typeNo4F = matchMBTIType(profile, primary4F,false);
 
       const typeNo4F = matchMBTI(profile)// matchMBTIType(profile, typeNo4F
+      const primary4F = MBTIProfiles.find(profile => profile.name === mbtiType.type)?.mode || ""
+
       setPrimary4FType(primary4F);
       setMatchedMBTIType(mbtiType.type);
       setAccuracy((mbtiType.scores as any)[mbtiType.type].score);

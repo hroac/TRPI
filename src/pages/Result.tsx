@@ -31,6 +31,7 @@ import { Share as ShareIcon, Close as CloseIcon } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import RedditIcon from '@mui/icons-material/Reddit';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import { determineTRPISuffix } from '../utils/mbtiMapping';
 
 const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number }, binId: string }> = ({
   type,
@@ -128,6 +129,8 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
   const handleCloseShareModal = () => setShareModalOpen(false);
   const handleSnackbarClose = () => setSnackbarOpen(false);
 
+
+
   if (loading) {
     return (
       <Paper elevation={3} sx={{ mt: '75px !important', p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
@@ -160,7 +163,8 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
     );
   }
 
-  const { type, bigFiveResponses, primary4FType, description, responses, statements, accuracy, list } = bin;
+  const { type, bigFiveResponses, primary4FType, description, responses, statements, accuracy, list, suffix } = bin;
+  const typeSuffix = suffix ?? determineTRPISuffix(type, list)
   const data = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
     datasets: [
@@ -237,7 +241,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
         </Grid>
         <Grid item xs>
           <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ wordBreak: 'break-word' }}>
-            TRPI - {primary4FType} - {type} {accuracy ? `- ${accuracy.toFixed(1)}%` : ''}
+            TRPI - {primary4FType} - {type}-{typeSuffix} {accuracy ? `${accuracy.toFixed(1)}%` : ''}
           </Typography>
         </Grid>
         <Grid item>

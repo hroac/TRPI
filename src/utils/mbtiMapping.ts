@@ -478,6 +478,66 @@ export function filterTypesByMajorityTraitMatch(
 }
 
 
+  /**
+ * Determine the TRPI suffix (ST, SF, NT, or NF) for a given MBTI type,
+ * based on which opposite (J→P or P→J) type has the highest score.
+ *
+ * @param {string} baseType  - Four‑letter MBTI type (e.g. "ENTP" or "INTJ")
+ * @param {Object} scores    - Map from type string to { score: number, … }
+ * @returns {string}         - One of "ST", "SF", "NT", "NF"
+ */
+  export function determineTRPISuffix(baseType: string, scores: any) {
+    // Define which group we're in:
+    const isJudger    = baseType.endsWith("J");
+    const isPerceiver = baseType.endsWith("P");
+    if (!isJudger && !isPerceiver) {
+      throw new Error("Type must end in J or P");
+    }
+  
+    // For Judgers, suffix → Ego state → points at a Perceiver (Freeze/Fawn).
+    // For Perceivers, suffix → Superego state → points at a Judger (Fight/Flight).
+    const oppositeMap = {
+      // All Judgers share the same four P‑type targets:
+      ST: ["ISTP", "ESTP"],  // Thinking suffix → logic → Freeze/Fight
+      SF: ["ISFP", "ESFP"],  // Feeling suffix → values → Fawn/Flight
+      NT: ["INTP", "ENTP"],
+      NF: ["INFP", "ENFP"]
+    };
+  
+    // All Perceivers share the same four J‑type targets:
+    const oppositeMapRev = {
+      ST: ["ISTJ", "ESTJ"],
+      SF: ["ISFJ", "ESFJ"],
+      NT: ["INTJ", "ENTJ"],
+      NF: ["INFJ", "ENFJ"]
+    };
+  
+    const mapToUse = isJudger ? oppositeMap : oppositeMapRev;
+  
+    let bestSuffix = null;
+    let bestScore  = -Infinity;
+  
+    // Check each suffix bucket
+    for (const suffix of ["ST","SF","NT","NF"]) {
+      // Sum the scores of the two opposite types for that suffix
+      const targets = (mapToUse as any)[suffix];
+      let bucketScore = 0;
+      for (const t of targets) {
+        if (scores[t] && typeof scores[t].score === "number") {
+          bucketScore += scores[t].score;
+        }
+      }
+      // Pick the suffix whose bucket has the highest total
+      if (bucketScore > bestScore) {
+        bestScore  = bucketScore;
+        bestSuffix = suffix;
+      }
+    }
+  
+    return bestSuffix;
+  }
+
+
 export function pearsonProfile(profile: number[], types: any[], filterTypes = true) {
   // 1. Filter down the types by trait difference
  // const filteredTypes = filterTypesByMajorityTraitMatch(profile, types, 0.4, 4);

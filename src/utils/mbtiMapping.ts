@@ -397,7 +397,7 @@ export const matchMBTI = (profile: Record<any, any>, exclude?: Array<string>) =>
   const profileArray = Object.values(profile);
 
   // Step 1: Calculate Scores (Pearson Correlation and Weighted Euclidean Distance)
-  const combinedScores = MBTIProfiles.filter(prf => !exclude || !exclude.includes(prf.name)).map((candidate) => {
+  const combinedScores = MBTIProfiles.map((candidate) => {
     // Pearson correlation between the user profile and the candidate traits
     const correlation = pearsonCorrelationBigFive(
       profileArray,
@@ -432,7 +432,11 @@ export const matchMBTI = (profile: Record<any, any>, exclude?: Array<string>) =>
   });
 
   // Step 2: Sort by Score and Find the Best Match
-  const sortedScores = combinedScores.sort((a, b) => b.score - a.score);
+  const sortedScores = combinedScores.sort((a, b) => b.score - a.score).filter((profile, index) => {
+    if(!exclude || (!index || !exclude.includes(profile.type))) {
+      return profile
+    }
+  });
   const bestMatch = sortedScores[0];
 
   // Step 3: Return the Results
@@ -7686,8 +7690,6 @@ export const allStatements = [
       "10-20": {
         "text": "I occasionally feel a little frustrated.",
         "exclude": [
-          "INTJ",
-          "ISTJ",
           "ISFJ",
           "INFJ",
           "ENFJ",

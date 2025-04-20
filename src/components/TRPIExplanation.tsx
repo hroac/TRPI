@@ -323,6 +323,62 @@ const TRPIExplanation: React.FC = () => {
           </TableContainer>
         </AccordionDetails>
       </Accordion>
+      <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="h6">TRPI 64‑State Reference</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box mb={2}>
+          <Typography variant="subtitle1"><strong>1. Type System</strong></Typography>
+          <Typography paragraph>
+            All 16 MBTI types operate from either the Ego or Superego by default. Judging types (ending in J) are Superego‑based; Perceiving types (ending in P) are Ego‑based. A two‑letter suffix (ST, SF, NT, NF) indicates the currently active alternate control system.
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="subtitle1"><strong>2. Control System Logic</strong></Typography>
+          <Typography paragraph>
+            For J types, the suffix shows the <strong>Ego</strong> pairing (Fight or Flight). For P types, the suffix shows the <strong>Superego</strong> pairing (Freeze or Fawn).
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="subtitle1"><strong>3. Function Pairing Rules</strong></Typography>
+          <Typography paragraph>
+            Each suffix pairs one perceiving and one judging function with opposite attitudes within the same hemisphere:
+          </Typography>
+          <Typography component="ul">
+            <li><strong>ST:</strong> Sensing + Thinking</li>
+            <li><strong>SF:</strong> Sensing + Feeling</li>
+            <li><strong>NT:</strong> Intuition + Thinking</li>
+            <li><strong>NF:</strong> Intuition + Feeling</li>
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="subtitle1"><strong>4. 4F Response Mapping</strong></Typography>
+          <Typography paragraph>
+            Responses under stress map to the 4F survival modes based on control system base:
+          </Typography>
+          <Typography component="ul">
+            <li><strong>Superego base (J types):</strong> ST/NT → Fight; SF/NF → Flight</li>
+            <li><strong>Ego base (P types):</strong> ST/NT → Freeze; SF/NF → Fawn</li>
+          </Typography>
+        </Box>
+        <Box mb={2}>
+          <Typography variant="subtitle1"><strong>5. Example Shifts</strong></Typography>
+          <Typography component="ul">
+            <li><strong>ENTJ–ST:</strong> TiSe — Fight</li>
+            <li><strong>ENTJ–SF:</strong> FiSe — Flight</li>
+            <li><strong>ISTP–ST:</strong> TeSi — Freeze</li>
+            <li><strong>ISTP–SF:</strong> FeSi — Fawn</li>
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="subtitle1"><strong>6. System Summary</strong></Typography>
+          <Typography paragraph>
+            There are 64 distinct states (16 types × 4 suffixes). Each suffix reveals the active function pairing, the engaged control system, and the resulting 4F response, capturing real‑time shifts in cognition and stress adaptation.
+          </Typography>
+        </Box>
+      </AccordionDetails>
+    </Accordion>
 
       <Card sx={{ marginBottom: '20px' }}>
         <CardContent>

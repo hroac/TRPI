@@ -554,6 +554,7 @@ export function findClosestComplement(baseType: string, userProfile: any, weight
     const dist = compareProfilesIgnoringDominant(userProfile, candidate.traits, weights);
     if (dist < best.distance) {
       best = { type: candidate.name, distance: dist };
+      console.log('best', best)
     }
   }
 

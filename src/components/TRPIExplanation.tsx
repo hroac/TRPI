@@ -61,10 +61,7 @@ const TRPIExplanation: React.FC = () => {
       </Typography>
 
       <Typography variant="body1" paragraph>
-        The Trait Response Personality Indicator (TRPI) combines elements of the MBTI, Big Five traits, and the 4F trauma
-        response system to provide insights into personality. It’s rooted in the idea that responses to stress and trauma
-        play a significant role in personality development, influencing our information processing, social interactions,
-        and coping mechanisms.
+      The Trait Response Personality Indicator (TRPI) blends Jungian cognitive functions, Freudian structure, and the 4F trauma response system to map how personality forms and adapts under pressure. It reframes traditional typology by showing that personality is not fixed but shaped by the brain’s response to stress, experience, and environment.
       </Typography>
 
       {/* <iframe src="https://mfr.de-1.osf.io/render?url=https%3A%2F%2Fosf.io%2Fdownload%2Fzrq4v%2F%3Fdirect%26mode%3Drender"

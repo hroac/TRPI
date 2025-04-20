@@ -7675,10 +7675,6 @@ export const allStatements = [
       "0-10": {
         "text": "I rarely get angry.",
         "exclude": [
-          "ESTP",
-          "INTJ",
-          "ISTJ",
-          "ESTJ",
           "ISFJ",
           "INFJ",
           "ENFJ",
@@ -7690,10 +7686,8 @@ export const allStatements = [
       "10-20": {
         "text": "I occasionally feel a little frustrated.",
         "exclude": [
-          "ESTP",
           "INTJ",
           "ISTJ",
-          "ESTJ",
           "ISFJ",
           "INFJ",
           "ENFJ",

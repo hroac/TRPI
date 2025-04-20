@@ -39,7 +39,7 @@ const Ranking: React.FC<RankingProps> = ({ data }) => {
   const sortedItems = filteredItems.sort((a, b) => b.score - a.score);
 
   // Limit to the top 5 items
-  const topItems = sortedItems.slice(0, 5).filter(item => item.type !== mostAccurate.type);
+  const topItems = sortedItems.slice(0, 5).filter(item => item.type !== mostAccurate.type && item.score > 0);
 
 
   // Normalize the score values among the top items for a 0-100 range

@@ -3439,12 +3439,6 @@ export const allStatements = [
           "ISTJ",
           "ENTJ",
           "ESTJ",
-          "ISFJ",
-          "INFJ",
-          "ESFJ",
-          "ENFJ",
-          "ESFP",
-          "ENFP"
         ]
       },
       "10-20": {
@@ -3456,12 +3450,6 @@ export const allStatements = [
           "ISTJ",
           "ENTJ",
           "ESTJ",
-          "ISFJ",
-          "INFJ",
-          "ESFJ",
-          "ENFJ",
-          "ESFP",
-          "ENFP"
         ]
       },
       "20-30": {
@@ -3473,12 +3461,6 @@ export const allStatements = [
           "ISTJ",
           "ENTJ",
           "ESTJ",
-          "ISFJ",
-          "INFJ",
-          "ESFJ",
-          "ENFJ",
-          "ESFP",
-          "ENFP"
         ]
       },
       "30-40": {
@@ -3532,11 +3514,6 @@ export const allStatements = [
       "90-100": {
         "text": "I always base my decisions solely on factual evidence.",
         "exclude": [
-          "ENTP",
-          "ESTP",
-          "INTP",
-          "ISTP",
-          "ISTJ",
           "ISFJ",
           "INFJ",
           "ESFP",

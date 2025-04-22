@@ -503,6 +503,64 @@ export function generateComplements(baseType: any) {
 }
 
 /**
+ * Compare two Big‑Five profiles using Pearson correlation,
+ * **excluding** both the 'openness' trait and the dominant non‑openness trait of profileA.
+ *
+ * @param profileA  - first Big‑Five profile (with keys: openness, conscientiousness, extraversion, agreeableness, neuroticism)
+ * @param profileB  - second Big‑Five profile (same keys)
+ * @returns         - Pearson r between the two reduced profiles (–1 to 1)
+ */
+export function compareProfilesIgnoringDominantPearson(
+  profileA: Record<string, number>,
+  profileB: Record<string, number>
+): number {
+  // 1. Build a list of trait keys, excluding 'openness'
+  const traitKeys = Object.keys(profileA).filter(k => k !== "openness");
+
+  // 2. Find the dominant trait in A (among those non‑openness keys)
+  let dominant = traitKeys[0];
+  for (const key of traitKeys) {
+    if (profileA[key] > profileA[dominant]) {
+      dominant = key;
+    }
+  }
+
+  // 3. Final list of keys to compare: exclude both 'openness' and the dominant trait
+  const compareKeys = traitKeys.filter(k => k !== dominant);
+
+  // 4. Extract the values
+  const aVals = compareKeys.map(k => profileA[k]);
+  const bVals = compareKeys.map(k => profileB[k]);
+
+  // 5. Compute means
+  const n = aVals.length;
+  const meanA = aVals.reduce((sum, v) => sum + v, 0) / n;
+  const meanB = bVals.reduce((sum, v) => sum + v, 0) / n;
+
+  // 6. Compute covariance and variances
+  let cov = 0,
+      varA = 0,
+      varB = 0;
+
+  for (let i = 0; i < n; i++) {
+    const da = aVals[i] - meanA;
+    const db = bVals[i] - meanB;
+    cov  += da * db;
+    varA += da * da;
+    varB += db * db;
+  }
+
+  // 7. Guard against zero variance
+  if (varA === 0 || varB === 0) {
+    return 0;
+  }
+
+  // 8. Return Pearson correlation coefficient
+  return cov / Math.sqrt(varA * varB);
+}
+
+
+/**
  * Compare two Big‑Five profiles while ignoring profileA's dominant non‑openness trait.
  * Uses a weighted Euclidean distance function (must be available in scope).
  *
@@ -520,6 +578,9 @@ export function compareProfilesIgnoringDominant(profileA: any, profileB: any, we
       dominant = k;
     }
   }
+
+  delete profileA.openness 
+  delete profileB.openness 
 
   // Build reduced copies without that dominant trait
   const a = {};
@@ -557,7 +618,7 @@ export function findClosestComplement(baseType: string, userProfile: any, weight
   let best = { type: '', distance: Infinity };
 
   for (const candidate of MBTIProfiles.filter(prf => complements.includes(prf.name))) {
-    const dist = compareProfilesIgnoringDominant(userProfile, candidate.traits, weights);
+    const dist = compareProfilesIgnoringDominantPearson(userProfile, candidate.traits);
     if (dist < best.distance) {
       best = { type: candidate.name, distance: dist };
       console.log('best', best)
@@ -569,6 +630,22 @@ export function findClosestComplement(baseType: string, userProfile: any, weight
   }
 
   return best;
+}
+
+export function getTRPISuffix(profile: BigFiveValues): "ST" | "NT" | "SF" | "NF" {
+  const { conscientiousness, agreeableness, neuroticism, extraversion } = profile;
+
+  // Determine which axis is dominant: C-A or N-E
+  const caAxis = Math.max(conscientiousness, agreeableness);
+  const neAxis = Math.max(neuroticism, extraversion);
+
+  if (caAxis > neAxis) {
+    // C-A axis dominates, check N vs E for suffix
+    return neuroticism > extraversion ? "NF" : "NT";
+  } else {
+    // N-E axis dominates, check C vs A for suffix
+    return conscientiousness > agreeableness ? "ST" : "SF";
+  }
 }
 
   /**

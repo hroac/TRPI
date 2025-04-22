@@ -556,7 +556,7 @@ export function compareProfilesIgnoringDominantPearson(
   }
 
   // 8. Return Pearson correlation coefficient
-  return cov / Math.sqrt(varA * varB);
+  return Math.abs(cov / Math.sqrt(varA * varB));
 }
 
 
@@ -613,13 +613,13 @@ export function compareProfilesIgnoringDominant(profileA: any, profileB: any, we
  * @param {Object} [weights={}]        - Optional per‑trait weights for distance
  * @returns {{ type: string, distance: number }}
  */
-export function findClosestComplement(baseType: string, userProfile: any, weights = {}) {
+export function findClosestComplement(baseType: string, userProfile: any) {
   const complements = generateComplements(baseType);
-  let best = { type: '', distance: Infinity };
+  let best = { type: '', distance: 0 };
 
   for (const candidate of MBTIProfiles.filter(prf => complements.includes(prf.name))) {
     const dist = compareProfilesIgnoringDominantPearson(userProfile, candidate.traits);
-    if (dist < best.distance) {
+    if (dist > best.distance) {
       best = { type: candidate.name, distance: dist };
       console.log('best', best)
     }
@@ -5170,7 +5170,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I love engaging in discussions and discussions on various ideas.",
+    "text": "I love engaging in discussions on various ideas.",
     "trait": "extraversion",
     "weight": 0.9,
     "aspect": "Assertiveness",

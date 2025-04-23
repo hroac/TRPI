@@ -9630,10 +9630,6 @@ export const allStatements = [
           "ISTP",
           "ISTJ",
           "ESTJ",
-          "ISFJ",
-          "ESFJ",
-          "ESFP",
-          "ISFP"
         ]
       }
     }

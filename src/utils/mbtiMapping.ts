@@ -579,8 +579,7 @@ export function compareProfilesIgnoringDominant(profileA: any, profileB: any, we
     }
   }
 
-  delete profileA.openness 
-  delete profileB.openness 
+
 
   // Build reduced copies without that dominant trait
   const a = {};
@@ -618,8 +617,11 @@ export function findClosestComplement(baseType: string, userProfile: any) {
   let best = { type: '', distance: 0 };
 
   for (const candidate of MBTIProfiles.filter(prf => complements.includes(prf.name))) {
-    const dist = compareProfilesIgnoringDominantPearson(userProfile, candidate.traits);
-    if (dist > best.distance) {
+    const distance1 = compareProfilesIgnoringDominantPearson(userProfile, candidate.traits);
+    const distance2 = compareProfilesIgnoringDominant(userProfile, candidate.traits)
+    console.log(candidate.name, distance1, distance2, distance1 - distance2)
+    const dist = Math.abs(distance1 - (distance2/2));
+    if (!best.distance || dist > best.distance) {
       best = { type: candidate.name, distance: dist };
       console.log('best', best)
     }

@@ -527,6 +527,7 @@ export function compareProfilesIgnoringDominantPearson(
 
   // 3. Final list of keys to compare: exclude both 'openness' and the dominant trait
   const compareKeys = traitKeys.filter(k => k !== dominant);
+  console.log(compareKeys)
 
   // 4. Extract the values
   const aVals = compareKeys.map(k => profileA[k]);
@@ -537,6 +538,7 @@ export function compareProfilesIgnoringDominantPearson(
   const meanA = aVals.reduce((sum, v) => sum + v, 0) / n;
   const meanB = bVals.reduce((sum, v) => sum + v, 0) / n;
 
+  console.log(aVals, bVals, meanA, meanB)
   // 6. Compute covariance and variances
   let cov = 0,
       varA = 0,
@@ -556,7 +558,7 @@ export function compareProfilesIgnoringDominantPearson(
   }
 
   // 8. Return Pearson correlation coefficient
-  return Math.abs(cov / Math.sqrt(varA * varB));
+  return cov / Math.sqrt(varA * varB);
 }
 
 
@@ -614,21 +616,28 @@ export function compareProfilesIgnoringDominant(profileA: any, profileB: any, we
  */
 export function findClosestComplement(baseType: string, userProfile: any) {
   const complements = generateComplements(baseType);
+  const distances = [];
   let best = { type: '', distance: 0 };
 
   for (const candidate of MBTIProfiles.filter(prf => complements.includes(prf.name))) {
     const distance1 = compareProfilesIgnoringDominantPearson(userProfile, candidate.traits);
     const distance2 = compareProfilesIgnoringDominant(userProfile, candidate.traits)
-    console.log(candidate.name, distance1, distance2, distance1 - distance2)
-    const dist = Math.abs(distance1 - (distance2/2));
-    if (!best.distance || dist > best.distance) {
+    console.log(candidate.name, distance1, distance2, distance1 - ((1 - distance2)/10))
+    const dist = distance1 - ((1- distance2)/10);
+    distances.push({ type: candidate.name, distance: dist })
+    if (dist > best.distance) {
       best = { type: candidate.name, distance: dist };
       console.log('best', best)
     }
   }
 
-  if (best.type === null) {
-    throw new Error(`No complement profiles found for ${baseType}`);
+  if (best.type === '') {
+    for(let dist of distances) {
+      if(Math.abs(dist.distance) > best.distance) {
+        best = dist;
+      }
+    }
+   // throw new Error(`No complement profiles found for ${baseType}`);
   }
 
   return best;

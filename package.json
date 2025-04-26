@@ -23,6 +23,7 @@
         "annyang": "^2.6.1",
         "axios": "^0.27.2",
         "chart.js": "^4.4.6",
+        "framer-motion": "^12.9.2",
         "franc": "^6.2.0",
         "gapi-script": "^1.2.0",
         "gh-pages-fs": "^1.0.0",

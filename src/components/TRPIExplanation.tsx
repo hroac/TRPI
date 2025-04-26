@@ -21,6 +21,7 @@ import Matrix from './Matrix';
 import ModeSelector from './ModeSelector';
 import { Helmet } from 'react-helmet';
 import { functionPairings } from '../utils/mbtiMapping';
+import TypeSelector from './TypeSelector';
 const TRPIHelmet: React.FC = () => (
   <Helmet>
     <title>Understanding Personality with TRPI</title>
@@ -77,6 +78,19 @@ const TRPIExplanation: React.FC = () => {
       <Box justifyContent={'center'}>
         <ModeSelector/>
       </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          marginBottom: '50px'
+        }}
+      >
+      <Box sx={{ width: '100%', maxWidth: 420,  }}>
+              <Matrix width={'100px'} />
+              </Box>
+              </Box>
         <Box
         sx={{
           display: 'flex',
@@ -86,9 +100,8 @@ const TRPIExplanation: React.FC = () => {
           marginBottom: '50px'
         }}
       >
-        <Box sx={{ width: '100%', maxWidth: 420 }}>
-              <Matrix width={'100px'} />
-              </Box>
+        
+             <TypeSelector/>
             </Box>
       <Accordion>
   <AccordionSummary expandIcon={<ExpandMoreIcon />}>

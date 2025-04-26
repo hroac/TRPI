@@ -71,7 +71,7 @@ const TypeSelector: React.FC = () => {
   };
 
   return (
-    <Box sx={isMobile ? {position: 'relative', left: 20}: {}}>
+    <Box >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2 }}>
         {mbtiLetters.map((ltr, idx) => (
           <Box

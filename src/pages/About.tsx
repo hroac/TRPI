@@ -78,7 +78,7 @@ const AboutPage: React.FC<{
           
             return range ? (statement.subtext as any)[range]?.text : null;
           };
-          if(description) {
+          if(!bin || description) {
             return;
           }
           setLoading(true)

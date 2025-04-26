@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
-import { functionPairings, MBTIProfiles } from '../utils/mbtiMapping';
+import { findClosestComplement, functionPairings, MBTIProfiles } from '../utils/mbtiMapping';
 import {
   Box,
   Grid,
@@ -24,7 +24,7 @@ import Carousel from '../components/Carousel';
 import PremiumModal from '../components/PremiumModal';
 import JsonBinApi from '../utils/jsonBin';
 import QuestionnaireModal from '../components/QuestionnaireModal';
-import { generateProfileAnalysis } from '../utils/profileGenerator';
+import { generateProfile, generateProfileAnalysis } from '../utils/profileGenerator';
 import { guid } from '../utils/guid';
 import Ranking from '../components/Ranking';
 import ReactMarkdown from 'react-markdown';
@@ -63,7 +63,52 @@ const AboutPage: React.FC<{
 
   const handleOpenPremiumModal = () => setPremiumModalOpen(true);
   const handleClosePremiumModal = () => setPremiumModalOpen(false);
+  const [desc, setDescription] = useState<any>('')
   
+  
+  useEffect(() => {
+
+    const fetchProfile = async () => {
+         const getSubtext = (statement: any, value: number) => {
+            const percentage = Math.round(value * 100);
+            const range = Object.keys(statement.subtext).find((key) => {
+              const [min, max] = key.split('-').map(Number);
+              return percentage >= min && percentage <= max;
+            });
+          
+            return range ? (statement.subtext as any)[range]?.text : null;
+          };
+          if(description) {
+            return;
+          }
+          setLoading(true)
+           let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
+         (prfl as any).suffix = findClosestComplement(bin.type, bin.bigFiveResponses)?.type.slice(1,3)
+                let descriptionText = `${statements.map((statement: any, index: any) => {
+                  const answer = allResponses[statement.trait][index];
+                  if(!answer) return '';
+                  const subText = getSubtext(statement, answer);
+                  return subText.trim();
+                }).join('\n')}`;
+
+          try {
+            const desc = await generateProfile({
+              cognitiveProfile: prfl,
+              assessment: descriptionText,
+              scores: bin.bigFiveResponses as any
+            })
+          setDescription(desc)
+          JsonBinApi.updateResultsInJsonBin({ ...bin, description: desc });
+      handleReloadBin && handleReloadBin();
+          } catch(error: any) {
+
+          } finally {
+            setLoading(false)
+          }
+    }
+    fetchProfile();
+  }, [bin])
+
   const handlePaymentSuccess = async (data: any) => {
     setPaymentSuccessful(true);
     setPremiumModalOpen(false);
@@ -217,7 +262,7 @@ const AboutPage: React.FC<{
               {description && <ReactMarkdown>{description}</ReactMarkdown> || typeInfo.description}
             </Typography>
           )}
-          {bin && bin.userId === guid() && !description && (
+          {bin && bin.userId === guid() && !loading && (
             <Button
               variant="contained"
               color="primary"

@@ -321,7 +321,6 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
         <AboutPage
           bin={bin}
           mbtiType={type}
-          suffix={suffix}
           showBigFive={false}
           description={description}
           allResponses={responses}

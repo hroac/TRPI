@@ -22,8 +22,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import {
   determinePrimary4FType,
-  findClosestComplement,
-  functionPairings,
   matchMBTI,
   matchMBTIType,
   MBTIProfiles,
@@ -46,7 +44,6 @@ import { typesData } from '../utils/typesData';
 import { Helmet } from 'react-helmet';
 import PremiumModal from './PremiumModal';
 import { statements as fixedStatements } from '../utils/mbtiMapping';
-import { generateProfile } from '../utils/profileGenerator';
 
 const BigFiveQuestionnaireHelmet: React.FC = () => (
   <Helmet>
@@ -310,29 +307,7 @@ console.log('new statements')
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const getSubtext = (statement: any, value: number) => {
-      const percentage = Math.round(value * 100);
-      const range = Object.keys(statement.subtext).find((key) => {
-        const [min, max] = key.split('-').map(Number);
-        return percentage >= min && percentage <= max;
-      });
-    
-      return range ? (statement.subtext as any)[range]?.text : null;
-    };
-     let prfl = functionPairings.find(pairing => pairing.type === mbtiType.type) || functionPairings[0];
-   (prfl as any).suffix = findClosestComplement(type, weightedScores)?.type.slice(1,3)
-          let descriptionText = `${statements.map((statement, index) => {
-            const answer = responses[statement.trait][index];
-            if(!answer) return '';
-            const subText = getSubtext(statement, answer);
-            return subText.trim();
-          }).join('\n')}`;
-    const desc = await generateProfile({
-      cognitiveProfile: prfl,
-      assessment: descriptionText,
-      scores: weightedScores as any
-    })
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: desc, responses: responses, statements, accuracy, list: mbtiType.scores});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores});
     navigate(`/result/${binId}`);
   };
 

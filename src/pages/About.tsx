@@ -144,7 +144,8 @@ const AboutPage: React.FC<{
           {stage.map((stmt: any) => {
             const index = stmnts.filter(s => s.trait === stmt.trait).indexOf(stmt);
             const explanation = allResponses[stmt.trait][index];
-            const value = typeof explanation === 'string' 
+            const parsed = parseInt(explanation);
+            const value = Number.isNaN(parsed) 
               ? explanation.trim() 
               : `${parseInt((explanation * 100).toString(), 10)} \n${getSubtext(stmt, explanation)}`;
             return (
@@ -159,8 +160,8 @@ const AboutPage: React.FC<{
                   <Typography sx={{ whiteSpace: "pre-wrap" }}>
                     <strong>Your Answer:</strong> {value || ""}
                   </Typography>
-                  <LinearProgress color="primary" variant="determinate" value={parseFloat(value.toString())}/>
-                  <LinearProgress color="primary" variant="determinate" value={parseFloat(value.toString())}/>
+                  <LinearProgress color="primary" variant="determinate" value={parseFloat(value.toString()) < 1 ? parseFloat(value.toString()) * 100 : parseFloat(value.toString())}/>
+                  <LinearProgress color="primary" variant="determinate" value={parseFloat(value.toString()) < 1 ? parseFloat(value.toString()) * 100 : parseFloat(value.toString())}/>
                 </Box>
               </Paper>
             );

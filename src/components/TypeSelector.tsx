@@ -1,6 +1,5 @@
-// src/App.tsx
 import React, { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { FlipLetter } from "./Flip";
 import { generateDescription } from "../utils/description";
 import ReactMarkdown from "react-markdown";
@@ -40,6 +39,8 @@ const toggleLetter = (
 };
 
 const TypeSelector: React.FC = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mbtiLetters, setMbtiLetters] = useState<Letter[]>([...INITIAL_MBTI]);
   const [suffixLetters, setSuffixLetters] = useState<Letter[]>([...INITIAL_SUFFIX]);
   const [desc, setDesc] = useState<string>("");
@@ -52,9 +53,7 @@ const TypeSelector: React.FC = () => {
     setDesc(rawCode.includes("X") ? "" : generateDescription(rawCode));
   }, [rawCode]);
 
-  // ────────────────────────────────────────────────────────────
   // Click handlers
-  // ────────────────────────────────────────────────────────────
   const toggleMbti = (idx: number) => {
     setMbtiLetters((current) => {
       const next = [...current];
@@ -71,38 +70,59 @@ const TypeSelector: React.FC = () => {
     });
   };
 
-  // ────────────────────────────────────────────────────────────
-  // Render
-  // ────────────────────────────────────────────────────────────
   return (
-    <Box>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+    <Box sx={isMobile ? {position: 'relative', left: 20}: {}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2 }}>
         {mbtiLetters.map((ltr, idx) => (
-          <FlipLetter key={`mbti-${idx}`} letter={ltr} onClick={() => toggleMbti(idx)} />
+          <Box
+            key={`mbti-${idx}`}
+            sx={{
+              fontSize: isMobile ? '1rem' : '3rem',
+              width: isMobile ? 30 : 60,
+              height: isMobile ? 40 : 60,
+            }}
+          >
+            <FlipLetter isMobile={isMobile} letter={ltr} onClick={() => toggleMbti(idx)} />
+          </Box>
         ))}
-        <Typography variant="h2">-</Typography>
+
+        <Typography
+          variant="h2"
+          sx={{ fontSize: isMobile ? '2rem' : '3rem', mx: isMobile ? 0.5 : 1 }}
+        >
+          
+        </Typography>
+
         {suffixLetters.map((ltr, idx) => (
-          <FlipLetter key={`suffix-${idx}`} letter={ltr} onClick={() => toggleSuffix(idx)} />
+          <Box
+            key={`suffix-${idx}`}
+            sx={{
+              fontSize: isMobile ? '2rem' : '3rem',
+              width: isMobile ? 40 : 60,
+              height: isMobile ? 40 : 60,
+            }}
+          >
+            <FlipLetter isMobile={isMobile} letter={ltr} onClick={() => toggleSuffix(idx)} />
+          </Box>
         ))}
       </Box>
 
-      <Box display={'flex'} justifyContent={'center'}> 
       {desc && (
         <Box
           sx={{
             mt: 4,
             p: 3,
-            bgcolor: "background.paper",
+            bgcolor: 'background.paper',
             borderRadius: 1,
             boxShadow: 1,
-            width: "100%",
+            width: '100%',
             maxWidth: 480,
+            mx: 'auto',
           }}
         >
           <ReactMarkdown>{desc}</ReactMarkdown>
         </Box>
       )}
-      </Box>
     </Box>
   );
 };

@@ -60,41 +60,76 @@ export const generateProfile = async (profile: Profile): Promise<string> => {
   const { cognitiveProfile, scores } = profile;
 
   const prompt = `
-    You are an expert at using the Big Five. Describe the following personality profile based on the provided cognitive structure, and Big Five scores. Provide a detailed description.
-
-    **Cognitive Profile:**
-    - Type: ${cognitiveProfile.type}
-    - 4F Trauma Response: ${cognitiveProfile.f4}
-    -Suffix: ${cognitiveProfile.suffix}
-
-    **Assessment:** 
-    ${profile.assessment}
-
-    **Big Five Scores:**
-    - Openness: ${scores.openness.toFixed(2)} (0-1)
-    - Conscientiousness: ${scores.conscientiousness.toFixed(2)} (0-1)
-    - Extraversion: ${scores.extraversion.toFixed(2)} (0-1)
-    - Agreeableness: ${scores.agreeableness.toFixed(2)} (0-1)
-    - Neuroticism: ${scores.neuroticism.toFixed(2)} (0-1)
-    
-
-    **Guidelines for Describing:**
-    1. **Cognitive Profile:**
-        - Highlight how the 4F trauma response (e.g., Flight) influences their behavior.
-        - Suggest actionable steps for leveraging their function stack effectively.
-        - Address challenges posed by their opposite type (${cognitiveProfile.opposite}).
-
-    2. **Big Five Scores:**
-        - Provide tailored advice for each trait (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism).
-        - Focus on how these traits interact with their cognitive functions.
-
-    3. **Suffix**
-        -Explain how their suffix influences their type, 
-        -the suffix is the middle two letters of their ego or superego, 
-        -if the type ends with J the suffix denotes their ego while if a type ends with P it denotes their superego
-
-also pretty please format this nicely, write it like a psychogist would write a report to a client to help them understand themselves. use md formatting and make it fancy!!. and get straight into the analysis  dont include titles
+  You are a TRPI-certified personality specialist, accredited in the four pillars of TRPI: the Big Five trait framework, the trait response model (4F), Freud’s structural model of the psyche (Id, Ego, Superego), and Jung’s cognitive functions and their dynamic interconnections. Your task is to weave these four lenses into a seamless, client-friendly report.
+  
+  **INPUTS**  
+  **Cognitive Profile**  
+  • **Type:** ${cognitiveProfile.type}  
+  • **Trait Response:** ${cognitiveProfile.f4}  
+  • **Suffix:** ${cognitiveProfile.suffix} _(the two middle letters of their active judging type: their Ego type if “J”, or their Superego type if “P”)_  
+  • **Opposite Type:** ${cognitiveProfile.opposite}  
+  
+  **Assessment Narrative:**  
+  ${profile.assessment}
+  
+  **Big Five Scores** (0–1 scale)  
+  • **Openness:** ${scores.openness.toFixed(2)}  
+  • **Conscientiousness:** ${scores.conscientiousness.toFixed(2)}  
+  • **Extraversion:** ${scores.extraversion.toFixed(2)}  
+  • **Agreeableness:** ${scores.agreeableness.toFixed(2)}  
+  • **Neuroticism:** ${scores.neuroticism.toFixed(2)}
+  
+  ---
+  
+  **Cognitive Modes & Alignments**  
+  • **Fight (Se/Ne + Ti):** ENTP, ESTP, INTP, ISTP  
+  • **Freeze (Si/Ni + Te):** INTJ, ISTJ, ENTJ, ESTJ  
+  • **Fawn (Si/Ni + Fe):** ISFJ, INFJ, ESFJ, ENFJ  
+  • **Flight (Se/Ne + Fi):** ESFP, ENFP, ISFP, INFP  
+  
+  **Big Five ↔ Trait Response**  
+  • **Conscientiousness:** Freeze (Si/Ni + Te)  
+  • **Extraversion:** Fight (Se/Ne + Ti)  
+  • **Agreeableness:** Fawn (Si/Ni + Fe)  
+  • **Neuroticism:** Flight (Se/Ne + Fi)  
+  • **Openness:** Determines Sensing (low) or Intuition (high)
+  
+  ---
+  
+  **GUIDELINES**  
+  1. **TRPI Cognitive & Trait Response Integration**  
+     - Detail how their Jungian function stack operates in daily life and within the structural psyche (Id drives, Ego regulation, Superego critique).  
+     - Show how the trait response modulates each function under stress.  
+     - Offer 2–3 concrete strategies to leverage dominant functions, soothe the trait response, and strengthen Ego resilience.  
+  
+  2. **Suffix & Ego/Superego Dynamics**  
+     - Explain that the **suffix** comes from the two middle letters of the type code of their active judging subsystem:  
+       - For **J**-ending types, this is taken from their **Ego type** (Ti/Fi conscious judging).  
+       - For **P**-ending types, it’s from their **Superego type** (Te/Fe unconscious judging).  
+     - Describe how that subsystem shapes decision-making, self-critique, and the tension between Id impulses and Superego ideals.  
+     - Recommend exercises for healthy Ego integration (e.g. structured self-reflection) or for unconscious integration for P-suffix types (e.g. guided role-play).
+  
+  3. **Freudian Structural Insights**  
+     - **Id Drives:** Map to all perceiving functions (Se, Si, Ne, Ni) as the source of raw impulses and data-gathering urges.  
+     - **Ego Regulation:** Grounded in the judging functions Ti and Fi, managing and integrating drives through logical or values-based processing.  
+     - **Superego Ideals:** Derived from the judging functions Te and Fe, embodying internalized standards, social norms, and “should” imperatives.  
+     - Suggest methods to harmonize these forces—e.g. Ego-strengthening journaling to balance raw drives with ideal constraints, boundary-setting exercises to honor both needs and norms.
+  
+  4. **Big Five Trait Interventions**  
+     - **Openness:** Relate high/low Openness to Ni/Ne/Se/Si tension; propose creative vs. sensory grounding practices.  
+     - **Conscientiousness:** Link C to Ego’s Te organization; offer planning frameworks paired with self-compassion.  
+     - **Extraversion:** Tie E to Id’s Se/Ne expression; Assertiveness to Ti; advise energy regulation for inward-focused types.  
+     - **Agreeableness:** Connect A to Fe empathy and Superego harmony; share boundary-setting and assertiveness drills.  
+     - **Neuroticism:** Map N to Ego vulnerabilities with Fi/Ti; provide grounding, cognitive restructuring, and Ego-reinforcement techniques.
+  
+  5. **Report Style**  
+     - Format like a psychologist’s client report: clear **section headings**, bullet-point summaries, and concise **“Action Steps”** at each stage.  
+     - Use Markdown for emphasis—**bold**, *italics*, and ✔️ checklists.  
+     - Begin immediately with the analysis—no title or preamble.
+  
+  Deliver a richly detailed, actionable profile that melds TRPI’s four pillars to empower the client’s self-understanding and growth.
   `;
+  ;
 
   try {
     const response = await axios.post(

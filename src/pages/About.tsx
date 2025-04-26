@@ -32,6 +32,7 @@ import ReactMarkdown from 'react-markdown';
 const AboutPage: React.FC<{
   bin?: any,
   mbtiType?: string;
+  suffix?: string;
   showBigFive?: boolean;
   description?: string;
   allResponses?: any;
@@ -39,7 +40,7 @@ const AboutPage: React.FC<{
   stages?: any[];
   list?: Record<any, any>;
   handleReloadBin?: () => void;
-}> = ({ bin, mbtiType, showBigFive = true, description = '', allResponses = {}, statements = [], stages = [], list={}, handleReloadBin = null }) => {
+}> = ({ bin, mbtiType, suffix, showBigFive = true, description = '', allResponses = {}, statements = [], stages = [], list={}, handleReloadBin = null }) => {
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t) => t.type === type || t.type === mbtiType);
   const profile = MBTIProfiles.find((p) => p.name === type || p.name === mbtiType);
@@ -70,6 +71,7 @@ const AboutPage: React.FC<{
 
     try {
       let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
+      (profile as any).suffix = suffix;
       let descriptionText = `${stmnts.map((statement, index) => {
         const answer = allResponses[statement.trait][index];
         if(!answer) return '';

@@ -28,6 +28,8 @@ import {
   pearsonCorrelationBigFive,
   pearsonProfile,
 longStatements,
+functionPairings,
+findClosestComplement,
 } from '../utils/mbtiMapping';
 import Matrix from './Matrix';
 import {
@@ -45,6 +47,7 @@ import { typesData } from '../utils/typesData';
 import { Helmet } from 'react-helmet';
 import PremiumModal from './PremiumModal';
 import { statements, stages as shortStages } from '../utils/mbtiMapping'; // Importing original for reference
+import { generateProfile } from '../utils/profileGenerator';
 
 const LongBigFiveQuestionnaireHelmet: React.FC = () => (
   <Helmet>
@@ -284,7 +287,29 @@ console.log(responses)
     localStorage.removeItem('longResponses')
     localStorage.removeItem('longStage')
     localStorage.removeItem('longLastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements: longStatements, accuracy, list: mbtiType.scores});
+const getSubtext = (statement: any, value: number) => {
+  const percentage = Math.round(value * 100);
+  const range = Object.keys(statement.subtext).find((key) => {
+    const [min, max] = key.split('-').map(Number);
+    return percentage >= min && percentage <= max;
+  });
+
+  return range ? (statement.subtext as any)[range]?.text : null;
+};
+     let prfl = functionPairings.find(pairing => pairing.type === mbtiType.type) || functionPairings[0];
+   (prfl as any).suffix = findClosestComplement(type, weightedScores)?.type.slice(1,3)
+          let descriptionText = `${statements.map((statement, index) => {
+            const answer = responses[statement.trait][index];
+            if(!answer) return '';
+            const subText = getSubtext(statement, answer);
+            return subText.trim();
+          }).join('\n')}`;
+    const desc = await generateProfile({
+      cognitiveProfile: prfl,
+      assessment: descriptionText,
+      scores: weightedScores as any
+    })
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: desc, responses: responses, statements: longStatements, accuracy, list: mbtiType.scores});
     navigate(`/result/${binId}`); // Ensure your result route can handle potentially different data
   };
 

@@ -24,6 +24,7 @@ export interface CognitiveProfile {
   tertiary: string; // Tertiary pairing, e.g., Fe > Si (Ego + Id)
   inferior: string; // Inferior pairing, e.g., Fi > Se (Ego + Id)
   opposite: string; // Opposite type, e.g., ESTJ
+  suffix?: string;
 }
 
 export interface BigFiveScores {
@@ -32,6 +33,12 @@ export interface BigFiveScores {
   extraversion: number; // 0-1
   agreeableness: number; // 0-1
   neuroticism: number; // 0-1
+}
+
+export interface Profile {
+  cognitiveProfile: CognitiveProfile,
+  assessment: any,
+  scores: BigFiveScores,
 }
 
 export interface FullProfile {
@@ -48,6 +55,82 @@ export interface FullProfile {
   };
 }
 
+
+export const generateProfile = async (profile: Profile): Promise<string> => {
+  const { cognitiveProfile, scores } = profile;
+
+  const prompt = `
+    You are an expert at using the Big Five. Describe the following personality profile based on the provided cognitive structure, and Big Five scores. Provide a detailed description.
+
+    **Cognitive Profile:**
+    - Type: ${cognitiveProfile.type}
+    - 4F Trauma Response: ${cognitiveProfile.f4}
+    -Suffix: ${cognitiveProfile.suffix}
+
+    **Assessment:** 
+    ${profile.assessment}
+
+    **Big Five Scores:**
+    - Openness: ${scores.openness.toFixed(2)} (0-1)
+    - Conscientiousness: ${scores.conscientiousness.toFixed(2)} (0-1)
+    - Extraversion: ${scores.extraversion.toFixed(2)} (0-1)
+    - Agreeableness: ${scores.agreeableness.toFixed(2)} (0-1)
+    - Neuroticism: ${scores.neuroticism.toFixed(2)} (0-1)
+    
+
+    **Guidelines for Describing:**
+    1. **Cognitive Profile:**
+        - Highlight how the 4F trauma response (e.g., Flight) influences their behavior.
+        - Suggest actionable steps for leveraging their function stack effectively.
+        - Address challenges posed by their opposite type (${cognitiveProfile.opposite}).
+
+    2. **Big Five Scores:**
+        - Provide tailored advice for each trait (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism).
+        - Focus on how these traits interact with their cognitive functions.
+
+    3. **Suffix**
+        -Explain how their suffix influences their type, 
+        -the suffix is the middle two letters of their ego or superego, 
+        -if the type ends with J the suffix denotes their ego while if a type ends with P it denotes their superego
+
+also pretty please format this nicely, write it like a psychogist would write a report to a client to help them understand themselves. use md formatting and make it fancy!!. and get straight into the analysis  dont include titles
+  `;
+
+  try {
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-4o-mini-2024-07-18",
+        messages: [
+          { role: "system", content: `You are a helpful and expert in TRPI which is as follows
+            Id: perceiving functions (Se/Si | Ni/Ne)
+            ego: judging functions (Ti/Fi)
+            superego: inversed judging functions (Te/Fe)
+            Fight: Se/Ne + Ti = Extraversion
+            Freeze: Si/Ni + Te = Conscientiousness
+            Fawn: Si/Ni + Fe = Agreeableness
+            Flight: Se/Ne + Fi = Neuroticism
+
+            you are also an expert at formatting text and use md formatting wherever necessary
+            ` },
+          { role: "user", content: prompt },
+        ],
+        max_tokens: 750,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data.choices[0].message.content || "No advice generated.";
+  } catch (error) {
+    console.error("Error generating profile analysis:", error);
+    return "An error occurred while generating the profile analysis.";
+  }
+} 
 // Function to generate profile analysis
 export const generateProfileAnalysis = async (profile: FullProfile): Promise<string> => {
   const { cognitiveProfile, scores, demographics } = profile;
@@ -110,8 +193,8 @@ also pretty please format this nicely, write it like a psychogist would write a 
         messages: [
           { role: "system", content: `You are a helpful and expert personality coach. an expert in TRPI which is as follows
             Id: perceiving functions (Se/Si | Ni/Ne)
-            ego: judging functions (SF | NT)
-            superego inversed judging functions (ST/NF)
+            ego: judging functions (Ti/Fi)
+            superego inversed judging functions (Te/Fe)
             Fight: Se/Ne + Ti = Extraversion
             Freeze: Si/Ni + Te = Conscientiousness
             Fawn: Si/Ni + Fe = Agreeableness

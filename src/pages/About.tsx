@@ -65,6 +65,15 @@ const AboutPage: React.FC<{
   const handleClosePremiumModal = () => setPremiumModalOpen(false);
   const [desc, setDescription] = useState<any>('')
   
+  const getStatement = (trait: any, i: any) => {
+    const stage = statements.filter((s) => s.trait === trait)
+    const statement = stage[i]
+
+
+    console.log(trait, i, statement, stage)
+    return statement
+    
+  }
   
   useEffect(() => {
 
@@ -85,7 +94,9 @@ const AboutPage: React.FC<{
            let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
          (prfl as any).suffix = findClosestComplement(bin.type, bin.bigFiveResponses)?.type.slice(1,3)
                 let descriptionText = `${statements.map((statement: any, index: any) => {
-                  const answer = allResponses[statement.trait][index];
+                  const idx = stmnts.filter(s => s.trait === statement.trait).indexOf(statement);
+           
+                  const answer = allResponses[statement.trait][idx];
                   if(!answer) return '';
                   const subText = getSubtext(statement, answer);
                   return subText.trim();
@@ -109,6 +120,8 @@ const AboutPage: React.FC<{
     fetchProfile();
   }, [bin])
 
+
+
   const handlePaymentSuccess = async (data: any) => {
     setPaymentSuccessful(true);
     setPremiumModalOpen(false);
@@ -118,7 +131,7 @@ const AboutPage: React.FC<{
       let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
       (profile as any).suffix = suffix;
       let descriptionText = `${stmnts.map((statement, index) => {
-        const answer = allResponses[statement.trait][index];
+        const answer = getStatement(statement.trait, index);
         if(!answer) return '';
         const subText = getSubtext(statement, answer);
         return subText.trim();

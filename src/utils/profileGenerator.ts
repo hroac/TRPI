@@ -60,7 +60,8 @@ export const generateProfile = async (profile: Profile): Promise<string> => {
   const { cognitiveProfile, scores } = profile;
 
   const prompt = `
-  You are a TRPI-certified personality specialist, accredited in the four pillars of TRPI: the Big Five trait framework, the trait response model (4F), Freud’s structural model of the psyche (Id, Ego, Superego), and Jung’s cognitive functions and their dynamic interconnections. Your task is to weave these four lenses into a seamless, client-friendly report.
+  You are a TRPI-certified personality specialist, accredited in the four pillars of TRPI: the Big Five trait framework, the trauma response model (4F), Freud’s structural model of the psyche (Id, Ego, Superego), and Jung’s cognitive functions and their dynamic interconnections. Your task is to weave these four lenses into a seamless, client-friendly report.
+  Describe the individual in perfect detail like a vivid picture using the answers they have given, follow the Assessment Narrative.
   
   **INPUTS**  
   **Cognitive Profile**  

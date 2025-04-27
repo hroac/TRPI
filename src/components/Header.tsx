@@ -21,39 +21,63 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Link, useNavigate } from 'react-router-dom';
 
+interface MenuItemWithModal {
+  label: string;
+  path?: string;
+  parent?: string;
+  /** Now a ReactElement that we’ll clone */
+  modalComponent?: React.ReactElement;
+}
+
 interface HeaderProps {
   brand: string;
   logo: string;
-  menuItems: { label: string; path?: string; parent?: string }[];
+  menuItems: MenuItemWithModal[];
 }
 
 const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [anchorEls, setAnchorEls] = React.useState<{ [key: string]: HTMLElement | null }>({});
+  // desktop submenu anchors
+  const [anchorEls, setAnchorEls] = React.useState<Record<string, HTMLElement | null>>({});
+  // mobile drawer
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [openSubmenus, setOpenSubmenus] = React.useState<{ [key: string]: boolean }>({});
+  const [openSubmenus, setOpenSubmenus] = React.useState<Record<string, boolean>>({});
+  // modal state
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalElement, setModalElement] = React.useState<React.ReactElement | null>(null);
 
-  const handleMenuOpen = (label: string) => (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEls({ ...anchorEls, [label]: event.currentTarget });
+  const parentItems = menuItems.filter(item => !item.parent);
+  const childItems  = menuItems.filter(item => item.parent);
+
+  const handleMenuOpen = (label: string) => (e: React.MouseEvent<HTMLElement>) => {
+    setAnchorEls(prev => ({ ...prev, [label]: e.currentTarget }));
   };
-
   const handleMenuClose = (label: string) => () => {
-    setAnchorEls({ ...anchorEls, [label]: null });
+    setAnchorEls(prev => ({ ...prev, [label]: null }));
   };
-
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
-
   const toggleSubmenu = (label: string) => () => {
-    setOpenSubmenus((prev) => ({ ...prev, [label]: !prev[label] }));
+    setOpenSubmenus(prev => ({ ...prev, [label]: !prev[label] }));
   };
 
-  const parentItems = menuItems.filter(item => !item.parent);
-  const childItems = menuItems.filter(item => item.parent);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const handleItemClick = (item: MenuItemWithModal) => () => {
+    if (item.modalComponent) {
+      // store the element they passed
+      setModalElement(item.modalComponent);
+      setModalOpen(true);
+    } else if (item.path) {
+      navigate(item.path);
+    }
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalElement(null);
+  };
 
   return (
     <Box display="flex" justifyContent="center">
@@ -66,9 +90,9 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
           borderTop: '4px solid #a8dadc',
           boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
           width: '90%',
-    margin: '0 auto', // centers the AppBar
-    left: 0,
-    right: 0,
+          margin: '0 auto',
+          left: 0,
+          right: 0,
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -76,66 +100,51 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
             sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }}
             onClick={() => navigate('/')}
           >
-            <Box
-              component="img"
-              src={logo}
-              alt={`${brand} logo`}
-              sx={{ width: 32, height: 32 }}
-            />
-            <Typography
-              variant="h6"
-              sx={{ fontSize: '1.3rem', fontWeight: 600, color: 'background.paper' }}
-            >
+            <Box component="img" src={logo} alt={`${brand} logo`} sx={{ width: 32, height: 32 }} />
+            <Typography variant="h6" sx={{ fontSize: '1.3rem', fontWeight: 600, color: 'background.paper' }}>
               {brand}
             </Typography>
           </Box>
 
-          {/* Desktop menu: visible on larger screens */}
+          {/* Desktop menu */}
           <Box sx={{ display: { xs: 'none', lg: 'flex' }, gap: 2 }}>
-            {parentItems.map((item) => {
-              const children = childItems.filter(child => child.parent === item.label);
-              return children.length > 0 ? (
-                <Box key={item.label}>
-                  <Button
-                    onClick={handleMenuOpen(item.label)}
-                    sx={{
-                      textTransform: 'none',
-                      borderRadius: '8px',
-                      '&:hover': {
-                        backgroundColor: 'rgba(168, 199, 161, 0.1)',
-                      },
-                    }}
-                  >
-                    {item.label}
-                  </Button>
-                  <Menu
-                    anchorEl={anchorEls[item.label]}
-                    open={Boolean(anchorEls[item.label])}
-                    onClose={handleMenuClose(item.label)}
-                  >
-                    {children.map(child => (
-                      <MenuItem
-                        key={child.label}
-                        component={Link}
-                        to={child.path || ''}
-                        onClick={handleMenuClose(item.label)}
-                      >
-                        {child.label}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </Box>
-              ) : (
+            {parentItems.map(item => {
+              const children = childItems.filter(c => c.parent === item.label);
+              if (children.length > 0) {
+                return (
+                  <Box key={item.label}>
+                    <Button
+                      onClick={handleMenuOpen(item.label)}
+                      sx={{
+                        textTransform: 'none',
+                        borderRadius: '8px',
+                        '&:hover': { backgroundColor: 'rgba(168, 199, 161, 0.1)' },
+                      }}
+                    >
+                      {item.label}
+                    </Button>
+                    <Menu
+                      anchorEl={anchorEls[item.label]}
+                      open={Boolean(anchorEls[item.label])}
+                      onClose={handleMenuClose(item.label)}
+                    >
+                      {children.map(child => (
+                        <MenuItem key={child.label} onClick={handleItemClick(child)}>
+                          {child.label}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </Box>
+                );
+              }
+              return (
                 <Button
                   key={item.label}
-                  component={Link}
-                  to={item.path || ''}
+                  onClick={handleItemClick(item)}
                   sx={{
                     textTransform: 'none',
                     borderRadius: '8px',
-                    '&:hover': {
-                      backgroundColor: 'rgba(168, 199, 161, 0.1)',
-                    },
+                    '&:hover': { backgroundColor: 'rgba(168, 199, 161, 0.1)' },
                   }}
                 >
                   {item.label}
@@ -144,7 +153,7 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
             })}
           </Box>
 
-          {/* Hamburger icon for smaller screens */}
+          {/* Mobile hamburger */}
           <IconButton
             color="inherit"
             edge="end"
@@ -156,12 +165,12 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
         </Toolbar>
       </AppBar>
 
-      {/* Drawer with submenus */}
+      {/* Mobile drawer */}
       <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <Box sx={{ width: 250, paddingTop: 2 }}>
+        <Box sx={{ width: 250, pt: 2 }}>
           <List>
-            {parentItems.map((item) => {
-              const children = childItems.filter(child => child.parent === item.label);
+            {parentItems.map(item => {
+              const children = childItems.filter(c => c.parent === item.label);
               if (children.length > 0) {
                 return (
                   <React.Fragment key={item.label}>
@@ -175,9 +184,10 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
                           <ListItem
                             key={child.label}
                             button
-                            component={Link}
-                            to={child.path || ''}
-                            onClick={toggleDrawer(false)}
+                            onClick={() => {
+                              toggleDrawer(false)();
+                              handleItemClick(child)();
+                            }}
                             sx={{ pl: 4 }}
                           >
                             <ListItemText primary={child.label} />
@@ -187,23 +197,30 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
                     </Collapse>
                   </React.Fragment>
                 );
-              } else {
-                return (
-                  <ListItem
-                    key={item.label}
-                    button
-                    component={Link}
-                    to={item.path || ''}
-                    onClick={toggleDrawer(false)}
-                  >
-                    <ListItemText primary={item.label} />
-                  </ListItem>
-                );
               }
+              return (
+                <ListItem
+                  key={item.label}
+                  button
+                  onClick={() => {
+                    toggleDrawer(false)();
+                    handleItemClick(item)();
+                  }}
+                >
+                  <ListItemText primary={item.label} />
+                </ListItem>
+              );
             })}
           </List>
         </Box>
       </Drawer>
+
+      {/* Render your passed-in Modal element, injecting open/onClose */}
+      {modalElement &&
+        React.cloneElement(modalElement, {
+          open: modalOpen,
+          onClose: closeModal,
+        })}
     </Box>
   );
 };

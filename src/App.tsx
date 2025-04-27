@@ -29,6 +29,7 @@ import TypeComparator from './components/TypeComparator';
 import Scheduler from './pages/Scheduler';
 import TermsOfService from './pages/Terms';
 import LongBigFiveQuestionnaire from './components/LongBigFiveQuestionaire';
+import PremiumModal from './components/PremiumModal';
 
 const AppHelmet: React.FC = () => (
   <Helmet>
@@ -112,7 +113,8 @@ function App() {
        { label: 'Type Comparator', path: '/compare', parent: 'Tools' },
         {label:  'Sources', path: '/sources'},
         { label: 'Reviews', path: '/reviews'},
-        { label: 'Contact', path: '/contact' }
+        { label: 'Contact', path: '/contact' },
+        {label: 'Donate', modalComponent: (<PremiumModal open={false} title={"Donate to a Vision!"} description={"Help us reach a bigger audience"} price={0.99} onClose={() => {}} allowAmountOverride={true} handlePaymentSuccess={() => {}}/>)}
     ]
     
     return (

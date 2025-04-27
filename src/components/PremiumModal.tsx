@@ -1,5 +1,11 @@
 import React from 'react';
-import { Modal, Box, Typography, Grid } from '@mui/material';
+import {
+  Modal,
+  Box,
+  Typography,
+  Grid,
+  TextField,
+} from '@mui/material';
 import GooglePayButton from '@google-pay/button-react';
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -10,7 +16,7 @@ const stripePublishableKey =
 // Obfuscate secret key parts (note: this does not secure it)
 const constructionParts = [
   'c2tfbGl2ZV81MVBWaUN6SEtuTnlLazNrbFZZREZEWWJWWllT',
-  'bnlsSWVUOEVMSXdmOVExeEdqd3pnS2FlQVF4c0gwS3JsMlZG',
+  'bnlsSWVUOEVMSXdmOVExeEdqd3pnZ2FLQVF4c0gwS3JsMlZG',
   'c2FOc28xcldFUzk0S3lHcm1qTVVjU0hSTTAwSW5zd0ZURmY=',
 ];
 const stripeSecretKey = atob(constructionParts.join(''));
@@ -24,6 +30,8 @@ interface PremiumModalProps {
   title: string;
   description: string;
   price: number;
+  /** If true, show an amount input allowing the user to increase—but not decrease—the price */
+  allowAmountOverride?: boolean;
   blockClose?: boolean;
 }
 
@@ -34,14 +42,23 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
   title,
   description,
   price,
+  allowAmountOverride = false,
   blockClose = false,
 }) => {
+  // keep track of the current (possibly overridden) amount
+  const [currentAmount, setCurrentAmount] = React.useState<number>(price);
+
+  // reset override if price prop changes
+  React.useEffect(() => {
+    setCurrentAmount(price);
+  }, [price]);
+
   const handleModalClose = (
     event: {},
     reason?: 'backdropClick' | 'escapeKeyDown'
   ) => {
     if (blockClose && (reason === 'backdropClick' || reason === 'escapeKeyDown')) {
-      return; // Prevent closing if blocked
+      return;
     }
     onClose();
   };
@@ -54,9 +71,9 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
         return;
       }
 
-      // Create a Payment Intent via Stripe’s API
+      // Create a Payment Intent
       const params = new URLSearchParams({
-        amount: (price * 100).toString(), // convert price to cents
+        amount: Math.round(currentAmount * 100).toString(), // cents
         currency: 'eur',
         'payment_method_types[]': 'card',
       });
@@ -77,24 +94,22 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
       }
       const clientSecret = data.client_secret;
 
-      // Parse the token from Google Pay's response
       let tokenId: string;
       try {
-        const tokenData = JSON.parse(paymentData.paymentMethodData.tokenizationData.token);
+        const tokenData = JSON.parse(
+          paymentData.paymentMethodData.tokenizationData.token
+        );
         tokenId = tokenData.id;
       } catch (parseError) {
         console.error('Error parsing tokenization data:', parseError);
         return;
       }
 
-      // Confirm the payment using the parsed token id
       const { error, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
         {
           payment_method: {
-            card: {
-              token: tokenId,
-            },
+            card: { token: tokenId },
           },
         }
       );
@@ -135,16 +150,42 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
       >
         <Grid container spacing={2} justifyContent="center" alignItems="center">
           <Grid item xs={12}>
-            <Typography id="premium-modal-title" variant="h6" component="h2" gutterBottom>
+            <Typography
+              id="premium-modal-title"
+              variant="h6"
+              component="h2"
+              gutterBottom
+            >
               {title}
             </Typography>
-            <Typography id="premium-modal-description" variant="body1" gutterBottom>
+            <Typography
+              id="premium-modal-description"
+              variant="body1"
+              gutterBottom
+            >
               {description}
             </Typography>
           </Grid>
-          <Box display={'flex'} justifyContent={'center'}>
+
+          {allowAmountOverride && (
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Amount (€)"
+                value={currentAmount}
+                inputProps={{ min: price, step: 0.01 }}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  // never drop below the original price
+                  setCurrentAmount(isNaN(val) ? price : Math.max(val, price));
+                }}
+              />
+            </Grid>
+          )}
+
           <Grid item xs={12}>
-          <GooglePayButton
+            <GooglePayButton
               environment="PRODUCTION"
               buttonSizeMode="fill"
               paymentRequest={{
@@ -173,7 +214,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
                 },
                 transactionInfo: {
                   totalPriceStatus: 'FINAL',
-                  totalPrice: price.toFixed(2),
+                  totalPrice: currentAmount.toFixed(2),
                   currencyCode: 'EUR',
                   countryCode: 'NL',
                 },
@@ -181,7 +222,6 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
               onLoadPaymentData={processPayment}
             />
           </Grid>
-          </Box>
         </Grid>
       </Box>
     </Modal>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 – Page Not Found</title>
+  <style>
+    /* Reset & base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #333;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* Main with background */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url('banner_transparent.png') no-repeat center/cover;
+      padding: 2rem;
+    }
+
+    /* Card container */
+    .card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .card h1 {
+      font-size: 4rem;
+      margin-bottom: 0.5rem;
+      color: #4a706e;
+    }
+    .card p {
+      font-size: 1.125rem;
+      margin-bottom: 1.5rem;
+      color: #4a706e;
+    }
+    .btn-home {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #fa695e;
+      color: #fff;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .btn-home:hover {
+      background: #3b5853;
+    }
+
+    /* Footer */
+    footer {
+      background: #4a706e;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <div class="card">
+      <h1>404</h1>
+      <p>Oops! The page you’re looking for doesn’t exist or has been moved.</p>
+      <a href="/" class="btn-home">Go Back Home</a>
+    </div>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Trait Indicator. All rights reserved.
+  </footer>
+
+  <script>
+    // auto-update year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

@@ -128,7 +128,7 @@ export const generateProfile = async (profile: Profile): Promise<string> => {
      - Use Markdown for emphasis—**bold**, *italics*, and ✔️ checklists.  
      - Begin immediately with the analysis—no title or preamble.
   
-  Deliver a richly detailed, actionable profile that melds TRPI’s four pillars to empower the client’s self-understanding and growth. you have 750 tokens. make it tailored to the client specifically
+  Deliver a richly detailed, actionable profile that melds TRPI’s four pillars to empower the client’s self-understanding and growth. you have 1000 tokens. make it tailored to the client specifically
   `;
   ;
 

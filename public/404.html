@@ -16,19 +16,31 @@
     }
     a { text-decoration: none; color: inherit; }
 
-    /* Main with background */
+    /* Main with blurred background via ::before */
     main {
+      position: relative;
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: url('banner_transparent.png') no-repeat center/cover;
       padding: 2rem;
+      overflow: hidden;
+    }
+    main::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('banner_transparent.png') no-repeat center/cover;
+      filter: blur(0px);
+      transform: scale(1.05);
+      z-index: 0;
     }
 
     /* Card container */
     .card {
-      background: #fff;
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 1);
       padding: 2rem;
       border-radius: 8px;
       max-width: 360px;
@@ -56,7 +68,7 @@
       transition: background 0.3s;
     }
     .btn-home:hover {
-      background: #3b5853;
+      background: #d14e45;
     }
 
     /* Footer */
@@ -70,6 +82,38 @@
   </style>
 </head>
 <body>
+
+  <!-- redirect logic based on route list -->
+  <script>
+    (function(){
+      const routes = [
+        '/', '/test', '/result/:binId', '/input',
+        '/about/:type', '/about', '/contact',
+        '/services', '/privacy-policy', '/talk',
+        '/sources', '/reviews', '/compare', 
+        '/scheduler', '/terms', '/assessment'
+      ];
+
+      function matchRoute(path) {
+        return routes.some(route => {
+          if (route.includes(':')) {
+            // convert :param to [^/]+
+            const regex = new RegExp('^' +
+              route.replace(/:[^/]+/g, '[^/]+')
+                   .replace(/\//g, '\\/') +
+              '$');
+            return regex.test(path);
+          }
+          return route === path;
+        });
+      }
+
+      const { pathname, search, origin, hash } = window.location;
+      if (matchRoute(pathname) && !hash.startsWith('#/')) {
+        window.location.replace(`${origin}/#${pathname}${search}`);
+      }
+    })();
+  </script>
 
   <main>
     <div class="card">
@@ -87,6 +131,5 @@
     // auto-update year
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
-
 </body>
 </html>

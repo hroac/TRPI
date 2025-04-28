@@ -512,7 +512,7 @@ const determineIndex = (trait: string, index: number) : number => {
             <ShuffleOn />
           </IconButton>
           </Tooltip>
-          <Tooltip title="Unlock your previous answers!">
+          <Tooltip title=" Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
           </IconButton>
@@ -537,7 +537,7 @@ const determineIndex = (trait: string, index: number) : number => {
             <ShuffleOn />
           </IconButton>
           </Tooltip>
-          <Tooltip title="Unlock your previous answers!">
+          <Tooltip title="Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
           </IconButton>

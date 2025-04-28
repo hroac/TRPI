@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
@@ -60,7 +60,7 @@ const AboutPage: React.FC<{
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const hasFetchedProfile = useRef(false);
   const handleOpenPremiumModal = () => setPremiumModalOpen(true);
   const handleClosePremiumModal = () => setPremiumModalOpen(false);
   const [desc, setDescription] = useState<any>('')
@@ -76,51 +76,44 @@ const AboutPage: React.FC<{
   }
   
   useEffect(() => {
-
     const fetchProfile = async () => {
-         const getSubtext = (statement: any, value: number) => {
-            const percentage = Math.round(value * 100);
-            const range = Object.keys(statement.subtext).find((key) => {
-              const [min, max] = key.split('-').map(Number);
-              return percentage >= min && percentage <= max;
-            });
-          
-            return range ? (statement.subtext as any)[range]?.text : null;
-          };
-          if(!bin || description) {
-            return;
-          }
-          setLoading(true)
-           let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
-           let suffix = findClosestComplement(bin.type, bin.bigFiveResponses)?.type;
-         (prfl as any).suffix = suffix.slice(1,3);
-         (prfl as any).suffixType = suffix;
-                let descriptionText = `${statements.map((statement: any, index: any) => {
-                  const idx = stmnts.filter(s => s.trait === statement.trait).indexOf(statement);
-           
-                  const answer = allResponses[statement.trait][idx];
-                  if(!answer) return '';
-                  const subText = getSubtext(statement, answer);
-                  return subText.trim();
-                }).join('\n')}`;
+      console.log('fetching profile');
 
-          try {
-            const desc = await generateProfile({
-              cognitiveProfile: prfl,
-              assessment: descriptionText,
-              scores: bin.bigFiveResponses as any
-            })
-          setDescription(desc)
-          JsonBinApi.updateResultsInJsonBin({ ...bin, description: desc });
-      handleReloadBin && handleReloadBin();
-          } catch(error: any) {
+      let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
+      let suffixType = findClosestComplement(bin.type, bin.bigFiveResponses)?.type || '';
+      (prfl as any).suffix = suffixType.slice(1, 3);
+      (prfl as any).suffixType = suffixType;
 
-          } finally {
-            setLoading(false)
-          }
+      const descriptionText = `${statements.map((statement: any, index: any) => {
+        const idx = stmnts.filter(s => s.trait === statement.trait).indexOf(statement);
+        const answer = allResponses[statement.trait][idx];
+        if (!answer) return '';
+        const subText = getSubtext(statement, answer);
+        return subText?.trim();
+      }).join('\n')}`;
+
+      try {
+        setLoading(true);
+        const generated = await generateProfile({
+          cognitiveProfile: prfl,
+          assessment: descriptionText,
+          scores: bin.bigFiveResponses
+        });
+        setDescription(generated);
+        await JsonBinApi.updateResultsInJsonBin({ ...bin, description: generated });
+        handleReloadBin && handleReloadBin();
+      } catch (error) {
+        console.error('Profile generation error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (bin && !bin.description && !hasFetchedProfile.current) {
+      hasFetchedProfile.current = true;
+      fetchProfile();
     }
-    fetchProfile();
-  }, [bin])
+  }, [bin]);
 
 
 

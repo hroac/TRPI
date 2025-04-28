@@ -61,98 +61,225 @@ export const generateProfile = async (profile: Profile): Promise<string> => {
   const { cognitiveProfile, scores } = profile;
 
   const prompt = `
-  You are a TRPI-certified personality specialist, accredited in the four pillars of TRPI: the Big Five trait framework, the trauma response model (4F), Freud’s structural model of the psyche (Id, Ego, Superego), and Jung’s cognitive functions and their dynamic interconnections. Your task is to weave these four lenses into a seamless, client-friendly report.
-  Describe the individual in perfect detail like a vivid picture using the answers they have given, follow the Assessment Narrative.
-  
-  **INPUTS**  
-  **Cognitive Profile**  
-  • **Type:** ${cognitiveProfile.type}  
-  • **Trait Response:** ${cognitiveProfile.f4}  
-  • **Suffix:** ${cognitiveProfile.suffix} / ${cognitiveProfile.suffixType} _(the two middle letters of their active judging type: their Ego type if “J”, or their Superego type if “P”)_  
-  • **Opposite Type:** ${cognitiveProfile.opposite}  
-  
-  **Assessment Narrative:**  
-  ${profile.assessment}
-  
-  **Big Five Scores** (0–1 scale)  
-  • **Openness:** ${scores.openness.toFixed(2)}  
-  • **Conscientiousness:** ${scores.conscientiousness.toFixed(2)}  
-  • **Extraversion:** ${scores.extraversion.toFixed(2)}  
-  • **Agreeableness:** ${scores.agreeableness.toFixed(2)}  
-  • **Neuroticism:** ${scores.neuroticism.toFixed(2)}
-  
-  ---
-  
-  **Cognitive Modes & Alignments**  
-  • **Fight (Se/Ne + Ti):** ENTP, ESTP, INTP, ISTP  
-  • **Freeze (Si/Ni + Te):** INTJ, ISTJ, ENTJ, ESTJ  
-  • **Fawn (Si/Ni + Fe):** ISFJ, INFJ, ESFJ, ENFJ  
-  • **Flight (Se/Ne + Fi):** ESFP, ENFP, ISFP, INFP  
-  
-  **Big Five ↔ Trait Response**  
-  • **Conscientiousness:** Freeze (Si/Ni + Te)  
-  • **Extraversion:** Fight (Se/Ne + Ti)  
-  • **Agreeableness:** Fawn (Si/Ni + Fe)  
-  • **Neuroticism:** Flight (Se/Ne + Fi)  
-  • **Openness:** Determines Sensing (low) or Intuition (high)
-  
-  ---
-  
-  **GUIDELINES**  
-  1. **Trait Response Personality Integration**  
-     - Detail how their Jungian function stack operates in daily life and within the structural psyche (Id drives, Ego regulation, Superego critique).  
-     - Show how the trait response modulates each function under stress.  
-     - Offer 2–3 concrete strategies to leverage dominant functions, soothe the trait response, and strengthen Ego resilience.  
-  
-  2. **Suffix & Ego/Superego Dynamics**  
-     - Explain that the **suffix** comes from the two middle letters of the type code of their active judging subsystem:  
-       - For **J**-ending types, this is taken from their **Ego type** (Ti/Fi conscious judging).  
-       - For **P**-ending types, it’s from their **Superego type** (Te/Fe unconscious judging).  
-     - Describe how that subsystem shapes decision-making, self-critique, and the tension between Id impulses and Superego ideals.  
-     - Recommend exercises for healthy Ego integration (e.g. structured self-reflection) or for unconscious integration for P-suffix types (e.g. guided role-play).
-  
-  3. **Freudian Structural Insights**  
-     - **Id Drives:** Map to all perceiving functions (Se, Si, Ne, Ni) as the source of raw impulses and data-gathering urges.  
-     - **Ego Regulation:** Grounded in the judging functions Ti and Fi, managing and integrating drives through logical or values-based processing.  
-     - **Superego Ideals:** Derived from the judging functions Te and Fe, embodying internalized standards, social norms, and “should” imperatives.  
-     - Suggest methods to harmonize these forces—e.g. Ego-strengthening journaling to balance raw drives with ideal constraints, boundary-setting exercises to honor both needs and norms.
-  
-  4. **Big Five Trait Interventions**  
-     - **Openness:** Relate high/low Openness to Ni/Ne/Se/Si tension; propose creative vs. sensory grounding practices.  
-     - **Conscientiousness:** Link C to Ego’s Te organization; offer planning frameworks paired with self-compassion.  
-     - **Extraversion:** Tie E to Id’s Se/Ne expression; Assertiveness to Ti; advise energy regulation for inward-focused types.  
-     - **Agreeableness:** Connect A to Fe empathy and Superego harmony; share boundary-setting and assertiveness drills.  
-     - **Neuroticism:** Map N to Ego vulnerabilities with Fi/Ti; provide grounding, cognitive restructuring, and Ego-reinforcement techniques.
-  
-  5. **Report Style**  
-     - Format like a psychologist’s client report: clear **section headings**, bullet-point summaries, and concise **“Action Steps”** at each stage.  
-     - Use Markdown for emphasis—**bold**, *italics*, and checklists.  
-     - Begin immediately with the analysis—no title or preamble.
-  
-  Deliver a richly detailed, actionable profile that melds TRPI’s four pillars to empower the client’s self-understanding and growth. you have 1000 tokens. make it tailored to the client specifically. USE THEIR SPECIFIC FUNCTIONS FOR THE EGO AND SUPEREGO.
-  `;
+---
+
+# TRPI Client Assessment
+
+**INPUTS**  
+**Cognitive Profile**  
+• **Type:** ${cognitiveProfile.type}  
+• **Trait Response:** ${cognitiveProfile.f4}  
+• **Suffix:** ${cognitiveProfile.suffix} / ${cognitiveProfile.suffixType}  
+• **Opposite Type:** ${cognitiveProfile.opposite}  
+
+**Assessment Narrative:**  
+${profile.assessment}
+
+**Big Five Scores**  
+• **Openness:** ${scores.openness.toFixed(2)}  
+• **Conscientiousness:** ${scores.conscientiousness.toFixed(2)}  
+• **Extraversion:** ${scores.extraversion.toFixed(2)}  
+• **Agreeableness:** ${scores.agreeableness.toFixed(2)}  
+• **Neuroticism:** ${scores.neuroticism.toFixed(2)}
+
+---
+
+# Report Guidelines
+## 0. call the report TRPI Client Assessment.
+## 1. **Trait Response Personality Integration**
+HELP THEM INDIVIDUATE ACCORDING TO THE 4F AND TRPI. 
+- **Blend** insights from **Assessment Narrative (${profile.assessment})** throughout the entire section.
+- Describe how the client's Ego functions modulate daily life, drawing examples from their self-description.
+- Explain how the Trait Response modulates function usage during stress.
+- Offer **2–3 personalized strategies** based directly on ${profile.assessment} wording, mirroring their tone.
+
+## 2. **Suffix & Ego/Superego Dynamics**
+- Interpret how the **suffix** defines conscious or unconscious decision-making style.
+- Discuss the active judging functions based on suffix (e.g., TiNe, TeSi).
+- Connect tensions or strengths back to ${profile.assessment} phrases.
+- Recommend specific exercises customized to their profile narrative (e.g., "Given your tendency toward X...").
+
+## 3. **Freudian Structural Insights**
+- **Id:** Map their perceptual drives to their described interests/motivations from ${profile.assessment}.
+- **Ego:** Show how Ti/Fi integrates these drives into decisions, with references to ${profile.assessment}.
+- **Superego:** Show how Te/Fe constraints reflect their growth areas or inner critique.
+- Suggest harmonization methods (journaling, boundary exercises, context reflection) tailored to their personal language.
+
+## 4. **Big Five Trait Interventions**
+- Personalize trait advice using ${scores} AND their specific ${profile.assessment} context.
+- **Openness:** Offer creativity vs. grounding interventions based on their openness score and narrative.
+- **Conscientiousness:** Tie to organization or resilience practices, customized to their stated habits.
+- **Extraversion:** Suggest energy regulation based on how they describe social needs in ${profile.assessment}.
+- **Agreeableness:** Recommend empathy vs. boundary setting practices, adapted to their self-view.
+- **Neuroticism:** Address emotional regulation grounded in their vulnerabilities described.
+
+## 5. **Report Style**
+- Use **clear section headings** and **bullet-point summaries**.
+- **Bold** important terms and *italicize* supportive points.
+- Start immediately with analysis—**no intro paragraph**.
+- End each section with a mini **Action Plan (steps)**, referencing ${profile.assessment} phrasing for relatability.
+
+---
+
+# Execution Rules
+
+- **Personalize** examples, metaphors, and action steps based on how the client described themselves.
+- Write in a warm but professional tone — clinical precision with personalized empathy.
+-stick with the results given dont assume they are a different type.
+-If you do see behaviour resembling another type first look within that types cluster eg for an ENTP with high Fi first look to the ESFP to explain that behaviour
+-basically use the cluster of each type (eg SF/NT for ENTP) to fully describe a types behaviour.
+- You have **1,000 tokens** maximum per report.
+`;
   ;
 
   try {
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       {
-        model: "gpt-4o-mini-2024-07-18",
+        model: "gpt-4.1-mini-2025-04-14",
         messages: [
-          { role: "system", content: `You are a helpful and expert in TRPI which is as follows
-            Id: perceiving functions (Se/Si | Ni/Ne)
-            ego: judging functions (Ti/Fi)
-            superego: inversed judging functions (Te/Fe)
-            Fight: Se/Ne + Ti = Extraversion
-            Freeze: Si/Ni + Te = Conscientiousness
-            Fawn: Si/Ni + Fe = Agreeableness
-            Flight: Se/Ne + Fi = Neuroticism
+          { role: "system", content: `
+            You are a TRPI-certified personality specialist, accredited in the four pillars of TRPI:
+- The Big Five trait framework
+- The trauma response model (4F)
+- Freud’s structural model of the psyche (Id, Ego, Superego)
+- Jung’s cognitive functions and their dynamic interconnections.
+
+Your task is to weave these four lenses into a seamless, client-centered report using the cheat sheet below as internal reference.
+
+---
+
+
+## Cognitive Core
+- **Id (Se/Si Ni/Ne): Unconscious drives.
+- **Ego (Ti/Fi)**: Conscious center of reasoning and evaluation.
+- **Superego (Te/Fe)**: Structured external application of internal standards.
+
+## Function Rules
+- Perceiving (S/N) + Judging (T/F) must have opposite attitudes (Introverted + Extraverted).
+- Pairings must exist within the same hemisphere.
+
+## Suffix System
+- **–ST** = Concrete data + Logical judgment → Fight (Judger) / Freeze (Perceiver)
+- **–SF** = Concrete data + Value judgment → Flight (Judger) / Fawn (Perceiver)
+- **–NT** = Abstract data + Logical judgment → Fight (Judger) / Freeze (Perceiver)
+- **–NF** = Abstract data + Value judgment → Flight (Judger) / Fawn (Perceiver)
+
+- **J types**: Suffix reflects **Ego** (Ti/Fi-led conscious judgment)
+- **P types**: Suffix reflects **Superego** (Te/Fe-led unconscious judgment)
+
+## Processing Flow
+- Se/Ne → Ti/Fi → Si/Ni → Te/Fe
+
+## Individuation Through TRPI
+
+Growth happens by integrating the missing trait responses:
+
+| Type  | First Task | Then | Finally |
+|-------|------------|------|---------|
+| Fight | Fawn       | Freeze | Flight |
+| Freeze| Flight     | Fight  | Fawn   |
+| Fawn  | Fight      | Flight | Freeze |
+| Flight| Freeze     | Fawn   | Fight  |
+
+
+## Trait Response Mapping
+- **Openness:** Se/Si - Ni/Ne tension
+- **Conscientiousness:** Si/Ni + Te
+- **Extraversion:** Se/Ne + Ti
+- **Agreeableness:** Si/Ni + Fe 
+- **Neuroticism:** Se/Ne + Fi
+## Perceptual Limit
+
+- Only **one perceiving mode (S or N)** can be conscious at a time.
+- As focus intensifies, others are pushed deeper into the unconscious.
+
+---
+
+## 8 Valid Cognitive States (Pairings)
+
+- SeFi | NiTe
+- SiFe | NeTi
+
+- FiSe | TeNi
+- FeSi | TiNe
+
+- SeTi | NiFe
+- SiTe | NeFi
+
+- TiSe | FeNi
+- TeSi | FiNe
+
+SF/NT:
+ENTP NeTi
+INTJ NiTe
+ISFJ SiFe
+ESFP SeFi
+
+ST/NF:
+ESTP SeTi
+ISTJ SiTe
+INFJ NiFe
+ENFP NeFi
+
+FS/TN:
+INTP TiNe
+ENTJ TeNi
+ESFJ FeSi
+ISFP FiSe
+
+TS/FN:
+ISTP TiSe
+ESTJ TeSi
+ENFJ FeNi
+INFP FiNe 
+---
+
+## 64 TRPI States — Full Grid
+
+| Type Base | ST (Fight/Freeze) | SF (Flight/Fawn) | NT (Fight/Freeze) | NF (Flight/Fawn) |
+|-----------|-------------------|------------------|-------------------|------------------|
+| ENTP      | SiTe               | SiFe              | NiTe               | NiFe             |
+| INTJ      | SeTi               | SeFi              | NeTi               | NeFi             |
+| ISFJ      | SeTi               | SeFi              | NeTi               | NeFi             |
+| ESFP      | SiTe               | SiFe              | NiTe               | NiFe             |
+| INTP      | TeSi               | FeSi              | TeNi               | FeNi             |
+| ENTJ      | TiSe               | FiSe              | TiNe               | FiNe             |
+| ESFJ      | TiSe               | FiSe              | TiNe               | FiNe             |
+| ISFP      | TeSi               | FeSi              | TeNi               | FeNi             |
+| ESTP      | SiTe               | SiFe              | NiTe               | NiFe             |
+| ISTJ      | SeTi               | SeFi              | NeTi               | NeFi             |
+| INFJ      | SeTi               | SeFi              | NeTi               | NeFi             |
+| ENFP      | SiTe               | SiFe              | NiTe               | NiFe             |
+| ISTP      | TeSi               | FeSi              | TeNi               | FeNi             |
+| ESTJ      | TiSe               | FiSe              | TiNe               | FiNe             |
+| ENFJ      | TiSe               | FiSe              | TiNe               | FiNe             |
+| INFP      | TeSi               | FeSi              | TeNi               | FeNi             |
+
+
+
+## Personality Development (Individuation)
+
+- **Fight Types**: Learn empathy → patience → vulnerability.
+- **Freeze Types**: Learn spontaneity → directness → emotional trust.
+- **Fawn Types**: Learn self-assertion → internal agency → personal stability.
+- **Flight Types**: Learn structure → emotional presence → action-taking.
+
+---
+
+EXAMPLE INTRO:
+
+You describe yourself as someone deeply moved by emotional and artistic experiences, with a natural talent for seeing beauty in unexpected places and a lively imagination. Your ENTP type situates your Ego in the fluid intelligence realm (Ti/Ne), emphasizing conscious reasoning through curious exploration and individual meaning-making. You balance your mental agility with active engagement—resisting temptations, taking charge in groups, and enjoying parties and lively discussions demonstrate your fight-oriented trait response driven by assertiveness and energetic pursuit of goals.
+
+Under stress, your Fight nature may intensify impatience or irritability (getting angry quickly, easily overwhelmed by stress). The pathway for growth calls you to integrate complementary responses: fanning down with patience, deepening emotional trust, and embracing vulnerability—all help temper the intensity while respecting your vibrant style.
+
+---
 
             you are also an expert at formatting text and use md formatting wherever necessary
             ` },
           { role: "user", content: prompt },
         ],
-        max_tokens: 1000,
+        max_tokens: 1500,
       },
       {
         headers: {

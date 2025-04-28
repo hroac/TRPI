@@ -43,7 +43,78 @@ import { guid } from '../utils/guid';
 import { typesData } from '../utils/typesData';
 import { Helmet } from 'react-helmet';
 import PremiumModal from './PremiumModal';
-import { statements as fixedStatements } from '../utils/mbtiMapping';
+import { statements as fixedStatements, allStatements } from '../utils/mbtiMapping';
+
+/** ------------------------------------------------------------------
+ *  Utility helpers
+ * ------------------------------------------------------------------*/
+
+// Simple Fisher–Yates shuffle (returns new array)
+const shuffle = <T,>(arr: T[]): T[] => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+/** Build a unique signature for a statement without relying on an `id` field */
+const signature = (s: Statement) => `${s.trait}|${s.text}`;
+
+export interface SubtextEntry {
+  text: string;
+  exclude?: string[];
+}
+
+export interface Statement {
+  trait: 'openness' | 'conscientiousness' | 'extraversion' | 'agreeableness' | 'neuroticism';
+  text: string;
+  weight?: number;
+  aspect?: string;
+  subtext?: Record<string, SubtextEntry>;
+}
+
+/**
+ * Select fresh statements for the current stage without re‑using any that
+ * already appear in other stages. Uses the `signature` helper instead of `id`.
+ */
+const selectFreshStatements = (
+  pool: Statement[],
+  stages: Statement[][],
+  currentStage: number,
+): Statement[] => {
+  const traits = stages[currentStage].map(st => st.trait)
+  const used = new Set<string>(
+    stages.flatMap((stage, idx) => (idx === currentStage ? [] : stage.map(signature))),
+  );
+
+
+  let candidates = pool.filter(s => !used.has(signature(s)));
+
+  if(traits.includes('openness')) {
+    candidates = candidates.filter(c => c.trait === 'openness')
+  } else {
+    candidates = candidates.filter(c => c.trait !== 'openness')
+  }
+  const needed = stages[currentStage].length;
+  if (candidates.length < needed) {
+    console.warn('[flush] Not enough unused candidates');
+    return [];
+  }
+
+  const shuffled = shuffle(candidates)
+  const fresh: Statement[] = []
+
+ if(!traits.includes('openness')) {
+  traits.forEach(tr => {
+    fresh.push(shuffled.find(sh => sh.trait == tr) as Statement)
+  })
+ } else {
+  fresh.push(...shuffled.slice(0, needed))
+ }
+  return fresh;
+};
 
 const BigFiveQuestionnaireHelmet: React.FC = () => (
   <Helmet>
@@ -155,7 +226,31 @@ console.log('new statements')
 
    }
 
+   const flushCurrentStage = () => {
+    const start = stages.slice(0, currentStage).reduce((sum, arr) => sum + arr.length, 0);
+    const len   = stages[currentStage].length;
 
+    const replacements = selectFreshStatements((allStatements as Statement[]), stages, currentStage);
+    if (replacements.length !== len) return;
+
+    //console.log(statements, replacements);
+    stages[currentStage] = replacements;
+    const newStatements = stages.flat();
+    //replacements.forEach((r, i) => { newStatements[start + i] = r; });
+    setStatements(newStatements);
+    localStorage.setItem('statements', JSON.stringify(newStatements));
+
+    const newResponses = { ...responses } as Record<string, number[]>;
+    replacements.forEach(rep => {
+      if (!newResponses[rep.trait]) newResponses[rep.trait] = [];
+      const traitStmts = newStatements.filter(st => st.trait === rep.trait);
+      const traitIdx   = traitStmts.findIndex(st => signature(st) === signature(rep));
+      newResponses[rep.trait][traitIdx] = 0.500001;
+    });
+    setResponses(newResponses);
+    localStorage.setItem('responses', JSON.stringify(newResponses));
+    window.scrollTo(0, 0);
+  };
 
   const setRandomly = () => {
     const stageResponses = stages.slice(lastStage, stages.length).flat();
@@ -422,36 +517,52 @@ console.log('new statements')
         {isMobile ? (
           <Stack>
             {currentStage < lastStage && (
+              <Tooltip title="Unlock your previous answers!">
               <IconButton onClick={window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal} color='primary'>
               <LockOpenIcon/>
             </IconButton>
+            </Tooltip>
             )}
+            <Tooltip title="Reset your answers">
              <IconButton onClick={reset} color='primary'>
             <RestartAlt/>
           </IconButton>
-          <IconButton onClick={setRandomly} color="primary">
+          </Tooltip>
+          <Tooltip title="Get different statements">
+          <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
+          </Tooltip>
+          <Tooltip title="Unlock your previous answers">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
           </IconButton>
+          </Tooltip>
         </Stack>
         ) : (
           <Grid spacing={4}>
-            {currentStage < lastStage && (
-              <IconButton onClick={(window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal)} color='primary'>
+           {currentStage < lastStage && (
+              <Tooltip title="Unlock your previous answers">
+              <IconButton onClick={window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal} color='primary'>
               <LockOpenIcon/>
             </IconButton>
+            </Tooltip>
             )}
+            <Tooltip title="Reset your answers">
              <IconButton onClick={reset} color='primary'>
             <RestartAlt/>
           </IconButton>
-          <IconButton onClick={setRandomly} color="primary">
+          </Tooltip>
+          <Tooltip title="Get different statements">
+          <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
+          </Tooltip>
+          <Tooltip title="Unlock your previous answers!">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
           </IconButton>
+          </Tooltip>
         </Grid>
         )
       }

@@ -44,8 +44,78 @@ import { guid } from '../utils/guid';
 import { typesData } from '../utils/typesData';
 import { Helmet } from 'react-helmet';
 import PremiumModal from './PremiumModal';
-import { statements, stages as shortStages } from '../utils/mbtiMapping'; // Importing original for reference
+import { statements as fixedStatements, allStatements } from '../utils/mbtiMapping';
 
+/** ------------------------------------------------------------------
+ *  Utility helpers
+ * ------------------------------------------------------------------*/
+
+// Simple Fisher–Yates shuffle (returns new array)
+const shuffle = <T,>(arr: T[]): T[] => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+/** Build a unique signature for a statement without relying on an `id` field */
+const signature = (s: Statement) => `${s.trait}|${s.text}`;
+
+export interface SubtextEntry {
+  text: string;
+  exclude?: string[];
+}
+
+export interface Statement {
+  trait: 'openness' | 'conscientiousness' | 'extraversion' | 'agreeableness' | 'neuroticism';
+  text: string;
+  weight?: number;
+  aspect?: string;
+  subtext?: Record<string, SubtextEntry>;
+}
+
+/**
+ * Select fresh statements for the current stage without re‑using any that
+ * already appear in other stages. Uses the `signature` helper instead of `id`.
+ */
+const selectFreshStatements = (
+  pool: Statement[],
+  stages: Statement[][],
+  currentStage: number,
+): Statement[] => {
+  const traits = stages[currentStage].map(st => st.trait)
+  const used = new Set<string>(
+    stages.flatMap((stage, idx) => (idx === currentStage ? [] : stage.map(signature))),
+  );
+
+
+  let candidates = pool.filter(s => !used.has(signature(s)));
+
+  if(traits.includes('openness')) {
+    candidates = candidates.filter(c => c.trait === 'openness')
+  } else {
+    candidates = candidates.filter(c => c.trait !== 'openness')
+  }
+  const needed = stages[currentStage].length;
+  if (candidates.length < needed) {
+    console.warn('[flush] Not enough unused candidates');
+    return [];
+  }
+
+  const shuffled = shuffle(candidates)
+  const fresh: Statement[] = []
+
+ if(!traits.includes('openness')) {
+  traits.forEach(tr => {
+    fresh.push(shuffled.find(sh => sh.trait == tr) as Statement)
+  })
+ } else {
+  fresh.push(...shuffled.slice(0, needed))
+ }
+  return fresh;
+};
 const LongBigFiveQuestionnaireHelmet: React.FC = () => (
   <Helmet>
     <title>Discover Your Personality with the TRPI Test (Long Form)</title>
@@ -90,7 +160,19 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
     return acc;
   }, {} as { [trait: string]: number[]})
 };
-
+ const initialStatements = () => {
+    const statements = localStorage.getItem('statements')
+    const parsed = statements && JSON.parse(statements)
+    if(Array.isArray(parsed)) {
+    console.log(statements, parsed, (statements||[]).length)
+      return parsed
+    }
+console.log('new statements')
+    const newStatements = JSON.stringify(longStatements);
+    localStorage.setItem('longStatements', newStatements);
+    return longStatements
+  }
+  const [statements, setStatements] = useState<any[]>(initialStatements)
   const [responses, setResponses] = useState(initialResponses)
   const [currentStage, setCurrentStage] = useState(parseInt(localStorage.getItem('longLastStage') || "0"));
   const [lastStage, setLastStage] = useState(parseInt(localStorage.getItem('longStage')|| "0"))
@@ -106,17 +188,17 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const [submitted, setSubmitted] = useState<boolean>(false)
   const type = typesData.find(t => t.type === matchedMBTIType);
 const longStages = [
-  longStatements.slice(0,3), // Stage 0
-  longStatements.slice(3, 7),  // stage 1
-  longStatements.slice(7, 11), // Stage 2
-  longStatements.slice(11, 15), // Stage 3
-  longStatements.slice(15, 19), // Stage 4
-  longStatements.slice(19, 23), // Stage 5
-  longStatements.slice(23, 27), // stage 6 
-  longStatements.slice(27, 31), // stage 7
-  longStatements.slice(31, 35), // stage 8
-  longStatements.slice(35, 39),  // stage 9
-  longStatements.slice(39, 42), // stage 10
+  statements.slice(0,3), // Stage 0
+  statements.slice(3, 7),  // stage 1
+  statements.slice(7, 11), // Stage 2
+  statements.slice(11, 15), // Stage 3
+  statements.slice(15, 19), // Stage 4
+  statements.slice(19, 23), // Stage 5
+  statements.slice(23, 27), // stage 6 
+  statements.slice(27, 31), // stage 7
+  statements.slice(31, 35), // stage 8
+  statements.slice(35, 39),  // stage 9
+  statements.slice(39, 42), // stage 10
 ]
     
 
@@ -145,6 +227,32 @@ const longStages = [
    localStorage.removeItem('longLastStage');
 console.log(responses)
    }
+
+const flushCurrentStage = () => {
+  const start = longStages.slice(0, currentStage).reduce((sum, arr) => sum + arr.length, 0);
+  const len   = longStages[currentStage].length;
+
+  const replacements = selectFreshStatements((allStatements as Statement[]), longStages, currentStage);
+  if (replacements.length !== len) return;
+
+  //console.log(statements, replacements);
+  longStages[currentStage] = replacements;
+  const newStatements = longStages.flat();
+  //replacements.forEach((r, i) => { newStatements[start + i] = r; });
+  setStatements(newStatements);
+  localStorage.setItem('longStatements', JSON.stringify(newStatements));
+
+  const newResponses = { ...responses } as Record<string, number[]>;
+  replacements.forEach(rep => {
+    if (!newResponses[rep.trait]) newResponses[rep.trait] = [];
+    const traitStmts = newStatements.filter(st => st.trait === rep.trait);
+    const traitIdx   = traitStmts.findIndex(st => signature(st) === signature(rep));
+    newResponses[rep.trait][traitIdx] = 0.500001;
+  });
+  setResponses(newResponses);
+  localStorage.setItem('longResponses', JSON.stringify(newResponses));
+  window.scrollTo(0, 0);
+};
 
 
 
@@ -387,37 +495,53 @@ const determineIndex = (currentStage: number, trait: string, index: number) : nu
         </Typography>
         {isMobile ? (
           <Stack>
-            {currentStage < lastStage && (
+           {currentStage < lastStage && (
+              <Tooltip title="Unlock your previous answers">
               <IconButton onClick={window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal} color='primary'>
               <LockOpenIcon/>
             </IconButton>
+            </Tooltip>
             )}
+            <Tooltip title="Reset your answers">
              <IconButton onClick={reset} color='primary'>
             <RestartAlt/>
           </IconButton>
-          <IconButton onClick={setRandomly} color="primary">
+          </Tooltip>
+          <Tooltip title="Get different statements">
+          <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
+          </Tooltip>
+          <Tooltip title="Unlock your previous answers!">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
           </IconButton>
+          </Tooltip>
         </Stack>
         ) : (
           <Grid spacing={4}>
             {currentStage < lastStage && (
-              <IconButton onClick={(window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal)} color='primary'>
+              <Tooltip title="Unlock your previous answers">
+              <IconButton onClick={window.location.hostname === "localhost" ? unlock : handleOpenPremiumModal} color='primary'>
               <LockOpenIcon/>
             </IconButton>
+            </Tooltip>
             )}
+            <Tooltip title="Reset your answers">
              <IconButton onClick={reset} color='primary'>
             <RestartAlt/>
           </IconButton>
-          <IconButton onClick={setRandomly} color="primary">
+          </Tooltip>
+          <Tooltip title="Get different statements">
+          <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
+          </Tooltip>
+          <Tooltip title="Unlock your previous answers!">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
           </IconButton>
+          </Tooltip>
         </Grid>
         )
       }

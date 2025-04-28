@@ -92,7 +92,9 @@ const AboutPage: React.FC<{
           }
           setLoading(true)
            let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
-         (prfl as any).suffix = findClosestComplement(bin.type, bin.bigFiveResponses)?.type.slice(1,3)
+           let suffix = findClosestComplement(bin.type, bin.bigFiveResponses)?.type;
+         (prfl as any).suffix = suffix.slice(1,3);
+         (prfl as any).suffixType = suffix;
                 let descriptionText = `${statements.map((statement: any, index: any) => {
                   const idx = stmnts.filter(s => s.trait === statement.trait).indexOf(statement);
            

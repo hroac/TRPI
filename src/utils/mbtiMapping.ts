@@ -10789,6 +10789,7 @@ export const functionPairings = [
     tertiary: 'Ni>Fe (Id + Superego)',   // Ni introverted perceiving
     inferior: 'Ne>Fi (Id + Ego)',        // Ne extraverted perceiving
     opposite: 'ISFJ',
+    suffix: '',
   },
 
   // INTJ (Perceiving pairings from introverted lefts)
@@ -10802,6 +10803,7 @@ export const functionPairings = [
     tertiary: 'Ne>Fi (Id + Ego)',        // Ne extraverted perceiving
     inferior: 'Ni>Fe (Id + Superego)',     // Ni introverted perceiving
     opposite: 'ESFP',
+    suffix: '',
   },
 
   // ISFJ
@@ -10814,6 +10816,7 @@ export const functionPairings = [
     tertiary: 'Se>Ti (Id + Ego)',          // Se extraverted perceiving → (Id + Ego)
     inferior: 'Si>Te (Id + Superego)',       // Si introverted perceiving → (Id + Superego)
     opposite: 'ENTP',
+    suffix: '',
   },
 
   // ESFP
@@ -10826,6 +10829,7 @@ export const functionPairings = [
     tertiary: 'Si>Te (Id + Superego)',       // Si introverted perceiving → (Id + Superego)
     inferior: 'Se>Ti (Id + Ego)',           // Se extraverted perceiving → (Id + Ego)
     opposite: 'INTJ',
+    suffix: '',
   },
 
   // ESTP
@@ -10838,6 +10842,7 @@ export const functionPairings = [
     tertiary: 'Si>Fe (Id + Superego)',       // Si introverted perceiving → (Id + Superego)
     inferior: 'Se>Fi (Id + Ego)',           // Se extraverted perceiving → (Id + Ego)
     opposite: 'INFJ',
+    suffix: '',
   },
 
   // ISTJ
@@ -10850,6 +10855,7 @@ export const functionPairings = [
     tertiary: 'Se>Fi (Id + Ego)',            // Se extraverted perceiving → (Id + Ego)
     inferior: 'Si>Fe (Id + Superego)',         // Si introverted perceiving → (Id + Superego)
     opposite: 'ENFP',
+    suffix: '',
   },
 
   // INFJ
@@ -10862,6 +10868,7 @@ export const functionPairings = [
     tertiary: 'Ne>Fi (Id + Ego)',            // Ne extraverted perceiving → (Id + Ego)
     inferior: 'Ni>Te (Id + Superego)',        // Ni introverted perceiving → (Id + Superego)
     opposite: 'ESTP',
+    suffix: '',
   },
 
   // ENFP
@@ -10874,6 +10881,7 @@ export const functionPairings = [
     tertiary: 'Ni>Te (Id + Superego)',        // Ni introverted perceiving → (Id + Superego)
     inferior: 'Ne>Ti (Id + Ego)',            // Ne extraverted perceiving → (Id + Ego)
     opposite: 'ISTJ',
+    suffix: '',
   },
 
   // INTP – now the dominant left function is judging
@@ -10886,6 +10894,7 @@ export const functionPairings = [
     tertiary: 'Te>Si (Superego + Id)',        // Te is extraverted judging → (Superego + Id)
     inferior: 'Ti>Se (Ego + Id)',             // Ti is introverted judging → (Ego + Id)
     opposite: 'ESFJ',
+    suffix: '',
   },
 
   // ENTJ – dominant left function is judging
@@ -10898,6 +10907,7 @@ export const functionPairings = [
     tertiary: 'Ti>Se (Ego + Id)',             // Ti introverted judging → (Ego + Id)
     inferior: 'Te>Si (Superego + Id)',         // Te extraverted judging → (Superego + Id)
     opposite: 'ISFP',
+    suffix: '',
   },
 
   // ESFJ – dominant left function is judging
@@ -10910,6 +10920,7 @@ export const functionPairings = [
     tertiary: 'Fi>Ne (Ego + Id)',             // Fi introverted judging → (Ego + Id)
     inferior: 'Fe>Ni (Superego + Id)',         // Fe extraverted judging → (Superego + Id)
     opposite: 'INTP',
+    suffix: '',
   },
 
   // ISFP – dominant left function is judging
@@ -10922,6 +10933,7 @@ export const functionPairings = [
     tertiary: 'Fe>Ni (Superego + Id)',        // Fe extraverted judging → (Superego + Id)
     inferior: 'Fi>Ne (Ego + Id)',             // Fi introverted judging → (Ego + Id)
     opposite: 'ENTJ',
+    suffix: '',
   },
 
   // ISTP – dominant left function is judging
@@ -10934,6 +10946,7 @@ export const functionPairings = [
     tertiary: 'Te>Ni (Superego + Id)',        // Te extraverted judging → (Superego + Id)
     inferior: 'Ti>Ne (Ego + Id)',             // Ti introverted judging → (Ego + Id)
     opposite: 'ENFJ',
+    suffix: '',
   },
 
   // ESTJ – dominant left function is judging
@@ -10946,6 +10959,7 @@ export const functionPairings = [
     tertiary: 'Ti>Ne (Ego + Id)',             // Ti introverted judging → (Ego + Id)
     inferior: 'Te>Ni (Superego + Id)',         // Te extraverted judging → (Superego + Id)
     opposite: 'INFP',
+    suffix: '',
   },
 
   // ENFJ – dominant left function is judging
@@ -10958,6 +10972,7 @@ export const functionPairings = [
     tertiary: 'Fi>Ne (Ego + Id)',             // Fi introverted judging → (Ego + Id)
     inferior: 'Fe>Si (Superego + Id)',         // Fe extraverted judging → (Superego + Id)
     opposite: 'ISTP',
+    suffix: '',
   },
 
   // INFP – dominant left function is judging
@@ -10970,6 +10985,7 @@ export const functionPairings = [
     tertiary: 'Fe>Si (Superego + Id)',        // Fe extraverted judging → (Superego + Id)
     inferior: 'Fi>Se (Ego + Id)',             // Fi introverted judging → (Ego + Id)
     opposite: 'ESTJ',
+    suffix: '',
   },
 ];
 

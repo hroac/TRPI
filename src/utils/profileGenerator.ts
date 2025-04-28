@@ -25,6 +25,7 @@ export interface CognitiveProfile {
   inferior: string; // Inferior pairing, e.g., Fi > Se (Ego + Id)
   opposite: string; // Opposite type, e.g., ESTJ
   suffix?: string;
+  suffixType?:string;
 }
 
 export interface BigFiveScores {
@@ -67,7 +68,7 @@ export const generateProfile = async (profile: Profile): Promise<string> => {
   **Cognitive Profile**  
   • **Type:** ${cognitiveProfile.type}  
   • **Trait Response:** ${cognitiveProfile.f4}  
-  • **Suffix:** ${cognitiveProfile.suffix} _(the two middle letters of their active judging type: their Ego type if “J”, or their Superego type if “P”)_  
+  • **Suffix:** ${cognitiveProfile.suffix} / ${cognitiveProfile.suffixType} _(the two middle letters of their active judging type: their Ego type if “J”, or their Superego type if “P”)_  
   • **Opposite Type:** ${cognitiveProfile.opposite}  
   
   **Assessment Narrative:**  
@@ -98,7 +99,7 @@ export const generateProfile = async (profile: Profile): Promise<string> => {
   ---
   
   **GUIDELINES**  
-  1. **TRPI Cognitive & Trait Response Integration**  
+  1. **Trait Response Personality Integration**  
      - Detail how their Jungian function stack operates in daily life and within the structural psyche (Id drives, Ego regulation, Superego critique).  
      - Show how the trait response modulates each function under stress.  
      - Offer 2–3 concrete strategies to leverage dominant functions, soothe the trait response, and strengthen Ego resilience.  
@@ -125,10 +126,10 @@ export const generateProfile = async (profile: Profile): Promise<string> => {
   
   5. **Report Style**  
      - Format like a psychologist’s client report: clear **section headings**, bullet-point summaries, and concise **“Action Steps”** at each stage.  
-     - Use Markdown for emphasis—**bold**, *italics*, and ✔️ checklists.  
+     - Use Markdown for emphasis—**bold**, *italics*, and checklists.  
      - Begin immediately with the analysis—no title or preamble.
   
-  Deliver a richly detailed, actionable profile that melds TRPI’s four pillars to empower the client’s self-understanding and growth. you have 1000 tokens. make it tailored to the client specifically
+  Deliver a richly detailed, actionable profile that melds TRPI’s four pillars to empower the client’s self-understanding and growth. you have 1000 tokens. make it tailored to the client specifically. USE THEIR SPECIFIC FUNCTIONS FOR THE EGO AND SUPEREGO.
   `;
   ;
 

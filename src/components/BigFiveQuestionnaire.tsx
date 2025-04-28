@@ -495,8 +495,9 @@ console.log('new statements')
   }
 
 
-  const determineIndex = (currentStage: number, trait: string, index: number) : number => {
-   if(trait === 'openness') {
+  const determineIndex = (trait: string, index: number) : number => {
+   console.log(index, currentStage - 1, index === currentStage - 1)
+    if(trait === 'openness') {
       if(currentStage === 6) {
         return index + 3
       }
@@ -636,8 +637,8 @@ console.log('new statements')
               {/* The index mapping here depends on how you originally mapped sliders. 
                   If you notice any indexing issues, adjust accordingly. */}
               <Slider
-               value={responses[s.trait][determineIndex(currentStage, s.trait, index)]}
-               onChange={handleSliderChange(s.trait, determineIndex(currentStage, s.trait, index))}
+               value={responses[s.trait][determineIndex(s.trait, index)]}
+               onChange={handleSliderChange(s.trait, determineIndex(s.trait, index))}
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}

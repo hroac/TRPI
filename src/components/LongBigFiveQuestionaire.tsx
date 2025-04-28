@@ -149,7 +149,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const navigate = useNavigate();
 
   const initialResponses = () => {
-    console.log(longStatements)
+   // console.log(longStatements)
 
     if(localStorage.getItem('longResponses')) {
       return JSON.parse(localStorage.getItem('longResponses')  || '')
@@ -164,10 +164,10 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
     const statements = localStorage.getItem('statements')
     const parsed = statements && JSON.parse(statements)
     if(Array.isArray(parsed)) {
-    console.log(statements, parsed, (statements||[]).length)
+   // console.log(statements, parsed, (statements||[]).length)
       return parsed
     }
-console.log('new statements')
+//console.log('new statements')
     const newStatements = JSON.stringify(longStatements);
     localStorage.setItem('longStatements', newStatements);
     return longStatements
@@ -214,7 +214,7 @@ const longStages = [
   }
 
   const reset = () => {
-    console.log(longStatements)
+    //console.log(longStatements)
     setLastStage(0)
     setCurrentStage(0)
     setResponses(longStatements.reduce((acc, s) => {
@@ -225,7 +225,7 @@ const longStages = [
    localStorage.removeItem('longResponses');
    localStorage.removeItem('longStage');
    localStorage.removeItem('longLastStage');
-console.log(responses)
+//console.log(responses)
    }
 
 const flushCurrentStage = () => {
@@ -259,7 +259,7 @@ const flushCurrentStage = () => {
   const setRandomly = () => {
     const stageResponses = longStages.slice(lastStage, longStages.length).flat();
 
-    console.log(stageResponses)
+    //console.log(stageResponses)
     const randomResponses = stageResponses.reduce((acc, s) => {
       if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage ? lastStage : lastStage); // Adjusted slice end
       acc[s.trait].push(Math.random());
@@ -316,8 +316,8 @@ const flushCurrentStage = () => {
         setSelectedStatement(sub)
         return;
       }
-console.log(trait, index, value)
-console.log(responses)
+//console.log(trait, index, value)
+//console.log(responses)
       setResponses((prev: any) => {
         const updatedResponses = { ...prev };
         updatedResponses[trait][index] = value;
@@ -339,10 +339,10 @@ console.log(responses)
 
       const stageAnswers: any = longStages[currentStage].map((statement, index) => {
         const trait = statement.trait;
-        const indexInTrait = determineIndex(currentStage, statement.trait, index);
+        const indexInTrait = determineIndex(statement.trait, index);
         return responses[trait]?.[indexInTrait];
       });
-      console.log(stageAnswers);
+      //console.log(stageAnswers);
       const changed = stageAnswers.every((answer: number) => answer !== 0.500001);
 
       if(changed && currentStage + 1 > lastStage) {
@@ -473,10 +473,10 @@ console.log(responses)
 
   }
 
-const determineIndex = (currentStage: number, trait: string, index: number) : number => {
+const determineIndex = (trait: string, index: number) : number => {
     if(trait === 'openness') {
        if(currentStage === 10) {
-        console.log(responses[trait][index + 3])
+        //console.log(responses[trait][index + 3])
          return index + 3
        }
        return index
@@ -615,8 +615,8 @@ const determineIndex = (currentStage: number, trait: string, index: number) : nu
               {/* The index mapping here depends on how you originally mapped sliders. 
                   If you notice any indexing issues, adjust accordingly. */}
               <Slider
-               value={responses[s.trait][determineIndex(currentStage, s.trait, index)]}
-               onChange={handleSliderChange(s.trait, determineIndex(currentStage, s.trait, index))}
+               value={responses[s.trait][determineIndex(s.trait, index)]}
+               onChange={handleSliderChange(s.trait, determineIndex(s.trait, index))}
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}

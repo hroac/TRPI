@@ -11,6 +11,13 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import Markdown from "react-markdown";
+import PremiumModal from "./PremiumModal";
+import {
+  getChatTrpiRemainingUses,
+  chatTrpiNeedsPayment,
+  incrementChatTrpiUsage,
+  resetChatTrpiUsage,
+} from "../utils/chatUsageTracker";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -28,6 +35,8 @@ interface ChatTRPIState {
   messages: ChatMessage[];
   input: string;
   loading: boolean;
+  remainingUses: number;
+  premiumModalOpen: boolean;
 }
 
 const INITIAL_MESSAGES: ChatMessage[] = [
@@ -41,12 +50,12 @@ const INITIAL_MESSAGES: ChatMessage[] = [
 export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
   private containerRef = createRef<HTMLDivElement>();
 
-  /* ----------------------------- lifecycle ----------------------------- */
-
   state: ChatTRPIState = {
     messages: INITIAL_MESSAGES,
     input: "",
     loading: false,
+    remainingUses: getChatTrpiRemainingUses(),
+    premiumModalOpen: false,
   };
 
   componentDidMount() {
@@ -82,13 +91,26 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
     }
   }
 
-  /* --------------------------- event handlers -------------------------- */
+  checkPaymentRequirement = () => {
+    if (chatTrpiNeedsPayment()) {
+      this.setState({ premiumModalOpen: true });
+    }
+  };
+
+  handlePaymentSuccess = () => {
+    resetChatTrpiUsage(300);
+    this.setState({
+      remainingUses: getChatTrpiRemainingUses(),
+      premiumModalOpen: false,
+    });
+    alert("Payment successful! Your usage count has been reset.");
+    alert("Payment successful! Your usage count has been reset.");
+  };
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ input: e.target.value });
   };
 
-  /** Intercept key presses so Shift+Enter = newline, Enter = send */
   handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -98,14 +120,24 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
 
   sendMessage = async (e: FormEvent) => {
     e.preventDefault();
-    const { input, loading, messages } = this.state;
+    const { input, loading } = this.state;
     const { apiPath, userId } = this.props;
 
     if (!input.trim() || loading) return;
 
+    // Check free-use limit
+    if (chatTrpiNeedsPayment()) {
+      this.checkPaymentRequirement();
+      return;
+    }
+
+    // Deduct one use
+    incrementChatTrpiUsage();
+    this.setState({ remainingUses: getChatTrpiRemainingUses() });
+
     const userMsg: ChatMessage = { role: "user", content: input.trim() };
     this.setState({
-      messages: [...messages, userMsg],
+      messages: [...this.state.messages, userMsg],
       input: "",
       loading: true,
     });
@@ -116,7 +148,7 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId,
-          messages: [...messages, userMsg],
+          messages: [...this.state.messages, userMsg],
         }),
       });
 
@@ -139,10 +171,8 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
     }
   };
 
-  /* ------------------------------- render ------------------------------ */
-
   render() {
-    const { messages, input, loading } = this.state;
+    const { messages, input, loading, remainingUses, premiumModalOpen } = this.state;
 
     return (
       <Paper
@@ -159,6 +189,9 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
       >
         <Typography variant="h6" gutterBottom>
           TRPI Chat Assistant
+        </Typography>
+        <Typography variant="body2" color="text.secondary" mb={1}>
+          Remaining (Free) Uses This Week: {remainingUses}
         </Typography>
 
         {/* Chat transcript */}
@@ -178,20 +211,17 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
               <Box
                 sx={{
                   bgcolor: m.role === "user" ? "primary.main" : "grey.300",
-                  color:
-                    m.role === "user" ? "#ededed !important" : "text.primary",
+                  color: m.role === "user" ? "#ededed !important" : "text.primary",
                   px: 2,
                   py: 1,
                   borderRadius: 2,
                   maxWidth: "80%",
                   whiteSpace: "pre-wrap",
-                  padding: 3
+                  padding: 3,
                 }}
               >
                 <Typography variant="body2" color="inherit">
-                  <Markdown>
-                  {m.content}
-                  </Markdown>
+                  <Markdown>{m.content}</Markdown>
                 </Typography>
               </Box>
             </Box>
@@ -206,11 +236,7 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
 
         {/* Input box */}
         <Divider />
-        <Box
-          component="form"
-          onSubmit={this.sendMessage}
-          sx={{ display: "flex", mt: 1 }}
-        >
+        <Box component="form" onSubmit={this.sendMessage} sx={{ display: "flex", mt: 1 }}>
           <TextField
             variant="outlined"
             placeholder="Type your message…"
@@ -231,6 +257,15 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
             <SendIcon />
           </IconButton>
         </Box>
+
+        <PremiumModal
+          open={premiumModalOpen}
+          onClose={() => this.setState({ premiumModalOpen: false })}
+          title="ChatTRPI Premium"
+          description="Unlock 300 chats for only €2.99!"
+          price={2.99}
+          handlePaymentSuccess={this.handlePaymentSuccess}
+        />
       </Paper>
     );
   }

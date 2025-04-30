@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Typography,
   Button,
@@ -309,6 +309,7 @@ const Home = () => {
   const [isBinsLoading, setIsBinsLoading] = useState<boolean>(false);
   const [isReviewsLoading, setIsReviewsLoading] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const fetched : React.MutableRefObject<boolean> = useRef(false)
 
   // Fetch all bins (test results) using a for loop
   const fetchBins = async () => {
@@ -442,10 +443,14 @@ const Home = () => {
 
   // On mount, initiate data fetching
   useEffect(() => {
+    if(fetched.current) {
+      return
+    }
+    (fetched as React.MutableRefObject<boolean>).current = true;
     fetchReviews();
     fetchBins();
 
-    setIsBinsLoading(true);
+    //setIsBinsLoading(true);
     setIsReviewsLoading(true);
   }, []);
 

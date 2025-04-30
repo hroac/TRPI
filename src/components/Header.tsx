@@ -107,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
           </Box>
 
           {/* Desktop menu */}
-          <Box sx={{ display: { xs: 'none', lg: 'flex' }, gap: 2 }}>
+          <Box sx={{ display: { xs: 'none', md: 'none', lg: 'flex' }, gap: 2 }}>
             {parentItems.map(item => {
               const children = childItems.filter(c => c.parent === item.label);
               if (children.length > 0) {

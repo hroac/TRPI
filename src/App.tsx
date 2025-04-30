@@ -30,6 +30,7 @@ import Scheduler from './pages/Scheduler';
 import TermsOfService from './pages/Terms';
 import LongBigFiveQuestionnaire from './components/LongBigFiveQuestionaire';
 import PremiumModal from './components/PremiumModal';
+import ChatTRPI from './components/ChatTRPI';
 
 const AppHelmet: React.FC = () => (
   <Helmet>
@@ -101,8 +102,9 @@ function App() {
 
     
       menuItems = [...menuItems, 
-        { label: 'About', path: '/about' },
         { label: 'Take the test', path: '/test' },
+        { label: 'About', path: '/about' },
+        {label: 'ChatTRPI', path: '/oracle'},
         { label: 'Tests'},
        { label: 'Short Format', path: '/test', parent: 'Tests'},
        { label: 'Long Format', path: '/assessment', parent: 'Tests'},
@@ -111,9 +113,10 @@ function App() {
        {label: 'Tools'},
        { label: 'Big Five Input', path: '/input', parent: 'Tools' },
        { label: 'Type Comparator', path: '/compare', parent: 'Tools' },
-        {label:  'Sources', path: '/sources'},
-        { label: 'Reviews', path: '/reviews'},
-        { label: 'Contact', path: '/contact' },
+       {label: 'Other'},
+        {label:  'Sources', path: '/sources', parent: 'Other'},
+        { label: 'Reviews', path: '/reviews',parent: 'Other'},
+        { label: 'Contact', path: '/contact', parent: 'Other' },
         {label: 'Donate', modalComponent: (<PremiumModal open={false} title={"Donate to a Vision!"} description={"Help us reach a bigger audience"} price={0.99} onClose={() => {}} allowAmountOverride={true} handlePaymentSuccess={() => {}}/>)}
     ]
     
@@ -149,6 +152,7 @@ function App() {
                             <Route path='/scheduler' element={<Scheduler/>} />
                             <Route path='/terms' element={<TermsOfService/>} />
                             <Route path='/assessment' element={<LongBigFiveQuestionnaire onComplete={handleComplete}/>} />
+                            <Route path='/oracle' element={<ChatTRPI apiPath='https://chattrpi-production.up.railway.app/api/trpi-chat' userId={guid()}/>}/>
                         </Routes>
                         <Box position={'relative'} top={225}>
                         <Footer />

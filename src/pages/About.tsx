@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
-import { findClosestComplement, functionPairings, MBTIProfiles } from '../utils/mbtiMapping';
+import { MBTIProfiles } from '../utils/mbtiMapping';
 import {
   Box,
   Grid,
@@ -18,19 +18,56 @@ import {
   Stack,
   LinearProgress,
   CircularProgress,
+  Radio,
+  RadioGroup,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
 } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import Carousel from '../components/Carousel';
-import PremiumModal from '../components/PremiumModal';
 import JsonBinApi from '../utils/jsonBin';
 import QuestionnaireModal from '../components/QuestionnaireModal';
-import { generateProfile, generateProfileAnalysis } from '../utils/profileGenerator';
+import {
+  generateLaymanReport,
+  generateEnthusiastReport,
+  generateExpertReport,
+} from '../utils/profileGenerator';
 import { guid } from '../utils/guid';
 import Ranking from '../components/Ranking';
 import ReactMarkdown from 'react-markdown';
 
+/* ------------------------------------------------------------ */
+/*  helpers for assessment narrative                            */
+/* ------------------------------------------------------------ */
+const getSubtext = (statement: any, value: number) => {
+  const pct = Math.round(value * 100);
+  const range = Object.keys(statement.subtext ?? {}).find((key) => {
+    const [min, max] = key.split('-').map(Number);
+    return pct >= min && pct <= max;
+  });
+  return range ? statement.subtext[range]?.text ?? '' : '';
+};
+
+const buildAssessmentNarrative = (
+  statements: any[],
+  stagesFlat: any[],
+  allResponses: Record<string, any>
+) =>
+  statements
+    .map((statement) => {
+      const idx = stagesFlat.filter((s) => s.trait === statement.trait).indexOf(statement);
+      const answer = allResponses?.[statement.trait]?.[idx];
+      if (answer === undefined || answer === null) return '';
+      return getSubtext(statement, answer).trim();
+    })
+    .join('\n');
+
+/* ------------------------------------------------------------ */
+/*  Component                                                   */
+/* ------------------------------------------------------------ */
 const AboutPage: React.FC<{
-  bin?: any,
+  bin?: any;
   mbtiType?: string;
   suffix?: string;
   showBigFive?: boolean;
@@ -40,146 +77,44 @@ const AboutPage: React.FC<{
   stages?: any[];
   list?: Record<any, any>;
   handleReloadBin?: () => void;
-}> = ({ bin, mbtiType, suffix, showBigFive = true, description = '', allResponses = {}, statements = [], stages = [], list={}, handleReloadBin = null }) => {
+}> = ({
+  bin,
+  mbtiType,
+  suffix,
+  showBigFive = true,
+  description = '',
+  allResponses = {},
+  statements = [],
+  stages = [],
+  list = {},
+  handleReloadBin = null,
+}) => {
+  /* ------------------ look-ups & responsive ------------------ */
   const { type } = useParams<{ type: string }>();
   const typeInfo = typesData.find((t) => t.type === type || t.type === mbtiType);
   const profile = MBTIProfiles.find((p) => p.name === type || p.name === mbtiType);
-  const stmnts = stages.flat();
-  const getSubtext = (statement: any, value: number) => {
-    const percentage = Math.round(value * 100);
-    const range = Object.keys(statement.subtext).find((key) => {
-      const [min, max] = key.split('-').map(Number);
-      return percentage >= min && percentage <= max;
-    });
-  
-    return range ? (statement.subtext as any)[range]?.text : null;
-  };
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  /* ------------------ local state ---------------------------- */
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
-  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const [loading, setLoading] = useState(false);
-  const hasFetchedProfile = useRef(false);
-  const handleOpenPremiumModal = () => setPremiumModalOpen(true);
-  const handleClosePremiumModal = () => setPremiumModalOpen(false);
-  const [desc, setDescription] = useState<any>('')
-  
-  const getStatement = (trait: any, i: any) => {
-    const stage = statements.filter((s) => s.trait === trait)
-    const statement = stage[i]
+  const [profileText, setProfileText] = useState<string>(description);
+  const [reportLevel, setReportLevel] = useState<'casual' | 'advanced' | 'expert'>('casual');
 
+  /* ------------------ assessment narrative ------------------- */
+  const stmnts = stages.flat();
+  const assessmentNarrative = buildAssessmentNarrative(statements, stmnts, allResponses);
 
-    console.log(trait, i, statement, stage)
-    return statement
-    
-  }
-  
-  useEffect(() => {
-    const fetchProfile = async () => {
-      console.log('fetching profile');
+  /* ------------------ generator map -------------------------- */
+  const levelToGenerator = {
+    casual: generateLaymanReport,
+    advanced: generateEnthusiastReport,
+    expert: generateExpertReport,
+  } as const;
 
-      let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
-      let suffixType = findClosestComplement(bin.type, bin.bigFiveResponses)?.type || '';
-      (prfl as any).suffix = suffixType.slice(1, 3);
-      (prfl as any).suffixType = suffixType;
-
-      const descriptionText = `${statements.map((statement: any, index: any) => {
-        const idx = stmnts.filter(s => s.trait === statement.trait).indexOf(statement);
-        const answer = allResponses[statement.trait][idx];
-        if (!answer) return '';
-        const subText = getSubtext(statement, answer);
-        return subText?.trim();
-      }).join('\n')}`;
-
-      try {
-        setLoading(true);
-        const generated = await generateProfile({
-          cognitiveProfile: prfl,
-          assessment: descriptionText,
-          scores: bin.bigFiveResponses
-        });
-        setDescription(generated);
-        await JsonBinApi.updateResultsInJsonBin({ ...bin, description: generated });
-        handleReloadBin && handleReloadBin();
-      } catch (error) {
-        console.error('Profile generation error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (bin && !bin.description && !hasFetchedProfile.current) {
-      hasFetchedProfile.current = true;
-      fetchProfile();
-    }
-  }, [bin]);
-
-
-
-  const handlePaymentSuccess = async (data: any) => {
-    setPaymentSuccessful(true);
-    setPremiumModalOpen(false);
-    setLoading(true);
-
-    try {
-      let profile = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
-      (profile as any).suffix = suffix;
-      let descriptionText = `${stmnts.map((statement, index) => {
-        const answer = getStatement(statement.trait, index);
-        if(!answer) return '';
-        const subText = getSubtext(statement, answer);
-        return subText.trim();
-      }).join('\n')}`;
-  
-      descriptionText = await generateProfileAnalysis({
-        cognitiveProfile: profile,
-        scores: bin.bigFiveResponses,
-        demographics: data.demographics,
-        assessment: descriptionText,
-      });
-      JsonBinApi.updateResultsInJsonBin({ ...bin, ...data.demographics, description: descriptionText });
-      handleReloadBin && handleReloadBin();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const slides = Object.values(allResponses).length ? stages.map(stage => {
-    return { content: (
-      <Paper>
-        <Stack spacing={2}>
-          {stage.map((stmt: any) => {
-            const index = stmnts.filter(s => s.trait === stmt.trait).indexOf(stmt);
-            const explanation = allResponses[stmt.trait][index];
-            const parsed = parseInt(explanation);
-            const value = Number.isNaN(parsed) 
-              ? explanation.trim() 
-              : `${parseInt((explanation * 100).toString(), 10)} \n${getSubtext(stmt, explanation)}`;
-            return (
-              <Paper sx={{ p: 3, mb: 5 }} key={index}>
-                <Typography variant="h6" gutterBottom>
-                  {stmt.text}
-                </Typography>
-                <Typography color="text.secondary">
-                  Trait: {stmt.trait.toUpperCase()}
-                </Typography>
-                <Box mt={1}>
-                  <Typography sx={{ whiteSpace: "pre-wrap" }}>
-                    <strong>Your Answer:</strong> {value || ""}
-                  </Typography>
-                  <LinearProgress color="primary" variant="determinate" value={parseFloat(value.toString()) < 1 ? parseFloat(value.toString()) * 100 : parseFloat(value.toString())}/>
-                  <LinearProgress color="primary" variant="determinate" value={parseFloat(value.toString()) < 1 ? parseFloat(value.toString()) * 100 : parseFloat(value.toString())}/>
-                </Box>
-              </Paper>
-            );
-          })}
-        </Stack>
-      </Paper>
-    )};
-  }) : [];
-
-  const data = {
+  /* ------------------ chart data ----------------------------- */
+  const chartData = {
     labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
     datasets: [
       {
@@ -200,66 +135,133 @@ const AboutPage: React.FC<{
           'rgba(153, 102, 255, 0.6)',
           'rgba(255, 99, 132, 0.6)',
         ],
-        borderColor: [
-          'rgba(75, 192, 192, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 99, 132, 1)',
-        ],
         borderWidth: 1,
       },
     ],
   };
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-      title: { display: true, text: 'Big Five Personality Scores' },
-    },
-    scales: { y: { beginAtZero: true, max: 100 } },
+  /* ------------------ FREE or PREMIUM generation ------------- */
+  const generateFreeReport = async () => {
+    setLoading(true);
+    try {
+      const generator = levelToGenerator[reportLevel];
+      const descriptionText = await generator({
+        cognitiveProfile: bin,
+        scores: bin.bigFiveResponses,
+        assessment: assessmentNarrative,
+      });
+      await JsonBinApi.updateResultsInJsonBin({
+        ...bin,
+        description: descriptionText,
+        detailLevel: reportLevel,
+      });
+      setProfileText(descriptionText);
+      handleReloadBin && handleReloadBin();
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!typeInfo) {
-    return <Typography variant="h5">Type information not available.</Typography>;
-  }
+  const handleGenerateClick = () => {
+    if (reportLevel === 'expert') {
+      setPremiumModalOpen(true);        // pay-gated path
+    } else {
+      generateFreeReport();             // immediate & free
+    }
+  };
 
+  const handlePaymentSuccess = async (data: any) => {
+    setPremiumModalOpen(false);
+    setLoading(true);
+
+    try {
+      const descriptionText = await generateExpertReport({
+        cognitiveProfile: bin,
+        scores: bin.bigFiveResponses,
+        assessment: assessmentNarrative,
+      });
+
+      await JsonBinApi.updateResultsInJsonBin({
+        ...bin,
+        ...data.demographics,
+        description: descriptionText,
+        detailLevel: 'expert',
+      });
+      setProfileText(descriptionText);
+      handleReloadBin && handleReloadBin();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* ------------------ carousel slides ------------------------ */
+  const slides =
+    Object.values(allResponses).length && stages.length
+      ? stages.map((stage) => ({
+          content: (
+            <Paper>
+              <Stack spacing={2}>
+                {stage.map((stmt: any) => {
+                  const idx = stmnts.filter((s) => s.trait === stmt.trait).indexOf(stmt);
+                  const raw = allResponses?.[stmt.trait]?.[idx];
+                  const num = parseFloat(raw);
+                  return (
+                    <Paper sx={{ p: 3, mb: 5 }} key={idx}>
+                      <Typography variant="h6">{stmt.text}</Typography>
+                      <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
+                      <Box mt={1}>
+                        <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+                          <strong>Your Answer:</strong>{' '}
+                          {Number.isNaN(num) ? raw : `${Math.round(num * 100)}%`}
+                        </Typography>
+                        {!Number.isNaN(num) && (
+                          <LinearProgress variant="determinate" value={num * 100} />
+                        )}
+                      </Box>
+                    </Paper>
+                  );
+                })}
+              </Stack>
+            </Paper>
+          ),
+        }))
+      : [];
+
+  /* ------------------ guard -------------------- */
+  if (!typeInfo) return <Typography variant="h5">Type information not available.</Typography>;
+
+  /* ------------------ JSX ---------------------- */
   return (
-    <Box sx={{marginTop: '100px'}} padding={isMobile ? 2 : 4}>
-      <Typography
-        variant={isMobile ? "h5" : "h4"}
-        align="center"
-        gutterBottom
-        sx={{ wordBreak: 'break-word' }}
-      >
-        {type || mbtiType} - {typeInfo.description.slice(typeInfo.description.indexOf(',') + 2, typeInfo.description.indexOf(':'))}
+    <Box sx={{ mt: '100px' }} padding={isMobile ? 2 : 4}>
+      {/* Header */}
+      <Typography variant={isMobile ? 'h5' : 'h4'} align="center" gutterBottom>
+        {type || mbtiType} –{' '}
+        {typeInfo.description.slice(
+          typeInfo.description.indexOf(',') + 2,
+          typeInfo.description.indexOf(':')
+        )}
       </Typography>
 
-      {/* Big Five Scores Chart */}
+      {/* Big-Five Chart */}
       {showBigFive && (
         <Box display="flex" justifyContent="center" my={4}>
           <Box width={isMobile ? '90%' : '60%'}>
-            <Bar data={data} options={options} />
+            <Bar data={chartData} options={{ responsive: true, plugins: { legend: { display: false } } }} />
           </Box>
         </Box>
       )}
 
+      {/* Quote */}
       <Box display="flex" justifyContent="center">
         <Typography
           variant="h4"
-          sx={{
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            mb: 2,
-            fontSize: isMobile ? '1.5rem' : '2rem',
-          }}
+          sx={{ fontStyle: 'italic', fontWeight: 'bold', mb: 2, fontSize: isMobile ? '1.5rem' : '2rem' }}
         >
           {`"${typeInfo.quote}"`}
         </Typography>
       </Box>
 
-      {/* Description and Generate Profile Button */}
+      {/* Description & controls */}
       <Card variant="outlined" sx={{ my: 3, p: 2 }}>
         <CardContent>
           {loading ? (
@@ -268,50 +270,68 @@ const AboutPage: React.FC<{
             </Box>
           ) : (
             <Typography variant="body1" paragraph>
-              {description && <ReactMarkdown>{description}</ReactMarkdown> || typeInfo.description}
+              {profileText ? <ReactMarkdown>{profileText}</ReactMarkdown> : typeInfo.description}
             </Typography>
           )}
-          {bin && bin.userId === guid() && !loading && (
+
+         
+
+      {!profileText ? (
+        <Box>
+   <Box display={'flex'} justifyContent={'flexStart'}>
+          <FormControl component="fieldset" sx={{ mt: 3 }}>
+  <FormLabel component="legend">Report detail</FormLabel>
+
+  {/* Vertical by default — no `row` prop */}
+  <RadioGroup
+    value={reportLevel}
+    onChange={e =>
+      setReportLevel(e.target.value as 'casual' | 'advanced' | 'expert')
+    }
+    sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}
+  >
+    <FormControlLabel value="casual"   control={<Radio />} label="Casual (Free)" />
+    <FormControlLabel value="advanced" control={<Radio />} label="Advanced (Free)" />
+    <FormControlLabel value="expert"   control={<Radio />} label="Expert (€0.99)" />
+  </RadioGroup>
+</FormControl>
+
+         </Box>
+
+          {/* Generate button */}
+          {bin && bin.userId === guid() && (
             <Button
               variant="contained"
               color="primary"
               fullWidth={!isMobile}
-              onClick={handleOpenPremiumModal}
-              sx={{ mt: 3 }}
+              sx={{ mt: 2 }}
+              onClick={handleGenerateClick}
+              disabled={loading}
             >
-              Generate a Custom Profile
+              {reportLevel === 'expert'
+                ? 'Generate Expert Profile – €0.99'
+                : `Generate ${reportLevel.charAt(0).toUpperCase() + reportLevel.slice(1)} Profile (Free)`}
             </Button>
           )}
+        </Box>
+      ) : (<></>)}
         </CardContent>
       </Card>
-    
-      {/* Carousel */}
-      <Carousel
-        slides={slides}
-        settings={{
-          spaceBetween: 50,
-          slidesPerView: 1,
-          autoplay: { delay: 6000 },
-          loop: true,
-          autoHeight: true,
-        }}
-      />
 
-      {/* Stereotype and Reality */}
+      {/* Carousel */}
+      <Carousel slides={slides} settings={{ slidesPerView: 1, loop: true, autoHeight: true }} />
+
+      {/* Stereotype vs Reality */}
       <Box mt={5}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>
-              Stereotype
-            </Typography>
+            <Typography variant="h5">Stereotype</Typography>
             <Typography variant="body2" color="text.secondary">
               {typeInfo.Stereotype}
             </Typography>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>
-              Reality
-            </Typography>
+            <Typography variant="h5">Reality</Typography>
             <Typography variant="body2" color="text.secondary">
               {typeInfo.Reality}
             </Typography>
@@ -319,43 +339,40 @@ const AboutPage: React.FC<{
         </Grid>
       </Box>
 
-      {/* Strengths and Weaknesses */}
+      {/* Strengths / Weaknesses */}
       <Box mt={5}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>
-              Strengths
-            </Typography>
+            <Typography variant="h5">Strengths</Typography>
             <List>
-              {typeInfo.strengths.map((strength: string, idx: number) => (
-                <ListItem key={idx}>{strength}</ListItem>
+              {typeInfo.strengths.map((s: string, i: number) => (
+                <ListItem key={i}>{s}</ListItem>
               ))}
             </List>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>
-              Weaknesses
-            </Typography>
+            <Typography variant="h5">Weaknesses</Typography>
             <List>
-              {typeInfo.weaknesses.map((weakness: string, idx: number) => (
-                <ListItem key={idx}>{weakness}</ListItem>
+              {typeInfo.weaknesses.map((w: string, i: number) => (
+                <ListItem key={i}>{w}</ListItem>
               ))}
             </List>
           </Grid>
         </Grid>
       </Box>
 
+      {/* Optional ranking */}
       {Object.keys(list).length > 0 && <Ranking data={list} />}
 
-      {/* Related Types */}
+      {/* Related types */}
       <Box mt={5}>
         <RelatedTypesBox type={type || mbtiType || ''} />
       </Box>
 
-      {/* Premium Modal */}
+      {/* Payment modal for expert only */}
       <QuestionnaireModal
         open={premiumModalOpen}
-        onClose={handleClosePremiumModal}
+        onClose={() => setPremiumModalOpen(false)}
         handlePaymentSuccess={handlePaymentSuccess}
         price={0.99}
       />

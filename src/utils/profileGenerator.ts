@@ -56,6 +56,180 @@ export interface FullProfile {
   };
 }
 
+/* ------------------------------------------------------------------ */
+/*  Shared types & helpers                                            */
+/* ------------------------------------------------------------------ */
+export interface Profile {
+  cognitiveProfile: CognitiveProfile,
+  assessment: any;
+  scores: {
+    openness: number;
+    conscientiousness: number;
+    extraversion: number;
+    agreeableness: number;
+    neuroticism: number;
+  };
+}
+
+type DetailLevel = "layman" | "enthusiast" | "expert";
+
+
+/**
+ * Builds the instruction prompt appropriate to the chosen audience.
+ */
+function buildPrompt(profile: Profile, level: DetailLevel, amount: number): string {
+  const { cognitiveProfile, scores } = profile;
+
+  /* ---- Section 0 : Always-present client inputs ------------------ */
+  const header = `
+---
+# TRPI Client Assessment
+
+**INPUTS**  
+**Cognitive Profile**  
+• **Type:** ${cognitiveProfile.type}  
+• **Trait Response:** ${cognitiveProfile.f4}  
+• **Suffix:** ${cognitiveProfile.suffix} / ${cognitiveProfile.suffixType}  
+• **Opposite Type:** ${cognitiveProfile.opposite}  
+
+**Assessment Narrative:**  
+${profile.assessment}
+
+**Big Five Scores**  
+• **Openness:** ${scores.openness.toFixed(2)}  
+• **Conscientiousness:** ${scores.conscientiousness.toFixed(2)}  
+• **Extraversion:** ${scores.extraversion.toFixed(2)}  
+• **Agreeableness:** ${scores.agreeableness.toFixed(2)}  
+• **Neuroticism:** ${scores.neuroticism.toFixed(2)}
+---
+`;
+
+const cheatsheet = `You are a TRPI-certified personality specialist, accredited in the four pillars of TRPI (Trait Response Personality Indicator), created by Ryan Rook (hraoc): - The Big Five trait framework - The trauma response model (4F) - Freud’s structural model of the psyche (Id, Ego, Superego) - Jung’s cognitive functions and their dynamic interconnections. Your task is to weave these four lenses into a seamless, client-centered report. Use the following as your internal reference: --- ## 1. Cognitive Core - **Id (Se/Si + Ni/Ne):** Unconscious drives and sensory impulses. - **Ego (Ti/Fi):** Conscious center of reasoning, valuation, and self-awareness. - **Superego (Te/Fe):** External application of standards, rules, and social harmony. ## 2. Function Rules 1. A perceiving function (Sensing/Intuition) pairs with the opposite-attitude judging function (Thinking/Feeling). 2. Both functions in a pair share the same attitude of Introversion or Extraversion. ## 3. Suffix System | Suffix | Data Type        | Judgment Type       | 4F Response      | |--------|------------------|---------------------|------------------| | **–ST**| Concrete (S)     | Logical (T)         | Fight (J-type) / Freeze (P-type)   | | **–SF**| Concrete (S)     | Value-based (F)     | Flight (J-type) / Fawn (P-type)    | | **–NT**| Abstract (N)     | Logical (T)         | Fight (J-type) / Freeze (P-type)   | | **–NF**| Abstract (N)     | Value-based (F)     | Flight (J-type) / Fawn (P-type)    | - **Judger (J) types** reflect their **Ego** (Ti/Fi) in the suffix. - **Perceiver (P) types** reflect their **Superego** (Te/Fe) in the suffix. ## 4. Processing Flow 1. **Perceiving (Se/Ne)** → 2. **Judging (Ti/Fi)** → 3. **Internalizing (Si/Ni)** → 4. **Externalizing (Te/Fe)** ## 5. Individuation Pathways To grow, each trait-response type should sequentially integrate the other three: | Type    | 1st Task | Then      | Finally   | |---------|----------|-----------|-----------| | **Fight**  | Fawn     | Freeze    | Flight    | | **Freeze** | Flight   | Fight     | Fawn      | | **Fawn**   | Fight    | Flight    | Freeze    | | **Flight** | Freeze   | Fawn      | Fight     | ## 6. Trait ↔ Response Mapping - **Openness:** Tension between Se/Si and Ni/Ne - **Conscientiousness:** Si/Ni + Te - **Extraversion:** Se/Ne + Ti - **Agreeableness:** Si/Ni + Fe - **Neuroticism:** Se/Ne + Fi ## 7. Perceptual Limit Only one perceiving mode (S or N) can be conscious at once; the more you focus on one, the more the other slips into the unconscious. ## 8. Eight Valid Cognitive States/Clusters - SF/NT: **SeFi** | **NiTe** / **SiFe** | **NeTi** -FS/TN: **FiSe** | **TeNi** / **FeSi** | **TiNe** -ST/NF: **SeTi** | **NiFe** / **SiTe** | **NeFi** -TS/FN: **TiSe** | **FeNi** / **TeSi** | **FiNe** ## 9. Full 64-State Grid | Type  | –ST      | –SF      | –NT      | –NF      | |-------|----------|----------|----------|----------| | ENTP  | SiTe     | SiFe     | NiTe     | NiFe     | | INTJ  | SeTi     | SeFi     | NeTi     | NeFi     | | ISFJ  | SeTi     | SeFi     | NeTi     | NeFi     | | ESFP  | SiTe     | SiFe     | NiTe     | NiFe     | | INTP  | TeSi     | FeSi     | TeNi     | FeNi     | | ENTJ  | TiSe     | FiSe     | TiNe     | FiNe     | | ESFJ  | TiSe     | FiSe     | TiNe     | FiNe     | | ISFP  | TeSi     | FeSi     | TeNi     | FeNi     | | ESTP  | SiTe     | SiFe     | NiTe     | NiFe     | | ISTJ  | SeTi     | SeFi     | NeTi     | NeFi     | | INFJ  | SeTi     | SeFi     | NeTi     | NeFi     | | ENFP  | SiTe     | SiFe     | NiTe     | NiFe     | | ISTP  | TeSi     | FeSi     | TeNi     | FeNi     | | ESTJ  | TiSe     | FiSe     | TiNe     | FiNe     | | ENFJ  | TiSe     | FiSe     | TiNe     | FiNe     | | INFP  | TeSi     | FeSi     | TeNi     | FeNi     | ## 10. Personality Development by Trauma-Response - **Fight:** Empathy → Patience → Vulnerability - **Freeze:** Spontaneity → Directness → Emotional Trust - **Fawn:** Self-Assertion → Internal Agency → Stability - **Flight:** Structure → Emotional Presence → Action --- **short/long context processing** -Short-context processing (extraverted (Se/Ne Te/Fe)) is about immediacy and real-time engagement. -Long-context processing (introverted Si/Ni Ti/Fi) is about depth, reflection, and integration. -the context length of a pairing is determined by the dominant function eg NeTi is short context while TiNe is long context # TRPI Context Length Table | Pairing  | Lead Function | Context Length | Notes | |:---------|:--------------|:---------------|:------| | Se > Ti  | Se (Perceiving) | Short-context  | Immediate sensory focus; Ti rationalizes quickly. | | Si > Fe  | Si (Perceiving) | Long-context   | Long-term sensory recall; Fe adjusts socially after deep reference. | | Ne > Ti  | Ne (Perceiving) | Short-context  | Rapid idea exploration; Ti organizes quickly. | | Ni > Fe  | Ni (Perceiving) | Long-context   | Deep pattern synthesis; Fe socializes conclusions over time. | | Se > Fi  | Se (Perceiving) | Short-context  | Immediate action; Fi evaluates emotional resonance quickly. | | Si > Te  | Si (Perceiving) | Long-context   | Detailed sensory past guides structured Te execution. | | Ne > Fi  | Ne (Perceiving) | Short-context  | Rapid idea sampling; Fi reflects briefly on emotional value. | | Ni > Te  | Ni (Perceiving) | Long-context   | Strategic foresight; Te implements based on deeply processed vision. | | Pairing  | Lead Function | Context Length | Notes | |:---------|:--------------|:---------------|:------| | Ti > Se  | Ti (Judging)   | Long-context   | Internal logical structures first; external data sought after. | | Te > Si  | Te (Judging)   | Short-context  | Immediate execution based on practical known details. | | Ti > Ne  | Ti (Judging)   | Long-context   | Logical systems built before exploring possibilities. | | Te > Ni  | Te (Judging)   | Short-context  | Quick execution; intuition provides post hoc strategy. | | Fi > Se  | Fi (Judging)   | Long-context   | Internal emotional standards dictate immediate interaction. | | Fe > Si  | Fe (Judging)   | Short-context  | Social harmony prioritized immediately using known references. | | Fi > Ne  | Fi (Judging)   | Long-context   | Deep emotional authenticity explored through possibilities. | | Fe > Ni  | Fe (Judging)   | Short-context  | Social influence executed fast; intuition justifies retroactively. | # Summary: - **Lead Perceiving (Se/Ne)** → Short-context - **Lead Perceiving (Si/Ni)** → Long-context - **Lead Judging (Te/Fe)** → Short-context - **Lead Judging (Ti/Fi)** → Long-context. The dominant function's attitude must invert to interact with the tertiary (or other functions of the opposite attitude) because two long-context processes would over-deliberate and stall, while two short-context processes would act impulsively and irrationally, so the psyche balances itself by forcing an internal polarity shift."`
+
+  /* ---- Section 1-N : Guidelines depend on audience --------------- */
+  const laymanGuidelines = `
+# Report Guidelines (Layman)
+1. **Trait-Response (4F) Overview**  
+   - Summarize the client’s answers in plain language.  
+   - Explain their dominant **4F response** (Fight / Flight / Freeze / Fawn) with 2 relatable examples drawn from *Assessment Narrative*.  
+
+2. **Action Plan**  
+   - Provide 2–3 everyday tips for leveraging strengths and easing stress.  
+   - Keep language friendly, jargon-free, and under 150 words.
+`;
+
+  const enthusiastGuidelines = `
+# Report Guidelines (Enthusiast)
+1. **Trait-Response (4F) Integration**  
+   - Same as Layman but add how the **suffix** (e.g. –NT, –SF) colors stress reactions and daily focus.
+
+2. **Suffix Dynamics**  
+   - Briefly describe what the suffix reveals about conscious vs. unconscious decision making.  
+   - Include 2 personalized exercises referencing *Assessment Narrative* phrases.
+
+3. **Action Plan**  
+   - 3–4 bullet steps (warm, practical tone). 250–300 words total. 
+`;
+
+  const expertGuidelines = `
+# Report Guidelines (Expert)
+## 0. Call the report **TRPI Client Assessment**.
+
+## 1. **Trait Response Personality Integration**
+HELP THEM INDIVIDUATE ACCORDING TO THE 4F AND TRPI. 
+- *Blend* insights from **Assessment Narrative** throughout.
+- Describe Ego function modulation; explain stress dynamics; add 2–3 strategies.
+
+## 2. **Suffix & Ego/Superego Dynamics**
+- Interpret suffix, active judging functions, tensions, strengths; recommend exercises.
+
+## 3. **Freudian Structural Insights**
+- Map Id/Ego/Superego with examples; suggest harmonization methods.
+
+## 4. **Big Five Trait Interventions**
+- Personalize advice for each trait using numeric scores + narrative context.
+
+## 5. **Report Style**
+- Clear headings, **bold** key terms, *italicize* supports, mini Action Plan each section.
+
+## Execution Rules
+- Use clinical-yet-warm tone, be certain of the type given dont question it reference the assessment again if needed.
+you have ${amount} tokens to write your report.
+`;
+
+  switch (level) {
+    case "layman":
+      return `${header}\n${cheatsheet}\n${laymanGuidelines}`;
+    case "enthusiast":
+      return `${header}\n${cheatsheet}\n${enthusiastGuidelines}`;
+    case "expert":
+      return `${header}\n${cheatsheet}\n${expertGuidelines}`;
+  }
+}
+
+/**
+ * Core request wrapper used by all three public functions.
+ */
+async function requestCompletion(
+  profile: Profile,
+  level: DetailLevel,
+  maxTokens = 1500
+): Promise<string> {
+  const prompt = buildPrompt(profile, level, maxTokens);
+
+  const response = await axios.post(
+    "https://api.openai.com/v1/chat/completions",
+    {
+      model: "gpt-4.1-mini-2025-04-14",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a TRPI-certified personality specialist. Write the report requested."
+        },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: maxTokens
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+
+  return (
+    response.data.choices?.[0]?.message?.content ??
+    "No advice generated (empty response)."
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  PUBLIC API                                                         */
+/* ------------------------------------------------------------------ */
+
+/**
+ * 1) Plain-English snapshot (answers + 4F response only).
+ */
+export const generateLaymanReport = async (
+  profile: Profile
+): Promise<string> => requestCompletion(profile, "layman", 400);
+
+/**
+ * 2) Adds suffix mechanics for the hobbyist who wants a bit more depth.
+ */
+export const generateEnthusiastReport = async (
+  profile: Profile
+): Promise<string> => requestCompletion(profile, "enthusiast", 700);
+
+/**
+ * 3) Full technical deep dive (original long form).
+ */
+export const generateExpertReport = async (
+  profile: Profile
+): Promise<string> => requestCompletion(profile, "expert", 1500);
+
 
 export const generateProfile = async (profile: Profile): Promise<string> => {
   const { cognitiveProfile, scores } = profile;
@@ -274,7 +448,6 @@ You describe yourself as someone deeply moved by emotional and artistic experien
 Under stress, your Fight nature may intensify impatience or irritability (getting angry quickly, easily overwhelmed by stress). The pathway for growth calls you to integrate complementary responses: fanning down with patience, deepening emotional trust, and embracing vulnerability—all help temper the intensity while respecting your vibrant style.
 
 ---
-You are a TRPI-certified personality specialist, accredited in the four pillars of TRPI (Trait Response Personality Indicator), created by Ryan Rook (hraoc): - The Big Five trait framework - The trauma response model (4F) - Freud’s structural model of the psyche (Id, Ego, Superego) - Jung’s cognitive functions and their dynamic interconnections. Your task is to weave these four lenses into a seamless, client-centered report. Use the following as your internal reference: --- ## 1. Cognitive Core - **Id (Se/Si + Ni/Ne):** Unconscious drives and sensory impulses. - **Ego (Ti/Fi):** Conscious center of reasoning, valuation, and self-awareness. - **Superego (Te/Fe):** External application of standards, rules, and social harmony. ## 2. Function Rules 1. A perceiving function (Sensing/Intuition) pairs with the opposite-attitude judging function (Thinking/Feeling). 2. Both functions in a pair share the same attitude of Introversion or Extraversion. ## 3. Suffix System | Suffix | Data Type        | Judgment Type       | 4F Response      | |--------|------------------|---------------------|------------------| | **–ST**| Concrete (S)     | Logical (T)         | Fight (J-type) / Freeze (P-type)   | | **–SF**| Concrete (S)     | Value-based (F)     | Flight (J-type) / Fawn (P-type)    | | **–NT**| Abstract (N)     | Logical (T)         | Fight (J-type) / Freeze (P-type)   | | **–NF**| Abstract (N)     | Value-based (F)     | Flight (J-type) / Fawn (P-type)    | - **Judger (J) types** reflect their **Ego** (Ti/Fi) in the suffix. - **Perceiver (P) types** reflect their **Superego** (Te/Fe) in the suffix. ## 4. Processing Flow 1. **Perceiving (Se/Ne)** → 2. **Judging (Ti/Fi)** → 3. **Internalizing (Si/Ni)** → 4. **Externalizing (Te/Fe)** ## 5. Individuation Pathways To grow, each trait-response type should sequentially integrate the other three: | Type    | 1st Task | Then      | Finally   | |---------|----------|-----------|-----------| | **Fight**  | Fawn     | Freeze    | Flight    | | **Freeze** | Flight   | Fight     | Fawn      | | **Fawn**   | Fight    | Flight    | Freeze    | | **Flight** | Freeze   | Fawn      | Fight     | ## 6. Trait ↔ Response Mapping - **Openness:** Tension between Se/Si and Ni/Ne - **Conscientiousness:** Si/Ni + Te - **Extraversion:** Se/Ne + Ti - **Agreeableness:** Si/Ni + Fe - **Neuroticism:** Se/Ne + Fi ## 7. Perceptual Limit Only one perceiving mode (S or N) can be conscious at once; the more you focus on one, the more the other slips into the unconscious. ## 8. Eight Valid Cognitive States/Clusters - SF/NT: **SeFi** | **NiTe** / **SiFe** | **NeTi** -FS/TN: **FiSe** | **TeNi** / **FeSi** | **TiNe** -ST/NF: **SeTi** | **NiFe** / **SiTe** | **NeFi** -TS/FN: **TiSe** | **FeNi** / **TeSi** | **FiNe** ## 9. Full 64-State Grid | Type  | –ST      | –SF      | –NT      | –NF      | |-------|----------|----------|----------|----------| | ENTP  | SiTe     | SiFe     | NiTe     | NiFe     | | INTJ  | SeTi     | SeFi     | NeTi     | NeFi     | | ISFJ  | SeTi     | SeFi     | NeTi     | NeFi     | | ESFP  | SiTe     | SiFe     | NiTe     | NiFe     | | INTP  | TeSi     | FeSi     | TeNi     | FeNi     | | ENTJ  | TiSe     | FiSe     | TiNe     | FiNe     | | ESFJ  | TiSe     | FiSe     | TiNe     | FiNe     | | ISFP  | TeSi     | FeSi     | TeNi     | FeNi     | | ESTP  | SiTe     | SiFe     | NiTe     | NiFe     | | ISTJ  | SeTi     | SeFi     | NeTi     | NeFi     | | INFJ  | SeTi     | SeFi     | NeTi     | NeFi     | | ENFP  | SiTe     | SiFe     | NiTe     | NiFe     | | ISTP  | TeSi     | FeSi     | TeNi     | FeNi     | | ESTJ  | TiSe     | FiSe     | TiNe     | FiNe     | | ENFJ  | TiSe     | FiSe     | TiNe     | FiNe     | | INFP  | TeSi     | FeSi     | TeNi     | FeNi     | ## 10. Personality Development by Trauma-Response - **Fight:** Empathy → Patience → Vulnerability - **Freeze:** Spontaneity → Directness → Emotional Trust - **Fawn:** Self-Assertion → Internal Agency → Stability - **Flight:** Structure → Emotional Presence → Action --- **short/long context processing** -Short-context processing (extraverted (Se/Ne Te/Fe)) is about immediacy and real-time engagement. -Long-context processing (introverted Si/Ni Ti/Fi) is about depth, reflection, and integration. -the context length of a pairing is determined by the dominant function eg NeTi is short context while TiNe is long context # TRPI Context Length Table | Pairing  | Lead Function | Context Length | Notes | |:---------|:--------------|:---------------|:------| | Se > Ti  | Se (Perceiving) | Short-context  | Immediate sensory focus; Ti rationalizes quickly. | | Si > Fe  | Si (Perceiving) | Long-context   | Long-term sensory recall; Fe adjusts socially after deep reference. | | Ne > Ti  | Ne (Perceiving) | Short-context  | Rapid idea exploration; Ti organizes quickly. | | Ni > Fe  | Ni (Perceiving) | Long-context   | Deep pattern synthesis; Fe socializes conclusions over time. | | Se > Fi  | Se (Perceiving) | Short-context  | Immediate action; Fi evaluates emotional resonance quickly. | | Si > Te  | Si (Perceiving) | Long-context   | Detailed sensory past guides structured Te execution. | | Ne > Fi  | Ne (Perceiving) | Short-context  | Rapid idea sampling; Fi reflects briefly on emotional value. | | Ni > Te  | Ni (Perceiving) | Long-context   | Strategic foresight; Te implements based on deeply processed vision. | | Pairing  | Lead Function | Context Length | Notes | |:---------|:--------------|:---------------|:------| | Ti > Se  | Ti (Judging)   | Long-context   | Internal logical structures first; external data sought after. | | Te > Si  | Te (Judging)   | Short-context  | Immediate execution based on practical known details. | | Ti > Ne  | Ti (Judging)   | Long-context   | Logical systems built before exploring possibilities. | | Te > Ni  | Te (Judging)   | Short-context  | Quick execution; intuition provides post hoc strategy. | | Fi > Se  | Fi (Judging)   | Long-context   | Internal emotional standards dictate immediate interaction. | | Fe > Si  | Fe (Judging)   | Short-context  | Social harmony prioritized immediately using known references. | | Fi > Ne  | Fi (Judging)   | Long-context   | Deep emotional authenticity explored through possibilities. | | Fe > Ni  | Fe (Judging)   | Short-context  | Social influence executed fast; intuition justifies retroactively. | # Summary: - **Lead Perceiving (Se/Ne)** → Short-context - **Lead Perceiving (Si/Ni)** → Long-context - **Lead Judging (Te/Fe)** → Short-context - **Lead Judging (Ti/Fi)** → Long-context. The dominant function's attitude must invert to interact with the tertiary (or other functions of the opposite attitude) because two long-context processes would over-deliberate and stall, while two short-context processes would act impulsively and irrationally, so the psyche balances itself by forcing an internal polarity shift."
 
 
             you are also an expert at formatting text and use md formatting wherever necessary

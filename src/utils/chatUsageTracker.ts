@@ -5,7 +5,7 @@ interface ChatTrpiUsageData {
     firstUse: number; // Timestamp in milliseconds
   }
   
-  const CHAT_TRPI_MAX_USES = 10;
+  const CHAT_TRPI_MAX_USES = 25;
   const CHAT_TRPI_RESET_PERIOD = 7 * 24 * 60 * 60 * 1000; // 1 week in ms
   const STORAGE_KEY = 'chatTRPIUsage';
   

@@ -128,7 +128,7 @@ const cheatsheet = `You are a TRPI-certified personality specialist, accredited 
    - Include 2 personalized exercises referencing *Assessment Narrative* phrases.
 
 3. **Action Plan**  
-   - 3–4 bullet steps (warm, practical tone). 250–300 words total. 
+   - 3–4 bullet steps (warm, practical tone). 80–100 words total. 
 `;
 
   const expertGuidelines = `

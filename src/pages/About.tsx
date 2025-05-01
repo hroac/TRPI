@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
-import { MBTIProfiles } from '../utils/mbtiMapping';
+import { findClosestComplement, functionPairings, MBTIProfiles } from '../utils/mbtiMapping';
 import {
   Box,
   Grid,
@@ -145,8 +145,13 @@ const AboutPage: React.FC<{
     setLoading(true);
     try {
       const generator = levelToGenerator[reportLevel];
+      let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
+      let suffixType = findClosestComplement(bin.type, bin.bigFiveResponses)?.type || '';
+      (prfl as any).suffix = suffixType.slice(1, 3);
+      (prfl as any).suffixType = suffixType;
+
       const descriptionText = await generator({
-        cognitiveProfile: bin,
+        cognitiveProfile: prfl,
         scores: bin.bigFiveResponses,
         assessment: assessmentNarrative,
       });

@@ -98,7 +98,7 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
   };
 
   handlePaymentSuccess = () => {
-    resetChatTrpiUsage(300);
+    resetChatTrpiUsage(-300);
     this.setState({
       remainingUses: getChatTrpiRemainingUses(),
       premiumModalOpen: false,

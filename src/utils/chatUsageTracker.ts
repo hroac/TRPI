@@ -35,7 +35,7 @@ interface ChatTrpiUsageData {
       // Reset period passed: start new period
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ count: 1, firstUse: now })
+        JSON.stringify({ count: data.count + 10, firstUse: now })
       );
     } else {
       // Within same period: bump count

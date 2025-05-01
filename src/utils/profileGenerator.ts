@@ -154,6 +154,7 @@ HELP THEM INDIVIDUATE ACCORDING TO THE 4F AND TRPI.
 
 ## Execution Rules
 - Use clinical-yet-warm tone, be certain of the type given dont question it reference the assessment again if needed.
+DONT HALLUCINATE. DOUBLE CHECK YOURSELF AGAINST THE RESULTS.
 you have ${amount} tokens to write your report.
 `;
 

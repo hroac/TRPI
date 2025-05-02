@@ -289,7 +289,7 @@ const AboutPage: React.FC<{
 
          
 
-      {!profileText && bin && bin.userId === guid() ? (
+      {!profileText && !loading && bin && bin.userId === guid() ? (
         <Box>
    <Box display={'flex'} justifyContent={'flexStart'}>
           <FormControl component="fieldset" sx={{ mt: 3 }}>

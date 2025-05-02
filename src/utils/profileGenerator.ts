@@ -26,6 +26,7 @@ export interface CognitiveProfile {
   opposite: string; // Opposite type, e.g., ESTJ
   suffix?: string;
   suffixType?:string;
+  suffixMode?:string;
 }
 
 export interface BigFiveScores {
@@ -249,7 +250,7 @@ export const generateProfile = async (profile: Profile): Promise<string> => {
 **Cognitive Profile**  
 • **Type:** ${cognitiveProfile.type}  
 • **Trait Response:** ${cognitiveProfile.f4}  
-• **Suffix:** ${cognitiveProfile.suffix} / ${cognitiveProfile.suffixType}  
+• **Suffix:** ${cognitiveProfile.suffix} / ${cognitiveProfile.suffixType}-${cognitiveProfile.suffixMode}  
 • **Opposite Type:** ${cognitiveProfile.opposite}  
 
 **Assessment Narrative:**  

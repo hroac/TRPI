@@ -180,8 +180,11 @@ const AboutPage: React.FC<{
     setLoading(true);
     let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
       let suffixType = findClosestComplement(bin.type, bin.bigFiveResponses)?.type || '';
+      let suffixMode = functionPairings.find(pairing => pairing.type === suffixType) || functionPairings[0];
+
       (prfl as any).suffix = suffixType.slice(1, 3);
       (prfl as any).suffixType = suffixType;
+      (prfl as any).suffixMode = suffixMode;
 
 
     try {

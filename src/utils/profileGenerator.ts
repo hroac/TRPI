@@ -109,6 +109,7 @@ const cheatsheet = `You are a TRPI-certified personality specialist, accredited 
   /* ---- Section 1-N : Guidelines depend on audience --------------- */
   const laymanGuidelines = `
 # Report Guidelines (Layman)
+0. Call the report **TRPI Client Assessment**.
 1. **Trait-Response (4F) Overview**  
    - Summarize the client’s answers in plain language.  
    - Explain their dominant **4F response** (Fight / Flight / Freeze / Fawn) with 2 relatable examples drawn from *Assessment Narrative*.  
@@ -116,12 +117,14 @@ const cheatsheet = `You are a TRPI-certified personality specialist, accredited 
 2. **Action Plan**  
    - Provide 2–3 everyday tips for leveraging strengths and easing stress.  
    - Keep language friendly, jargon-free, and under 150 words.
+   -- *Blend* insights from **Assessment Narrative** throughout.
 `;
 
   const enthusiastGuidelines = `
 # Report Guidelines (Enthusiast)
+0. Call the report **TRPI Client Assessment**.
 1. **Trait-Response (4F) Integration**  
-   - Same as Layman but add how the **suffix** (e.g. –NT, –SF) colors stress reactions and daily focus.
+   - Same as Layman but add the trauma response of the **suffix** (e.g. –NT, –SF) which colors stress reactions and daily focus.
 
 2. **Suffix Dynamics**  
    - Briefly describe what the suffix reveals about conscious vs. unconscious decision making.  
@@ -129,6 +132,7 @@ const cheatsheet = `You are a TRPI-certified personality specialist, accredited 
 
 3. **Action Plan**  
    - 3–4 bullet steps (warm, practical tone). 80–100 words total. 
+   - - *Blend* insights from **Assessment Narrative** throughout.
 `;
 
   const expertGuidelines = `
@@ -151,20 +155,21 @@ HELP THEM INDIVIDUATE ACCORDING TO THE 4F AND TRPI.
 
 ## 5. **Report Style**
 - Clear headings, **bold** key terms, *italicize* supports, mini Action Plan each section.
-
+`
+const rules = `
 ## Execution Rules
-- Use clinical-yet-warm tone, be certain of the type given dont question it reference the assessment again if needed.
+- Use clinical-yet-warm tone, be certain of the functions used for the type given dont question it reference the assessment again if needed.
 DONT HALLUCINATE. DOUBLE CHECK YOURSELF AGAINST THE RESULTS.
 you have ${amount} tokens to write your report.
 `;
 
   switch (level) {
     case "layman":
-      return `${header}\n${cheatsheet}\n${laymanGuidelines}`;
+      return `${header}\n${cheatsheet}\n${laymanGuidelines}\n${rules}`;
     case "enthusiast":
-      return `${header}\n${cheatsheet}\n${enthusiastGuidelines}`;
+      return `${header}\n${cheatsheet}\n${enthusiastGuidelines}\n${rules}`;
     case "expert":
-      return `${header}\n${cheatsheet}\n${expertGuidelines}`;
+      return `${header}\n${cheatsheet}\n${expertGuidelines}\n${rules}`;
   }
 }
 
@@ -215,14 +220,14 @@ async function requestCompletion(
  */
 export const generateLaymanReport = async (
   profile: Profile
-): Promise<string> => requestCompletion(profile, "layman", 400);
+): Promise<string> => requestCompletion(profile, "layman", 500);
 
 /**
  * 2) Adds suffix mechanics for the hobbyist who wants a bit more depth.
  */
 export const generateEnthusiastReport = async (
   profile: Profile
-): Promise<string> => requestCompletion(profile, "enthusiast", 700);
+): Promise<string> => requestCompletion(profile, "enthusiast", 1000);
 
 /**
  * 3) Full technical deep dive (original long form).

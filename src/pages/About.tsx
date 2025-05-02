@@ -156,9 +156,9 @@ const AboutPage: React.FC<{
         assessment: assessmentNarrative,
       });
       await JsonBinApi.updateResultsInJsonBin({
-        ...bin,
         description: descriptionText,
         detailLevel: reportLevel,
+        ...bin,
       });
       setProfileText(descriptionText);
       handleReloadBin && handleReloadBin();
@@ -178,19 +178,24 @@ const AboutPage: React.FC<{
   const handlePaymentSuccess = async (data: any) => {
     setPremiumModalOpen(false);
     setLoading(true);
+    let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
+      let suffixType = findClosestComplement(bin.type, bin.bigFiveResponses)?.type || '';
+      (prfl as any).suffix = suffixType.slice(1, 3);
+      (prfl as any).suffixType = suffixType;
+
 
     try {
       const descriptionText = await generateExpertReport({
-        cognitiveProfile: bin,
+        cognitiveProfile: prfl,
         scores: bin.bigFiveResponses,
         assessment: assessmentNarrative,
       });
 
       await JsonBinApi.updateResultsInJsonBin({
-        ...bin,
         ...data.demographics,
         description: descriptionText,
         detailLevel: 'expert',
+        ...bin,
       });
       setProfileText(descriptionText);
       handleReloadBin && handleReloadBin();

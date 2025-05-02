@@ -251,7 +251,7 @@ const AboutPage: React.FC<{
       {showBigFive && (
         <Box display="flex" justifyContent="center" my={4}>
           <Box width={isMobile ? '90%' : '60%'}>
-            <Bar data={chartData} options={{ responsive: true, plugins: { legend: { display: false } } }} />
+            <Bar data={chartData} options={{ responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } },}} />
           </Box>
         </Box>
       )}

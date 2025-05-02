@@ -281,7 +281,7 @@ const AboutPage: React.FC<{
 
          
 
-      {!profileText ? (
+      {!profileText && bin && bin.userId === guid() ? (
         <Box>
    <Box display={'flex'} justifyContent={'flexStart'}>
           <FormControl component="fieldset" sx={{ mt: 3 }}>

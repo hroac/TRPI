@@ -200,7 +200,7 @@ async function requestCompletion(
   const response = await axios.post(
     "https://api.openai.com/v1/chat/completions",
     {
-      model: level === 'expert' ? "o3-mini-2025-01-31" : "gpt-4.1-mini-2025-04-14" ,
+      model: level === 'expert' ? "o3-mini-2025-01-31" : "gpt-4.1-2025-04-14" ,
       messages: [
         {
           role: "system",

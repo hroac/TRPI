@@ -259,6 +259,30 @@ export const MBTIProfiles = [
       "copper": "ESTJ"
   }
 ]
+
+// Weights keyed by type, in Big-Five order: [O, C, E, A, N]
+export const MBTIWeights: Record<string, number[]> = {
+  ENTP: [3, 2, 4, 2, 1],
+  ESTP: [4, 2, 4, 2, 1],
+  INTP: [3, 2, 5, 2, 1],
+  ISTP: [4, 2, 5, 2, 1],
+
+  INTJ: [3, 3, 5, 2, 1],
+  ISTJ: [4, 3, 5, 2, 1],
+  ENTJ: [3, 3, 4, 2, 1],
+  ESTJ: [4, 3, 4, 2, 1],
+
+  ISFJ: [4, 3, 5, 3, 1],
+  INFJ: [3, 3, 5, 3, 1],
+  ESFJ: [4, 3, 4, 3, 1],
+  ENFJ: [3, 3, 4, 3, 1],
+
+  ESFP: [4, 2, 4, 3, 1],
+  ENFP: [3, 2, 4, 3, 1],
+  ISFP: [4, 2, 5, 3, 1],
+  INFP: [3, 2, 5, 3, 1],
+};
+
 // Define weights, emphasizing critical traits for each 4F mode
 const weights: Record<string, Record<string, number>> = {
   Fight: {
@@ -399,16 +423,18 @@ export const matchMBTI = (profile: Record<any, any>, exclude?: Array<string>) =>
   // Step 1: Calculate Scores (Pearson Correlation and Weighted Euclidean Distance)
   const combinedScores = MBTIProfiles.map((candidate) => {
     // Pearson correlation between the user profile and the candidate traits
-    const correlation = pearsonCorrelationBigFive(
+    const typeWeights = MBTIWeights[candidate.name]
+    const correlation = weightedPearsonCorrelationBigFive(
       profileArray,
-      Object.values(candidate.traits)
+      Object.values(candidate.traits),
+      Object.values(typeWeights)
     );
 
     // Weighted Euclidean distance between the user profile and the candidate traits
     const distance = weightedEuclideanDistance(
       profile,
       candidate.traits,
-      weights[candidate.mode]
+      typeWeights
     );
 
     // Normalize distance to a [0, 1] scale
@@ -781,6 +807,72 @@ export function pearsonCorrelationBigFive(profileA: number[], profileB: number[]
 
   return  !denominator ? 1 :  numerator / denominator;
 }
+
+export function weightedPearsonCorrelationBigFive(
+  profileA: number[],
+  profileB: number[],
+  weights: number[]
+): number {
+  const n = 5;
+
+  // Basic length checks
+  if (profileA.length !== n || profileB.length !== n || weights.length !== n) {
+    throw new Error(`All inputs must be arrays of length ${n}.`);
+  }
+
+  // Validate values
+  for (let i = 0; i < n; i++) {
+    const a = profileA[i], b = profileB[i], w = weights[i];
+    if (
+      typeof a !== "number" ||
+      typeof b !== "number" ||
+      typeof w !== "number"
+    ) {
+      throw new Error("All profile scores and weights must be numbers.");
+    }
+    if (a < 0 || a > 1 || b < 0 || b > 1) {
+      throw new Error("All profile scores must be between 0 and 1.");
+    }
+    if (w < 0) {
+      throw new Error("All weights must be non-negative.");
+    }
+  }
+
+  // Compute sum of weights
+  const sumW = weights.reduce((acc, w) => acc + w, 0);
+  if (sumW === 0) {
+    // no information to correlate
+    return 1;
+  }
+
+  // Weighted means
+  let meanA = 0,
+      meanB = 0;
+  for (let i = 0; i < n; i++) {
+    meanA += weights[i] * profileA[i];
+    meanB += weights[i] * profileB[i];
+  }
+  meanA /= sumW;
+  meanB /= sumW;
+
+  // Weighted covariance and variances
+  let covAB = 0,
+      varA = 0,
+      varB = 0;
+  for (let i = 0; i < n; i++) {
+    const w = weights[i];
+    const da = profileA[i] - meanA;
+    const db = profileB[i] - meanB;
+    covAB += w * da * db;
+    varA += w * da * da;
+    varB += w * db * db;
+  }
+
+  const denom = Math.sqrt(varA * varB);
+  // if zero variance on one side, fallback to perfect correlation
+  return denom === 0 ? 1 : covAB / denom;
+}
+
 // src/utils/pearsonCorrelation.ts
 
 /**

@@ -218,7 +218,7 @@ const AboutPage: React.FC<{
                   const idx = stmnts.filter((s) => s.trait === stmt.trait).indexOf(stmt);
                   const raw = allResponses?.[stmt.trait]?.[idx];
                   const num: number = parseFloat(raw);
-                  const value = Number.isNaN(parseFloat(raw)) ? raw.trim() : ''
+                  const value = Number.isNaN(parseFloat(raw)) ? getSubtext(stmt, Math.round(num * 100)) : ''
                   
                   return (
                     <Paper sx={{ p: 3, mb: 5 }} key={idx}>

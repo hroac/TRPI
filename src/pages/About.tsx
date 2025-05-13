@@ -217,14 +217,16 @@ const AboutPage: React.FC<{
                 {stage.map((stmt: any) => {
                   const idx = stmnts.filter((s) => s.trait === stmt.trait).indexOf(stmt);
                   const raw = allResponses?.[stmt.trait]?.[idx];
-                  const num = parseFloat(raw);
+                  const num: number = parseFloat(raw);
+                  const value = Number.isNaN(parseFloat(raw)) ? raw.trim() : ''
+                  
                   return (
                     <Paper sx={{ p: 3, mb: 5 }} key={idx}>
                       <Typography variant="h6">{stmt.text}</Typography>
                       <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
                       <Box mt={1}>
                         <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-                          <strong>Your Answer:</strong>{' '}
+                          <strong>Your Answer:</strong>{value || ""}
                           {Number.isNaN(num) ? raw : `${Math.round(num * 100)}%`}
                         </Typography>
                         {!Number.isNaN(num) && (

@@ -218,7 +218,7 @@ const AboutPage: React.FC<{
                   const idx = stmnts.filter((s) => s.trait === stmt.trait).indexOf(stmt);
                   const raw = allResponses?.[stmt.trait]?.[idx];
                   const num: number = parseFloat(raw);
-                  const value = getSubtext(stmt, Math.round(num * 100))
+                  const value = getSubtext(stmt, num)
                   
                   return (
                     <Paper sx={{ p: 3, mb: 5 }} key={idx}>
@@ -226,8 +226,9 @@ const AboutPage: React.FC<{
                       <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
                       <Box mt={1}>
                         <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-                          <strong>Your Answer:</strong>{value || ""}
-                          {Number.isNaN(num) ? raw : `${Math.round(num * 100)}%`}
+                          
+                         
+                         <strong>Your Answer:</strong>{Number.isNaN(num) ? raw : ` ${Math.round(num * 100)}%`} {value || ""}
                         </Typography>
                         {!Number.isNaN(num) && (
                           <LinearProgress variant="determinate" value={num * 100} />

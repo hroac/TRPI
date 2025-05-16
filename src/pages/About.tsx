@@ -155,11 +155,12 @@ const AboutPage: React.FC<{
         scores: bin.bigFiveResponses,
         assessment: assessmentNarrative,
       });
-      await JsonBinApi.updateResultsInJsonBin({
-        description: descriptionText,
+      const state = {
         detailLevel: reportLevel,
         ...bin,
-      });
+      }
+      state['description'] = descriptionText;
+      await JsonBinApi.updateResultsInJsonBin(state);
       setProfileText(descriptionText);
       handleReloadBin && handleReloadBin();
     } finally {
@@ -194,12 +195,14 @@ const AboutPage: React.FC<{
         assessment: assessmentNarrative,
       });
 
-      await JsonBinApi.updateResultsInJsonBin({
+      const state = {
         ...data.demographics,
-        description: descriptionText,
         detailLevel: 'expert',
         ...bin,
-      });
+      }
+
+      state['description'] = descriptionText;
+      await JsonBinApi.updateResultsInJsonBin(state);
       setProfileText(descriptionText);
       handleReloadBin && handleReloadBin();
     } finally {

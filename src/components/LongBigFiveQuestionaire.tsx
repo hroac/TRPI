@@ -161,7 +161,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   }, {} as { [trait: string]: number[]})
 };
  const initialStatements = () => {
-    const statements = localStorage.getItem('statements')
+    const statements = localStorage.getItem('longStatements')
     const parsed = statements && JSON.parse(statements)
     if(Array.isArray(parsed)) {
    // console.log(statements, parsed, (statements||[]).length)
@@ -650,7 +650,7 @@ const determineIndex = (trait: string, index: number) : number => {
 
       {/* Navigation Buttons */}
       <Box display="flex" justifyContent="space-between" mt={3}>
-        <Button onClick={handleBack} disabled={currentStage === 0}>
+        <Button onClick={handleBack} variant="contained" color="primary" disabled={currentStage === 0}>
           Back
         </Button>
         {lastStage >= 11 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (

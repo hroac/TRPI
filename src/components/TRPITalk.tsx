@@ -25,7 +25,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 // Example MBTI logic
 import { matchMBTI, MBTIProfiles, pearsonProfile, processProfile } from "../utils/mbtiMapping";
 import ScrollToTop from "../utils/ScrollToTop";
-import { statements, stages } from '../utils/mbtiMapping';
+import { statements as fixedStatements, stages } from '../utils/mbtiMapping';
 import { useNavigate } from "react-router-dom";
 import PremiumModal from "./PremiumModal";
 import { Headset, HeadsetOff, VolumeUp } from "@mui/icons-material";
@@ -54,6 +54,28 @@ interface TrpiTalkProps {
 // -------------------------------------------------------------------------
 const TrpiTalk: React.FC<TrpiTalkProps> = ({ onComplete }) => {
   // Each statement -> user explanation text\
+   const initialStatements = () => {
+      const statements = localStorage.getItem('textStatements')
+      const parsed = statements && JSON.parse(statements)
+      if(Array.isArray(parsed)) {
+     // console.log(statements, parsed, (statements||[]).length)
+        return parsed
+      }
+  //console.log('new statements')
+      const newStatements = JSON.stringify(fixedStatements);
+      localStorage.setItem('textStatements', newStatements);
+      return fixedStatements   
+    }
+    const [statements, setStatements] = useState<any[]>(initialStatements)
+    const stages = [
+  statements.slice(0, 3), // Stage 0
+  statements.slice(3, 7), // Stage 1
+  statements.slice(7, 11), // Stage 2
+  statements.slice(11, 15), // Stage 3
+  statements.slice(15, 19), // Stage 4
+  statements.slice(19, 23), // Stage 5
+  statements.slice(23, 26), // Stage 6
+];
   const navigate = useNavigate();
   const [userExplanations, setUserExplanations] = useState<Record<string, any>>( 
       localStorage.getItem("userExplanations") && JSON.parse(localStorage.getItem("userExplanations") || "") || {
@@ -230,7 +252,6 @@ const handleStartRecording = async (statementIndex: number, trait: string) => {
       setCurrentStage(6);
       speakText("You have completed all stages. Let’s review your responses.");
 
-      handleFetchBigFiveScores();
       handleOpenPremiumModal();
       window.scrollTo(0, 0);
     }
@@ -471,7 +492,7 @@ ${statements
   // -------------- RENDER --------------
   return (
     <Paper elevation={3} style={{ padding: 20, margin: '20px auto', maxWidth: 1500, width: isMobile ? 300 : 1050 }}>
-      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={handleFetchBigFiveScores}  price={5.99} title='Unlock your results' description="Pay €0.99 to view your results!"/>
+      <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={handleFetchBigFiveScores}  price={5.99} title='Unlock your results' description="Pay €5.99 to view your results!"/>
 
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 5, p: 2 }}>
       <IconButton sx={{position: 'relative', left:`${isMobile ? '200px' : '750px'}`}} onClick={() => setAudioDisabled(!audioDisabled)}>

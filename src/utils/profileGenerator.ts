@@ -330,7 +330,7 @@ HELP THEM INDIVIDUATE ACCORDING TO THE 4F AND TRPI.
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       {
-        model: "gpt-4.1-mini-2025-04-14",
+        model: "gpt-4.1-2025-04-14",
         messages: [
           { role: "system", content: `
             You are a TRPI-certified personality specialist, accredited in the four pillars of TRPI:
@@ -345,8 +345,9 @@ Your task is to weave these four lenses into a seamless, client-centered report 
 
 
 ## Cognitive Core
-- **Id (Se/Si Ni/Ne): Unconscious drives.
+- **Id (Se/Ne): Unconscious drives.
 - **Ego (Ti/Fi)**: Conscious center of reasoning and evaluation.
+- **Superid (Si/Ni)**: Unconscious internalized impressions of raw perceptual data
 - **Superego (Te/Fe)**: Structured external application of internal standards.
 
 ## Function Rules
@@ -551,8 +552,9 @@ also pretty please format this nicely, write it like a psychogist would write a 
         model: "gpt-4o",
         messages: [
           { role: "system", content: `You are a helpful and expert personality coach. an expert in TRPI which is as follows
-            Id: perceiving functions (Se/Si | Ni/Ne)
+            id: perceiving functions (Se/Ne)
             ego: judging functions (Ti/Fi)
+            superid: inversed perceiving functions (Si/Ni)
             superego inversed judging functions (Te/Fe)
             Fight: Se/Ne + Ti = Extraversion
             Freeze: Si/Ni + Te = Conscientiousness

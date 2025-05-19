@@ -252,6 +252,7 @@ const handleStartRecording = async (statementIndex: number, trait: string) => {
       setCurrentStage(6);
       speakText("You have completed all stages. Let’s review your responses.");
 
+     // handleFetchBigFiveScores();
       handleOpenPremiumModal();
       window.scrollTo(0, 0);
     }
@@ -267,7 +268,7 @@ const handleStartRecording = async (statementIndex: number, trait: string) => {
     const prompt = `
 You have ${statements.length} statements with user-provided free-text explanations. 
 1) Infer approximate Big Five trait scores (0-1) from these text answers (eg 0.91 for openness). 
-2) Generate a custom description (2 paragraphs (use \n)) explaining the user's perceived personality traits or style.
+2) Generate a custom description (4 paragraphs (use \n)) explaining the user's perceived personality traits or style.
 
 Return the JSON with the following fields:
 {
@@ -296,10 +297,10 @@ ${statements
           Authorization: `Bearer ${decodeToken(tokenParts)}`,
         },
         body: JSON.stringify({
-          model: "ft:gpt-4o-2024-08-06:smersh::Ae8H9Yf7",
+          model: "gpt-4.1-2025-04-14",
           messages: [{ role: "user", content: prompt }],
-          max_tokens: 600,
-          temperature: 0.7,
+          max_tokens: 2500,
+          temperature: 0.0,
         }),
       });
 
@@ -459,7 +460,8 @@ ${statements
             </Button>
           </Box>
           <Box my={3}>
-        <LinearProgress color="info" variant="determinate" value={progress} />
+        <LinearProgress color="secondary" variant="determinate" value={progress} />
+        <LinearProgress color="secondary" variant="determinate" value={progress} />
       </Box>
         </Box>
       );
@@ -503,7 +505,7 @@ ${statements
       </Typography>
       <Typography variant="body1" sx={{ mb: 3 }}>
         Please share your thoughts (typed or via voice). After finishing all stages,
-        we’ll generate approximate Big Five (0–100) + MBTI results and a custom description for just €5.99. 
+        we’ll generate approximate Big Five (0–100) + TRPI results and a custom description for just €5.99. 
       </Typography>
 
       {renderStage()}

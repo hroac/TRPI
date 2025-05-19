@@ -170,7 +170,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
 //console.log('new statements')
     const newStatements = JSON.stringify(longStatements);
     localStorage.setItem('longStatements', newStatements);
-    return longStatements
+    return longStatements   
   }
   const [statements, setStatements] = useState<any[]>(initialStatements)
   const [responses, setResponses] = useState(initialResponses)

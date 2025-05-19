@@ -27,6 +27,7 @@ import {
   MBTIProfiles,
   pearsonCorrelationBigFive,
   pearsonProfile,
+  statements,
 } from '../utils/mbtiMapping';
 import Matrix from './Matrix';
 import { 
@@ -322,16 +323,6 @@ console.log('new statements')
         const sub = getSubtext(trait, index, value as number);
         setSelectedStatement(sub.text)
 
-        if(sub.range.includes("0-10") || sub.range.includes("90-100")) {
-          setExludedTypes((prev: any) => {
-            const next = new Set<string>(...prev);
-            sub.exclude.forEach((type: string) => next.add(type))
-          
-            console.log(next)
-            return new Array<string>(...next);
-          })
-        }
-
         localStorage.setItem('responses', JSON.stringify(updatedResponses))
         return updatedResponses;
       });
@@ -374,6 +365,54 @@ console.log('new statements')
     }
     setSelectedStatement(null)
   };
+function getRange(score: number): string {
+  // Find the bucket that the score fits in, e.g., 0.33 → "30-40"
+  // Each range is a string, e.g., "0-10", "10-20", ..., "90-100"
+  const ranges = [
+    "0-10", "10-20", "20-30", "30-40", "40-50",
+    "50-60", "60-70", "70-80", "80-90", "90-100"
+  ];
+  // Convert to 0-100 scale if needed
+  const pct = Math.round(score * 100);
+  return ranges.find(range => {
+    const [low, high] = range.split('-').map(Number);
+    return pct >= low && pct < high;
+  }) || "90-100"; // fallback to highest
+}
+
+function buildStatementObject(weightedScores: { [trait: string]: number }, statements: any[]) {
+  // Output: { openness: { range: "40-50", text: "...", exclude: [...] }, ... }
+  const result: any[] = [];
+
+  Object.entries(weightedScores).forEach(([trait, score], index) => {
+    // Find the relevant statement for this trait
+    const statement = statements.filter((s) => s.trait === trait)[index];
+    
+    if (!statement) return; // skip if not found
+
+    const range = getRange(score);
+    const subtext = statement.subtext[range];
+
+    result[index] = {
+      range,
+      text: subtext?.text ?? "",
+      exclude: subtext?.exclude ?? []
+    };
+  });
+
+  return result;
+}
+
+  const getExcludedTypes = (stmnts: any[]) => {
+  // Utility to determine new excluded types based on all `subs`
+  const next = new Set<string>();
+  stmnts.forEach(stmnt => {
+    if (stmnt.range.includes("0-10") || stmnt.range.includes("90-100")) {
+      stmnt.exclude.forEach((type: string) => next.add(type));
+    }
+  });
+  return Array.from(next);
+};
 
   const handleSubmit = async () => {
     setSubmitted(true)
@@ -386,8 +425,12 @@ console.log('new statements')
       return acc;
     }, {} as { [trait: string]: number });
 
+
+    const stmnts = buildStatementObject(weightedScores, statements)
+    const excluded = getExcludedTypes(stmnts)
+    console.log("excluded!: ", excluded)
     //const primary4F = determinePrimary4FType(weightedScores);
-    const mbtiType = matchMBTI(weightedScores, excludedTypes.filter(x => x.length === 4))//matchMBTIType(weightedScores, primary4F);
+    const mbtiType = matchMBTI(weightedScores, excluded.filter(x => x.length === 4))//matchMBTIType(weightedScores, primary4F);
     const profile = typesData.find(t => t.type === mbtiType.type);
     const primary4F = profile?.mode || ""
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
@@ -534,7 +577,7 @@ console.log('new statements')
             <ShuffleOn />
           </IconButton>
           </Tooltip>
-          <Tooltip title="Unlock your previous answers">
+          <Tooltip title="Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
           </IconButton>
@@ -559,7 +602,7 @@ console.log('new statements')
             <ShuffleOn />
           </IconButton>
           </Tooltip>
-          <Tooltip title="Unlock your previous answers!">
+          <Tooltip title="Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
           </IconButton>

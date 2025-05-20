@@ -407,7 +407,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
   // Utility to determine new excluded types based on all `subs`
   const next = new Set<string>();
   stmnts.forEach(stmnt => {
-    if (stmnt.range.includes("0-10") || stmnt.range.includes("90-100")) {
+    if (stmnt.range.includes("10") || stmnt.range.includes("90")) {
       stmnt.exclude.forEach((type: string) => next.add(type));
     }
   });

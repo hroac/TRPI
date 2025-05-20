@@ -15,7 +15,9 @@ import {
   List,
   ListItem,
   TextField,
-  Typography
+  Typography,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { guid } from '../utils/guid';                     // <-- adjust import
@@ -215,6 +217,8 @@ function readLatestResult(): { name: string; mode: FourF } | null {
 /* ------------------------------------------------------------------ */
 
 export default function ChatContent() {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   /* ========== identity (static) ========== */
   const userId   = useRef(guid());
   const profile  = useRef(readLatestResult());
@@ -412,7 +416,125 @@ export default function ChatContent() {
   }, [draft, replyTo, selectedTags, userName, userColor]);
 
   /* ========== render ========== */
-  return (
+  return isMobile ? (
+  // 🔹 MOBILE RENDER
+  <Box sx={{ p: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Box sx={{ mb: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5, justifyContent: 'center' }}>
+      {tags.map(tag => (
+        <Chip
+          key={tag}
+          label={tag}
+          size="small"
+          color={selectedTags.includes(tag) ? 'primary' : 'default'}
+          onClick={() => toggleTag(tag)}
+        />
+      ))}
+    </Box>
+
+    {error && (
+      <Typography color="error" sx={{ mb: 1, fontSize: '0.75rem', textAlign: 'center' }}>
+        {error}
+      </Typography>
+    )}
+
+    <Box sx={{
+      flexGrow: 1,
+      overflowY: 'auto',
+      border: '1px solid',
+      borderColor: 'divider',
+      borderRadius: 1,
+      p: 1,
+      display: 'flex',
+      flexDirection: 'column-reverse'
+    }}>
+      <div ref={topSentinel} />
+      <List sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
+        {messages
+          .filter(msg => !selectedTags.length || selectedTags.includes(msg.tag))
+          .sort((a, b) => new Date(b.timestamp).valueOf() - new Date(a.timestamp).valueOf())
+          .map(msg => (
+            <ListItem
+              key={msg.id}
+              sx={{ display: 'block', py: 0.25 }}
+              onClick={() => setReply(msg)}
+            >
+              {msg.parent && (
+                <Box sx={{ bgcolor: 'action.hover', p: 0.5, mb: 0.5, borderRadius: 1 }}>
+                  <Typography variant="caption" sx={{ fontStyle: 'italic', fontSize: '0.65rem' }}>
+                    {msg.parent.text}
+                  </Typography>
+                </Box>
+              )}
+              <Typography variant="subtitle2" sx={{ fontSize: '0.75rem', fontWeight: 600, color: msg.color }}>
+                {msg.userName}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
+                {msg.text}
+              </Typography>
+              {msg.tag && <Chip label={msg.tag} size="small" sx={{ mt: 0.5 }} variant="outlined" />}
+              <Typography variant="caption" sx={{ fontSize: '0.55rem', opacity: 0.6 }}>
+                {new Date(msg.timestamp)
+                  .toLocaleString('en-GB', {
+                    year: '2-digit',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                  })
+                  .replace(',', '')
+                  .replace(/\//g, '-')
+                  .replace(' ', '-')}
+              </Typography>
+            </ListItem>
+          ))}
+      </List>
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
+          <CircularProgress size={20} />
+        </Box>
+      )}
+    </Box>
+
+    {replyTo && (
+      <Box sx={{
+        mt: 1,
+        mb: 0.5,
+        p: 0.5,
+        borderLeft: '4px solid',
+        borderColor: 'primary.main',
+        bgcolor: 'action.hover',
+        borderRadius: 1
+      }}>
+        <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
+          Replying to: {replyTo.text}{' '}
+          <Box component="span" sx={{ ml: 1, cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setReply(null)}>
+            cancel
+          </Box>
+        </Typography>
+      </Box>
+    )}
+
+    <Box sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
+      <TextField
+        fullWidth
+        size="small"
+        placeholder="Type your message…"
+        value={draft}
+        onChange={e => setDraft(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+          }
+        }}
+      />
+      <IconButton onClick={handleSend} color="primary" sx={{ alignSelf: 'flex-end' }}>
+        <SendIcon />
+      </IconButton>
+    </Box>
+  </Box>
+) : (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Tag selector */}
       <Box sx={{ mb: 1, display: 'flex', flexWrap: 'wrap', gap: 1 }}>

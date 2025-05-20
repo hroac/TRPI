@@ -30,7 +30,7 @@ const META_BIN     = '682caa748561e97a5018215f';
 const COLLECTION   = '682ca7998561e97a50181ffe';
 
 const MAX_PER_BIN      = 25;
-const POLL_INTERVAL_MS = 1500;                     // 0.5 s refresh
+const POLL_INTERVAL_MS = 2000;                     // 0.5 s refresh
 
 /* ----------------------------- TYPES ------------------------------ */
 type Tag   = `#${string}` | null;

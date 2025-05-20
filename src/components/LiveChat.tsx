@@ -250,7 +250,7 @@ export default function ChatContent() {
       if(inl){tag=inl; body=strip(body,tag);}
     }
     const msg:Message={
-      id:guid(), userId:uid.current, userName:uname, color:ucolor,
+      id:`${uid.current}_${new Date().toISOString()}`, userId:uid.current, userName:uname, color:ucolor,
       text:body, tag, timestamp:new Date().toISOString(), parent:reply??undefined
     };
     setMsgs(p=>[...p,msg]); seen.current.add(msg.id);

@@ -109,6 +109,7 @@ export default function App() {
   menuItems.push(
     { label: 'Take the test', path: '/test' },
     { label: 'About', path: '/about' },
+    {label: 'ChatTRPI', path: '/oracle'},
     { label: 'Live Chat', modalComponent: <ChatModal open={false} onClose={() => {}} /> }, // NEW
     { label: 'Tests' },
     { label: 'Short Format', path: '/test', parent: 'Tests' },

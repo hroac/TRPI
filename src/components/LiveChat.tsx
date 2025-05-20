@@ -175,7 +175,7 @@ export default function ChatContent() {
         setMsgs(bin.messages.slice()); setMore(Boolean(bin.prev));
 
         poller.current=setInterval(()=>livePoll(),POLL_INTERVAL_MS);
-      }catch(e:any){ if(e.name!=='AbortError')setErr(e.message);}finally{setBusy(false);}
+      }catch(e:any){ if(e.name!=='AbortError')setErr(e.message);}finally{setBusy(false);setTimeout(()=> setErr(""), 5000)}
     })();
     return()=>{ if(poller.current)clearInterval(poller.current); ctrl.abort(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -225,7 +225,7 @@ export default function ChatContent() {
         fresh.forEach(m=>seen.current.add(m.id));
         chain.current.unshift(bin.prev);
         setMsgs(p=>[...fresh,...p]);
-      }catch(e:any){ if(e.name!=='AbortError')setErr(e.message);}finally{setBusy(false);}
+      }catch(e:any){ if(e.name!=='AbortError')setErr(e.message);}finally{setBusy(false);setTimeout(()=> setErr(""), 5000)}
     },{threshold:0});
     io.observe(topRef.current);
     return()=>{io.disconnect();ctrl.abort();};
@@ -239,7 +239,7 @@ export default function ChatContent() {
     else if(sel.length===1) tag=sel[0];
     else if(sel.length>1){
       const inl=tagOf(body);
-      if(!inl||!sel.includes(inl)){setErr(`Choose one tag`);return;}
+      if(!inl||!sel.includes(inl)){setErr(`Choose one tag`);setTimeout(()=> setErr(""), 5000);return;}
       tag=inl; body=strip(body,tag);
     }else{
       const inl=tagOf(body);
@@ -264,7 +264,7 @@ export default function ChatContent() {
         bin.messages.push(msg);
         await api.put(`/b/${meta.currentBinId}`,bin);
       }
-    }catch(e:any){ if(e.name!=='AbortError')setErr(e.message);}
+    }catch(e:any){ if(e.name!=='AbortError')setErr(e.message);setTimeout(()=> setErr(""), 5000)}
   },[text,sel,reply,uname,ucolor]);
 
   /* -------- UI helpers -------- */

@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { guid } from '../utils/guid';                     // <-- adjust import
+import { findClosestComplement } from '../utils/mbtiMapping';
 
 /* ------------------------------------------------------------------ */
 /* --------------------------  CONFIG  ------------------------------ */
@@ -63,6 +64,7 @@ interface CachedResult {
   suffix?: string;
   primary4FType: string;
   accuracy?: number;
+  profile: Record<string, number>;
 }
 
 /**
@@ -87,7 +89,7 @@ export function getLatestUserName(): string {
   //const lastKey   = keys[keys.length - 1];
   //const result    = JSON.parse(localStorage.getItem(lastKey)!) as CachedResult;
   const type      = result.mbtiType;
-  const suffix    = result.suffix ? `-${result.suffix}` : '';
+  const suffix = `-${findClosestComplement(result.mbtiType, result.profile)?.type.slice(1, 3)}` || '';  
   const accuracy  = Math.round(result.accuracy ?? 0);
 
   return `${type}${suffix} (${accuracy}%)`;

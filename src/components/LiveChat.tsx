@@ -1,9 +1,9 @@
 /* ------------------------------------------------------------------ */
-/* ChatContent.tsx — Production build                                */
+/* ChatContent.tsx  —  2025-05-21, React-Query v5                     */
 /* ------------------------------------------------------------------ */
 import React, {
   useCallback,
-  useEffect,
+  useMemo,
   useRef,
   useState
 } from 'react';
@@ -20,20 +20,22 @@ import {
   useTheme
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { guid } from '../utils/guid';
-import { findClosestComplement, MBTIProfiles } from '../utils/mbtiMapping';
-import { Tag } from '@mui/icons-material';
+import { findClosestComplement } from '../utils/mbtiMapping';
 
-/* --------------------------- CONFIG ------------------------------- */
+/* ------------------------------ CONFIG ---------------------------- */
+
 const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
-const MASTER_KEY = '$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG';
-const META_BIN = '682caa748561e97a5018215f';
-const COLLECTION = '682ca7998561e97a50181ffe';
+const MASTER_KEY   = '<YOUR-MASTER-KEY>';          // keep secret in .env
+const META_BIN     = '682caa748561e97a5018215f';
+const COLLECTION   = '682ca7998561e97a50181ffe';
+const MAX_PER_BIN  = 25;
+const REFRESH_MS   = 5_000;
 
-const MAX_PER_BIN = 25;
-const POLL_INTERVAL_MS = 2000; // 2 s refresh
+/* ------------------------------- Types ---------------------------- */
 
-/* ----------------------------- TYPES ------------------------------ */
 type Tag = `#${string}` | null;
 type FourF = 'Fight' | 'Flight' | 'Freeze' | 'Fawn';
 
@@ -47,460 +49,309 @@ interface Message {
   timestamp: string;
   parent?: Message;
 }
-interface ChatBin {
-  messages: Message[];
-  prev?: string | null;
-}
-interface MetaBin {
-  currentBinId: string;
-  tags: Tag[];
-}
-interface Cache {
-  mbtiType?: string;
+
+interface ChatBin   { messages: Message[]; prev?: string | null; }
+interface MetaBin   { currentBinId: string; tags: Tag[]; }
+
+interface CachedResult {
+  mbtiType: string;
   suffix?: string;
-  primary4FType?: FourF;
+  primary4FType: FourF;
   accuracy?: number;
-  profile?: Record<string, number>;
+  profile: Record<string, number>;
 }
 
-/* --------------------- JSONBIN CLIENT ---------------------------- */
-const commonHeaders: HeadersInit = {
+/* ----------------------- Helper: headers ------------------------- */
+
+const baseHeaders = {
   'Content-Type': 'application/json',
   'X-Master-Key': MASTER_KEY,
-  'X-Bin-Name': new Date()
-    .toLocaleString('en-GB', {
-      year: '2-digit',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
-    })
-    .replace(',', '')
-    .replace(/\//g, '-')
-    .replace(' ', '-'),
-  ...(COLLECTION ? { 'X-Collection-Id': COLLECTION } : {})
+  ...(COLLECTION && { 'X-Collection-Id': COLLECTION })
 };
 
-// Generic fetch helpers that retry 5xx up to two times
-const retryable = async <T,>(fn: () => Promise<T>, attempt = 0): Promise<T> => {
-  try {
-    return await fn();
-  } catch (error: any) {
-    if (error.name === 'AbortError') throw error;
-    if (attempt < 2 && /^5\d{2}$/.test(error.message)) {
-      return retryable(fn, attempt + 1);
-    }
-    throw error;
-  }
-};
+/* ----------------------- Helper: fetchers ------------------------ */
 
-const jsonBin = (signal: AbortSignal) => {
-  const get = <T,>(path: string) =>
-    retryable<T>(() =>
-      fetch(`${JSONBIN_BASE}${path}`, { headers: commonHeaders, signal })
-        .then(r => {
-          if (!r.ok) throw new Error(String(r.status));
-          return r.json();
-        })
-        .then(j => j.record as T)
-    );
+const fetchJSON = <T,>(url: string, init?: RequestInit) =>
+  fetch(url, { ...init, headers: baseHeaders })
+    .then(r => {
+      if (!r.ok) throw new Error(`${r.status}: ${url}`);
+      return r.json() as Promise<T>;
+    });
 
-  const put = <T,>(path: string, body: T) =>
-    retryable<void>(() =>
-      fetch(`${JSONBIN_BASE}${path}`, {
-        method: 'PUT',
-        headers: commonHeaders,
-        body: JSON.stringify(body),
-        signal
-      }).then(r => {
-        if (!r.ok) throw new Error(String(r.status));
-      })
-    );
+const getRecord = <T,>(url: string) =>
+  fetchJSON<{ record: T }>(url).then(r => r.record);
 
-  const post = <T,>(body: T) =>
-    retryable<string>(() =>
-      fetch(`${JSONBIN_BASE}/b`, {
-        method: 'POST',
-        headers: commonHeaders,
-        body: JSON.stringify(body),
-        signal
-      })
-        .then(r => {
-          if (!r.ok) throw new Error(String(r.status));
-          return r.json();
-        })
-        .then(j => j.metadata.id as string)
-    );
+/* -------------------- Username / Colour utils -------------------- */
 
-  return { get, put, post };
-};
-
-/* ------------------ USERNAME & COLOR HELPERS --------------------- */
-function latestCache(): Cache | null {
-  const key = Object.keys(localStorage)
-    .filter(k => {
-      try {
-        const v = JSON.parse(localStorage.getItem(k) || '{}') as Cache;
-        return v.mbtiType && v.primary4FType;
-      } catch {
-        return false;
-      }
-    })
-    .sort()
-    .at(-1);
-  return key ? (JSON.parse(localStorage.getItem(key)!) as Cache) : null;
+function getLatestUserResult(): CachedResult | null {
+  const keys = Object.keys(localStorage).filter(k => {
+    try {
+      const v = JSON.parse(localStorage.getItem(k) || '{}');
+      return v.mbtiType && v.primary4FType;
+    } catch { return false; }
+  }).sort();
+  if (!keys.length) return null;
+  return JSON.parse(localStorage.getItem(keys.at(-1)!)!);
 }
-function buildUserName() {
-  const c = latestCache();
-  if (!c) return `user-${guid().slice(0, 5)}`;
-  const suf = c.profile ? `-${findClosestComplement(c.mbtiType!, c.profile).type.slice(1, 3)}` : '';
-  const pct = Math.round(c.accuracy ?? 0);
-  return `${c.mbtiType}${suf} (${pct}%)`;
+
+function buildUserName(res?: CachedResult): string {
+  if (!res) return `user-${guid().slice(0, 5)}`;
+  const suffix = findClosestComplement(res.mbtiType, res.profile)
+                  ? `-${findClosestComplement(res.mbtiType, res.profile)!.type.slice(1,3)}`
+                  : '';
+  const pct = Math.round(res.accuracy ?? 0);
+  return `${res.mbtiType}${suffix} (${pct}%)`;
 }
-function hue(seed: string, base: number, span: number) {
-  let h = 0;
-  for (const ch of seed) h = (h << 5) - h + ch.charCodeAt(0);
-  return base + (Math.abs(h) % span);
+
+function hashHue(seed: string, start: number, span: number) {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++)
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+  return start + (Math.abs(hash) % span);
 }
-function modeColor(mode: string, seed: string) {
+function colorFor(mode: FourF, seed: string): string {
   switch (mode) {
-    case 'Fight':
-      return `hsl(${hue(seed, 0, 12)} 70% 50%)`;
-    case 'Flight':
-      return `hsl(${hue(seed, 110, 30)} 70% 50%)`;
-    case 'Freeze':
-      return `hsl(${hue(seed, 200, 20)} 70% 50%)`;
-    case 'Fawn':
-      return `hsl(${hue(seed, 270, 30)} 70% 50%)`;
-    default: {
-      const light = 40 + hue(seed, 0, 20); // 40–60%
-      return `hsl(0 0% ${light}%)`;
-    }
+    case 'Fight':  return `hsl(${hashHue(seed, 0, 12)} 70% 50%)`;
+    case 'Flight': return `hsl(${hashHue(seed, 110, 30)} 70% 50%)`;
+    case 'Freeze': return `hsl(${hashHue(seed, 200, 20)} 70% 50%)`;
+    case 'Fawn':   return `hsl(${hashHue(seed, 270, 30)} 70% 50%)`;
+    default:       return `hsl(${hashHue(seed, 0, 360)} 70% 50%)`;
   }
 }
 
-/* --------------------------- COMPONENT --------------------------- */
+/* -------------------------- Component ---------------------------- */
+
 export default function ChatContent() {
+  /* Identity (static) */
+  const userId   = useRef(guid());
+  const cacheRes = useMemo(() => getLatestUserResult(), []);
+  const userName = buildUserName(cacheRes || undefined);
+  const userMode: FourF = cacheRes?.primary4FType ?? 'Fight';
+  const userColor = colorFor(userMode, userId.current);
+
+  /* Responsive path */
   const theme = useTheme();
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
 
-  /* identity */
-  const uid = useRef(guid());
-  const uname = useRef(buildUserName());
-  const mode = MBTIProfiles.find(pr => pr.name == uname.current.slice(0,4))?.mode || '';
-  const ucolor = useRef(modeColor(mode, uid.current));
+  /* UI state */
+  const [draft, setDraft] = useState('');
+  const [replyTo, setReplyTo] = useState<Message | null>(null);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
-  /* refs */
-  const chain = useRef<string[]>([]); // ordered oldest ➜ newest bin IDs
-  const seen = useRef<Set<string>>(new Set());
-  const poller = useRef<ReturnType<typeof setInterval> | null>(null);
-  const topRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
 
-  /* state */
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [sel, setSel] = useState<Tag[]>([]);
-  const [text, setText] = useState('');
-  const [reply, setReply] = useState<Message | null>(null);
-  const [msgs, setMsgs] = useState<Message[]>([]);
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-  const [more, setMore] = useState(true);
+  /* -------- Meta-bin query (tags + currentBinId) -------- */
+  const metaQ = useQuery({
+    queryKey: ['meta'],
+    queryFn: () => getRecord<MetaBin>(`${JSONBIN_BASE}/b/${META_BIN}/latest`),
+    refetchInterval: REFRESH_MS
+  });
 
-  const strip = (t: string, tag: Tag) => (tag ? t.replace(tag, '').trim() : t.trim());
-  const tagOf = (t: string): Tag => (t.match(/#\w+/)?.[0] as Tag) || null;
+  /* -------- Current bin messages query -------- */
+  const currentBinId = metaQ.data?.currentBinId;
 
-  /* ----------------------- RUNTIME HELPERS ------------------------ */
-  const pushFresh = useCallback((arr: Message[]) => {
-    const fresh = arr.filter(m => !seen.current.has(m.id));
-    if (!fresh.length) return;
-    fresh.forEach(m => seen.current.add(m.id));
-    setMsgs(p => [...p, ...fresh]); // newest last for flex-column-reverse
-  }, []);
+  const messagesQ = useQuery({
+    enabled: !!currentBinId,
+    queryKey: ['bin', currentBinId],
+    queryFn: () => getRecord<ChatBin>(`${JSONBIN_BASE}/b/${currentBinId}/latest`)
+                 .then(b => b.messages),
+    refetchInterval: REFRESH_MS,
+    select: msgs => msgs.sort((a,b)=>new Date(a.timestamp).valueOf()-new Date(b.timestamp).valueOf())
+  });
 
-  const loadFullHistory = useCallback(async (api: ReturnType<typeof jsonBin>, startId: string) => {
-    const bins: ChatBin[] = [];
-    let binId: string | null | undefined = startId;
+  /* Derived */
+  const tags = metaQ.data?.tags ?? [];
+  const messages = messagesQ.data ?? [];
+  const loading  = metaQ.isPending || messagesQ.isPending;
 
-    while (binId) {
-      // eslint-disable-next-line no-await-in-loop
-      const b: ChatBin = await api.get<ChatBin>(`/b/${binId}/latest`);
-      bins.unshift(b); // oldest at index 0
-      binId = b.prev ?? null;
-    }
+  /* -------- Send mutation -------- */
+  const sendMutation = useMutation({
+    mutationFn: async (msg: Message) => {
+      const meta = await getRecord<MetaBin>(`${JSONBIN_BASE}/b/${META_BIN}/latest`);
+      let bin = await getRecord<ChatBin>(`${JSONBIN_BASE}/b/${meta.currentBinId}/latest`);
 
-    const allMsgs = bins
-      .flatMap(b => b.messages)
-      .sort((a, b) => new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf());
+      /* rollover? */
+      if (bin.messages.length >= MAX_PER_BIN) {
+        const newBinRes = await fetchJSON<{ metadata:{ id:string } }>(
+          `${JSONBIN_BASE}/b`, {
+            method: 'POST',
+            body: JSON.stringify({ messages:[msg], prev: meta.currentBinId }),
+            headers: baseHeaders
+          });
+        const newBinId = newBinRes.metadata.id;
 
-    allMsgs.forEach(m => seen.current.add(m.id));
-    setMsgs(allMsgs);
-    chain.current = bins.map((_, idx) => bins[idx].prev ?? startId).filter(Boolean) as string[];
-    setMore(Boolean(bins[0]?.prev));
-  }, []);
-
-  /* --------------------------- BOOTSTRAP -------------------------- */
-  useEffect(() => {
-    const ctrl = new AbortController();
-    const api = jsonBin(ctrl.signal);
-
-    (async () => {
-      try {
-        setBusy(true);
-
-        // 1) META — ensure tag list exists
-        const meta = await api.get<MetaBin>(`/b/${META_BIN}/latest`);
-        if (!meta.tags?.length) {
-          meta.tags = ['#Fight', '#Flight', '#Freeze', '#Fawn', '#Ego', '#Superego'];
-          await api.put(`/b/${META_BIN}`, meta);
-        }
-        setTags(meta.tags);
-
-        // 2) Walk chain back to start and populate messages
-        await loadFullHistory(api, meta.currentBinId);
-
-        // 3) Start poller
-        poller.current = setInterval(() => livePoll(), POLL_INTERVAL_MS);
-      } catch (e: any) {
-        if (e.name !== 'AbortError') setErr(e.message);
-      } finally {
-        setBusy(false);
-      }
-    })();
-
-    return () => {
-      if (poller.current) clearInterval(poller.current);
-      ctrl.abort();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /* ---------------------------- POLLER ---------------------------- */
-  const livePoll = useCallback(async () => {
-    const ctrl = new AbortController();
-    const api = jsonBin(ctrl.signal);
-
-    try {
-      const meta = await api.get<MetaBin>(`/b/${META_BIN}/latest`);
-      const cur = meta.currentBinId;
-
-      // Rollover — new bin ID we haven't seen yet
-      if (!chain.current.includes(cur)) {
-        const b = await api.get<ChatBin>(`/b/${cur}/latest`);
-        pushFresh(b.messages);
-        chain.current.push(cur);
+        /* update meta-bin */
+        await fetchJSON(`${JSONBIN_BASE}/b/${META_BIN}`, {
+          method: 'PUT',
+          body: JSON.stringify({ ...meta, currentBinId: newBinId }),
+          headers: baseHeaders
+        });
+        return { newBinId, msg };
       } else {
-        // Same bin — always re‑GET to avoid HEAD inconsistencies
-        const b = await api.get<ChatBin>(`/b/${cur}/latest`);
-        pushFresh(b.messages);
+        /* append in place */
+        bin.messages.push(msg);
+        await fetchJSON(`${JSONBIN_BASE}/b/${meta.currentBinId}`, {
+          method: 'PUT',
+          body: JSON.stringify(bin),
+          headers: baseHeaders
+        });
+        return { newBinId: null, msg };
       }
-    } catch {
-      /* silent — network flake */
+    },
+    onMutate: async (msg) => {
+      /* optimistic update cache */
+      await queryClient.cancelQueries({ queryKey:['bin', currentBinId]});
+      const prev = queryClient.getQueryData<Message[]>(['bin', currentBinId]);
+      queryClient.setQueryData<Message[]>(['bin', currentBinId], old => [...(old||[]), msg]);
+      return { prev };
+    },
+    onError: (_err, _msg, ctx) => {
+      if (ctx?.prev) queryClient.setQueryData(['bin', currentBinId], ctx.prev);
+    },
+    onSuccess: ({ newBinId }) => {
+      /* invalidate queries so everyone refetches */
+      queryClient.invalidateQueries({ queryKey:['meta']});
+      if (newBinId) queryClient.invalidateQueries({ queryKey:['bin', newBinId]});
     }
-  }, [pushFresh]);
+  });
 
-  /* ------------------------ INFINITE SCROLL ----------------------- */
-  useEffect(() => {
-    if (!topRef.current || !more) return;
+  /* -------- Helpers -------- */
+  const toggleTag = (t:Tag) =>
+    setSelectedTags(p=>p.includes(t)?p.filter(x=>x!==t):[...p,t]);
 
-    const ctrl = new AbortController();
-    const api = jsonBin(ctrl.signal);
+  const extractTag = (t:string):Tag => (t.match(/#\w+/)?.[0] as Tag)??null;
+  const stripTag   = (t:string,tag:Tag)=>tag?t.replace(tag,'').trim():t.trim();
 
-    const io = new IntersectionObserver(async entries => {
-      if (!entries[0].isIntersecting || !chain.current.length) return;
-      try {
-        setBusy(true);
-        const oldest = chain.current[0];
-        const bin = await api.get<ChatBin>(`/b/${oldest}/latest`);
-        if (!bin.prev) {
-          setMore(false);
-          return;
-        }
-        const prev = await api.get<ChatBin>(`/b/${bin.prev}/latest`);
-        chain.current.unshift(bin.prev);
-        pushFresh(prev.messages);
-      } catch (e: any) {
-        if (e.name !== 'AbortError') setErr(e.message);
-      } finally {
-        setBusy(false);
-      }
-    }, { threshold: 0 });
+  const handleSend = useCallback(() => {
+    if (!draft.trim()) return;
 
-    io.observe(topRef.current);
-    return () => {
-      io.disconnect();
-      ctrl.abort();
-    };
-  }, [more, pushFresh]);
-
-  /* ------------------------------ SEND ---------------------------- */
-  const send = useCallback(async () => {
-    if (!text.trim()) return;
-
-    // Resolve tag choice
-    let tag: Tag = null;
-    let body = text;
-
-    if (reply?.tag) tag = reply.tag;
-    else if (sel.length === 1) tag = sel[0];
-    else if (sel.length > 1) {
-      const inl = tagOf(body);
-      if (!inl || !sel.includes(inl)) {
-        setErr('Choose one tag');
-        return;
-      }
-      tag = inl;
-      body = strip(body, tag);
+    /* ----- tag resolution ----- */
+    let tag:Tag = null;
+    let txt = draft;
+    if (replyTo?.tag) tag = replyTo.tag;
+    else if (selectedTags.length===1) tag = selectedTags[0];
+    else if (selectedTags.length>1) {
+      const inl = extractTag(txt);
+      if (!inl || !selectedTags.includes(inl)) return;
+      tag=inl; txt=stripTag(txt, tag);
     } else {
-      const inl = tagOf(body);
-      if (inl) {
-        tag = inl;
-        body = strip(body, tag);
-      }
+      const inl = extractTag(txt);
+      if (inl){ tag=inl; txt=stripTag(txt,tag);}
     }
 
-    const timestamp = new Date().toISOString();
-    const msg: Message = {
-      id: `${uid.current}_${timestamp}`,
-      userId: uid.current,
-      userName: uname.current,
-      color: ucolor.current,
-      text: body,
+    const msg:Message = {
+      id: guid(),
+      userId: userId.current,
+      userName,
+      color: userColor,
+      text: txt,
       tag,
-      timestamp,
-      parent: reply ?? undefined
+      timestamp: new Date().toISOString(),
+      parent: replyTo ?? undefined,
     };
 
-    // Optimistic UI
-    pushFresh([msg]);
-    setText('');
-    setReply(null);
+    setDraft('');
+    setReplyTo(null);
+    sendMutation.mutate(msg);
+  }, [draft, replyTo, selectedTags, userName, userColor]);
 
-    // Persist
-    const ctrl = new AbortController();
-    const api = jsonBin(ctrl.signal);
-
-    try {
-      const meta = await api.get<MetaBin>(`/b/${META_BIN}/latest`);
-      const currentBin = await api.get<ChatBin>(`/b/${meta.currentBinId}/latest`);
-
-      if (currentBin.messages.length >= MAX_PER_BIN) {
-        const newId = await api.post<ChatBin>({ messages: [msg], prev: meta.currentBinId });
-        await api.put(`/b/${META_BIN}`, { ...meta, currentBinId: newId });
-        chain.current.push(newId);
-      } else {
-        currentBin.messages.push(msg);
-        await api.put(`/b/${meta.currentBinId}`, currentBin);
-      }
-    } catch (e: any) {
-      if (e.name !== 'AbortError') setErr(e.message);
-    }
-  }, [reply, sel, strip, tagOf, text, pushFresh]);
-
-  /* ------------------------------ UI ------------------------------ */
-  const TagBar = (
-    <Box sx={{ mb: 1, display: 'flex', flexWrap: 'wrap', gap: mobile ? 0.5 : 1, justifyContent: mobile ? 'center' : 'flex-start' }}>
-      {tags.map(t => (
-        <Chip
-          key={t}
-          label={t}
-          size="small"
-          color={sel.includes(t) ? 'primary' : 'default'}
-          onClick={() => setSel(p => (p.includes(t) ? p.filter(x => x !== t) : [...p, t]))}
-        />
+  /* -------- Shared parts of UI -------- */
+  const TagSelector = (
+    <Box sx={{ mb: 1, display:'flex', flexWrap:'wrap', gap: isMobile?0.5:1,
+               justifyContent: isMobile?'center':'start' }}>
+      {tags.map(tag=>(
+        <Chip key={tag} label={tag} size="small"
+          color={selectedTags.includes(tag)?'primary':'default'}
+          onClick={()=>toggleTag(tag)}/>
       ))}
     </Box>
   );
 
-  const MsgList = (
-    <Box sx={{ flexGrow: 1, overflowY: 'auto', border: '1px solid', borderColor: 'divider', borderRadius: 1, p: 1, display: 'flex', flexDirection: 'column-reverse' }}>
-      <div ref={topRef} />
-      <List sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
-        {msgs
-          .filter(m => !sel.length || sel.includes(m.tag))
-          .sort((a, b) => new Date(b.timestamp).valueOf() - new Date(a.timestamp).valueOf())
-          .map(m => (
-            <ListItem key={m.id} sx={{ display: 'block', py: mobile ? 0.25 : 0.5 }} onClick={() => setReply(m)}>
+  const MessageList = (
+    <Box sx={{
+      flexGrow:1, overflowY:'auto', border:'1px solid', borderColor:'divider',
+      borderRadius:1, p:1, display:'flex', flexDirection:'column-reverse'
+    }}>
+      <List sx={{display:'flex', flexDirection:'column-reverse'}}>
+        {messages
+          .filter(m => !selectedTags.length || selectedTags.includes(m.tag))
+          .map(m=>(
+            <ListItem key={m.id} sx={{display:'block', py:isMobile?0.25:0.5}}
+              onClick={()=>setReplyTo(m)}>
               {m.parent && (
-                <Box sx={{ bgcolor: 'action.hover', p: 0.5, mb: 0.5, borderRadius: 1 }}>
-                  <Typography variant="caption" sx={{ fontSize: mobile ? '0.65rem' : '0.75rem', fontStyle: 'italic' }}>
+                <Box sx={{bgcolor:'action.hover',p:0.5,mb:0.5,borderRadius:1}}>
+                  <Typography variant="caption" sx={{fontStyle:'italic', fontSize:isMobile?'0.65rem':undefined}}>
                     {m.parent.text}
                   </Typography>
                 </Box>
               )}
-              <Typography variant="subtitle2" sx={{ color: m.color, fontWeight: 700, fontSize: mobile ? '0.75rem' : '0.875rem' }}>
-                {m.userName}
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: mobile ? '0.8rem' : '0.875rem' }}>
+              <Typography variant="subtitle2" sx={{
+                color:m.color, fontWeight:700, fontSize:isMobile?'0.75rem':undefined
+              }}>{m.userName}</Typography>
+              <Typography variant="body2" sx={{fontSize:isMobile?'0.8rem':undefined}}>
                 {m.text}
               </Typography>
-              {m.tag && <Chip label={m.tag} size="small" sx={{ mt: 0.5 }} variant="outlined" />}
-              <Typography variant="caption" sx={{ fontSize: mobile ? '0.55rem' : '0.625rem', opacity: 0.6 }}>
-                {new Date(m.timestamp)
-                  .toLocaleString('en-GB', {
-                    year: '2-digit',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                  })
-                  .replace(',', '')
-                  .replace(/\//g, '-')
-                  .replace(' ', '-')}
+              {m.tag && <Chip label={m.tag} size="small" sx={{mt:0.5}} variant="outlined"/>}
+              <Typography variant="caption" sx={{
+                fontSize:isMobile?'0.55rem':'0.625rem', opacity:0.6
+              }}>
+                {new Date(m.timestamp).toLocaleString('en-GB',{
+                  year:'2-digit',month:'2-digit',day:'2-digit',
+                  hour:'2-digit',minute:'2-digit',hour12:false
+                }).replace(',','').replace(/\//g,'-').replace(' ','-')}
               </Typography>
             </ListItem>
           ))}
       </List>
-      {busy && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
-          <CircularProgress size={20} />
+      {(loading||sendMutation.isPending) && (
+        <Box sx={{display:'flex',justifyContent:'center',py:1}}>
+          <CircularProgress size={20}/>
         </Box>
       )}
     </Box>
   );
 
-  const ReplyBar =
-    reply && (
-      <Box sx={{ mt: 1, mb: 0.5, p: 0.5, borderLeft: '4px solid', borderColor: 'primary.main', bgcolor: 'action.hover', borderRadius: 1 }}>
-        <Typography variant="caption" sx={{ fontSize: mobile ? '0.7rem' : '0.75rem' }}>
-          Replying to: {reply.text}{' '}
-          <Box component="span" sx={{ ml: 1, cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setReply(null)}>
-            cancel
-          </Box>
-        </Typography>
-      </Box>
-    );
+  const ReplyBanner = replyTo && (
+    <Box sx={{
+      mt:1, mb:0.5, p:0.5, borderLeft:'4px solid', borderColor:'primary.main',
+      bgcolor:'action.hover', borderRadius:1
+    }}>
+      <Typography variant="caption" sx={{fontSize:isMobile?'0.7rem':undefined}}>
+        Replying to: {replyTo.text}{' '}
+        <Box component="span"
+          sx={{ml:1,cursor:'pointer',textDecoration:'underline'}}
+          onClick={()=>setReplyTo(null)}
+        >cancel</Box>
+      </Typography>
+    </Box>
+  );
 
-  const Compose = (
-    <Box sx={{ mt: 1, display: 'flex', gap: 1, flexDirection: mobile ? 'column' : 'row' }}>
-      <TextField
-        fullWidth
-        size="small"
-        placeholder="Type your message…"
-        value={text}
-        onChange={e => setText(e.target.value)}
-        onKeyDown={e => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            send();
-          }
-        }}
-      />
-      <IconButton onClick={send} color="primary" sx={{ alignSelf: mobile ? 'flex-end' : 'center' }}>
-        <SendIcon />
+  const Composer = (
+    <Box sx={{mt:1, display:'flex', flexDirection:isMobile?'column':'row', gap:1}}>
+      <TextField fullWidth size="small" placeholder="Type your message…"
+        value={draft} onChange={e=>setDraft(e.target.value)}
+        onKeyDown={e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();}}}/>
+      <IconButton onClick={handleSend} color="primary"
+        sx={{alignSelf:isMobile?'flex-end':'center'}}>
+        <SendIcon/>
       </IconButton>
     </Box>
   );
 
-
-  return(
-    <Box sx={{p:mobile?1:2,display:'flex',flexDirection:'column',height:'100%',boxSizing:'border-box'}}>
-      {TagBar}
-      {err&&<Typography color="error" align="center" sx={{mb:1,fontSize:mobile?'0.75rem':'0.875rem'}}>{err}</Typography>}
-      {MsgList}
-      {ReplyBar}
-      {Compose}
+  /* -------- Render -------- */
+  return isMobile ? (
+    <Box sx={{p:1, display:'flex', flexDirection:'column', height:'100vh'}}>
+      {TagSelector}
+      {MessageList}
+      {ReplyBanner}
+      {Composer}
+    </Box>
+  ) : (
+    <Box sx={{height:'100%', display:'flex', flexDirection:'column'}}>
+      {TagSelector}
+      {MessageList}
+      {ReplyBanner}
+      {Composer}
     </Box>
   );
 }

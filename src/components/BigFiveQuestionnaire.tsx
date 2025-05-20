@@ -396,6 +396,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     result[index] = {
       range,
       text: subtext?.text ?? "",
+      trait: trait,
       exclude: subtext?.exclude ?? []
     };
   });
@@ -426,7 +427,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     }, {} as { [trait: string]: number });
 
 
-    const stmnts = buildStatementObject(weightedScores, statements)
+    const stmnts = buildStatementObject(weightedScores, statements).filter(stmnt => stmnt.trait !== 'openness');
     const excluded = getExcludedTypes(stmnts)
     console.log("excluded!: ", excluded)
     //const primary4F = determinePrimary4FType(weightedScores);

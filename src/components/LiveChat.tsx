@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/* ChatContent.tsx — production build                                 */
+/* ChatContent.tsx — production build (2025-05-20)                     */
 /* ------------------------------------------------------------------ */
 import React, {
   useCallback,
@@ -20,24 +20,20 @@ import {
   useTheme
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { guid } from '../utils/guid';                     // <-- adjust import
+import { guid } from '../utils/guid';
 import { findClosestComplement } from '../utils/mbtiMapping';
 
-/* ------------------------------------------------------------------ */
-/* --------------------------  CONFIG  ------------------------------ */
-/* ------------------------------------------------------------------ */
+/* --------------------------- CONFIG ------------------------------- */
 
 const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
 const MASTER_KEY   = '$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG';
 const META_BIN     = '682caa748561e97a5018215f';
 const COLLECTION   = '682ca7998561e97a50181ffe';
 
-const MAX_PER_BIN  = 25;
-const POLL_INTERVAL_MS = 5_000;
+const MAX_PER_BIN       = 25;
+const POLL_INTERVAL_MS  = 5_000;
 
-/* ------------------------------------------------------------------ */
-/* ----------------------------  TYPES  ----------------------------- */
-/* ------------------------------------------------------------------ */
+/* ---------------------------- TYPES ------------------------------- */
 
 type Tag   = `#${string}` | null;
 type FourF = 'Fight' | 'Flight' | 'Freeze' | 'Fawn';
@@ -45,22 +41,16 @@ type FourF = 'Fight' | 'Flight' | 'Freeze' | 'Fawn';
 interface Message {
   id: string;
   userId: string;
-  userName: string;         // e.g. "ENTP-NT (86%)"
-  color: string;            // stable HSL
+  userName: string;
+  color: string;
   text: string;
   tag: Tag;
-  timestamp: string;        // ISO
+  timestamp: string;
   parent?: Message;
 }
+interface ChatBin { messages: Message[]; prev?: string | null; }
+interface MetaBin { currentBinId: string; tags: Tag[]; }
 
-interface ChatBin   { messages: Message[]; prev?: string | null; }
-interface MetaBin   { currentBinId: string; tags: Tag[]; }
-interface TestCache {
-  mbtiType: string;
-  suffix?: string;
-  primary4FType: FourF;
-  accuracy?: number;
-}
 interface CachedResult {
   mbtiType: string;
   suffix?: string;
@@ -69,253 +59,185 @@ interface CachedResult {
   profile: Record<string, number>;
 }
 
-/**
- * Reads the latest valid test result from localStorage and formats it
- * as a user display name: "TYPE-SUFFIX (NN%)"
- */
+/* ------------------ LOCAL-STORAGE USERNAME ----------------------- */
+
 export function getLatestUserName(): string {
-  const result = localStorage.getItem(guid()) && JSON.parse(localStorage.getItem(guid()) ||'') || {} as CachedResult
-  /*const keys = Object.keys(localStorage)
-    .filter(k => {
-      try {
-        const v = JSON.parse(localStorage.getItem(k) || '{}') as CachedResult;
-        return v.mbtiType && v.primary4FType;
-      } catch {
-        return false;
-      }
-    })
-    .sort(); // sort so last written is last  */
+  const cache = localStorage.getItem(guid());
+  const result: CachedResult = cache ? JSON.parse(cache) : {} as CachedResult;
+  if (!result.mbtiType) return `user-${guid().slice(0, 5)}`;
 
-  if (!Object.keys(result).length) return `user-${guid().slice(0, 5)}`;
-
-  //const lastKey   = keys[keys.length - 1];
-  //const result    = JSON.parse(localStorage.getItem(lastKey)!) as CachedResult;
-  const type      = result.mbtiType;
-  const suffix = `-${findClosestComplement(result.mbtiType, result.profile)?.type.slice(1, 3)}` || '';  
-  const accuracy  = Math.round(result.accuracy ?? 0);
-
-  return `${type}${suffix} (${accuracy}%)`;
+  const suffix = `-${findClosestComplement(result.mbtiType, result.profile)?.type.slice(1, 3)}` || '';
+  const accuracy = Math.round(result.accuracy ?? 0);
+  return `${result.mbtiType}${suffix} (${accuracy}%)`;
 }
 
-
-/* ------------------------------------------------------------------ */
-/* ---------------------  JSONBIN CLIENT ---------------------------- */
-/* ------------------------------------------------------------------ */
+/* ---------------------  JSONBIN CLIENT --------------------------- */
 
 const headers = {
   'Content-Type': 'application/json',
   'X-Master-Key': MASTER_KEY,
-  'X-Bin-Name': new Date().toLocaleString('en-GB', { year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).replace(',', '').replace(/\//g, '-').replace(' ', '-'),
+  'X-Bin-Name': new Date()
+    .toLocaleString('en-GB', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    })
+    .replace(',', '')
+    .replace(/\//g, '-')
+    .replace(' ', '-'),
   ...(COLLECTION ? { 'X-Collection-Id': COLLECTION } : {})
 };
 
-// jsonBinClient.ts  (inside ChatContent for brevity)
 function jsonBinClient(signal: AbortSignal) {
-  const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+  const delay = (ms: number) => new Promise(r => setTimeout(r, ms));
 
   async function get<T>(path: string, attempt = 0): Promise<T> {
     try {
       const res = await fetch(`${JSONBIN_BASE}${path}`, { headers, signal });
       if (!res.ok) {
-        if (attempt < 2 && res.status >= 500) {          // retry 5xx
-          await sleep(250 * 2 ** attempt);
+        if (attempt < 2 && res.status >= 500) {
+          await delay(300 * 2 ** attempt);
           return get<T>(path, attempt + 1);
         }
-        throw new Error(`GET ${path} -> ${res.status}`);
+        throw new Error(`GET ${path} → ${res.status}`);
       }
-      const resp = await res.json();
-      console.log(resp)
-      return (resp).record as T;
-    } catch (err: any) {
-      if (err.name === 'AbortError') throw err;          // ← swallow later
-      throw err;                                         // real failure
+      return (await res.json()).record as T;
+    } catch (e: any) {
+      if (e.name === 'AbortError') throw e;
+      throw e;
     }
   }
 
-  async function put<T>(path: string, body: T): Promise<void> {
-    try {
-      const res = await fetch(`${JSONBIN_BASE}${path}`, {
-        method: 'PUT',
-        headers,
-        body: JSON.stringify(body),
-        signal
-      });
-      if (!res.ok) throw new Error(`PUT ${path} -> ${res.status}`);
-    } catch (err: any) {
-      if (err.name === 'AbortError') return;             // silent cancel
-      throw err;
-    }
+  async function put<T>(path: string, body: T) {
+    const res = await fetch(`${JSONBIN_BASE}${path}`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(body),
+      signal
+    });
+    if (!res.ok) throw new Error(`PUT ${path} → ${res.status}`);
   }
 
   async function post<T>(body: T): Promise<string> {
-    try {
-      const res = await fetch(`${JSONBIN_BASE}/b`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(body),
-        signal
-      });
-      if (!res.ok) throw new Error(`POST -> ${res.status}`);
-      return (await res.json()).metadata.id as string;
-    } catch (err: any) {
-      if (err.name === 'AbortError') throw err;
-      throw err;
-    }
+    const res = await fetch(`${JSONBIN_BASE}/b`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+      signal
+    });
+    if (!res.ok) throw new Error(`POST → ${res.status}`);
+    return (await res.json()).metadata.id as string;
   }
 
   return { get, put, post };
 }
 
+/* ---------------------- COLOR UTILITIES -------------------------- */
 
-/* ------------------------------------------------------------------ */
-/* ------------------  USERNAME & COLOR HELPERS --------------------- */
-/* ------------------------------------------------------------------ */
-
-/** Stable hash so the same user always gets the same hue */
-function hashToHue(str: string, base: number, span: number) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++)
-    hash = (hash << 5) - hash + str.charCodeAt(i);
-  hash = Math.abs(hash);
-  return base + (hash % span);
+function hashHue(seed: string, base: number, span: number) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h << 5) - h + seed.charCodeAt(i);
+  return base + (Math.abs(h) % span);
 }
-
-function colorForMode(mode: FourF, seed: string): string {
+function colorForMode(mode: FourF, seed: string) {
   switch (mode) {
-    case 'Fight':  return `hsl(${hashToHue(seed,   0,  12)} 70% 50%)`; // red
-    case 'Flight': return `hsl(${hashToHue(seed, 110, 30)} 70% 50%)`; // green
-    case 'Freeze': return `hsl(${hashToHue(seed, 200, 20)} 70% 50%)`; // blue
-    case 'Fawn':   return `hsl(${hashToHue(seed, 270, 30)} 70% 50%)`; // purple
-    default:       return `hsl(${hashToHue(seed,   0,360)} 70% 50%)`;
+    case 'Fight':  return `hsl(${hashHue(seed, 0, 12)} 70% 50%)`;
+    case 'Flight': return `hsl(${hashHue(seed, 110, 30)} 70% 50%)`;
+    case 'Freeze': return `hsl(${hashHue(seed, 200, 20)} 70% 50%)`;
+    case 'Fawn':   return `hsl(${hashHue(seed, 270, 30)} 70% 50%)`;
+    default:       return `hsl(${hashHue(seed, 0, 360)} 70% 50%)`;
   }
 }
 
-/** Returns latest cached test-result or null */
-function readLatestResult(): { name: string; mode: FourF } | null {
-  const keys = Object.keys(localStorage)
-    .filter(k => {
-      try {
-        const v = JSON.parse(localStorage.getItem(k) || '{}') as TestCache;
-        return v.mbtiType && v.primary4FType;
-      } catch { return false; }
-    })
-    .sort();                                               // last key is newest
-
-  if (!keys.length) return null;
-  const payload = JSON.parse(
-    localStorage.getItem(keys[keys.length - 1])!
-  ) as TestCache;
-
-  const suffix  = payload.suffix ? `-${payload.suffix}` : '';
-  const pct     = Math.round(payload.accuracy ?? 0);
-  const name    = `${payload.mbtiType}${suffix} (${pct}%)`;
-  const mode    = payload.primary4FType;
-
-  return { name, mode };
-}
-
-/* ------------------------------------------------------------------ */
-/* -----------------------  MAIN COMPONENT -------------------------- */
-/* ------------------------------------------------------------------ */
+/* ----------------------- COMPONENT ------------------------------- */
 
 export default function ChatContent() {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  /* ========== identity (static) ========== */
-  const userId   = useRef(guid());
-  const profile  = useRef(readLatestResult());
-  const userName = getLatestUserName();
-  const userMode = profile.current?.mode ?? 'Fight';
-  const userColor = colorForMode(userMode, userId.current);
+  const theme     = useTheme();
+  const isMobile  = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
 
-  /* ========== state ========== */
-  const [tags, setTags]           = useState<Tag[]>([]);
-  const [selectedTags, setSel]    = useState<Tag[]>([]);
-  const [draft, setDraft]         = useState('');
-  const [replyTo, setReply]       = useState<Message | null>(null);
+  /* identity */
+  const userId    = useRef(guid());
+  const userName  = getLatestUserName();
+  const userColor = colorForMode('Fight', userId.current); // default red if unknown
 
-  const [messages, setMessages]   = useState<Message[]>([]);
-  const [binChain, setBinChain]   = useState<string[]>([]);   // oldest → newest
-  const [hasMore, setHasMore]     = useState(true);
-  const [loading, setLoading]     = useState(false);
-  const [error, setError]         = useState<string | null>(null);
+  /* state */
+  const [tags, setTags]             = useState<Tag[]>([]);
+  const [selectedTags, setSelected] = useState<Tag[]>([]);
+  const [draft, setDraft]           = useState('');
+  const [replyTo, setReplyTo]       = useState<Message | null>(null);
 
-  const seenIds = useRef<Set<string>>(new Set());            // dedupe set
-  const topSentinel = useRef<HTMLDivElement | null>(null);
+  const [messages, setMessages]     = useState<Message[]>([]);
+  const [binChain, setBinChain]     = useState<string[]>([]);
+  const [loading, setLoading]       = useState(false);
+  const [error, setError]           = useState<string | null>(null);
+  const [hasMore, setHasMore]       = useState(true);
 
-  /* ========== helpers ========== */
-  const extractTag = (t: string): Tag =>
-    (t.match(/#\w+/)?.[0] as Tag) ?? null;
-  const stripTag = (t: string, tag: Tag) =>
-    tag ? t.replace(tag, '').trim() : t.trim();
+  const seenIds  = useRef<Set<string>>(new Set());
+  const topRef   = useRef<HTMLDivElement>(null);
 
-  /* ========== data loader ========== */
+  /* helpers */
+  const stripTag = (txt: string, tag: Tag) => tag ? txt.replace(tag, '').trim() : txt.trim();
+  const findTag  = (txt: string): Tag => (txt.match(/#\w+/)?.[0] as Tag) ?? null;
+
+  /* ---------- initial load ---------- */
   useEffect(() => {
     const abort = new AbortController();
-    const api = jsonBinClient(abort.signal);
+    const api   = jsonBinClient(abort.signal);
 
     (async () => {
       try {
         setLoading(true);
         let meta = await api.get<MetaBin>(`/b/${META_BIN}/latest`);
-
-        // one-time tag seeding
         if (!meta.tags?.length) {
           meta.tags = ['#Fight', '#Flight', '#Freeze', '#Fawn', '#Ego', '#Superego'];
           await api.put(`/b/${META_BIN}`, meta);
         }
         setTags(meta.tags);
 
-        // load latest bin
         const latest = await api.get<ChatBin>(`/b/${meta.currentBinId}/latest`);
         latest.messages.forEach(m => seenIds.current.add(m.id));
         setMessages(latest.messages.slice());
         setBinChain([meta.currentBinId]);
         setHasMore(Boolean(latest.prev));
       } catch (e: any) {
-  if (e.name === 'AbortError') return; // component unmounted or effect cleaned up
-  setError(e.message);
-} finally {
-        setLoading(false);
-      }
+        if (e.name !== 'AbortError') setError(e.message);
+      } finally { setLoading(false); }
     })();
 
     return () => abort.abort();
   }, []);
 
-  /* ========== infinite scroll (history) ========== */
+  /* ---------- infinite scroll ---------- */
   useEffect(() => {
-    if (!topSentinel.current || !hasMore) return;
+    if (!topRef.current || !hasMore) return;
     const abort = new AbortController();
-    const api   = jsonBinClient(abort.signal);
+    const api = jsonBinClient(abort.signal);
 
     const io = new IntersectionObserver(async entries => {
-      if (!entries[0].isIntersecting || !binChain.length) return;
+      if (!entries[0].isIntersecting  || !binChain.length) return;
       try {
-        setLoading(true);
-        const oldestId = binChain[0];
-        const oldest   = await api.get<ChatBin>(`/b/${oldestId}/latest`);
-        if (!oldest.prev) { setHasMore(false); return; }
+        const oldest = binChain[0];
+        const bin    = await api.get<ChatBin>(`/b/${oldest}/latest`);
+        if (!bin.prev) { setHasMore(false); return; }
 
-        const prevBin  = await api.get<ChatBin>(`/b/${oldest.prev}/latest`);
-        const unseen   = prevBin.messages.filter(m => !seenIds.current.has(m.id));
+        const prev = await api.get<ChatBin>(`/b/${bin.prev}/latest`);
+        const unseen = prev.messages.filter(m => !seenIds.current.has(m.id));
         unseen.forEach(m => seenIds.current.add(m.id));
-
-        setMessages(p => [...unseen.slice().reverse(), ...p]);
-        setBinChain(p => [oldest.prev!, ...p]);
+        setMessages(p => [...unseen.reverse(), ...p]);
+        setBinChain(p => [bin.prev!, ...p]);
       } catch (e: any) {
-        if (e.name === 'AbortError') return; // component unmounted or effect cleaned up
-        setError(e.message);
-      } finally {
-        setLoading(false);
+        if (e.name !== 'AbortError') setError(e.message);
       }
     }, { threshold: 0 });
 
-    io.observe(topSentinel.current);
+    io.observe(topRef.current);
     return () => { io.disconnect(); abort.abort(); };
   }, [binChain, hasMore]);
 
-  /* ========== live polling ========== */
+  /* ---------- live poller ---------- */
   useEffect(() => {
     const abort = new AbortController();
     const api   = jsonBinClient(abort.signal);
@@ -323,122 +245,110 @@ export default function ChatContent() {
     const poll = async () => {
       try {
         const meta = await api.get<MetaBin>(`/b/${META_BIN}/latest`);
+        const currentId = meta.currentBinId;
 
-        // 1) if a new bin is active, grab it
-        if (meta.currentBinId !== binChain[binChain.length - 1]) {
-          const newBin = await api.get<ChatBin>(`/b/${meta.currentBinId}/latest`);
+        // new active bin?
+        if (!binChain.includes(currentId)) {
+          const newBin = await api.get<ChatBin>(`/b/${currentId}/latest`);
           const unseen = newBin.messages.filter(m => !seenIds.current.has(m.id));
           unseen.forEach(m => seenIds.current.add(m.id));
-
           setMessages(p => [...p, ...unseen]);
-          setBinChain(p => [...p, meta.currentBinId]);
-        } else {
-          // 2) otherwise check for new lines in current bin
-          const cur = await api.get<ChatBin>(`/b/${meta.currentBinId}/latest`);
-          const unseen = cur.messages.filter(m => !seenIds.current.has(m.id));
-          if (unseen.length) {
-            unseen.forEach(m => seenIds.current.add(m.id));
-            setMessages(p => [...p, ...unseen]);
-          }
+          setBinChain(p => [...p, currentId]);
         }
-      } catch {/* swallow polling errors */ }
+
+        // always check the current bin for new messages
+        const curBin = await api.get<ChatBin>(`/b/${currentId}/latest`);
+        const unseen = curBin.messages.filter(m => !seenIds.current.has(m.id));
+        if (unseen.length) {
+          unseen.forEach(m => seenIds.current.add(m.id));
+          setMessages(p => [...p, ...unseen]);
+        }
+      } catch { /* swallow */ }
     };
 
-    poll();                                         // immediate kick
+    poll();
     const id = setInterval(poll, POLL_INTERVAL_MS);
     return () => { clearInterval(id); abort.abort(); };
   }, [binChain]);
 
-  /* ========== tag selection ========== */
-  const toggleTag = (tag: Tag) =>
-    setSel(p => p.includes(tag) ? p.filter(t => t !== tag) : [...p, tag]);
-
-  /* ========== send handler ========== */
+  /* ---------- send ---------- */
   const handleSend = useCallback(async () => {
     if (!draft.trim()) return;
 
+    // determine tag
     let tag: Tag = null;
-    let text     = draft;
-
-    // resolve tag per rules
-    if (replyTo?.tag)                       tag = replyTo.tag;
-    else if (selectedTags.length === 1)     tag = selectedTags[0];
-    else if (selectedTags.length  >  1) {
-      const inlined = extractTag(text);
-      if (!inlined || !selectedTags.includes(inlined)) {
+    let txt = draft;
+    if (replyTo?.tag) tag = replyTo.tag;
+    else if (selectedTags.length === 1) tag = selectedTags[0];
+    else if (selectedTags.length > 1) {
+      const inl = findTag(txt);
+      if (!inl || !selectedTags.includes(inl)) {
         setError(`Multiple tags: include one (e.g. ${selectedTags[0]})`);
         return;
       }
-      tag  = inlined;
-      text = stripTag(text, tag);
+      tag = inl; txt = stripTag(txt, tag);
     } else {
-      const inlined = extractTag(text);
-      if (inlined) { tag = inlined; text = stripTag(text, tag); }
+      const inl = findTag(txt);
+      if (inl) { tag = inl; txt = stripTag(txt, tag); }
     }
 
-    const newMessage: Message = {
+    const msg: Message = {
       id: guid(),
       userId: userId.current,
       userName,
       color: userColor,
-      text,
+      text: txt,
       tag,
       timestamp: new Date().toISOString(),
       parent: replyTo ?? undefined
     };
 
-    // optimistic UI
-    setMessages(p => [...p, newMessage]);
-    seenIds.current.add(newMessage.id);
-    setDraft(''); setReply(null);
+    setDraft('');
+    setReplyTo(null);
+    setLoading(true);
 
-    // persistent write
     const abort = new AbortController();
-    const api   = jsonBinClient(abort.signal);
+    const api = jsonBinClient(abort.signal);
     try {
       let meta = await api.get<MetaBin>(`/b/${META_BIN}/latest`);
       let bin  = await api.get<ChatBin>(`/b/${meta.currentBinId}/latest`);
 
+      // roll to new bin if needed
       if (bin.messages.length >= MAX_PER_BIN) {
-        const newBinId = await api.post<ChatBin>({
-          messages: [newMessage],
-          prev     : meta.currentBinId
-        });
+        const newBinId = await api.post<ChatBin>({ messages: [msg], prev: meta.currentBinId });
         await api.put(`/b/${META_BIN}`, { ...meta, currentBinId: newBinId });
         setBinChain(p => [...p, newBinId]);
       } else {
-        bin.messages.push(newMessage);
+        bin.messages.push(msg);
         await api.put(`/b/${meta.currentBinId}`, bin);
       }
-    } catch (e: any) {
-  if (e.name === 'AbortError') return; // component unmounted or effect cleaned up
-  setError(e.message);
-}
-    return () => abort.abort();
-  }, [draft, replyTo, selectedTags, userName, userColor]);
 
-  /* ========== render ========== */
-  return isMobile ? (
-  // 🔹 MOBILE RENDER
-  <Box sx={{ p: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
-    <Box sx={{ mb: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5, justifyContent: 'center' }}>
-      {tags.map(tag => (
+      // confirmed write → show message
+      seenIds.current.add(msg.id);
+      setMessages(p => [...p, msg]);
+    } catch (e: any) {
+      if (e.name !== 'AbortError') setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [draft, selectedTags, replyTo, userColor, userName]);
+
+  /* ---------- UI blocks ---------- */
+  const TagSelector = (
+    <Box sx={{ mb: 1, display: 'flex', flexWrap: 'wrap', gap: isMobile ? 0.5 : 1, justifyContent: isMobile ? 'center' : 'flex-start' }}>
+      {tags.map(t => (
         <Chip
-          key={tag}
-          label={tag}
+          key={t}
+          label={t}
           size="small"
-          color={selectedTags.includes(tag) ? 'primary' : 'default'}
-          onClick={() => toggleTag(tag)}
+          color={selectedTags.includes(t) ? 'primary' : 'default'}
+          onClick={() => setSelected(p => p.includes(t) ? p.filter(x => x !== t) : [...p, t])}
         />
       ))}
     </Box>
+  );
 
-    {error && (
-      <Typography color="error" sx={{ mb: 1, fontSize: '0.75rem', textAlign: 'center' }}>
-        {error}
-      </Typography>
-    )}
-
+  const MessageList = (
     <Box sx={{
       flexGrow: 1,
       overflowY: 'auto',
@@ -449,44 +359,32 @@ export default function ChatContent() {
       display: 'flex',
       flexDirection: 'column-reverse'
     }}>
-      <div ref={topSentinel} />
+      <div ref={topRef} />
       <List sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
         {messages
-          .filter(msg => !selectedTags.length || selectedTags.includes(msg.tag))
+          .filter(m => !selectedTags.length || selectedTags.includes(m.tag))
           .sort((a, b) => new Date(b.timestamp).valueOf() - new Date(a.timestamp).valueOf())
-          .map(msg => (
-            <ListItem
-              key={msg.id}
-              sx={{ display: 'block', py: 0.25 }}
-              onClick={() => setReply(msg)}
-            >
-              {msg.parent && (
+          .map(m => (
+            <ListItem key={m.id} sx={{ display: 'block', py: isMobile ? 0.25 : 0.5 }} onClick={() => setReplyTo(m)}>
+              {m.parent && (
                 <Box sx={{ bgcolor: 'action.hover', p: 0.5, mb: 0.5, borderRadius: 1 }}>
-                  <Typography variant="caption" sx={{ fontStyle: 'italic', fontSize: '0.65rem' }}>
-                    {msg.parent.text}
+                  <Typography variant="caption" sx={{ fontStyle: 'italic', fontSize: isMobile ? '0.65rem' : '0.75rem' }}>
+                    {m.parent.text}
                   </Typography>
                 </Box>
               )}
-              <Typography variant="subtitle2" sx={{ fontSize: '0.75rem', fontWeight: 600, color: msg.color }}>
-                {msg.userName}
+              <Typography variant="subtitle2" sx={{ color: m.color, fontWeight: 700, fontSize: isMobile ? '0.75rem' : '0.875rem' }}>
+                {m.userName}
               </Typography>
-              <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
-                {msg.text}
+              <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8rem' : '0.875rem' }}>
+                {m.text}
               </Typography>
-              {msg.tag && <Chip label={msg.tag} size="small" sx={{ mt: 0.5 }} variant="outlined" />}
-              <Typography variant="caption" sx={{ fontSize: '0.55rem', opacity: 0.6 }}>
-                {new Date(msg.timestamp)
-                  .toLocaleString('en-GB', {
-                    year: '2-digit',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                  })
-                  .replace(',', '')
-                  .replace(/\//g, '-')
-                  .replace(' ', '-')}
+              {m.tag && <Chip label={m.tag} size="small" sx={{ mt: 0.5 }} variant="outlined" />}
+              <Typography variant="caption" sx={{ fontSize: isMobile ? '0.55rem' : '0.625rem', opacity: 0.6 }}>
+                {new Date(m.timestamp).toLocaleString('en-GB', {
+                  year: '2-digit', month: '2-digit', day: '2-digit',
+                  hour: '2-digit', minute: '2-digit', hour12: false
+                }).replace(',', '').replace(/\//g, '-').replace(' ', '-')}
               </Typography>
             </ListItem>
           ))}
@@ -497,168 +395,50 @@ export default function ChatContent() {
         </Box>
       )}
     </Box>
+  );
 
-    {replyTo && (
-      <Box sx={{
-        mt: 1,
-        mb: 0.5,
-        p: 0.5,
-        borderLeft: '4px solid',
-        borderColor: 'primary.main',
-        bgcolor: 'action.hover',
-        borderRadius: 1
-      }}>
-        <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
-          Replying to: {replyTo.text}{' '}
-          <Box component="span" sx={{ ml: 1, cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setReply(null)}>
-            cancel
-          </Box>
-        </Typography>
-      </Box>
-    )}
+  const ReplyBanner = replyTo && (
+    <Box sx={{
+      mt: 1, mb: 0.5, p: 0.5,
+      borderLeft: '4px solid', borderColor: 'primary.main',
+      bgcolor: 'action.hover', borderRadius: 1
+    }}>
+      <Typography variant="caption" sx={{ fontSize: isMobile ? '0.7rem' : '0.75rem' }}>
+        Replying to: {replyTo.text}{' '}
+        <Box component="span" sx={{ ml: 1, cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setReplyTo(null)}>
+          cancel
+        </Box>
+      </Typography>
+    </Box>
+  );
 
-    <Box sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
+  const ComposeBox = (
+    <Box sx={{ mt: 1, display: 'flex', gap: 1, flexDirection: isMobile ? 'column' : 'row' }}>
       <TextField
-        fullWidth
-        size="small"
-        placeholder="Type your message…"
-        value={draft}
-        onChange={e => setDraft(e.target.value)}
-        onKeyDown={e => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSend();
-          }
-        }}
+        fullWidth size="small" placeholder="Type your message…"
+        value={draft} onChange={e => setDraft(e.target.value)}
+        onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
       />
-      <IconButton onClick={handleSend} color="primary" sx={{ alignSelf: 'flex-end' }}>
+      <IconButton onClick={handleSend} color="primary" sx={{ alignSelf: isMobile ? 'flex-end' : 'center' }}>
         <SendIcon />
       </IconButton>
     </Box>
-  </Box>
-) : (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      {/* Tag selector */}
-      <Box sx={{ mb: 1, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-        {tags.map(tag => (
-          <Chip
-            key={tag}
-            label={tag}
-            size="small"
-            color={selectedTags.includes(tag) ? 'primary' : 'default'}
-            onClick={() => toggleTag(tag)}
-          />
-        ))}
-      </Box>
+  );
 
-      {error && (
-        <Typography color="error" sx={{ mb: 1 }}>{error}</Typography>
-      )}
-
-      {/* Messages */}
-      <Box sx={{
-        flexGrow: 1,
-        overflowY: 'auto',
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 1,
-        p: 1,
-        display: 'flex',
-        flexDirection: 'column-reverse'
-      }}>
-        <div ref={topSentinel} />
-
-        <List sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
-          {messages.filter(msg => !selectedTags.length || selectedTags.includes(msg.tag)).sort((msgA, msgB) => new Date(msgB.timestamp).valueOf() - new Date(msgA.timestamp).valueOf()).map(msg => (
-            <ListItem
-              key={msg.id}
-              sx={{ display: 'block', py: 0.5, cursor: 'pointer' }}
-              onClick={() => setReply(msg)}
-            >
-              {msg.parent && (
-                <Box sx={{ bgcolor: 'action.hover', p: 0.5, mb: 0.5, borderRadius: 1 }}>
-                  <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                    {msg.parent.text}
-                  </Typography>
-                </Box>
-              )}
-
-              <Typography variant="subtitle2" sx={{ color: msg.color, fontWeight: 700 }}>
-                {msg.userName}
-              </Typography>
-              <Typography variant="body2">{msg.text}</Typography>
-              {msg.tag && (
-                <Chip label={msg.tag} size="small" sx={{ mt: 0.5 }} variant="outlined" />
-              )}
-              <Typography variant="caption" sx={{ fontSize: '0.625rem', opacity: 0.6 }}>
-                {new Date(msg.timestamp)
-                    .toLocaleString('en-GB', {
-                    year: '2-digit',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                    })
-                    .replace(',', '')
-                    .replace(/\//g, '-')
-                    .replace(' ', '-')}
-                </Typography>
-
-            </ListItem>
-          ))}
-        </List>
-
-        {loading && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
-            <CircularProgress size={20} />
-          </Box>
-        )}
-      </Box>
-
-      {/* Reply indicator */}
-      {replyTo && (
-        <Box sx={{
-          mt: 1,
-          mb: 0.5,
-          p: 0.5,
-          borderLeft: '4px solid',
-          borderColor: 'primary.main',
-          bgcolor: 'action.hover',
-          borderRadius: 1
-        }}>
-          <Typography variant="caption">
-            Replying to: {replyTo.text}{' '}
-            <Box
-              component="span"
-              sx={{ ml: 1, cursor: 'pointer', textDecoration: 'underline' }}
-              onClick={() => setReply(null)}
-            >
-              cancel
-            </Box>
-          </Typography>
-        </Box>
-      )}
-
-      {/* Compose */}
-      <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
-        <TextField
-          fullWidth
-          size="small"
-          placeholder="Type your message…"
-          value={draft}
-          onChange={e => setDraft(e.target.value)}
-          onKeyDown={e => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              handleSend();
-            }
-          }}
-        />
-        <IconButton onClick={handleSend} color="primary">
-          <SendIcon />
-        </IconButton>
-      </Box>
+  /* ---------- FINAL RENDER ---------- */
+  return (
+    <Box sx={{
+      p: isMobile ? 1 : 2,
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      boxSizing: 'border-box'
+    }}>
+      {TagSelector}
+      {error && <Typography color="error" sx={{ mb: 1, fontSize: isMobile ? '0.75rem' : '0.875rem', textAlign: 'center' }}>{error}</Typography>}
+      {MessageList}
+      {ReplyBanner}
+      {ComposeBox}
     </Box>
   );
 }

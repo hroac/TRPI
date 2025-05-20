@@ -30,7 +30,7 @@ const META_BIN     = '682caa748561e97a5018215f';
 const COLLECTION   = '682ca7998561e97a50181ffe';
 
 const MAX_PER_BIN      = 25;
-const POLL_INTERVAL_MS = 500;                     // 0.5 s refresh
+const POLL_INTERVAL_MS = 1000;                     // 0.5 s refresh
 
 /* ----------------------------- TYPES ------------------------------ */
 type Tag   = `#${string}` | null;
@@ -123,7 +123,11 @@ function modeColor(mode: FourF, seed: string){
     case'Flight': return`hsl(${hue(seed,110,30)} 70% 50%)`;
     case'Freeze': return`hsl(${hue(seed,200,20)} 70% 50%)`;
     case'Fawn':   return`hsl(${hue(seed,270,30)} 70% 50%)`;
-    default:      return`hsl(${hue(seed,0,360)} 70% 50%)`;
+    default: {
+      // variation of grey: fixed hue, low saturation, variable lightness
+      const light = 40 + (hue(seed, 0, 20)); // 40–60%
+      return `hsl(0 0% ${light}%)`; // grayscale
+    };
   }
 }
 

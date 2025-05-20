@@ -99,7 +99,7 @@ function jsonBinClient(signal: AbortSignal) {
       const res = await fetch(`${JSONBIN_BASE}${path}`, { headers, signal });
       if (!res.ok) {
         if (attempt < 2 && res.status >= 500) {
-          await delay(300 * 2 ** attempt);
+          await delay(100 * 2 ** attempt);
           return get<T>(path, attempt + 1);
         }
         throw new Error(`GET ${path} → ${res.status}`);
@@ -208,7 +208,7 @@ export default function ChatContent() {
     })();
 
     return () => abort.abort();
-  }, []);
+  }, [messages]);
 
   /* ---------- infinite scroll ---------- */
   useEffect(() => {
@@ -235,7 +235,7 @@ export default function ChatContent() {
 
     io.observe(topRef.current);
     return () => { io.disconnect(); abort.abort(); };
-  }, [binChain, hasMore]);
+  }, [binChain, messages, hasMore]);
 
   /* ---------- live poller ---------- */
   useEffect(() => {
@@ -269,7 +269,7 @@ export default function ChatContent() {
     poll();
     const id = setInterval(poll, POLL_INTERVAL_MS);
     return () => { clearInterval(id); abort.abort(); };
-  }, [binChain]);
+  }, [binChain, messages]);
 
   /* ---------- send ---------- */
   const handleSend = useCallback(async () => {

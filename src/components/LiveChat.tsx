@@ -66,6 +66,18 @@ interface Cache {
 const commonHeaders: HeadersInit = {
   'Content-Type': 'application/json',
   'X-Master-Key': MASTER_KEY,
+  'X-Bin-Name': new Date()
+    .toLocaleString('en-GB', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    })
+    .replace(',', '')
+    .replace(/\//g, '-')
+    .replace(' ', '-'),
   ...(COLLECTION ? { 'X-Collection-Id': COLLECTION } : {})
 };
 

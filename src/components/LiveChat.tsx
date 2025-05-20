@@ -30,7 +30,7 @@ const META_BIN     = '682caa748561e97a5018215f';
 const COLLECTION   = '682ca7998561e97a50181ffe';
 
 const MAX_PER_BIN      = 25;
-const POLL_INTERVAL_MS = 1000;                     // 0.5 s refresh
+const POLL_INTERVAL_MS = 3000;                     // 0.5 s refresh
 
 /* ----------------------------- TYPES ------------------------------ */
 type Tag   = `#${string}` | null;
@@ -289,7 +289,7 @@ export default function ChatContent() {
     }}>
       <div ref={topRef}/>
       <List sx={{display:'flex',flexDirection:'column-reverse'}}>
-        {msgs.filter(m=>!sel.length||sel.includes(m.tag)).sort((msgA, msgB) => new Date(msgB.timestamp).valueOf() - new Date(msgA.timestamp).valueOf() ).map(m=>(
+        {msgs.filter(m=>!sel.length||sel.includes(m.tag)).sort((msgA, msgB) => new Date(msgB.timestamp).valueOf() - new Date(msgA.timestamp).valueOf()).map(m=>(
           <ListItem key={m.id} sx={{display:'block',py:mobile?0.25:0.5}} onClick={()=>setReply(m)}>
             {m.parent&&(
               <Box sx={{bgcolor:'action.hover',p:0.5,mb:0.5,borderRadius:1}}>

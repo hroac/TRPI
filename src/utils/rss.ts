@@ -24,7 +24,7 @@ async function parseRss(xmlDoc: Document) {
       const namespace = "http://purl.org/rss/1.0/modules/content/";
       const encodedElements = item.getElementsByTagNameNS(namespace, "encoded")[0];
 
-      console.log(encodedElements)
+     // console.log(encodedElements)
       // Try to get <content:encoded> (note the escaped colon)
       const textContent = (item.textContent || '')
       const content =textContent.slice(textContent.indexOf('</figure>') + 9)

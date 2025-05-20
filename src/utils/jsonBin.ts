@@ -31,7 +31,7 @@ class JsonBinApi {
             );
 
             const binId = response.data.metadata.id; // Extract the bin ID
-            console.log('Results saved successfully, Bin ID:', binId);
+            //console.log('Results saved successfully, Bin ID:', binId);
             return binId; // Return only the bin ID
         } catch (error) {
             console.error('Error saving results:', error);
@@ -63,7 +63,7 @@ class JsonBinApi {
             );
 
             const binId = response.data.metadata.id; // Extract the bin ID
-            console.log('Results saved successfully, Bin ID:', binId);
+            //console.log('Results saved successfully, Bin ID:', binId);
             return binId; // Return only the bin ID
         } catch (error) {
             console.error('Error saving results:', error);
@@ -83,7 +83,7 @@ class JsonBinApi {
                 },
             });
 
-            console.log('Retrieved bins from collection:', response.data);
+            //console.log('Retrieved bins from collection:', response.data);
             return response.data;
         } catch (error) {
             console.error('Error retrieving bins from collection:', error);
@@ -104,7 +104,7 @@ class JsonBinApi {
                 },
             });
 
-            console.log('Retrieved bin data:', response.data);
+           // console.log('Retrieved bin data:', response.data);
             return response.data.record; // Return the specific bin data
         } catch (error) {
             console.error('Error retrieving bin by ID:', error);

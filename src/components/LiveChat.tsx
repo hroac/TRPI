@@ -74,7 +74,7 @@ interface CachedResult {
  * as a user display name: "TYPE-SUFFIX (NN%)"
  */
 export function getLatestUserName(): string {
-  const result = JSON.parse(localStorage.getItem(guid()) ||'') as CachedResult
+  const result = localStorage.getItem(guid()) && JSON.parse(localStorage.getItem(guid()) ||'') as CachedResult
   /*const keys = Object.keys(localStorage)
     .filter(k => {
       try {

@@ -22,6 +22,7 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import { guid } from '../utils/guid';
 import { findClosestComplement, MBTIProfiles } from '../utils/mbtiMapping';
+import { Tag } from '@mui/icons-material';
 
 /* --------------------------- CONFIG ------------------------------- */
 const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
@@ -30,7 +31,7 @@ const META_BIN = '682caa748561e97a5018215f';
 const COLLECTION = '682ca7998561e97a50181ffe';
 
 const MAX_PER_BIN = 25;
-const POLL_INTERVAL_MS = 2_000; // 2 s refresh
+const POLL_INTERVAL_MS = 2000; // 2 s refresh
 
 /* ----------------------------- TYPES ------------------------------ */
 type Tag = `#${string}` | null;

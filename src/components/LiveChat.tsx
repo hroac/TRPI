@@ -466,6 +466,21 @@ export default function ChatContent() {
               {msg.tag && (
                 <Chip label={msg.tag} size="small" sx={{ mt: 0.5 }} variant="outlined" />
               )}
+              <Typography variant="caption" sx={{ fontSize: '0.625rem', opacity: 0.6 }}>
+                {new Date(msg.timestamp)
+                    .toLocaleString('en-GB', {
+                    year: '2-digit',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                    })
+                    .replace(',', '')
+                    .replace(/\//g, '-')
+                    .replace(' ', '-')}
+                </Typography>
+
             </ListItem>
           ))}
         </List>

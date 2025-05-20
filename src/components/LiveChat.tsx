@@ -123,7 +123,9 @@ function jsonBinClient(signal: AbortSignal) {
         }
         throw new Error(`GET ${path} -> ${res.status}`);
       }
-      return (await res.json()).record as T;
+      const resp = await res.json();
+      console.log(resp)
+      return (resp).record as T;
     } catch (err: any) {
       if (err.name === 'AbortError') throw err;          // ← swallow later
       throw err;                                         // real failure
@@ -267,7 +269,7 @@ export default function ChatContent() {
         // load latest bin
         const latest = await api.get<ChatBin>(`/b/${meta.currentBinId}/latest`);
         latest.messages.forEach(m => seenIds.current.add(m.id));
-        setMessages(latest.messages.slice().reverse());
+        setMessages(latest.messages.slice());
         setBinChain([meta.currentBinId]);
         setHasMore(Boolean(latest.prev));
       } catch (e: any) {

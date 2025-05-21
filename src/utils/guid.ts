@@ -1,13 +1,13 @@
 export function guid() {
     let guid = localStorage.getItem('guid') || '';
     if (guid) {
-      console.log('Using existing GUID:', guid);
+      //console.log('Using existing GUID:', guid);
       return guid;
     }
   
     const cryptoObj = window.crypto || window.Crypto;
     if (!cryptoObj) {
-      console.error('Crypto API not available');
+      //console.error('Crypto API not available');
       return '';
     }
   

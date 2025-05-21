@@ -393,14 +393,14 @@ export const matchMBTIType = (profile: any, primary4F: any, filter: boolean = tr
     candidates = candidates.filter(p => p.mode === primary4F);
   }
 
-  console.log('Filtered Candidates:', candidates);
+  //console.log('Filtered Candidates:', candidates);
 
   let closestType = '';
   let closestDistance = Infinity;
 
   candidates.forEach(candidate => {
     const distance = weightedEuclideanDistance(profile, candidate.traits, weights[primary4F]);
-    console.log(`Candidate: ${candidate.name}, Distance: ${distance}`);
+    //console.log(`Candidate: ${candidate.name}, Distance: ${distance}`);
 
     if (distance < closestDistance) {
       closestDistance = distance;
@@ -408,7 +408,7 @@ export const matchMBTIType = (profile: any, primary4F: any, filter: boolean = tr
     }
   });
 
-  console.log('Closest Type:', closestType, 'Distance:', closestDistance);
+  //console.log('Closest Type:', closestType, 'Distance:', closestDistance);
   return closestType;
 };
 
@@ -553,7 +553,7 @@ export function compareProfilesIgnoringDominantPearson(
 
   // 3. Final list of keys to compare: exclude both 'openness' and the dominant trait
   const compareKeys = traitKeys.filter(k => k !== dominant);
-  console.log(compareKeys)
+  //console.log(compareKeys)
 
   // 4. Extract the values
   const aVals = compareKeys.map(k => profileA[k]);
@@ -564,7 +564,7 @@ export function compareProfilesIgnoringDominantPearson(
   const meanA = aVals.reduce((sum, v) => sum + v, 0) / n;
   const meanB = bVals.reduce((sum, v) => sum + v, 0) / n;
 
-  console.log(aVals, bVals, meanA, meanB)
+  //console.log(aVals, bVals, meanA, meanB)
   // 6. Compute covariance and variances
   let cov = 0,
       varA = 0,
@@ -648,12 +648,12 @@ export function findClosestComplement(baseType: string, userProfile: any) {
   for (const candidate of MBTIProfiles.filter(prf => complements.includes(prf.name))) {
     const distance1 = compareProfilesIgnoringDominantPearson(userProfile, candidate.traits);
     const distance2 = compareProfilesIgnoringDominant(userProfile, candidate.traits)
-    console.log(candidate.name, distance1, distance2, distance1 - ((1 - distance2)/10))
+    //console.log(candidate.name, distance1, distance2, distance1 - ((1 - distance2)/10))
     const dist = distance1 - ((1- distance2)/10);
     distances.push({ type: candidate.name, distance: dist })
     if (dist > best.distance) {
       best = { type: candidate.name, distance: dist };
-      console.log('best', best)
+      //console.log('best', best)
     }
   }
 

@@ -112,6 +112,7 @@ async function jsonBinGet<T>(path: string, xJsonPath?: string): Promise<T> {
 }
 
 async function jsonBinPut<T>(path: string, body: T) {
+  console.log(path, 'putting')
   const res = await fetch(`${JSONBIN_BASE}${path}`, {
     method: 'PUT',
     headers: baseHeaders,
@@ -259,7 +260,7 @@ const setSize = (index: number, size: number) => {
   const { data: meta } = useQuery<MetaBin>({
     queryKey: ['meta'],
     queryFn: () => jsonBinGet<MetaBin>(`/b/${META_BIN}/latest`),
-    staleTime: Infinity,
+    staleTime: 0,
   });
 
   const binId = meta?.currentBinId ?? null;
@@ -322,12 +323,14 @@ useEffect(() => {
       if (!metaLive) metaLive = await jsonBinGet<MetaBin>(`/b/${META_BIN}/latest`);
 
        if (atBottomRef.current && filtered.length > 0) {
-      listRef.current?.scrollToItem(filtered.length - 1, 'end');
+              listRef.current?.scrollTo(filtered.length * itemHeight);
+
     }
 
       const curBinId = metaLive.currentBinId;
       const curPath  = `/b/${curBinId}`;
       let curBin     = rq.getQueryData<ChatBin>(['bin', curBinId]);
+      console.log(curBinId, curBin)
       if (!curBin)   curBin = await jsonBinGet<ChatBin>(`${curPath}/latest`);
 
       /* rollover if full ----------------------------------------- */
@@ -340,7 +343,7 @@ useEffect(() => {
 
       /* append normally ------------------------------------------ */
       curBin.messages.push(msg);
-      await jsonBinPatch(curPath, msg);
+      await jsonBinPut(curPath, curBin);
       return { newBinId: null, msg };
     },
 
@@ -391,7 +394,7 @@ useEffect(() => {
     }
 
     const msg: Message = {
-      id: guid(),
+      id: `${guid()}_${new Date().toISOString()}`,
       userId: userId.current,
       userName,
       color: userColor,
@@ -403,6 +406,7 @@ useEffect(() => {
 
     setDraft('');
     setReply(null);
+    console.log(msg)
     sendMut.mutate(msg);
   }, [draft, reply, selTags, userName, userColor, sendMut]);
 
@@ -582,7 +586,7 @@ const Row = ({ index, style, data }: RowProps) => {
  useEffect(() => {
   const timeout = setTimeout(() => {
     if (atBottomRef.current && filtered.length > 0) {
-     listRef.current?.scrollTo(0);
+     listRef.current?.scrollTo(filtered.length * itemHeight);
 
     }
   }, 10); // Slight delay ensures DOM update first

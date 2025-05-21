@@ -117,6 +117,15 @@ async function jsonBinPut<T>(path: string, body: T) {
   });
   if (!res.ok) throw new Error(`${res.status}: PUT ${path}`);
 }
+async function jsonBinPatch<T>(path: string, msg: T) {
+  const res = await fetch(`${JSONBIN_BASE}${path}`, {
+    method: 'PATCH',
+   headers: { ...baseHeaders, 'X-Bin-Path': '/messages/-' }, // “append”
+    body: JSON.stringify(msg),
+  });
+  if (!res.ok) throw new Error(`${res.status}: PUT ${path}`);
+}
+
 
 async function jsonBinPost<T>(body: T) {
   const res = await fetch(`${JSONBIN_BASE}/b`, {
@@ -306,7 +315,7 @@ function ChatContent() {
 
       if (curBin.messages.length >= MAX_PER_BIN) {
         // open new bin in *parallel* – don't block UI
-        const newId = await jsonBinPost<ChatBin>({ messages: [msg], prev: metaLive.currentBinId });
+        const newId = await jsonBinPatch<Message>(`/b/${metaLive.currentBinId}`, msg);
         await jsonBinPut(`/b/${META_BIN}`, { ...metaLive, currentBinId: newId });
         return { newBinId: newId, msg };
       } else {

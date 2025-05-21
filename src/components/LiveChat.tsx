@@ -96,6 +96,18 @@ export interface MetaBin { currentBinId: string; tags: Tag[]; }
 const baseHeaders: HeadersInit = {
   'Content-Type': 'application/json',
   'X-Master-Key': MASTER_KEY,
+  'X-Bin-Name': new Date()
+    .toLocaleString('en-GB', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    })
+    .replace(',', '')
+    .replace(/\//g, '-')
+    .replace(' ', '-'),
   ...(COLLECTION && { 'X-Collection-Id': COLLECTION }),
   'X-Bin-Meta': 'false',
 };
@@ -167,14 +179,22 @@ const hue = (s: string, base: number, span: number) => {
   for (const ch of s) h = (h << 5) - h + ch.charCodeAt(0);
   return base + (Math.abs(h) % span);
 };
-const modeColor = (m: FourF, id: string) =>
-  m === 'Fight'
-    ? `hsl(${hue(id, 0, 12)} 70% 50%)`
-    : m === 'Flight'
-    ? `hsl(${hue(id, 110, 30)} 70% 50%)`
-    : m === 'Freeze'
-    ? `hsl(${hue(id, 200, 20)} 70% 50%)`
-    : `hsl(${hue(id, 270, 30)} 70% 50%)`;
+function modeColor(mode: string, seed: string) {
+  switch (mode) {
+    case 'Fight':
+      return `hsl(${hue(seed, 0, 12)} 70% 50%)`;
+    case 'Flight':
+      return `hsl(${hue(seed, 110, 30)} 70% 50%)`;
+    case 'Freeze':
+      return `hsl(${hue(seed, 200, 20)} 70% 50%)`;
+    case 'Fawn':
+      return `hsl(${hue(seed, 270, 30)} 70% 50%)`;
+    default: {
+      const light = 40 + hue(seed, 0, 20); // 40–60%
+      return `hsl(0 0% ${light}%)`;
+    }
+  }
+}
 
 /* --------------------------- WRAPPER ----------------------------- */
 export default function ChatContentWrapper() {

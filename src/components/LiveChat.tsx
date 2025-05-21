@@ -1,42 +1,54 @@
 /* ------------------------------------------------------------------ */
-/* ChatContent.tsx  —  2025-05-21, React-Query v5                     */
+/* ChatContent.tsx — v3-opt-final  (React-Query v5, 2025-05-21)       */
 /* ------------------------------------------------------------------ */
 import React, {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
+  memo,
 } from 'react';
 import {
   Box,
   Chip,
   CircularProgress,
   IconButton,
-  List,
-  ListItem,
   TextField,
   Typography,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
+import {
+  QueryClient,
+  QueryClientProvider,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import {
+  FixedSizeList as VList,
+  ListOnScrollProps,
+} from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
 import { guid } from '../utils/guid';
 import { findClosestComplement } from '../utils/mbtiMapping';
 
-/* ------------------------------ CONFIG ---------------------------- */
-
+/* ----------------------------- CONFIG ----------------------------- */
 const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
-const MASTER_KEY   = '<YOUR-MASTER-KEY>';          // keep secret in .env
+const MASTER_KEY   = '$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG';       // put in .env
 const META_BIN     = '682caa748561e97a5018215f';
 const COLLECTION   = '682ca7998561e97a50181ffe';
-const MAX_PER_BIN  = 25;
-const REFRESH_MS   = 5_000;
 
-/* ------------------------------- Types ---------------------------- */
+const MAX_PER_BIN  = 200;
+const POLL_BUSY_MS = 2000;
+const POLL_PASSIVE = 15_000;
+const POLL_IDLE    = 60_000;
+const IDLE_MS      = 5 * 60 * 1_000;
 
-type Tag = `#${string}` | null;
+/* ----------------------------- TYPES ------------------------------ */
+type Tag   = `#${string}` | null;
 type FourF = 'Fight' | 'Flight' | 'Freeze' | 'Fawn';
 
 interface Message {
@@ -49,197 +61,326 @@ interface Message {
   timestamp: string;
   parent?: Message;
 }
+interface ChatBin { messages: Message[]; prev?: string | null; }
+interface MetaBin { currentBinId: string; tags: Tag[]; }
 
-interface ChatBin   { messages: Message[]; prev?: string | null; }
-interface MetaBin   { currentBinId: string; tags: Tag[]; }
-
-interface CachedResult {
+interface CacheResult {
   mbtiType: string;
-  suffix?: string;
   primary4FType: FourF;
   accuracy?: number;
   profile: Record<string, number>;
 }
 
-/* ----------------------- Helper: headers ------------------------- */
-
-const baseHeaders = {
+/* ------------------------ FETCH HELPERS -------------------------- */
+const baseHeaders: HeadersInit = {
   'Content-Type': 'application/json',
   'X-Master-Key': MASTER_KEY,
-  ...(COLLECTION && { 'X-Collection-Id': COLLECTION })
+ 'X-Bin-Name': new Date()
+    .toLocaleString('en-GB', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    })
+    .replace(',', '')
+    .replace(/\//g, '-')
+    .replace(' ', '-'),
+  ...(COLLECTION && { 'X-Collection-Id': COLLECTION }),
+  'X-Bin-Meta': 'false',
 };
 
-/* ----------------------- Helper: fetchers ------------------------ */
+const etags   = new Map<string, string>();
+const aborts  = new Map<string, AbortController>();
 
-const fetchJSON = <T,>(url: string, init?: RequestInit) =>
-  fetch(url, { ...init, headers: baseHeaders })
-    .then(r => {
-      if (!r.ok) throw new Error(`${r.status}: ${url}`);
-      return r.json() as Promise<T>;
-    });
+const abortPrev = (p: string) => aborts.get(p)?.abort();
 
-const getRecord = <T,>(url: string) =>
-  fetchJSON<{ record: T }>(url).then(r => r.record);
+async function jsonBinGet<T>(path: string, since?: string): Promise<T> {
+  abortPrev(path);
+  const ctrl = new AbortController();
+  aborts.set(path, ctrl);
 
-/* -------------------- Username / Colour utils -------------------- */
+  const headers: HeadersInit = { ...baseHeaders };
+  if (since)
+    (headers as any)['X-JSON-Path'] = `messages[?(@.timestamp > "${since}")]`;
+  const etag = etags.get(path);
+  if (etag) (headers as any)['If-None-Match'] = etag;
 
-function getLatestUserResult(): CachedResult | null {
-  const keys = Object.keys(localStorage).filter(k => {
-    try {
-      const v = JSON.parse(localStorage.getItem(k) || '{}');
-      return v.mbtiType && v.primary4FType;
-    } catch { return false; }
-  }).sort();
-  if (!keys.length) return null;
-  return JSON.parse(localStorage.getItem(keys.at(-1)!)!);
+  const res = await fetch(`${JSONBIN_BASE}${path}?meta=false`, {
+    headers,
+    signal: ctrl.signal,
+  });
+  if (res.status === 304) return [] as unknown as T;
+  if (!res.ok) throw new Error(`${res.status}: ${path}`);
+
+  const tag = res.headers.get('ETag');
+  if (tag) etags.set(path, tag);
+
+  const j = await res.json()
+  return ('record' in j ? j.record : j) as T
 }
 
-function buildUserName(res?: CachedResult): string {
-  if (!res) return `user-${guid().slice(0, 5)}`;
-  const suffix = findClosestComplement(res.mbtiType, res.profile)
-                  ? `-${findClosestComplement(res.mbtiType, res.profile)!.type.slice(1,3)}`
-                  : '';
-  const pct = Math.round(res.accuracy ?? 0);
-  return `${res.mbtiType}${suffix} (${pct}%)`;
+async function jsonBinPut<T>(path: string, body: T) {
+  abortPrev(path);
+  const ctrl = new AbortController();
+  aborts.set(path, ctrl);
+  const res = await fetch(`${JSONBIN_BASE}${path}`, {
+    method: 'PUT',
+    headers: baseHeaders,
+    body: JSON.stringify(body),
+    signal: ctrl.signal,
+  });
+  if (!res.ok) throw new Error(`${res.status}: PUT ${path}`);
+  etags.delete(path);
 }
 
-function hashHue(seed: string, start: number, span: number) {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++)
-    hash = (hash << 5) - hash + seed.charCodeAt(i);
-  return start + (Math.abs(hash) % span);
-}
-function colorFor(mode: FourF, seed: string): string {
-  switch (mode) {
-    case 'Fight':  return `hsl(${hashHue(seed, 0, 12)} 70% 50%)`;
-    case 'Flight': return `hsl(${hashHue(seed, 110, 30)} 70% 50%)`;
-    case 'Freeze': return `hsl(${hashHue(seed, 200, 20)} 70% 50%)`;
-    case 'Fawn':   return `hsl(${hashHue(seed, 270, 30)} 70% 50%)`;
-    default:       return `hsl(${hashHue(seed, 0, 360)} 70% 50%)`;
-  }
+async function jsonBinPost<T>(body: T) {
+  const res = await fetch(`${JSONBIN_BASE}/b`, {
+    method: 'POST',
+    headers: baseHeaders,
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`${res.status}: POST`);
+  return (await res.json()).metadata.id as string;
 }
 
-/* -------------------------- Component ---------------------------- */
+/* ---------------- USERNAME / COLOR HELPERS ---------------------- */
+function latestCache(): CacheResult | null {
+  const key = Object.keys(localStorage)
+    .filter(k => {
+      try { return JSON.parse(localStorage.getItem(k) || '{}').mbtiType; }
+      catch { return false; }
+    })
+    .sort()
+    .at(-1);
+  return key ? JSON.parse(localStorage.getItem(key)!) : null;
+}
+function buildUserName(c?: CacheResult): string {
+  if (!c) return `user-${guid().slice(0, 5)}`;
+  const suffix = findClosestComplement(c.mbtiType, c.profile)
+    ? `-${findClosestComplement(c.mbtiType, c.profile)!.type.slice(1, 3)}`
+    : '';
+  const pct = Math.round(c.accuracy ?? 0);
+  return `${c.mbtiType}${suffix} (${pct}%)`;
+}
+const hue = (s: string, base: number, span: number) => {
+  let h = 0;
+  for (const ch of s) h = (h << 5) - h + ch.charCodeAt(0);
+  return base + (Math.abs(h) % span);
+};
+const modeColor = (m: FourF, id: string) =>
+  m === 'Fight'
+    ? `hsl(${hue(id, 0, 12)} 70% 50%)`
+    : m === 'Flight'
+    ? `hsl(${hue(id, 110, 30)} 70% 50%)`
+    : m === 'Freeze'
+    ? `hsl(${hue(id, 200, 20)} 70% 50%)`
+    : `hsl(${hue(id, 270, 30)} 70% 50%)`;
 
-export default function ChatContent() {
-  /* Identity (static) */
-  const userId   = useRef(guid());
-  const cacheRes = useMemo(() => getLatestUserResult(), []);
-  const userName = buildUserName(cacheRes || undefined);
-  const userMode: FourF = cacheRes?.primary4FType ?? 'Fight';
-  const userColor = colorFor(userMode, userId.current);
+/* ------------------------- QUERY CLIENT ------------------------- */
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { staleTime: 0, gcTime: 0, refetchOnWindowFocus: false },
+  },
+});
 
-  /* Responsive path */
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
+export default function ChatContentWrapper() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ChatContent />
+    </QueryClientProvider>
+  );
+}
+
+/* --------------------------- COMPONENT -------------------------- */
+function ChatContent() {
+  /* identity */
+  const userId    = useRef(guid());
+  const cache     = useMemo(latestCache, []);
+  const userName  = buildUserName(cache ?? undefined);
+  const userMode: FourF = cache?.primary4FType ?? 'Fight';
+  const userColor = modeColor(userMode, userId.current);
+
+  /* responsive */
+  const theme      = useTheme();
+  const mobile     = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
+  const itemHeight = mobile ? 120 : 100;
 
   /* UI state */
-  const [draft, setDraft] = useState('');
-  const [replyTo, setReplyTo] = useState<Message | null>(null);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [draft, setDraft]         = useState('');
+  const [reply, setReply]         = useState<Message | null>(null);
+  const [selTags, setSelTags]     = useState<Tag[]>([]);
+  const [loadingOlder, setOlder]  = useState(false);
+  const [meta, setMeta]           = useState<MetaBin | null>(null);
+  const [messages, setMessages]   = useState<Message[]>([]);
+  const [err, setErr]             = useState<string | null>(null);
 
-  const queryClient = useQueryClient();
+  /* refs */
+  const lastSeenRef = useRef<string | null>(null);
+  const idleRef     = useRef(Date.now());
+  const atBottomRef = useRef(true);
+  const prevBinRef  = useRef<string | null>(null);
+  const listRef     = useRef<VList>(null);
 
-  /* -------- Meta-bin query (tags + currentBinId) -------- */
-  const metaQ = useQuery({
+  const rq = useQueryClient();
+
+  /* polling cadence */
+  const [pollMs, setPoll] = useState(POLL_BUSY_MS);
+  useEffect(() => {
+    const vis = () =>
+      setPoll(
+        document.visibilityState === 'hidden'
+          ? POLL_PASSIVE
+          : atBottomRef.current
+          ? POLL_BUSY_MS
+          : POLL_PASSIVE
+      );
+    document.addEventListener('visibilitychange', vis);
+    return () => document.removeEventListener('visibilitychange', vis);
+  }, []);
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (Date.now() - idleRef.current > IDLE_MS) setPoll(POLL_IDLE);
+    }, 30_000);
+    return () => clearInterval(id);
+  }, []);
+
+  /* meta query into local state */
+  const metaQ = useQuery<MetaBin>({
     queryKey: ['meta'],
-    queryFn: () => getRecord<MetaBin>(`${JSONBIN_BASE}/b/${META_BIN}/latest`),
-    refetchInterval: REFRESH_MS
+    queryFn: () => jsonBinGet<MetaBin>(`/b/${META_BIN}/latest`),
+  });
+  useEffect(() => {
+    if (metaQ.data) setMeta(metaQ.data);
+  }, [metaQ.data]);
+
+  /* messages query */
+  const binId = meta?.currentBinId ?? null;
+  const {
+    data: newMsgs = [],
+    isSuccess: msgOk,
+    isError:   msgErr,
+    error:     msgErrObj,
+  } = useQuery<Message[]>({
+    queryKey: ['bin', binId, lastSeenRef.current],
+    enabled:  Boolean(binId),
+    refetchInterval: pollMs,
+    queryFn: async () => {
+      const data = await jsonBinGet<ChatBin | Message[]>(
+        `/b/${binId}/latest`,
+        lastSeenRef.current ?? undefined
+      );
+      if (!Array.isArray(data))
+        prevBinRef.current ??= data.prev ?? null;
+      return Array.isArray(data) ? data : data.messages ?? [];
+    },
   });
 
-  /* -------- Current bin messages query -------- */
-  const currentBinId = metaQ.data?.currentBinId;
+  /* process new messages */
+  useEffect(() => {
+    if (!msgOk || !newMsgs.length) return;
+    lastSeenRef.current = newMsgs[newMsgs.length - 1].timestamp;
+    setMessages(prev => [...prev, ...newMsgs]);
+  }, [msgOk, newMsgs]);
 
-  const messagesQ = useQuery({
-    enabled: !!currentBinId,
-    queryKey: ['bin', currentBinId],
-    queryFn: () => getRecord<ChatBin>(`${JSONBIN_BASE}/b/${currentBinId}/latest`)
-                 .then(b => b.messages),
-    refetchInterval: REFRESH_MS,
-    select: msgs => msgs.sort((a,b)=>new Date(a.timestamp).valueOf()-new Date(b.timestamp).valueOf())
-  });
+  /* error handling */
+  useEffect(() => {
+    if (msgErr && msgErrObj instanceof Error) setErr(msgErrObj.message); setTimeout(() => {setErr('')}, 5000);
+  }, [msgErr, msgErrObj]);
 
-  /* Derived */
-  const tags = metaQ.data?.tags ?? [];
-  const messages = messagesQ.data ?? [];
-  const loading  = metaQ.isPending || messagesQ.isPending;
+  /* load older bin on scroll-up */
+  const loadOlder = useCallback(
+    async (top: number) => {
+      if (loadingOlder || !prevBinRef.current) return;
+      try {
+        setOlder(true);
+        const older = await jsonBinGet<ChatBin>(
+          `/b/${prevBinRef.current}/latest`
+        );
+        prevBinRef.current = older.prev ?? null;
+        setMessages(p => [...older.messages, ...p]);
+        listRef.current?.scrollTo(top + older.messages.length * itemHeight);
+      } catch (e: any) {
+        setErr(e.message);
+      } finally {
+        setOlder(false);
+        setTimeout(() => {setErr('')}, 5000)
+      }
+    },
+    [loadingOlder, itemHeight]
+  );
 
-  /* -------- Send mutation -------- */
-  const sendMutation = useMutation({
+  /* send mutation */
+  const sendMut = useMutation({
     mutationFn: async (msg: Message) => {
-      const meta = await getRecord<MetaBin>(`${JSONBIN_BASE}/b/${META_BIN}/latest`);
-      let bin = await getRecord<ChatBin>(`${JSONBIN_BASE}/b/${meta.currentBinId}/latest`);
+      const metaLive = await jsonBinGet<MetaBin>(`/b/${META_BIN}/latest`);
+      const curPath  = `/b/${metaLive.currentBinId}`;
+      const curBin   = await jsonBinGet<ChatBin>(`${curPath}/latest`);
 
-      /* rollover? */
-      if (bin.messages.length >= MAX_PER_BIN) {
-        const newBinRes = await fetchJSON<{ metadata:{ id:string } }>(
-          `${JSONBIN_BASE}/b`, {
-            method: 'POST',
-            body: JSON.stringify({ messages:[msg], prev: meta.currentBinId }),
-            headers: baseHeaders
-          });
-        const newBinId = newBinRes.metadata.id;
-
-        /* update meta-bin */
-        await fetchJSON(`${JSONBIN_BASE}/b/${META_BIN}`, {
-          method: 'PUT',
-          body: JSON.stringify({ ...meta, currentBinId: newBinId }),
-          headers: baseHeaders
+      if (curBin.messages.length >= MAX_PER_BIN) {
+        const newId = await jsonBinPost<ChatBin>({
+          messages: [msg],
+          prev: metaLive.currentBinId,
         });
-        return { newBinId, msg };
+        await jsonBinPut(`/b/${META_BIN}`, {
+          ...metaLive,
+          currentBinId: newId,
+        });
+        return { newBinId: newId, msg };
       } else {
-        /* append in place */
-        bin.messages.push(msg);
-        await fetchJSON(`${JSONBIN_BASE}/b/${meta.currentBinId}`, {
-          method: 'PUT',
-          body: JSON.stringify(bin),
-          headers: baseHeaders
-        });
+        curBin.messages.push(msg);
+        await jsonBinPut(curPath, curBin);
         return { newBinId: null, msg };
       }
     },
-    onMutate: async (msg) => {
-      /* optimistic update cache */
-      await queryClient.cancelQueries({ queryKey:['bin', currentBinId]});
-      const prev = queryClient.getQueryData<Message[]>(['bin', currentBinId]);
-      queryClient.setQueryData<Message[]>(['bin', currentBinId], old => [...(old||[]), msg]);
+    onMutate: async msg => {
+      await rq.cancelQueries({ queryKey: ['bin', binId] });
+      const prev = rq.getQueryData<Message[]>(['bin', binId]);
+      rq.setQueryData<Message[]>(['bin', binId], old => [...(old ?? []), msg]);
       return { prev };
     },
-    onError: (_err, _msg, ctx) => {
-      if (ctx?.prev) queryClient.setQueryData(['bin', currentBinId], ctx.prev);
+    onError: (_e, _m, ctx) => {
+      if (ctx?.prev) rq.setQueryData(['bin', binId], ctx.prev);
     },
     onSuccess: ({ newBinId }) => {
-      /* invalidate queries so everyone refetches */
-      queryClient.invalidateQueries({ queryKey:['meta']});
-      if (newBinId) queryClient.invalidateQueries({ queryKey:['bin', newBinId]});
-    }
+      rq.invalidateQueries({ queryKey: ['meta'] });
+      if (newBinId)
+        rq.invalidateQueries({ queryKey: ['bin', newBinId] });
+    },
   });
 
-  /* -------- Helpers -------- */
-  const toggleTag = (t:Tag) =>
-    setSelectedTags(p=>p.includes(t)?p.filter(x=>x!==t):[...p,t]);
+  /* helpers */
+  const toggleTag = (t: Tag) =>
+    setSelTags(p => (p.includes(t) ? p.filter(x => x !== t) : [...p, t]));
+  const extract   = (t: string): Tag => (t.match(/#\w+/)?.[0] as Tag) || null;
+  const strip     = (t: string, tag: Tag) => (tag ? t.replace(tag, '').trim() : t.trim());
 
-  const extractTag = (t:string):Tag => (t.match(/#\w+/)?.[0] as Tag)??null;
-  const stripTag   = (t:string,tag:Tag)=>tag?t.replace(tag,'').trim():t.trim();
+  const send = useCallback(() => {
+    const txtTrim = draft.trim();
+    if (!txtTrim) return;
 
-  const handleSend = useCallback(() => {
-    if (!draft.trim()) return;
+    idleRef.current = Date.now();
 
-    /* ----- tag resolution ----- */
-    let tag:Tag = null;
-    let txt = draft;
-    if (replyTo?.tag) tag = replyTo.tag;
-    else if (selectedTags.length===1) tag = selectedTags[0];
-    else if (selectedTags.length>1) {
-      const inl = extractTag(txt);
-      if (!inl || !selectedTags.includes(inl)) return;
-      tag=inl; txt=stripTag(txt, tag);
+    let tag: Tag = null;
+    let txt      = txtTrim;
+
+    if (reply?.tag) tag = reply.tag;
+    else if (selTags.length === 1) tag = selTags[0];
+    else if (selTags.length > 1) {
+      const inl = extract(txt);
+      if (!inl || !selTags.includes(inl)) return;
+      tag = inl;
+      txt = strip(txt, inl);
     } else {
-      const inl = extractTag(txt);
-      if (inl){ tag=inl; txt=stripTag(txt,tag);}
+      const inl = extract(txt);
+      if (inl) {
+        tag = inl;
+        txt = strip(txt, inl);
+      }
     }
 
-    const msg:Message = {
+    const msg: Message = {
       id: guid(),
       userId: userId.current,
       userName,
@@ -247,110 +388,337 @@ export default function ChatContent() {
       text: txt,
       tag,
       timestamp: new Date().toISOString(),
-      parent: replyTo ?? undefined,
+      parent: reply ?? undefined,
     };
 
     setDraft('');
-    setReplyTo(null);
-    sendMutation.mutate(msg);
-  }, [draft, replyTo, selectedTags, userName, userColor]);
+    setReply(null);
+    sendMut.mutate(msg);
+  }, [draft, reply, selTags, userName, userColor, sendMut]);
 
-  /* -------- Shared parts of UI -------- */
-  const TagSelector = (
-    <Box sx={{ mb: 1, display:'flex', flexWrap:'wrap', gap: isMobile?0.5:1,
-               justifyContent: isMobile?'center':'start' }}>
-      {tags.map(tag=>(
-        <Chip key={tag} label={tag} size="small"
-          color={selectedTags.includes(tag)?'primary':'default'}
-          onClick={()=>toggleTag(tag)}/>
+  /* filtered + sorted list */
+  const filtered = useMemo(
+    () =>
+      messages
+        .filter(m => !selTags.length || selTags.includes(m.tag))
+        .sort(
+          (a, b) =>
+            new Date(a.timestamp).valueOf() -
+            new Date(b.timestamp).valueOf()
+        ),
+    [messages, selTags]
+  );
+
+  /* row renderer */
+  const Row = memo<{ index: number; style: React.CSSProperties }>(
+    ({ index, style }) => {
+      const m = filtered[index];
+      return (
+        <Box
+          style={style}
+          sx={{
+            px: mobile ? 0.5 : 1,
+            py: 0.75,
+            cursor: 'pointer',
+          }}
+          onClick={() => setReply(m)}
+        >
+          {m.parent && (
+            <Box
+              sx={{
+                bgcolor: 'action.hover',
+                p: 0.5,
+                mb: 0.5,
+                borderRadius: 1,
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{
+                  fontStyle: 'italic',
+                  fontSize: mobile ? '0.65rem' : undefined,
+                }}
+              >
+                {m.parent.text}
+              </Typography>
+            </Box>
+          )}
+          <Typography
+            variant="subtitle2"
+            sx={{
+              color: m.color,
+              fontWeight: 700,
+              fontSize: mobile ? '0.75rem' : undefined,
+            }}
+          >
+            {m.userName}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ fontSize: mobile ? '0.8rem' : undefined }}
+          >
+            {m.text}
+          </Typography>
+         <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        width="100%"
+        >
+    {/* Left-aligned timestamp */}
+    <Typography
+        variant="caption"
+        sx={{
+        opacity: 0.6,
+        fontSize: mobile ? '0.55rem' : '0.625rem',
+        }}
+    >
+        {new Date(m.timestamp)
+        .toLocaleString('en-GB', {
+            year: '2-digit',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        })
+        .replace(',', '')
+        .replace(/\//g, '-')
+        .replace(' ', '-')}
+    </Typography>
+     {/* Right-aligned Chip */}
+ {m.tag ? (
+    <Chip
+      label={m.tag}
+      size="small"
+      variant="outlined"
+      sx={{ mt: 0.5 }}
+    />
+    ) : (
+        <span /> // Empty spacer to maintain alignment if no tag
+    )}
+    </Box>
+
+        </Box>
+      );
+    }
+  );
+
+  /* scroll handler */
+  const onScroll = ({
+    scrollOffset,
+    scrollUpdateWasRequested,
+  }: ListOnScrollProps) => {
+    if (scrollUpdateWasRequested) return;
+    const list = listRef.current;
+    if (!list) return;
+
+    atBottomRef.current =
+      scrollOffset >=
+      list.props.itemSize * filtered.length -
+        parseInt(list.props.height.toString()) -
+        20;
+
+    setPoll(
+      document.visibilityState === 'hidden'
+        ? POLL_PASSIVE
+        : atBottomRef.current
+        ? POLL_BUSY_MS
+        : POLL_PASSIVE
+    );
+
+    if (scrollOffset < 60 && prevBinRef.current) loadOlder(scrollOffset);
+  };
+
+  /* autoscroll when at bottom */
+  useEffect(() => {
+    if (atBottomRef.current)
+      listRef.current?.scrollToItem(filtered.length - 1);
+  }, [filtered.length]);
+
+  /* -------- UI blocks -------- */
+  const TagBar = (
+    <Box
+      sx={{
+        mb: 1,
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: mobile ? 0.5 : 1,
+        justifyContent: mobile ? 'center' : 'start',
+      }}
+    >
+      {(meta?.tags ?? [
+        '#Fight',
+        '#Flight',
+        '#Freeze',
+        '#Fawn',
+        '#Ego',
+        '#Superego',
+      ]).map(t => (
+        <Chip
+          key={t}
+          label={t}
+          size="small"
+          color={selTags.includes(t) ? 'primary' : 'default'}
+          onClick={() => toggleTag(t)}
+        />
       ))}
     </Box>
   );
 
-  const MessageList = (
-    <Box sx={{
-      flexGrow:1, overflowY:'auto', border:'1px solid', borderColor:'divider',
-      borderRadius:1, p:1, display:'flex', flexDirection:'column-reverse'
-    }}>
-      <List sx={{display:'flex', flexDirection:'column-reverse'}}>
-        {messages
-          .filter(m => !selectedTags.length || selectedTags.includes(m.tag))
-          .map(m=>(
-            <ListItem key={m.id} sx={{display:'block', py:isMobile?0.25:0.5}}
-              onClick={()=>setReplyTo(m)}>
-              {m.parent && (
-                <Box sx={{bgcolor:'action.hover',p:0.5,mb:0.5,borderRadius:1}}>
-                  <Typography variant="caption" sx={{fontStyle:'italic', fontSize:isMobile?'0.65rem':undefined}}>
-                    {m.parent.text}
-                  </Typography>
-                </Box>
-              )}
-              <Typography variant="subtitle2" sx={{
-                color:m.color, fontWeight:700, fontSize:isMobile?'0.75rem':undefined
-              }}>{m.userName}</Typography>
-              <Typography variant="body2" sx={{fontSize:isMobile?'0.8rem':undefined}}>
-                {m.text}
-              </Typography>
-              {m.tag && <Chip label={m.tag} size="small" sx={{mt:0.5}} variant="outlined"/>}
-              <Typography variant="caption" sx={{
-                fontSize:isMobile?'0.55rem':'0.625rem', opacity:0.6
-              }}>
-                {new Date(m.timestamp).toLocaleString('en-GB',{
-                  year:'2-digit',month:'2-digit',day:'2-digit',
-                  hour:'2-digit',minute:'2-digit',hour12:false
-                }).replace(',','').replace(/\//g,'-').replace(' ','-')}
-              </Typography>
-            </ListItem>
-          ))}
-      </List>
-      {(loading||sendMutation.isPending) && (
-        <Box sx={{display:'flex',justifyContent:'center',py:1}}>
-          <CircularProgress size={20}/>
+  const MsgList = (
+    <Box
+      sx={{
+        flexGrow: 1,
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 1,
+        position: 'relative',
+      }}
+    >
+      {(!meta || messages.length === 0) && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%,-50%)',
+            zIndex: 1,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
+
+      {loadingOlder && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 4,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1,
+          }}
+        >
+          <CircularProgress size={16} />
+        </Box>
+      )}
+
+      <AutoSizer>
+        {({ height, width }: {height: any, width: any}) => (
+          <VList
+            ref={listRef}
+            height={height}
+            width={width}
+            itemCount={filtered.length}
+            itemSize={itemHeight}
+            onScroll={onScroll}
+          >
+            {Row as any}
+          </VList>
+        )}
+      </AutoSizer>
+
+      {sendMut.isPending && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
+          <CircularProgress size={20} />
         </Box>
       )}
     </Box>
   );
 
-  const ReplyBanner = replyTo && (
-    <Box sx={{
-      mt:1, mb:0.5, p:0.5, borderLeft:'4px solid', borderColor:'primary.main',
-      bgcolor:'action.hover', borderRadius:1
-    }}>
-      <Typography variant="caption" sx={{fontSize:isMobile?'0.7rem':undefined}}>
-        Replying to: {replyTo.text}{' '}
-        <Box component="span"
-          sx={{ml:1,cursor:'pointer',textDecoration:'underline'}}
-          onClick={()=>setReplyTo(null)}
-        >cancel</Box>
-      </Typography>
-    </Box>
-  );
+  const ReplyBar =
+    reply && (
+      <Box
+        sx={{
+          mt: 1,
+          mb: 0.5,
+          p: 0.5,
+          borderLeft: '4px solid',
+          borderColor: 'primary.main',
+          bgcolor: 'action.hover',
+          borderRadius: 1,
+        }}
+      >
+        <Typography
+          variant="caption"
+          sx={{ fontSize: mobile ? '0.7rem' : undefined }}
+        >
+          Replying to: {reply.text}{' '}
+          <Box
+            component="span"
+            sx={{
+              ml: 1,
+              cursor: 'pointer',
+              textDecoration: 'underline',
+            }}
+            onClick={() => setReply(null)}
+          >
+            cancel
+          </Box>
+        </Typography>
+      </Box>
+    );
 
   const Composer = (
-    <Box sx={{mt:1, display:'flex', flexDirection:isMobile?'column':'row', gap:1}}>
-      <TextField fullWidth size="small" placeholder="Type your message…"
-        value={draft} onChange={e=>setDraft(e.target.value)}
-        onKeyDown={e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();}}}/>
-      <IconButton onClick={handleSend} color="primary"
-        sx={{alignSelf:isMobile?'flex-end':'center'}}>
-        <SendIcon/>
+    <Box
+      sx={{
+        mt: 1,
+        display: 'flex',
+        flexDirection: mobile ? 'column' : 'row',
+        gap: 1,
+      }}
+    >
+      <TextField
+        fullWidth
+        size="small"
+        placeholder="Type your message…"
+        value={draft}
+        onChange={e => setDraft(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            send();
+          }
+        }}
+      />
+      <IconButton
+        color="primary"
+        onClick={send}
+        disabled={sendMut.isPending}
+        sx={{ alignSelf: mobile ? 'flex-end' : 'center' }}
+      >
+        <SendIcon />
       </IconButton>
     </Box>
   );
 
-  /* -------- Render -------- */
-  return isMobile ? (
-    <Box sx={{p:1, display:'flex', flexDirection:'column', height:'100vh'}}>
-      {TagSelector}
-      {MessageList}
-      {ReplyBanner}
-      {Composer}
-    </Box>
-  ) : (
-    <Box sx={{height:'100%', display:'flex', flexDirection:'column'}}>
-      {TagSelector}
-      {MessageList}
-      {ReplyBanner}
+  const Err =
+    err && (
+      <Typography
+        color="error"
+        align="center"
+        sx={{ my: 1, fontSize: mobile ? '0.75rem' : '0.875rem' }}
+      >
+        {err}
+      </Typography>
+    );
+
+  /* render */
+  return (
+    <Box
+      sx={{
+        p: mobile ? 1 : 2,
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        boxSizing: 'border-box',
+      }}
+    >
+      {TagBar}
+      {Err}
+      {MsgList}
+      {ReplyBar}
       {Composer}
     </Box>
   );

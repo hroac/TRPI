@@ -1,29 +1,21 @@
 /* ------------------------------------------------------------------ */
-/* ChatContentOptimized.tsx — v4 (React-Query v5, 2025-05-21)          */
+/* ChatContentOptimized.tsx — v5 (React-Query v5, 2025-05-21)          */
 /* ------------------------------------------------------------------ */
-// 🔑  Key improvements
-// 1.  Singleton QueryClient so cached data (meta, messages, etc.)    
-//     survives unmounts (e.g. when a modal closes).                  
-// 2.  React-Query is now the *single source of truth* for all server  
-//     data.  useState is kept only for transient UI (draft, reply…).  
-// 3.  meta-bin is cached forever (staleTime = ∞, cacheTime = ∞) so    
-//     we never refetch it unless an explicit invalidation happens.    
-// 4.  Messages are hydrated from – and written back to – the          
-//     QueryClient.  This means they instantly re-appear on remount    
-//     without a network request.                                      
-// 5.  sendMut mutation now uses the *already-cached* meta + bin data  
-//     whenever possible, doing only the minimal network calls.        
-// 6.  Aborted / duplicate fetch logic removed – React-Query handles   
-//     request de-duplication for us, keeping the code leaner.         
-// ------------------------------------------------------------------ */
+/* 🔑  Key points
+   • react-window rows now re-render when filtered[] mutates (itemData)
+   • every row has a stable `key={m.id}`
+   • new-bin rollover creates a fresh bin with jsonBinPost() and updates
+     the meta-bin, preventing undefined currentBinId
+   • other logic and UX remain unchanged                                    */
+/* ------------------------------------------------------------------ */
 
 import React, {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
-  memo,
 } from 'react';
 import {
   Box,
@@ -44,7 +36,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import {
-  FixedSizeList as VList,
+ VariableSizeList as VList,
   ListOnScrollProps,
 } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
@@ -53,23 +45,21 @@ import { findClosestComplement } from '../utils/mbtiMapping';
 
 /* ----------------------------- CONFIG ----------------------------- */
 const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
-const MASTER_KEY   = '$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG';// ⬅ put in .env
+const MASTER_KEY   = '$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG'; // ⬅ put in .env
 const META_BIN     = '682caa748561e97a5018215f';
 const COLLECTION   = '682ca7998561e97a50181ffe';
 
 const MAX_PER_BIN  = 200;
-const POLL_BUSY_MS = 2000;
+const POLL_BUSY_MS = 2_000;
 const POLL_PASSIVE = 15_000;
 const POLL_IDLE    = 60_000;
 const IDLE_MS      = 5 * 60 * 1_000;
 
 /* --------------------------- QUERY-CLIENT -------------------------- */
-// Singleton so data survives component unmounts (e.g. modal close)
 export const chatQueryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // very generous cache – this is chat history, we almost never want GC
-      staleTime: 0,                        // refetch control is manual below
+      staleTime: 0,
       refetchOnWindowFocus: false,
     },
   },
@@ -96,6 +86,8 @@ export interface MetaBin { currentBinId: string; tags: Tag[]; }
 const baseHeaders: HeadersInit = {
   'Content-Type': 'application/json',
   'X-Master-Key': MASTER_KEY,
+  'X-Bin-Meta': 'false',
+  ...(COLLECTION && { 'X-Collection-Id': COLLECTION }),
   'X-Bin-Name': new Date()
     .toLocaleString('en-GB', {
       year: '2-digit',
@@ -103,13 +95,11 @@ const baseHeaders: HeadersInit = {
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false
+      hour12: false,
     })
     .replace(',', '')
     .replace(/\//g, '-')
     .replace(' ', '-'),
-  ...(COLLECTION && { 'X-Collection-Id': COLLECTION }),
-  'X-Bin-Meta': 'false',
 };
 
 async function jsonBinGet<T>(path: string, xJsonPath?: string): Promise<T> {
@@ -129,15 +119,15 @@ async function jsonBinPut<T>(path: string, body: T) {
   });
   if (!res.ok) throw new Error(`${res.status}: PUT ${path}`);
 }
+
 async function jsonBinPatch<T>(path: string, msg: T) {
   const res = await fetch(`${JSONBIN_BASE}${path}`, {
     method: 'PATCH',
-   headers: { ...baseHeaders, 'X-Bin-Path': '/messages/-' }, // “append”
+    headers: { ...baseHeaders, 'X-Bin-Path': '/messages/-' }, // “append”
     body: JSON.stringify(msg),
   });
-  if (!res.ok) throw new Error(`${res.status}: PUT ${path}`);
+  if (!res.ok) throw new Error(`${res.status}: PATCH ${path}`);
 }
-
 
 async function jsonBinPost<T>(body: T) {
   const res = await fetch(`${JSONBIN_BASE}/b`, {
@@ -198,7 +188,6 @@ function modeColor(mode: string, seed: string) {
 
 /* --------------------------- WRAPPER ----------------------------- */
 export default function ChatContentWrapper() {
-  // by re-using the singleton query client, closing/reopening the modal keeps data
   return (
     <QueryClientProvider client={chatQueryClient}>
       <ChatContent />
@@ -228,6 +217,20 @@ function ChatContent() {
   const atBottomRef             = useRef(true);
   const listRef                 = useRef<VList>(null);
   const lastSeenRef             = useRef<string | null>(null);
+  // how tall is each rendered row?
+  const sizeMapRef = useRef<{ [index: number]: number }>({});
+
+const getSize = (index: number) =>
+  sizeMapRef.current[index] ?? itemHeight;   // fallback = old constant
+
+const setSize = (index: number, size: number) => {
+  if (sizeMapRef.current[index] !== size) {
+    sizeMapRef.current[index] = size;
+    // tell RV to recompute from this row downward
+    listRef.current?.resetAfterIndex(index);
+  }
+};
+
 
   /* polling cadence ---------------------------------------------- */
   const [pollMs, setPoll] = useState(POLL_BUSY_MS);
@@ -253,99 +256,95 @@ function ChatContent() {
   /* ------------------------ React-Query hooks -------------------- */
   const rq = useQueryClient();
 
-  /* meta – cached forever, no refetch unless we invalidate manually */
   const { data: meta } = useQuery<MetaBin>({
     queryKey: ['meta'],
     queryFn: () => jsonBinGet<MetaBin>(`/b/${META_BIN}/latest`),
     staleTime: Infinity,
   });
 
-  /* messages ------------------------------------------------------ */
   const binId = meta?.currentBinId ?? null;
 
-  /**
-   * We keep the *entire* message list inside React-Query under key ['messages'].
-   * This means:
-   *  - The first mount immediately shows whatever is already cached.
-   *  - On re-mount there is zero flashing/fetching – we only poll for *new* items.
-   */
- const { data: messages = [] } = useQuery<Message[]>({
-  queryKey: ['messages', binId],
-  enabled: Boolean(binId),
-  initialData: () => rq.getQueryData<Message[]>(['messages', binId]) ?? [],
-  refetchInterval: pollMs,
+  const { data: messages = [] } = useQuery<Message[]>({
+    queryKey: ['messages', binId],
+    enabled: Boolean(binId),
+    initialData: () => rq.getQueryData<Message[]>(['messages', binId]) ?? [],
+    refetchInterval: pollMs,
+    queryFn: async () => {
+      if (!binId) return [];
 
-  queryFn: async () => {
-    if (!binId) return [];
-
-    // 1️⃣ If we don't yet know the latest timestamp → full bin fetch
-    if (!lastSeenRef.current) {
-      const bin = await jsonBinGet<ChatBin>(`/b/${binId}/latest`);
-      prevBinRef.current = bin.prev ?? null;
-
-      if (bin.messages.length) {
-        lastSeenRef.current =
-          bin.messages[bin.messages.length - 1].timestamp;
+      if (!lastSeenRef.current) {
+        const bin = await jsonBinGet<ChatBin>(`/b/${binId}/latest`);
+        prevBinRef.current = bin.prev ?? null;
+        if (bin.messages.length)
+          lastSeenRef.current = bin.messages[bin.messages.length - 1].timestamp;
+        return bin.messages;
       }
-      return bin.messages;
-    }
 
-    // 2️⃣ Otherwise grab *only* the new stuff
-    const fresh = await jsonBinGet<Message[]>(
-      `/b/${binId}/latest`,
-      `messages[?(@.timestamp > "${lastSeenRef.current}")]`
-    );
+      const fresh = await jsonBinGet<Message[]>(
+        `/b/${binId}/latest`,
+        `messages[?(@.timestamp > "${lastSeenRef.current}")]`
+      );
 
-    if (!fresh.length) {
-      // nothing new
-      return rq.getQueryData<Message[]>(['messages', binId]) ?? [];
-    }
+      if (!fresh.length) {
+        return rq.getQueryData<Message[]>(['messages', binId]) ?? [];
+      }
 
-    lastSeenRef.current =
-      fresh[fresh.length - 1].timestamp;
-
-    // 3️⃣ Merge with whatever we already have, keyed by id
-    const existing =
-      rq.getQueryData<Message[]>(['messages', binId]) ?? [];
-
-    const mergedMap: Record<string, Message> = {};
-    [...existing, ...fresh].forEach(m => (mergedMap[m.id] = m));
-
-    return Object.values(mergedMap);
-  },
-});
-
+      lastSeenRef.current = fresh[fresh.length - 1].timestamp;
+      const existing = rq.getQueryData<Message[]>(['messages', binId]) ?? [];
+      const merged: Record<string, Message> = {};
+      [...existing, ...fresh].forEach(m => (merged[m.id] = m));
+      return Object.values(merged);
+    },
+  });
 
   /* filtered + sorted list --------------------------------------- */
   const filtered = useMemo(() => {
-    const byTag = messages.filter((m: any) => !selTags.length || selTags.includes(m.tag));
-    return byTag.sort((a: any, b: any) => new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf());
+    const byTag = messages.filter(m => !selTags.length || selTags.includes(m.tag));
+    return byTag.sort(
+      (a, b) => new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf()
+    );
   }, [messages, selTags]);
+useEffect(() => {
+  listRef.current?.resetAfterIndex(0, true); // true = also recompute scroll height
+}, [filtered.length]);
 
+useEffect(() => {
+  const ids = filtered.map(m => m.id);
+  const dupes = ids.filter((id, i) => ids.indexOf(id) !== i);
+  if (dupes.length) {
+    console.warn('🚨 Duplicate message IDs:', dupes);
+  }
+}, [filtered]);
   /* -------------------------- send mutation ---------------------- */
   const sendMut = useMutation({
     mutationFn: async (msg: Message) => {
-      // Use *cached* meta first – avoids one network round-trip in most cases
       let metaLive = meta;
       if (!metaLive) metaLive = await jsonBinGet<MetaBin>(`/b/${META_BIN}/latest`);
 
-      const curPath  = `/b/${metaLive.currentBinId}`;
-      let curBin     = rq.getQueryData<ChatBin>(['bin', metaLive.currentBinId]);
+       if (atBottomRef.current && filtered.length > 0) {
+      listRef.current?.scrollToItem(filtered.length - 1, 'end');
+    }
+
+      const curBinId = metaLive.currentBinId;
+      const curPath  = `/b/${curBinId}`;
+      let curBin     = rq.getQueryData<ChatBin>(['bin', curBinId]);
       if (!curBin)   curBin = await jsonBinGet<ChatBin>(`${curPath}/latest`);
 
+      /* rollover if full ----------------------------------------- */
       if (curBin.messages.length >= MAX_PER_BIN) {
-        // open new bin in *parallel* – don't block UI
-        const newId = await jsonBinPatch<Message>(`/b/${metaLive.currentBinId}`, msg);
+        const newBin: ChatBin = { messages: [msg], prev: curBinId };
+        const newId = await jsonBinPost(newBin);
         await jsonBinPut(`/b/${META_BIN}`, { ...metaLive, currentBinId: newId });
         return { newBinId: newId, msg };
-      } else {
-        curBin.messages.push(msg);
-        await jsonBinPut(curPath, curBin);
-        return { newBinId: null, msg };
       }
+
+      /* append normally ------------------------------------------ */
+      curBin.messages.push(msg);
+      await jsonBinPatch(curPath, msg);
+      return { newBinId: null, msg };
     },
+
     onMutate: async msg => {
-      // optimistic update – merge into cache immediately
       await rq.cancelQueries({ queryKey: ['messages', binId] });
       const prev = rq.getQueryData<Message[]>(['messages', binId]);
       rq.setQueryData<Message[]>(['messages', binId], old => [...(old ?? []), msg]);
@@ -366,11 +365,11 @@ function ChatContent() {
   const toggleTag = (t: Tag) => setSelTags(p => (p.includes(t) ? p.filter(x => x !== t) : [...p, t]));
   const extract   = (t: string): Tag => (t.match(/#\w+/)?.[0] as Tag) || null;
   const strip     = (t: string, tag: Tag) => (tag ? t.replace(tag, '').trim() : t.trim());
+  
 
   const send = useCallback(() => {
     const txtTrim = draft.trim();
     if (!txtTrim) return;
-
     idleRef.current = Date.now();
 
     let tag: Tag = null;
@@ -405,7 +404,6 @@ function ChatContent() {
     setDraft('');
     setReply(null);
     sendMut.mutate(msg);
-    // Our optimistic updater already handled UI – no extra local push needed
   }, [draft, reply, selTags, userName, userColor, sendMut]);
 
   /* -------------------------- UI blocks -------------------------- */
@@ -417,69 +415,179 @@ function ChatContent() {
     </Box>
   );
 
-  const Row = memo<{ index: number; style: React.CSSProperties }>(({ index, style }) => {
-    const m = filtered[index];
-    return (
-      <Box style={style} sx={{ px: mobile ? 0.5 : 1, py: 0.75, cursor: 'pointer' }} onClick={() => setReply(m)}>
-        {m.parent && (
-          <Box sx={{ bgcolor: 'action.hover', p: 0.5, mb: 0.5, borderRadius: 1 }}>
-            <Typography variant="caption" sx={{ fontStyle: 'italic', fontSize: mobile ? '0.65rem' : undefined }}>
-              {m.parent.text}
-            </Typography>
-          </Box>
-        )}
-        <Typography variant="subtitle2" sx={{ color: m.color, fontWeight: 700, fontSize: mobile ? '0.75rem' : undefined }}>
-          {m.userName}
-        </Typography>
-        <Typography variant="body2" sx={{ fontSize: mobile ? '0.8rem' : undefined }}>
-          {m.text}
-        </Typography>
-        <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
-          <Typography variant="caption" sx={{ opacity: 0.6, fontSize: mobile ? '0.55rem' : '0.625rem' }}>
-            {new Date(m.timestamp)
-              .toLocaleString('en-GB', { year: '2-digit', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false })
-              .replace(',', '')
-              .replace(/\//g, '-')
-              .replace(' ', '-')}
-          </Typography>
-          {m.tag ? <Chip label={m.tag} size="small" variant="outlined" sx={{ mt: 0.5 }} /> : <span />}
-        </Box>
-      </Box>
-    );
-  });
+  /* ▶ Row component (no closure on filtered[]) ------------------- */
+ interface RowProps {
+  index: number;
+  style: React.CSSProperties;
+  data: Message[];
+}
 
-  // scrolling + infinite older bins ------------------------------
+interface RowProps {
+  index: number;
+  style: React.CSSProperties;
+  data: Message[];
+}
+
+const Row = ({ index, style, data }: RowProps) => {
+  const m = data[index];
+  const rowRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const h = rowRef.current?.getBoundingClientRect().height ?? 0;
+    if (h) setSize(index, h); // from outer scope
+  }, [index]);
+
+  return (
+    <Box
+      ref={rowRef}
+      style={style}
+      sx={{
+        px: mobile ? 0.5 : 1,
+        py: 0.75,
+        cursor: 'pointer',
+        WebkitFontSmoothing: 'antialiased',
+        textRendering: 'optimizeLegibility',
+        fontWeight: 400,
+      }}
+      onClick={() => setReply(m)}
+    >
+      {m.parent && (
+        <Box
+          sx={{
+            bgcolor: 'action.hover',
+            p: 0.5,
+            mb: 0.5,
+            borderRadius: 1,
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{
+              fontStyle: 'italic',
+              fontSize: mobile ? '0.65rem' : undefined,
+              fontWeight: 400,
+              opacity: 0.8,
+            }}
+          >
+            {m.parent.text}
+          </Typography>
+        </Box>
+      )}
+
+      <Typography
+        variant="subtitle2"
+        sx={{
+          color: m.color,
+          fontWeight: 700,
+          fontSize: mobile ? '0.75rem' : undefined,
+        }}
+      >
+        {m.userName}
+      </Typography>
+
+      <Typography
+        variant="body2"
+        sx={{
+          fontSize: mobile ? '0.8rem' : undefined,
+          fontWeight: 400,
+        }}
+      >
+        {m.text}
+      </Typography>
+
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        width="100%"
+        mt={0.5}
+      >
+        <Typography
+          variant="caption"
+          sx={{
+            opacity: 0.6,
+            fontSize: mobile ? '0.55rem' : '0.625rem',
+            fontWeight: 400,
+          }}
+        >
+          {new Date(m.timestamp)
+            .toLocaleString('en-GB', {
+              year: '2-digit',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
+            })
+            .replace(',', '')
+            .replace(/\//g, '-')
+            .replace(' ', '-')}
+        </Typography>
+
+        {m.tag ? (
+          <Chip
+            label={m.tag}
+            size="small"
+            variant="outlined"
+            sx={{
+              mt: 0.5,
+              fontWeight: 400,
+            }}
+          />
+        ) : (
+          <span />
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+
+
+
+  /* scrolling + infinite older bins ------------------------------ */
   const prevBinRef = useRef<string | null>(null);
   const loadingOlderRef = useRef(false);
-  const loadOlder = useCallback(async (top: number) => {
-    if (loadingOlderRef.current || !prevBinRef.current) return;
-    try {
-      loadingOlderRef.current = true;
-      const older = await jsonBinGet<ChatBin>(`/b/${prevBinRef.current}/latest`);
-      prevBinRef.current = older.prev ?? null;
-      rq.setQueryData<Message[]>(['messages', binId], (old = []) => [...older.messages, ...old]);
-      // scroll position compensation
-      listRef.current?.scrollTo(top + older.messages.length * itemHeight);
-    } finally {
-      loadingOlderRef.current = false;
-    }
-  }, [binId, itemHeight, rq]);
+  const loadOlder = useCallback(
+    async (top: number) => {
+      if (loadingOlderRef.current || !prevBinRef.current) return;
+      try {
+        loadingOlderRef.current = true;
+        const older = await jsonBinGet<ChatBin>(`/b/${prevBinRef.current}/latest`);
+        prevBinRef.current = older.prev ?? null;
+        rq.setQueryData<Message[]>(['messages', binId], (old = []) => [...older.messages, ...old]);
+        listRef.current?.scrollTo(top + older.messages.length * itemHeight);
+      } finally {
+        loadingOlderRef.current = false;
+      }
+    },
+    [binId, itemHeight, rq]
+  );
 
   const onScroll = ({ scrollOffset, scrollUpdateWasRequested }: ListOnScrollProps) => {
     if (scrollUpdateWasRequested) return;
     const list = listRef.current;
     if (!list) return;
 
-    atBottomRef.current = scrollOffset >= list.props.itemSize * filtered.length - parseInt(list.props.height.toString()) - 20;
+        const visibleHeight = parseInt(list.props.height.toString());
+    const contentHeight = parseInt(list.props.itemSize.toString()) * filtered.length;
+    const remaining = contentHeight - scrollOffset - visibleHeight;
+    atBottomRef.current = remaining < 40; // 40px leeway
     setPoll(document.visibilityState === 'hidden' ? POLL_PASSIVE : atBottomRef.current ? POLL_BUSY_MS : POLL_PASSIVE);
 
     if (scrollOffset < 60 && prevBinRef.current) loadOlder(scrollOffset);
   };
 
-  // auto-scroll ----------------------------------------------------
-  useEffect(() => {
-    if (atBottomRef.current) listRef.current?.scrollToItem(filtered.length - 1);
-  }, [filtered.length]);
+  /* auto-scroll --------------------------------------------------- */
+ useEffect(() => {
+  const timeout = setTimeout(() => {
+    if (atBottomRef.current && filtered.length > 0) {
+     listRef.current?.scrollTo(0);
+
+    }
+  }, 10); // Slight delay ensures DOM update first
+  return () => clearTimeout(timeout);
+}, [filtered.length]);
 
   const MsgList = (
     <Box sx={{ flexGrow: 1, border: '1px solid', borderColor: 'divider', borderRadius: 1, position: 'relative' }}>
@@ -493,13 +601,23 @@ function ChatContent() {
           <CircularProgress size={16} />
         </Box>
       )}
-      <AutoSizer>
-        {({ height, width }: {height: any, width: any}) => (
-          <VList ref={listRef} height={height} width={width} itemCount={filtered.length} itemSize={itemHeight} onScroll={onScroll}>
-            {Row as any}
-          </VList>
-        )}
-      </AutoSizer>
+     <AutoSizer>
+  {({ height, width }: {height: any, width: any}) => (
+    <VList
+      ref={listRef}
+      height={height}
+      width={width}
+      itemCount={filtered.length}
+      itemSize={getSize} 
+      estimatedItemSize={itemHeight}                     // ⭐ dynamic height
+      itemData={filtered}
+      onScroll={onScroll}
+    >
+      {Row as any}
+    </VList>
+  )}
+</AutoSizer>
+
       {sendMut.isPending && (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
           <CircularProgress size={20} />

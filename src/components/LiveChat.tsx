@@ -299,12 +299,15 @@ const setSize = (index: number, size: number) => {
   });
 
   /* filtered + sorted list --------------------------------------- */
+  console.log(messages)
+  console.log(selTags)
   const filtered = useMemo(() => {
     const byTag = messages.filter(m => !selTags.length || selTags.includes(m.tag));
     return byTag.sort(
       (a, b) => new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf()
     );
   }, [messages, selTags]);
+  console.log(filtered)
 useEffect(() => {
   listRef.current?.resetAfterIndex(0, true); // true = also recompute scroll height
 }, [filtered.length]);

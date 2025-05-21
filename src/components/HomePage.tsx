@@ -193,7 +193,7 @@ const HeroSection = () => {
           slidesToShow: 3,
           speed: 500,
           autoplay: true,
-          autoplaySpeed: 2000,
+          autoplaySpeed: 5000,
         }}
       />
     </Box>

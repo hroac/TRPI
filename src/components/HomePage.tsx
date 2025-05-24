@@ -21,6 +21,7 @@ import JsonBinApi from '../utils/jsonBin';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 import Stories from './Stories';
+import LiveChat from './LiveChat';
 
 interface Review {
   id: string;
@@ -234,6 +235,29 @@ const TestResultsCarousel = ({ slides }: { slides: Slide[] }) => {
     </Box>
   );
 };
+const ChatSection = () => {
+  return (
+    <Box sx={{ my: 8 }}>
+      <Card 
+        elevation={3} 
+        sx={{ 
+          maxWidth: 800, 
+          mx: 'auto', 
+          p: 2, 
+          background: '#fff',
+          minHeight: { xs: 400, sm: 450 },  // <-- set a comfortable minimum height
+          display: 'flex', 
+          flexDirection: 'column',
+          justifyContent: 'stretch'
+        }}
+      >
+        <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <LiveChat />
+        </CardContent>
+      </Card>
+    </Box>
+  )
+}
 
 // --------- REVIEWS SECTION ---------
 const ReviewsSection = ({ reviews }: { reviews: Review[] }) => (
@@ -510,6 +534,7 @@ const Home = () => {
     <Container sx={{ mt: '128px' }}>
       <HeroSection />
       <TypeMatrix />
+      <ChatSection/>
       <ReviewsSection reviews={Object.values(reviews)} />
       <TestResultsCarousel slides={Object.values(slides)} />
       <Stories />

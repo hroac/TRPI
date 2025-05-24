@@ -667,11 +667,20 @@ const Row = ({ index, style, data }: RowProps) => {
 
   /* render -------------------------------------------------------- */
   return (
-    <Box sx={{ p: mobile ? 1 : 2, display: 'flex', flexDirection: 'column', height: '100%', boxSizing: 'border-box' }}>
-      {TagBar}
-      {MsgList}
-      {ReplyBar}
-      {Composer}
-    </Box>
+<Box
+  sx={{
+    p: mobile ? 1 : 2,
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: 350,        // <--- or whatever you like
+    boxSizing: 'border-box'
+  }}
+>
+  {TagBar}
+  {MsgList}
+  {ReplyBar}
+  {Composer}
+</Box>
   );
 }

@@ -40,6 +40,10 @@ export interface BigFiveScores {
 export interface Profile {
   cognitiveProfile: CognitiveProfile,
   assessment: any,
+  name?: string,
+  company?: string,
+  job?: string,
+  jobTitle?: string,
   scores: BigFiveScores,
 }
 
@@ -95,6 +99,12 @@ function buildPrompt(profile: Profile, level: DetailLevel, amount: number): stri
 
 **Assessment Narrative:**  
 ${profile.assessment}
+
+${profile.name ? `**Personal Details:**` :''}
+${profile.name}
+${profile.company}
+${profile.job}
+${profile.jobTitle}
 
 **Big Five Scores**  
 • **Openness:** ${scores.openness.toFixed(2)}  
@@ -174,6 +184,7 @@ const rules = `
 - Use clinical-yet-warm tone, be certain of the functions used for the type given dont question it reference the assessment again if needed.
 DONT HALLUCINATE. DOUBLE CHECK YOURSELF AGAINST THE RESULTS.
 -Make sure everything is in line with TRPI check the Full 64-State Grid and make sure the correct functions are referenced
+if a company is referenced in the personal details call the report TRPI Client Assessment - *company*
 you have ${amount} tokens to write your report.
 `;
 

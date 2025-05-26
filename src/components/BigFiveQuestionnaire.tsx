@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Grid,
   IconButton,
@@ -19,7 +19,7 @@ import {
   Tooltip,
   Stack
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   determinePrimary4FType,
   matchMBTI,
@@ -45,6 +45,9 @@ import { typesData } from '../utils/typesData';
 import { Helmet } from 'react-helmet';
 import PremiumModal from './PremiumModal';
 import { statements as fixedStatements, allStatements } from '../utils/mbtiMapping';
+import MetaBin from '../utils/metabin';
+import SlugModal from './slugModal';
+
 
 /** ------------------------------------------------------------------
  *  Utility helpers
@@ -150,11 +153,16 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   onComplete,
 }) => {
   const navigate = useNavigate();
+  const { company: slug } = useParams<{ company?: string }>();
+  const [mapping, setMapping]     = useState<string | null>(null);
+  const [loading, setLoading]     = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const resultsRef = useRef<any>(null);
   const initialStatements = () => {
     const statements = localStorage.getItem('statements')
     const parsed = statements && JSON.parse(statements)
     if(Array.isArray(parsed)) {
-    console.log(statements, parsed, (statements||[]).length)
+    //console.log(statements, parsed, (statements||[]).length)
       return parsed
     }
 console.log('new statements')
@@ -200,6 +208,29 @@ console.log('new statements')
     statements.slice(19, 23), // Stage 5
     statements.slice(23, 26), // Stage 6
   ];
+
+   // 1) On mount, load slug→collection map (if slug exists), otherwise skip
+  useEffect(() => {
+    if (!slug) {
+      setLoading(false);
+      return;
+    }
+    (async () => {
+      try {
+        const all = await MetaBin.getAll();
+        if (all[slug]) {
+          setMapping(all[slug]);
+          console.log('set slug')
+        } else {
+          console.warn(`Slug "${slug}" not found; proceeding without modal.`);
+        }
+      } catch (err) {
+        console.error('Error fetching slug map:', err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [slug]);
 
 
   const unlock = () => {
@@ -256,7 +287,7 @@ console.log('new statements')
   const setRandomly = () => {
     const stageResponses = stages.slice(lastStage, stages.length).flat();
 
-    console.log(stageResponses)
+    //consolelog(stageResponses)
     const randomResponses = stageResponses.reduce((acc, s) => {
       if (!acc[s.trait]) acc[s.trait] = responses[s.trait].slice(0, lastStage ? lastStage - 1 : lastStage);
       acc[s.trait].push(Math.random().toFixed(2));
@@ -344,7 +375,7 @@ console.log('new statements')
       }).reduce((acc: Array<any>, answer: any) => {
         return [...acc, answer[currentStage - 1] ]
       }, [])
-      console.log(stageAnswers);
+      //consolelog(stageAnswers);
       const changed = stageAnswers.every((answer: number) => answer !== 0.500001)
       if(changed && currentStage + 1 > lastStage) {
         setLastStage(currentStage + 1);
@@ -414,6 +445,48 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
   });
   return Array.from(next);
 };
+
+ // 3) After modal submission: merge and save
+  const handleModalSubmit = async (personal: {
+    name: string;
+    email: string;
+    company?: string;
+    jobTitle: string;
+    jobDescription?: string;
+  }) => {
+      setSubmitted(true)
+    const weightedScores = Object.keys(responses).reduce((acc, trait) => {
+      const traitScores = responses[trait].map((score: any, i: any) => 
+        score * (getStatement(trait, i).weight || 1)
+       );
+      const average =  traitScores.reduce((sum: any, score: any) => sum + score, 0) / traitScores.length;
+      acc[trait] = average > 1 ? 1 : average
+      return acc;
+    }, {} as { [trait: string]: number });
+
+
+    const stmnts = buildStatementObject(weightedScores, statements).filter(stmnt => stmnt.trait !== 'openness');
+    const excluded = getExcludedTypes(stmnts)
+    //consolelog("excluded!: ", excluded)
+    //const primary4F = determinePrimary4FType(weightedScores);
+    const mbtiType = matchMBTI(weightedScores, excluded.filter(x => x.length === 4))//matchMBTIType(weightedScores, primary4F);
+    const profile = typesData.find(t => t.type === mbtiType.type);
+    const primary4F = profile?.mode || ""
+    const accuracy = (mbtiType.scores as any)[mbtiType.type].score
+    setAccuracy(accuracy)
+    setList(mbtiType.scores)
+    const newJson = {
+      type: mbtiType.type,
+      primary4FType: primary4F,
+      bigFiveResponses: weightedScores,
+    }
+   
+    localStorage.removeItem('responses')
+    localStorage.removeItem('stage')
+    localStorage.removeItem('lastStage');
+    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping});
+    navigate(`/result/${binId}`);
+  }
 
   const handleSubmit = async () => {
     setSubmitted(true)
@@ -533,14 +606,14 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     const statement = stage[i]
 
 
-    console.log(trait, i, statement, stage)
+    //consolelog(trait, i, statement, stage)
     return statement
     
   }
 
 
   const determineIndex = (trait: string, index: number) : number => {
-   console.log(index, currentStage - 1, index === currentStage - 1)
+   //consolelog(index, currentStage - 1, index === currentStage - 1)
     if(trait === 'openness') {
       if(currentStage === 6) {
         return index + 3
@@ -735,7 +808,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
           </Tooltip>
         )}
         {currentStage === stages.length - 1 ? (
-          <Button onClick={handleSubmit} variant="contained" color="primary" disabled={submitted}>
+          <Button onClick={slug ? () => {setShowModal(true)} : handleSubmit} variant="contained" color="primary" disabled={submitted}>
             {submitted ? 'Submitted' : 'Submit'}
              
           </Button>
@@ -745,6 +818,15 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
           </Button>
         )}
       </Box>
+
+      {showModal && (
+        <SlugModal
+        open={showModal}
+          defaultCompany={slug}
+          onSubmit={handleModalSubmit}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </Paper>
   </Box>
   );

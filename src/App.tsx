@@ -84,6 +84,11 @@ export default function App() {
 
     const newBinId = await JsonBinApi.saveResultsToJsonBin({
       referrer,
+       name: responses.name,
+       email: responses.email,
+      company: responses.company,
+      jobTitle: responses.jobTitle,
+      jobDescription: responses.jobDescription,
       type: responses.mbtiType,
       primary4FType: responses.primary4F,
       bigFiveResponses: responses.profile,
@@ -92,6 +97,7 @@ export default function App() {
       responses: responses.responses ?? [],
       list: responses.list ?? {},
       statements: responses.statements ?? [],
+      collectionId: responses.collectionId 
     });
 
     setBinId(newBinId);
@@ -161,7 +167,8 @@ export default function App() {
           >
             <Routes>
               <Route path="/" element={<Homepage />} />
-              <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />} />
+              <Route path="/test/:company" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/result/:binId" element={<ResultsPage binId={binId} />} />
               <Route path="/input" element={<BigFiveInputPage onComplete={handleComplete} />} />
               <Route path="/about/:type" element={<AboutPage />} />
@@ -176,11 +183,9 @@ export default function App() {
               <Route path="/compare" element={<TypeComparator />} />
               <Route path="/scheduler" element={<Scheduler />} />
               <Route path="/terms" element={<TermsOfService />} />
-              <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />} />
-              <Route
-                path="/oracle"
-                element={<ChatTRPI apiPath="https://chattrpi-production.up.railway.app/api/trpi-chat" userId={guid()} />}
-              />
+              <Route path="/assessment/:company" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/oracle" element={<ChatTRPI apiPath="https://chattrpi-production.up.railway.app/api/trpi-chat" userId={guid()} />}/>
             </Routes>
 
             {/* Footer pinned near bottom */}

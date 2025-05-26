@@ -154,6 +154,10 @@ const AboutPage: React.FC<{
         cognitiveProfile: prfl,
         scores: bin.bigFiveResponses,
         assessment: assessmentNarrative,
+        name: bin.name,
+        company: bin.company,
+        job: bin.job,
+        jobTitle: bin.jobTitle,
       });
       const state = {
         detailLevel: reportLevel,

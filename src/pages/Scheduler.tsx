@@ -51,7 +51,6 @@ const Calendar: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [newAppointment, setNewAppointment] = useState<NewAppointment>({ date: '', startTime: '', endTime: '', title: '', description: '' });
   const [modalOpen, setModalOpen] = useState(false);
-  const [pendingAppointment, setPendingAppointment] = useState<NewAppointment | null>(null);
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const calendarRef = useRef<FullCalendar>(null);
@@ -220,15 +219,14 @@ const Calendar: React.FC = () => {
       alert('Please sign in with Google first.');
       return;
     }
-    setPendingAppointment(newAppointment);
     if(price.current) {
     setPremiumModalOpen(true);
-    } else if ((pendingAppointment || newAppointment) && currentUser) {
-      await createGoogleCalendarEvent(pendingAppointment|| newAppointment, ADMIN_CALENDAR_ID);
-      await createGoogleCalendarEvent(pendingAppointment || newAppointment, 'primary');
+    } else if ((newAppointment) && currentUser) {
+      await createGoogleCalendarEvent(newAppointment, ADMIN_CALENDAR_ID);
+      await createGoogleCalendarEvent(newAppointment, 'primary');
       await fetchAdminEvents();
       await fetchEvents('primary', currentUser.email)
-      setPendingAppointment(null);
+      setNewAppointment({ date: '', startTime: '', endTime: '', title: '', description: '' });
       setModalOpen(false);
     }
     setPremiumModalOpen(false);
@@ -236,10 +234,10 @@ const Calendar: React.FC = () => {
     };
 
   const handlePaymentSuccess = () => {
-    if (pendingAppointment && currentUser) {
-      createGoogleCalendarEvent(pendingAppointment, ADMIN_CALENDAR_ID);
-      createGoogleCalendarEvent(pendingAppointment, 'primary');
-      setPendingAppointment(null);
+    if (newAppointment && currentUser) {
+      createGoogleCalendarEvent(newAppointment, ADMIN_CALENDAR_ID);
+      createGoogleCalendarEvent(newAppointment, 'primary');
+      setNewAppointment({ date: '', startTime: '', endTime: '', title: '', description: '' });
       setModalOpen(false);
     }
     setPremiumModalOpen(false);

@@ -125,7 +125,7 @@ const Calendar: React.FC = () => {
           }));
           setAppointments(prev => {
             const combined = [...prev];
-            events.forEach(ev => { if (!combined.find(e => e.id === ev.id)) combined.push(ev); });
+            events.forEach((ev: any) => { if (!combined.find(e => e.id === ev.id)) combined.push(ev); });
             return combined;
           });
         }
@@ -167,7 +167,7 @@ const Calendar: React.FC = () => {
     alert(`Appointment Details:\n${appt.description}`);
   };
 
-  const handleRequestAppointment = () => { if (currentUser) setPendingAppointment(newAppointment) || setPremiumModalOpen(true); };
+  const handleRequestAppointment = () => { if (currentUser) setPendingAppointment(newAppointment); setPremiumModalOpen(true); };
   const handlePaymentSuccess = () => {
     if (pendingAppointment && currentUser) {
       createGoogleCalendarEvent(pendingAppointment, ADMIN_CALENDAR_ID);

@@ -13,13 +13,7 @@ import { loadStripe } from '@stripe/stripe-js';
 const stripePublishableKey =
   'pk_live_51PViCzHKnNyKk3kl1f3BOo3GMKcy68HDSO8RsjwIydff8UnKUnXtAk04aYmsmV8EHN6m3khoe8G0f7FsEQtYpO8400wOf5kqGe';
 
-// Obfuscate secret key parts (note: this does not secure it)
-const constructionParts = [
-  'c2tfbGl2ZV81MVBWaUN6SEtuTnlLazNrbFZZREZEWWJWWllT',
-  'bnlsSWVUOEVMSXdmOVExeEdqd3pnZ2FLQVF4c0gwS3JsMlZG',
-  'c2FOc28xcldFUzk0S3lHcm1qTVVjU0hSTTAwSW5zd0ZURmY=',
-];
-const stripeSecretKey = atob(constructionParts.join(''));
+const stripeSecretKey = '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'
 
 const stripePromise = loadStripe(stripePublishableKey);
 
@@ -119,6 +113,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({
       } else if (paymentIntent?.status === 'succeeded') {
         console.log('Payment successful!', paymentIntent);
         handlePaymentSuccess(paymentData);
+        onClose();
       } else {
         console.warn('Unexpected payment status:', paymentIntent?.status);
       }

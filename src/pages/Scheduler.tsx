@@ -56,8 +56,9 @@ const Calendar: React.FC = () => {
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const calendarRef = useRef<FullCalendar>(null);
   const fetchedAdminEvents = useRef(false);
+  const price = useRef(0);
 
-  // Calculate price
+  useEffect(() => {
   let computedPrice = 0;
   if (newAppointment.date && newAppointment.startTime && newAppointment.endTime) {
     const start = new Date(`${newAppointment.date}T${newAppointment.startTime}:00`);
@@ -65,7 +66,12 @@ const Calendar: React.FC = () => {
     const durationMinutes = (end.getTime() - start.getTime()) / 60000;
     const intervals = Math.ceil(durationMinutes / 30);
     computedPrice = Math.max(intervals * RATE_PER_INTERVAL, RATE_PER_INTERVAL);
+    price.current = computedPrice;
   }
+  }, [newAppointment])
+
+  // Calculate price
+  
 
   // Fetch userinfo (email) via Google OAuth2
   const fetchUserInfo = async (token: string) => {
@@ -215,8 +221,17 @@ const Calendar: React.FC = () => {
       return;
     }
     setPendingAppointment(newAppointment);
+    if(price.current) {
     setPremiumModalOpen(true);
-  };
+    } else if (pendingAppointment && currentUser) {
+      createGoogleCalendarEvent(pendingAppointment, ADMIN_CALENDAR_ID);
+      createGoogleCalendarEvent(pendingAppointment, 'primary');
+      setPendingAppointment(null);
+      setModalOpen(false);
+    }
+    setPremiumModalOpen(false);
+    alert('Your appointment has been created.');
+    };
 
   const handlePaymentSuccess = () => {
     if (pendingAppointment && currentUser) {
@@ -279,7 +294,7 @@ const Calendar: React.FC = () => {
             <DialogContent>
               <Typography variant="subtitle1">Date: {newAppointment.date}</Typography>
               <Typography variant="subtitle1">Time: {newAppointment.startTime} - {newAppointment.endTime}</Typography>
-              <Typography variant="subtitle2" gutterBottom>Total Price: {computedPrice.toFixed(2)} EUR</Typography>
+              <Typography variant="subtitle2" gutterBottom>Total Price: {price.current.toFixed(2)} EUR</Typography>
 
               <TextField label="Title" fullWidth margin="normal" value={newAppointment.title} onChange={e => setNewAppointment(prev => ({ ...prev, title: e.target.value }))} />
               <TextField label="Start Time" type="time" fullWidth margin="normal" InputLabelProps={{ shrink: true }} inputProps={{ step: 1800 }} value={newAppointment.startTime} onChange={e => setNewAppointment(prev => ({ ...prev, startTime: e.target.value }))} />
@@ -288,7 +303,7 @@ const Calendar: React.FC = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setModalOpen(false)}>Cancel</Button>
-              <Button variant="contained" onClick={handleRequestAppointment}>Create Appointment (Cost: {computedPrice.toFixed(2)})</Button>
+              <Button variant="contained" onClick={handleRequestAppointment}>Create Appointment (Cost: {price.current.toFixed(2)})</Button>
             </DialogActions>
           </Dialog>
 
@@ -296,8 +311,8 @@ const Calendar: React.FC = () => {
             open={premiumModalOpen}
             onClose={() => setPremiumModalOpen(false)}
             title="Appointment Payment Required"
-            description={`Creating this appointment costs €${computedPrice.toFixed(2)}.`}
-            price={computedPrice}
+            description={`Creating this appointment costs €${price.current.toFixed(2)}.`}
+            price={price.current}
             handlePaymentSuccess={handlePaymentSuccess}
           />
         </Box>

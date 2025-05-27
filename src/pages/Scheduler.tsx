@@ -40,7 +40,8 @@ interface CurrentUser {
   email: string;
 }
 
-const ADMIN_CALENDAR_ID = 'rsk.rook@gmail.com';
+const ADMIN_CALENDAR_ID = 'ef73ae9e24c750cf5e83feb07ebc16925838a98d256e54bc92c2133bf5da73d7@group.calendar.google.com';
+const GOOGLE_API_KEY = 'AIzaSyAZ-EFU0pZBUEYdcvT_vnu8_TDpjsWtGG0';
 const GOOGLE_CLIENT_ID = '356497060674-ndjka8l1iod2obja36djpah0fckmaot9.apps.googleusercontent.com';
 const RATE_PER_INTERVAL = 29.95; // per 30 minutes
 
@@ -54,6 +55,7 @@ const Calendar: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const calendarRef = useRef<FullCalendar>(null);
+  const fetchedAdminEvents = useRef(false);
 
   // Calculate price
   let computedPrice = 0;
@@ -137,16 +139,54 @@ const Calendar: React.FC = () => {
     [currentUser]
   );
 
+   const fetchAdminEvents = async () => {
+    const timeMin = new Date().toISOString();
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(
+      ADMIN_CALENDAR_ID
+    )}/events?key=${GOOGLE_API_KEY}` +
+      `&timeMin=${encodeURIComponent(timeMin)}` +
+      `&singleEvents=true&orderBy=startTime`;
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.items) {
+        const adminEvents: Appointment[] = data.items.map((e: any) => ({
+          id: e.id,
+          start: e.start.dateTime || e.start.date,
+          end: e.end.dateTime || e.end.date,
+          title: e.summary || 'No title',
+          description: e.description || '',
+          ownerEmail: ADMIN_CALENDAR_ID,
+        }));
+        setAppointments((prev) => {
+          // merge without duplicates
+          const merged = [...prev];
+          adminEvents.forEach((evt) => {
+            if (!merged.find((a) => a.id === evt.id)) merged.push(evt);
+          });
+          return merged;
+        });
+      }
+    } catch (err) {
+      console.error('Error fetching admin calendar:', err);
+    }
+  };
+
   // ----------------------------
   // Effects to fetch on login
   // ----------------------------
   useEffect(() => {
     if (currentUser) {
       fetchEvents('primary', currentUser.email);
-      fetchEvents('primary', ADMIN_CALENDAR_ID);
     }
   }, [currentUser, fetchEvents]);
 
+    useEffect(() => {
+    if (fetchedAdminEvents.current) return;
+    fetchedAdminEvents.current = true;
+    fetchAdminEvents();
+  }, []);
   // ----------------------------
   // FullCalendar Handlers
   // ----------------------------

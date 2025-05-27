@@ -226,6 +226,8 @@ const Calendar: React.FC = () => {
     } else if (pendingAppointment && currentUser) {
       createGoogleCalendarEvent(pendingAppointment, ADMIN_CALENDAR_ID);
       createGoogleCalendarEvent(pendingAppointment, 'primary');
+      fetchAdminEvents();
+      fetchEvents('primary', currentUser.email)
       setPendingAppointment(null);
       setModalOpen(false);
     }

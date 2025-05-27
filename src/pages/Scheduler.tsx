@@ -37,7 +37,6 @@ interface NewAppointment {
 
 interface CurrentUser {
   accessToken: string;
-  idToken: string;
   email: string;
 }
 
@@ -66,17 +65,19 @@ const Calendar: React.FC = () => {
     computedPrice = Math.max(intervals * RATE_PER_INTERVAL, RATE_PER_INTERVAL);
   }
 
-  // Decode ID token to extract email
-  useEffect(() => {
-    if (currentUser?.idToken && !currentUser.email) {
-      try {
-        const payload = JSON.parse(atob(currentUser.idToken.split('.')[1]));
-        setCurrentUser(prev => prev ? { ...prev, email: payload.email } : prev);
-      } catch {
-        console.warn('Failed to decode ID token');
-      }
+  // Fetch userinfo (email) via Google OAuth2
+  const fetchUserInfo = async (token: string) => {
+    try {
+      const resp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await resp.json();
+      return data.email as string;
+    } catch (err) {
+      console.error('Failed to fetch user info:', err);
+      return '';
     }
-  }, [currentUser]);
+  };
 
   // ----------------------------
   // Google Calendar API Integration
@@ -141,7 +142,7 @@ const Calendar: React.FC = () => {
   // ----------------------------
   useEffect(() => {
     if (currentUser) {
-      fetchEvents('primary', currentUser.email || '');
+      fetchEvents('primary', currentUser.email);
       fetchEvents(ADMIN_CALENDAR_ID, ADMIN_CALENDAR_ID);
     }
   }, [currentUser, fetchEvents]);
@@ -167,7 +168,15 @@ const Calendar: React.FC = () => {
     alert(`Appointment Details:\n${appt.description}`);
   };
 
-  const handleRequestAppointment = () => { if (currentUser) setPendingAppointment(newAppointment); setPremiumModalOpen(true); };
+  const handleRequestAppointment = () => {
+    if (!currentUser) {
+      alert('Please sign in with Google first.');
+      return;
+    }
+    setPendingAppointment(newAppointment);
+    setPremiumModalOpen(true);
+  };
+
   const handlePaymentSuccess = () => {
     if (pendingAppointment && currentUser) {
       createGoogleCalendarEvent(pendingAppointment, ADMIN_CALENDAR_ID);
@@ -195,8 +204,9 @@ const Calendar: React.FC = () => {
 
           {!currentUser && (
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-              <GoogleAuthButton onSuccess={(tokenResponse: any) => {
-                setCurrentUser({ accessToken: tokenResponse.access_token, idToken: tokenResponse.id_token, email: '' });
+              <GoogleAuthButton onSuccess={async (tokenResponse: any) => {
+                const email = await fetchUserInfo(tokenResponse.access_token);
+                setCurrentUser({ accessToken: tokenResponse.access_token, email });
               }} />
             </Box>
           )}

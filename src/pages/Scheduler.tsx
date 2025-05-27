@@ -215,7 +215,7 @@ const Calendar: React.FC = () => {
     alert(`Appointment Details:\n${appt.description}`);
   };
 
-  const handleRequestAppointment = () => {
+  const handleRequestAppointment = async () => {
     if (!currentUser) {
       alert('Please sign in with Google first.');
       return;
@@ -224,10 +224,10 @@ const Calendar: React.FC = () => {
     if(price.current) {
     setPremiumModalOpen(true);
     } else if (pendingAppointment && currentUser) {
-      createGoogleCalendarEvent(pendingAppointment, ADMIN_CALENDAR_ID);
-      createGoogleCalendarEvent(pendingAppointment, 'primary');
-      fetchAdminEvents();
-      fetchEvents('primary', currentUser.email)
+      await createGoogleCalendarEvent(pendingAppointment, ADMIN_CALENDAR_ID);
+      await createGoogleCalendarEvent(pendingAppointment, 'primary');
+      await fetchAdminEvents();
+      await fetchEvents('primary', currentUser.email)
       setPendingAppointment(null);
       setModalOpen(false);
     }

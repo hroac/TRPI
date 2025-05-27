@@ -43,7 +43,7 @@ interface CurrentUser {
 const ADMIN_CALENDAR_ID = 'ef73ae9e24c750cf5e83feb07ebc16925838a98d256e54bc92c2133bf5da73d7@group.calendar.google.com';
 const GOOGLE_API_KEY = 'AIzaSyAZ-EFU0pZBUEYdcvT_vnu8_TDpjsWtGG0';
 const GOOGLE_CLIENT_ID = '356497060674-ndjka8l1iod2obja36djpah0fckmaot9.apps.googleusercontent.com';
-const RATE_PER_INTERVAL = 29.95; // per 30 minutes
+const RATE_PER_INTERVAL = 0; // per 30 minutes
 
 const Calendar: React.FC = () => {
   const theme = useTheme();
@@ -205,6 +205,7 @@ const Calendar: React.FC = () => {
 
   const handleEventClick = (info: any) => {
     const appt: Appointment = info.event.extendedProps.appointment;
+    console.log(appt)
     alert(`Appointment Details:\n${appt.description}`);
   };
 

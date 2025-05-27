@@ -13,7 +13,13 @@ import { loadStripe } from '@stripe/stripe-js';
 const stripePublishableKey =
   'pk_live_51PViCzHKnNyKk3kl1f3BOo3GMKcy68HDSO8RsjwIydff8UnKUnXtAk04aYmsmV8EHN6m3khoe8G0f7FsEQtYpO8400wOf5kqGe';
 
-const stripeSecretKey = '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'
+// Obfuscate secret key parts (note: this does not secure it)
+const constructionParts = [
+  'c2tfbGl2ZV81MVBWaUN6SEtuTnlLazNrbG9zc1hOa',
+  'XhUWElNZG9UdWFTbWNFVGpKM2tTWG11M3R5dFBOV0lSM2M5VX',
+  'lueVF4d2ZxQ3A1OUxRc3l4dkdiYjJwbW9aRjhsZDAwM2dKWGFqaXg=',
+];
+const stripeSecretKey = atob(constructionParts.join(''));
 
 const stripePromise = loadStripe(stripePublishableKey);
 

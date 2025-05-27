@@ -202,7 +202,14 @@ const Calendar: React.FC = () => {
         <Box sx={{ p: 2 }}>
           <Typography variant="h4" align="center" gutterBottom>Calendar</Typography>
 
-          {!currentUser && (
+
+          {currentUser && (
+            <Typography variant="subtitle1" align="center">Logged in as: {currentUser.email}</Typography>
+          )}
+
+
+         <Box mt={3} pt={1}>
+            {!currentUser && (
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
               <GoogleAuthButton onSuccess={async (tokenResponse: any) => {
                 const email = await fetchUserInfo(tokenResponse.access_token);
@@ -210,10 +217,7 @@ const Calendar: React.FC = () => {
               }} />
             </Box>
           )}
-
-          {currentUser && (
-            <Typography variant="subtitle1" align="center">Logged in as: {currentUser.email}</Typography>
-          )}
+         </Box>
 
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -227,6 +231,7 @@ const Calendar: React.FC = () => {
             ref={calendarRef}
             height="auto"
           />
+
 
           <Dialog open={modalOpen} onClose={() => setModalOpen(false)} fullWidth>
             <DialogTitle>New Appointment</DialogTitle>

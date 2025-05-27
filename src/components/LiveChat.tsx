@@ -218,6 +218,13 @@ function ChatContent() {
   const atBottomRef             = useRef(true);
   const listRef                 = useRef<VList>(null);
   const lastSeenRef             = useRef<string | null>(null);
+  const [isVisible, setVisible] = useState(document.visibilityState === 'visible');
+  
+useEffect(() => {
+  const onVis = () => setVisible(document.visibilityState === 'visible');
+  document.addEventListener('visibilitychange', onVis);
+  return () => document.removeEventListener('visibilitychange', onVis);
+}, []);
   // how tall is each rendered row?
   const sizeMapRef = useRef<{ [index: number]: number }>({});
 
@@ -269,7 +276,8 @@ const setSize = (index: number, size: number) => {
     queryKey: ['messages', binId],
     enabled: Boolean(binId),
     initialData: () => rq.getQueryData<Message[]>(['messages', binId]) ?? [],
-    refetchInterval: pollMs,
+   refetchInterval: isVisible ? pollMs : false,     // stop completely when hidden
+  refetchOnWindowFocus: true,
     queryFn: async () => {
       if (!binId) return [];
 

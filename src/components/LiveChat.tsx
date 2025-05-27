@@ -281,6 +281,8 @@ const setSize = (index: number, size: number) => {
     queryFn: async () => {
       if (!binId) return [];
 
+      if(!isVisible) return rq.getQueryData<Message[]>(['messages', binId]) ?? [];;
+
       if (!lastSeenRef.current) {
         const bin = await jsonBinGet<ChatBin>(`/b/${binId}/latest`);
         prevBinRef.current = bin.prev ?? null;
@@ -307,8 +309,8 @@ const setSize = (index: number, size: number) => {
   });
 
   /* filtered + sorted list --------------------------------------- */
-  console.log(messages)
-  console.log(selTags)
+  //console.log(messages)
+  //console.log(selTags)
   const filtered = useMemo(() => {
     const byTag = messages.filter(m => !selTags.length || selTags.includes(m.tag));
     return byTag.sort(
@@ -341,7 +343,7 @@ useEffect(() => {
       const curBinId = metaLive.currentBinId;
       const curPath  = `/b/${curBinId}`;
       let curBin     = rq.getQueryData<ChatBin>(['bin', curBinId]);
-      console.log(curBinId, curBin)
+     // console.log(curBinId, curBin)
       if (!curBin)   curBin = await jsonBinGet<ChatBin>(`${curPath}/latest`);
 
       /* rollover if full ----------------------------------------- */

@@ -143,7 +143,7 @@ const Calendar: React.FC = () => {
   useEffect(() => {
     if (currentUser) {
       fetchEvents('primary', currentUser.email);
-      fetchEvents(ADMIN_CALENDAR_ID, ADMIN_CALENDAR_ID);
+      fetchEvents('primary', ADMIN_CALENDAR_ID);
     }
   }, [currentUser, fetchEvents]);
 

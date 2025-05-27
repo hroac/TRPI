@@ -121,6 +121,7 @@ export default function App() {
     { label: 'Short Format', path: '/test', parent: 'Tests' },
     { label: 'Long Format', path: '/assessment', parent: 'Tests' },
     { label: 'ChatGPT', path: '/talk', parent: 'Tests' },
+    { label: 'Appointment', path: '/scheduler'}
     { label: 'Tools' },
     { label: 'Big Five Input', path: '/input', parent: 'Tools' },
     { label: 'Type Comparator', path: '/compare', parent: 'Tools' },

@@ -92,7 +92,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8, px: 2 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 12, px: 2 }}>
       <Card sx={{ maxWidth: 600, width: '100%' }}>
         <CardContent>
           <Typography variant="h5" gutterBottom>

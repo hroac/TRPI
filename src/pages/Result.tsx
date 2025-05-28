@@ -41,6 +41,7 @@ import { determineTRPISuffix, findClosestComplement, MBTIProfiles } from '../uti
 import BarChartIcon from '@mui/icons-material/BarChart';
 import RadarIcon from '@mui/icons-material/DonutLarge'; // Substitute for radar, or your preferred icon
 import { typesData } from '../utils/typesData';
+import Carousel from '../components/Carousel';
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, RadialLinearScale, Title, ChartTooltip, Legend, PointElement, LineElement, Filler);
@@ -215,7 +216,7 @@ const radarData = {
     {
       label: 'Your Scores',
       data: chartDataArray,
-      backgroundColor: 'rgba(75,192,192,0.35)',      // Less transparent
+      backgroundColor: 'rgba(75,192,192,0.7)',      // Less transparent
       borderColor: 'rgba(75,192,192,1)',
       pointBackgroundColor: 'rgba(75,192,192,1)',
       pointBorderColor: '#fff',
@@ -242,6 +243,23 @@ const radarData = {
       }
     }
   };
+
+  const chartSlides = [
+  {
+    content: (
+      <Box display="flex" justifyContent="center" height={isMobile ? '300px' : '500px'}>
+        <Radar data={radarData} options={radarOptions} />
+      </Box>
+    )
+  },
+  {
+    content: (
+      <Box display="flex" justifyContent="center" height={isMobile ? '300px' : '500px'}>
+        <Bar data={barData} options={barOptions} />
+      </Box>
+    )
+  }
+];
 
   const shareDescription = bin?.description ? bin.description : "Check out my TRPI test results!";
   const shareUrl = window.location.href;
@@ -350,28 +368,10 @@ const radarData = {
 
       {/* Chart */}
       <Box my={3}>
-        {chartMode === 'radar' ? (
-         <Box display={'flex'} justifyContent={'center'} height={isMobile ? '300px': '500px'}>
-           <Radar data={radarData} options={radarOptions} />
-         </Box>
-        ) : (
-          <Bar data={barData} options={barOptions} />
-        )}
+        <Carousel slides={chartSlides} settings={{ slidesPerView: 1, loop: false, autoHeight: true }}/>
       </Box>
 
-      {/* Chart Toggle */}
-      <Box display="flex" justifyContent="center" my={2}>
-  <Tooltip title={chartMode === 'radar' ? "Show Bar Chart" : "Show Radar Chart"}>
-    <IconButton
-      color="primary"
-      onClick={() => setChartMode(chartMode === 'radar' ? 'bar' : 'radar')}
-      size="large"
-      aria-label="Toggle chart type"
-    >
-      {chartMode === 'radar' ? <BarChartIcon /> : <RadarIcon />}
-    </IconButton>
-  </Tooltip>
-</Box>
+  
       {/* Share Modal */}
       <Modal open={shareModalOpen} onClose={handleCloseShareModal}>
         <Box

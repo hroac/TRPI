@@ -255,7 +255,7 @@ const AboutPage: React.FC<{
 
   /* ------------------ JSX ---------------------- */
   return (
-    <Box sx={{ mt: '100px' }} padding={isMobile ? 2 : 4}>
+    <Box sx={{ mt: '10px' }} padding={isMobile ? 2 : 4}>
       {/* Header */}
       <Typography variant={isMobile ? 'h5' : 'h4'} align="center" gutterBottom>
         {type || mbtiType} –{' '}

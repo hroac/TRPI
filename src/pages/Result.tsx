@@ -10,16 +10,22 @@ import {
   Tooltip,
   Grid,
   Snackbar,
+  ButtonGroup,
+  Button,
 } from '@mui/material';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Radar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
+  RadialLinearScale,
   Title,
   Tooltip as ChartTooltip,
   Legend,
+  PointElement,
+  LineElement,
+  Filler
 } from 'chart.js';
 import JsonBinApi from '../utils/jsonBin';
 import AboutPage from './About';
@@ -31,7 +37,13 @@ import { Share as ShareIcon, Close as CloseIcon } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import RedditIcon from '@mui/icons-material/Reddit';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import { determineTRPISuffix, findClosestComplement } from '../utils/mbtiMapping';
+import { determineTRPISuffix, findClosestComplement, MBTIProfiles } from '../utils/mbtiMapping';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import RadarIcon from '@mui/icons-material/DonutLarge'; // Substitute for radar, or your preferred icon
+import { typesData } from '../utils/typesData';
+
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, RadialLinearScale, Title, ChartTooltip, Legend, PointElement, LineElement, Filler);
 
 const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveResponses: { [trait: string]: number }, binId: string }> = ({
   type,
@@ -59,8 +71,6 @@ const ResultHelmet: React.FC<{ type: string; primary4FType: string; bigFiveRespo
   );
 };
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ChartTooltip, Legend);
-
 interface ResultsProps {
   binId: string;
 }
@@ -75,6 +85,7 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
   const [date, setDate] = useState<Date>(new Date());
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [chartMode, setChartMode] = useState<'radar' | 'bar'>('radar');
 
   useEffect(() => {
     const fetchBinData = async () => {
@@ -102,81 +113,60 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
     fetchBinData();
   }, [date, params, binId]);
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-      title: { display: true, text: 'Big Five Personality Scores' },
-    },
-    scales: { y: { beginAtZero: true, max: 100 } },
-    maintainAspectRatio: true,
+  // Chart Data
+  const chartLabels = ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'];
+  const chartDataArray = bin ? [
+    bin.bigFiveResponses.openness * 100,
+    bin.bigFiveResponses.conscientiousness * 100,
+    bin.bigFiveResponses.extraversion * 100,
+    bin.bigFiveResponses.agreeableness * 100,
+    bin.bigFiveResponses.neuroticism * 100,
+  ] : [0, 0, 0, 0, 0];
+
+  // --- TYPE AVERAGE DATASET for RADAR CHART
+  let mbtiType = bin?.type;
+  // fallback if mbtiType is undefined/null
+  mbtiType = mbtiType || "";
+  const typeProfile: any = MBTIProfiles?.find(t => t.name === mbtiType) || {};
+  const userTypeData = typesData.find(t => t.type === mbtiType) || {};
+const baseColor = userTypeData.bgColor || '#aaa'; // fallback
+
+// 2. Get user accuracy (as 0–1 scale for calculations, if needed)
+const confidence = bin?.accuracy ?? 0; // e.g. 79.5
+
+// 3. Set color opacity and highlight offset based on accuracy (example: up to +0.2 more opacity for high accuracy)
+const userAlpha = 0.35 + Math.min(0.2, (confidence - 60) / 200); // e.g. 60% = 0.35, 80% = 0.45, max 0.55
+const averageAlpha = 0.12;
+
+// 4. Function to convert #rrggbb hex to rgba
+function hexToRgba(hex: string, alpha: number) {
+  const [, r, g, b] = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex) || [];
+  return r
+    ? `rgba(${parseInt(r,16)},${parseInt(g,16)},${parseInt(b,16)},${alpha})`
+    : `rgba(160,160,160,${alpha})`; // fallback gray
+}
+  const typeAverageBigFive = typeProfile.traits || {
+    openness: 0,
+    conscientiousness: 0,
+    extraversion: 0,
+    agreeableness: 0,
+    neuroticism: 0,
   };
+  const typeAverageArray = [
+    typeAverageBigFive.openness * 100,
+    typeAverageBigFive.conscientiousness * 100,
+    typeAverageBigFive.extraversion * 100,
+    typeAverageBigFive.agreeableness * 100,
+    typeAverageBigFive.neuroticism * 100,
+  ];
 
-  const shareDescription = bin?.description ? bin.description : "Check out my TRPI test results!";
-  const shareUrl = window.location.href;
-  const encodedUrl = encodeURIComponent(shareUrl);
-  const encodedDesc = encodeURIComponent(shareDescription);
-
-  // When the share icon is clicked, open the modal, copy the link, and show the snackbar.
-  const handleOpenShareModal = () => {
-    navigator.clipboard.writeText(shareUrl).catch((err) =>
-      console.error("Failed to copy: ", err)
-    );
-    setShareModalOpen(true);
-    setSnackbarOpen(true);
-  };
-
-  const handleCloseShareModal = () => setShareModalOpen(false);
-  const handleSnackbarClose = () => setSnackbarOpen(false);
-
-
-
-  if (loading) {
-    return (
-      <Paper elevation={3} sx={{ mt: '75px !important', p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
-        <Typography variant="h5" gutterBottom>
-          Loading Test Results...
-        </Typography>
-        <Box my={3}>
-          <Bar
-            data={{ labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: [] }}
-            options={options}
-          />
-        </Box>
-      </Paper>
-    );
-  }
-
-  if (!bin) {
-    return (
-      <Paper elevation={3} sx={{ mt: '75px !important', p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
-        <Typography variant="h5" gutterBottom>
-          No Results Found...
-        </Typography>
-        <Box my={3}>
-          <Bar
-            data={{ labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'], datasets: [] }}
-            options={options}
-          />
-        </Box>
-      </Paper>
-    );
-  }
-
-  const { type, bigFiveResponses, primary4FType, description, responses, statements, accuracy, list, suffix } = bin;
-  const typeSuffix = suffix ?? findClosestComplement(type, bigFiveResponses)?.type.slice(1,3)
-  const data = {
-    labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
+  // --- Bar and Radar Chart Data/Options
+  const barData = {
+    labels: chartLabels,
     datasets: [
       {
         label: 'Big Five Scores',
-        data: [
-          bigFiveResponses.openness * 100,
-          bigFiveResponses.conscientiousness * 100,
-          bigFiveResponses.extraversion * 100,
-          bigFiveResponses.agreeableness * 100,
-          bigFiveResponses.neuroticism * 100,
-        ],
+        data: chartDataArray,
         backgroundColor: [
           'rgba(75, 192, 192, 0.6)',
           'rgba(54, 162, 235, 0.6)',
@@ -196,33 +186,135 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
     ],
   };
 
+  const barOptions = {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'Big Five Personality Scores' },
+    },
+    scales: { y: { beginAtZero: true, max: 100 } },
+    maintainAspectRatio: true,
+  };
+
+const radarData = {
+  labels: chartLabels,
+  datasets: [
+    // DRAWN FIRST: Type Average (bottom, most transparent)
+    {
+      label: `${mbtiType} Average`,
+      data: typeAverageArray,
+      backgroundColor: hexToRgba(`${baseColor}`, 0.50),      // More transparent
+      borderColor: hexToRgba(baseColor, 1),           // Subtle border
+      pointBackgroundColor: hexToRgba(baseColor, 1),
+      pointBorderColor: '#fff',
+      pointRadius: 3,
+      borderWidth: 2,
+      order: 1, // explicit, but not required
+    },
+    // DRAWN SECOND: User (top, more solid)
+    {
+      label: 'Your Scores',
+      data: chartDataArray,
+      backgroundColor: 'rgba(75,192,192,0.35)',      // Less transparent
+      borderColor: 'rgba(75,192,192,1)',
+      pointBackgroundColor: 'rgba(75,192,192,1)',
+      pointBorderColor: '#fff',
+      pointRadius: 4,
+      borderWidth: 3,
+      order: 2, // explicit, but not required
+    }
+  ]
+};
+
+
+  const radarOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' as "top", labels: { font: { size: 13 } } },
+      title: { display: true, text: 'Big Five Personality Scores' },
+    },
+    scales: {
+      r: {
+        angleLines: { display: true },
+        min: 0, max: 100,
+        pointLabels: { font: { size: 13 } },
+        ticks: { stepSize: 20, font: { size: 11 } }
+      }
+    }
+  };
+
+  const shareDescription = bin?.description ? bin.description : "Check out my TRPI test results!";
+  const shareUrl = window.location.href;
+  const encodedUrl = encodeURIComponent(shareUrl);
+  const encodedDesc = encodeURIComponent(shareDescription);
+
+  const handleOpenShareModal = () => {
+    navigator.clipboard.writeText(shareUrl).catch((err) =>
+      console.error("Failed to copy: ", err)
+    );
+    setShareModalOpen(true);
+    setSnackbarOpen(true);
+  };
+
+  const handleCloseShareModal = () => setShareModalOpen(false);
+  const handleSnackbarClose = () => setSnackbarOpen(false);
+
+  if (loading) {
+    return (
+      <Paper elevation={3} sx={{ mt: '75px !important', p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
+        <Typography variant="h5" gutterBottom>
+          Loading Test Results...
+        </Typography>
+        <Box my={3}>
+          <Bar data={barData} options={barOptions} />
+        </Box>
+      </Paper>
+    );
+  }
+
+  if (!bin) {
+    return (
+      <Paper elevation={3} sx={{ mt: '75px !important', p: 2, m: '20px auto', maxWidth: isMobile ? 320 : 600 }}>
+        <Typography variant="h5" gutterBottom>
+          No Results Found...
+        </Typography>
+        <Box my={3}>
+          <Bar data={barData} options={barOptions} />
+        </Box>
+      </Paper>
+    );
+  }
+
+  const { type, bigFiveResponses, primary4FType, description, responses, statements, accuracy, list, suffix } = bin;
+  const typeSuffix = suffix ?? findClosestComplement(type, bigFiveResponses)?.type.slice(1,3);
+
   const isBinOwner = guid() === bin?.userId;
   const stages = [
-    statements.slice(0, 3), // Stage 0
-    statements.slice(3, 7), // Stage 1
-    statements.slice(7, 11), // Stage 2
-    statements.slice(11, 15), // Stage 3
-    statements.slice(15, 19), // Stage 4
-    statements.slice(19, 23), // Stage 5
-    statements.slice(23, 26), // Stage 6
+    statements.slice(0, 3),
+    statements.slice(3, 7),
+    statements.slice(7, 11),
+    statements.slice(11, 15),
+    statements.slice(15, 19),
+    statements.slice(19, 23),
+    statements.slice(23, 26),
   ];
-  
- const longStages = [
-    statements.slice(0,3), // Stage 0
-    statements.slice(3, 7),  // stage 1
-    statements.slice(7, 11), // Stage 2
-    statements.slice(11, 15), // Stage 3
-    statements.slice(15, 19), // Stage 4
-    statements.slice(19, 23), // Stage 5
-    statements.slice(23, 27), // stage 6 
-    statements.slice(27, 31), // stage 7
-    statements.slice(31, 35), // stage 8
-    statements.slice(35, 39),  // stage 9
-    statements.slice(39, 42), // stage 10
-  ]
+
+  const longStages = [
+    statements.slice(0, 3),
+    statements.slice(3, 7),
+    statements.slice(7, 11),
+    statements.slice(11, 15),
+    statements.slice(15, 19),
+    statements.slice(19, 23),
+    statements.slice(23, 27),
+    statements.slice(27, 31),
+    statements.slice(31, 35),
+    statements.slice(35, 39),
+    statements.slice(39, 42),
+  ];
 
   return (
-    <Paper elevation={3} sx={{p: 2, m: '20px auto', mt: '75px', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600 }}>
+    <Paper elevation={3} sx={{ p: 2, m: '20px auto', mt: '75px', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600 }}>
       <ResultHelmet
         type={type}
         primary4FType={primary4FType}
@@ -253,6 +345,33 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
         </Grid>
       </Grid>
 
+
+
+
+      {/* Chart */}
+      <Box my={3}>
+        {chartMode === 'radar' ? (
+         <Box display={'flex'} justifyContent={'center'} height={isMobile ? '300px': '500px'}>
+           <Radar data={radarData} options={radarOptions} />
+         </Box>
+        ) : (
+          <Bar data={barData} options={barOptions} />
+        )}
+      </Box>
+
+      {/* Chart Toggle */}
+      <Box display="flex" justifyContent="center" my={2}>
+  <Tooltip title={chartMode === 'radar' ? "Show Bar Chart" : "Show Radar Chart"}>
+    <IconButton
+      color="primary"
+      onClick={() => setChartMode(chartMode === 'radar' ? 'bar' : 'radar')}
+      size="large"
+      aria-label="Toggle chart type"
+    >
+      {chartMode === 'radar' ? <BarChartIcon /> : <RadarIcon />}
+    </IconButton>
+  </Tooltip>
+</Box>
       {/* Share Modal */}
       <Modal open={shareModalOpen} onClose={handleCloseShareModal}>
         <Box
@@ -312,10 +431,6 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
         onClose={handleSnackbarClose}
         message="Link Copied to Clipboard!"
       />
-
-      <Box my={3}>
-        <Bar data={data} options={options} />
-      </Box>
 
       {type && (
         <AboutPage

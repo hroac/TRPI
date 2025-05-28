@@ -18,11 +18,14 @@ import Carousel from '../components/Carousel';
 import Matrix from './Matrix';
 import { Link } from 'react-router-dom';
 import JsonBinApi from '../utils/jsonBin';
-import { Bar } from 'react-chartjs-2';
+import { Radar  } from 'react-chartjs-2';
+import {   Chart as ChartJS, Filler } from 'chart.js'
 import axios from 'axios';
 import Stories from './Stories';
 import LiveChat from './LiveChat';
+import { typesData } from './typesData';
 
+ChartJS.register(Filler)
 interface Review {
   id: string;
   name: string;
@@ -335,6 +338,13 @@ const Home = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const fetched : React.MutableRefObject<boolean> = useRef(false)
 
+  function hexToRgba(hex: string, alpha: number) {
+  const [, r, g, b] = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex) || [];
+  return r
+    ? `rgba(${parseInt(r,16)},${parseInt(g,16)},${parseInt(b,16)},${alpha})`
+    : `rgba(160,160,160,${alpha})`; // fallback gray
+}
+
   // Fetch all bins (test results) using a for loop
   const fetchBins = async () => {
     try {
@@ -344,47 +354,50 @@ const Home = () => {
       for (const item of binsCollection) {
         const newSlides: Array<Slide> = [];
         const bin = await JsonBinApi.getBinById(item.record);
+        const profile = typesData.find(t => t.type === bin.type)
+
 
         // Set up chart options and data
-        const options = {
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: 'Big Five Personality Scores' },
-          },
-          scales: { y: { beginAtZero: true, max: 100 } },
-        };
+      const data = {
+  labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
+  datasets: [
+    {
+      label: 'Big Five Scores',
+      data: [
+        bin.bigFiveResponses.openness * 100,
+        bin.bigFiveResponses.conscientiousness * 100,
+        bin.bigFiveResponses.extraversion * 100,
+        bin.bigFiveResponses.agreeableness * 100,
+        bin.bigFiveResponses.neuroticism * 100,
+      ],
+       backgroundColor: hexToRgba(profile.bgColor, 0.5),      // More transparent
+      borderColor: hexToRgba(profile.bgColor, 1),           // Subtle border
+      pointBackgroundColor: hexToRgba(profile.bgColor, 1),
+      pointBorderColor: '#fff',
+      pointRadius: 4,
+      borderWidth: 2,
+      fill: true
+    }
+  ],
+};
 
-        const data = {
-          labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
-          datasets: [
-            {
-              label: 'Big Five Scores',
-              data: [
-                bin.bigFiveResponses.openness * 100,
-                bin.bigFiveResponses.conscientiousness * 100,
-                bin.bigFiveResponses.extraversion * 100,
-                bin.bigFiveResponses.agreeableness * 100,
-                bin.bigFiveResponses.neuroticism * 100,
-              ],
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(54, 162, 235, 0.6)',
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(153, 102, 255, 0.6)',
-                'rgba(255, 99, 132, 0.6)',
-              ],
-              borderColor: [
-                'rgba(75, 192, 192, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 99, 132, 1)',
-              ],
-              borderWidth: 1,
-            },
-          ],
-        };
+const options = {
+  responsive: true,
+  fill: true,
+  plugins: {
+    legend: { position: 'top' as const },
+    title: { display: true, text: 'Big Five Personality Scores' },
+  },
+  scales: {
+    r: {
+      angleLines: { display: true },
+      min: 0,
+      max: 100,
+      pointLabels: { font: { size: 13 } },
+      ticks: { stepSize: 20, font: { size: 11 } }
+    }
+  }
+};
 
         newSlides.push({
           content: (
@@ -403,8 +416,9 @@ const Home = () => {
                 TRPI Test Results - {bin.primary4FType} - {bin.type}{' '}
                 {bin.accuracy ? `- ${bin.accuracy.toFixed(1)}%` : ''}
               </Typography>
-              <Box display="flex" justifyContent="center" my={3}>
-                <Bar data={data} options={options} />
+              
+              <Box display="flex" justifyContent="center" my={3} height={'300px'}>
+              <Radar data={data} options={options} />
               </Box>
             </Box>
           ),

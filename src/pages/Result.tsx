@@ -240,7 +240,7 @@ const radarData = {
         angleLines: { display: true },
         min: 0, max: 100,
         pointLabels: { font: { size: 18 } },
-        ticks: { stepSize: 20, font: { size: 15 }, backgroundColor: 'transparent' }
+        ticks: { stepSize: 20, font: { size: 15 }, backdropColor: 'transparent' }
       }
     }
   };

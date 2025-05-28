@@ -1,163 +1,141 @@
-import React, { useEffect, useState } from 'react';
-import { Box, TextField, Button, Typography } from '@mui/material';
-import { loadGapiInsideDOM } from 'gapi-script';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, TextField, Button, Typography, Card, CardContent, CardActions } from '@mui/material';
 
-
-interface google {
-  
+declare global {
+  interface Window { google: any }
 }
+
+const CLIENT_ID = '356497060674-ndjka8l1iod2obja36djpah0fckmaot9.apps.googleusercontent.com';
+
 const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [token, setToken] = useState<string | null>(null);
-  let tokenClient: any;
+  const [formData, setFormData] = useState({ subject: '', message: '', email: '' });
+  const tokenClient = useRef<any>(null);
 
   useEffect(() => {
-    const loadGapi = async () => {
-      await loadGapiInsideDOM();
-      // @ts-ignore
-      google.accounts.id.initialize({
-        client_id: '1038743380423-nqp44dfrru1l118rluin4507jmjlecpv.apps.googleusercontent.com',
-        callback: handleCredentialResponse,
-      });
+    // Initialize Google One-Tap / Credential response
+    window.google.accounts.id.initialize({
+      client_id: CLIENT_ID,
+      callback: (resp: any) => {
+        // Extract user email from the ID token
+        const user = JSON.parse(atob(resp.credential.split('.')[1]));
+        setFormData(f => ({ ...f, email: user.email }));
+        // Now request Gmail API token
+        tokenClient.current.requestAccessToken();
+      },
+    });
 
-      tokenClient = (google as any).accounts.oauth2.initTokenClient({
-        client_id: '1038743380423-nqp44dfrru1l118rluin4507jmjlecpv.apps.googleusercontent.com',
-        scope: 'https://www.googleapis.com/auth/gmail.send',
-        callback: (tokenResponse: any) => {
-          setToken(tokenResponse.access_token);
-          sendEmail(tokenResponse.access_token);
-        },
-      });
-    };
-    loadGapi();
-  }, [formData, token]);
+    // Initialize OAuth2 token client for gmail.send
+    tokenClient.current = window.google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/gmail.send',
+      callback: (tokenResp: any) => {
+        if (tokenResp.access_token) {
+          sendEmail(tokenResp.access_token);
+        }
+      },
+    });
+  }, []);
 
-  const handleCredentialResponse = (response: any) => {
-    const userObject = JSON.parse(atob(response.credential.split('.')[1]));
-    setFormData(prevState => ({ ...prevState, name: userObject.name, email: userObject.email }));
-    if (tokenClient) {
-      tokenClient.requestAccessToken();
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({ ...prevState, [name]: value }));
-  };
-
-  const createEmail = ({ to, from, subject, message }: {to: string, from: string, subject: string, message: string}) => {
-    const email = [
+  const createEmail = ({ to, from, subject, message }: any) => {
+    const lines = [
       `To: ${to}`,
       `From: ${from}`,
       `Subject: ${subject}`,
       `Content-Type: text/plain; charset=UTF-8`,
       ``,
-      `${message}`
-    ].join('\n');
-
-    return btoa(unescape(encodeURIComponent(email)))
+      message,
+    ];
+    return btoa(unescape(encodeURIComponent(lines.join('\n'))))
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=+$/, '');
   };
 
   const sendEmail = async (accessToken: string) => {
-    const rawEmail = createEmail({
+    const raw = createEmail({
       to: 'rsk.rook@gmail.com',
       from: formData.email,
       subject: formData.subject,
-      message: formData.message
+      message: formData.message,
     });
 
-    try {
-      const response = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+    const res = await fetch(
+      'https://gmail.googleapis.com/gmail/v1/users/me/messages/send',
+      {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ raw: rawEmail }),
-      });
-      if (response.ok) {
-        alert('Email sent successfully');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      } else {
-        console.error('Failed to send email:', response.statusText);
-        alert('Failed to send email');
+        body: JSON.stringify({ raw }),
       }
-    } catch (error) {
-      console.error('Error sending email:', error);
-      alert('Failed to send email');
+    );
+
+    if (res.ok) {
+      alert('Email sent successfully!');
+      setFormData(f => ({ ...f, subject: '', message: '' }));
+    } else {
+      console.error('Send failed:', await res.text());
+      alert('Failed to send email.');
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token) {
-      // @ts-ignore
-      google.accounts.id.prompt();
+    if (!formData.email) {
+      // Not signed in yet → trigger Google One-Tap / popup
+      window.google.accounts.id.prompt();
     } else {
-      sendEmail(token);
+      // Already have email → request Gmail token & send
+      tokenClient.current.requestAccessToken();
     }
   };
 
   return (
-    <Box sx={{ marginTop: '128px', display: 'flex', justifyContent: 'center' }}>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          backgroundColor: '#f9f9f9',
-          padding: 3,
-          borderRadius: 1,
-          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-          maxWidth: '600px',
-          width: '100%',
-          margin: '2rem auto',
-        }}
-      >
-        <Box sx={{ width: '100%', mb: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>Subject:</Typography>
-          <TextField
-            fullWidth
-            name="subject"
-            value={formData.subject}
-            onChange={handleInputChange}
-            required
-          />
-        </Box>
-        <Box sx={{ width: '100%', mb: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>Message:</Typography>
-          <TextField
-            fullWidth
-            name="message"
-            value={formData.message}
-            onChange={handleInputChange}
-            required
-            multiline
-            rows={6}
-          />
-        </Box>
-        <Button
-          type="submit"
-          sx={{
-            backgroundColor: '#1976d2',
-            color: 'white',
-            padding: '0.75rem 1.5rem',
-            borderRadius: 1,
-            fontSize: '1rem',
-            cursor: 'pointer',
-            '&:hover': {
-              backgroundColor: '#115293',
-            },
-          }}
-        >
-          Send
-        </Button>
-      </Box>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8, px: 2 }}>
+      <Card sx={{ maxWidth: 600, width: '100%' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>
+            Contact Us
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            We’ll send your message from your Google-authenticated email.
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}
+          >
+            <TextField
+              label="Subject"
+              name="subject"
+              fullWidth
+              required
+              value={formData.subject}
+              onChange={e => setFormData(f => ({ ...f, subject: e.target.value }))}
+            />
+            <TextField
+              label="Message"
+              name="message"
+              fullWidth
+              required
+              multiline
+              rows={6}
+              value={formData.message}
+              onChange={e => setFormData(f => ({ ...f, message: e.target.value }))}
+            />
+            <CardActions sx={{ justifyContent: 'flex-end', p: 0 }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="submit"
+              >
+                Send
+              </Button>
+            </CardActions>
+          </Box>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

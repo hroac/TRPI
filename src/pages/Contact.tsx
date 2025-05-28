@@ -98,9 +98,6 @@ const Contact: React.FC = () => {
           <Typography variant="h5" gutterBottom>
             Contact Us
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            We’ll send your message from your Google-authenticated email.
-          </Typography>
           <Box
             component="form"
             onSubmit={handleSubmit}

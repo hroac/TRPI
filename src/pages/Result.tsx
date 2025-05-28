@@ -203,7 +203,7 @@ const radarData = {
     {
       label: `${mbtiType} Average`,
       data: typeAverageArray,
-      backgroundColor: hexToRgba(`${baseColor}`, 0.50),      // More transparent
+      backgroundColor: hexToRgba(`${baseColor}`, 0.35),      // More transparent
       borderColor: hexToRgba(baseColor, 1),           // Subtle border
       pointBackgroundColor: hexToRgba(baseColor, 1),
       pointBorderColor: '#fff',

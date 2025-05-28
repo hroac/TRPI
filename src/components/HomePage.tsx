@@ -370,7 +370,7 @@ const Home = () => {
         bin.bigFiveResponses.agreeableness * 100,
         bin.bigFiveResponses.neuroticism * 100,
       ],
-       backgroundColor: hexToRgba(profile.bgColor, 0.5),      // More transparent
+       backgroundColor: hexToRgba(profile.bgColor, 0.35),      // More transparent
       borderColor: hexToRgba(profile.bgColor, 1),           // Subtle border
       pointBackgroundColor: hexToRgba(profile.bgColor, 1),
       pointBorderColor: '#fff',
@@ -417,7 +417,7 @@ const options = {
                 {bin.accuracy ? `- ${bin.accuracy.toFixed(1)}%` : ''}
               </Typography>
               
-              <Box display="flex" justifyContent="center" my={3} height={'300px'}>
+              <Box display="flex" justifyContent="center" my={3} height={'800px'}>
               <Radar data={data} options={options} />
               </Box>
             </Box>

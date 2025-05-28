@@ -205,9 +205,9 @@ const radarData = {
     {
       label: `${mbtiType} Average`,
       data: typeAverageArray,
-      backgroundColor: hexToRgba(`${baseColor}`, 0.35),      // More transparent
-      borderColor: hexToRgba(baseColor, 1),           // Subtle border
-      pointBackgroundColor: hexToRgba(baseColor, 1),
+      backgroundColor: 'rgba(75,192,192,0.7)',      // Less transparent
+      borderColor: 'rgba(75,192,192,1)',
+      pointBackgroundColor: 'rgba(75,192,192,1)',
       pointBorderColor: '#fff',
       pointRadius: 3,
       borderWidth: 2,
@@ -217,9 +217,9 @@ const radarData = {
     {
       label: 'Your Scores',
       data: chartDataArray,
-      backgroundColor: 'rgba(75,192,192,0.7)',      // Less transparent
-      borderColor: 'rgba(75,192,192,1)',
-      pointBackgroundColor: 'rgba(75,192,192,1)',
+        backgroundColor: hexToRgba(`${baseColor}`, 0.35),      // More transparent
+      borderColor: hexToRgba(baseColor, 1),           // Subtle border
+      pointBackgroundColor: hexToRgba(baseColor, 1),
       pointBorderColor: '#fff',
       pointRadius: 4,
       borderWidth: 3,

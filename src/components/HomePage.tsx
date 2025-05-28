@@ -385,7 +385,7 @@ const options = {
   responsive: true,
   fill: true,
   plugins: {
-    legend: { position: 'top' as const },
+    legend: { position: 'top' as "top", labels: { font: { size: 15 } }},
     title: { display: true, text: 'Big Five Personality Scores' },
   },
   scales: {
@@ -393,8 +393,8 @@ const options = {
       angleLines: { display: true },
       min: 0,
       max: 100,
-      pointLabels: { font: { size: 13 } },
-      ticks: { stepSize: 20, font: { size: 11 } }
+      pointLabels: { font: { size: 18 } },
+      ticks: { stepSize: 20, font: { size: 15 } }
     }
   }
 };

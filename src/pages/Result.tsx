@@ -42,6 +42,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import RadarIcon from '@mui/icons-material/DonutLarge'; // Substitute for radar, or your preferred icon
 import { typesData } from '../utils/typesData';
 import Carousel from '../components/Carousel';
+import { Autoplay } from 'swiper/modules';
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, RadialLinearScale, Title, ChartTooltip, Legend, PointElement, LineElement, Filler);
@@ -368,7 +369,7 @@ const radarData = {
 
       {/* Chart */}
       <Box my={3}>
-        <Carousel slides={chartSlides} settings={{ slidesPerView: 1, loop: false, autoHeight: true }}/>
+        <Carousel slides={chartSlides} settings={{ slidesPerView: 1, loop: false, autoHeight: true, autoplay: false }}/>
       </Box>
 
   

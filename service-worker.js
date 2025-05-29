@@ -124,7 +124,7 @@ self.addEventListener('fetch', event => {
         return self.clients.matchAll();
       })
     ); */
-  });
+  //});
   // -----------------------------------------------------------------------------
 
 } else {

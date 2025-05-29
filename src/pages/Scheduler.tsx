@@ -199,6 +199,7 @@ const Calendar: React.FC = () => {
   const handleDateSelect = (selectInfo: any) => {
     if (!currentUser) return alert('Please sign in with Google first.');
     const startDT = new Date(selectInfo.startStr);
+    if(startDT < new Date()) return  alert('Please select a date after the current date!')
     setNewAppointment({
       date: startDT.toISOString().split('T')[0],
       startTime: startDT.toTimeString().slice(0, 5),

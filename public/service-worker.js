@@ -32,38 +32,41 @@ if (workbox) {
     })
   );
 
-  // Add a fetch event listener to catch 404 responses.
-  self.addEventListener('fetch', event => {
-    event.respondWith((async () => {
-      try {
-        // Let the network handle the request.
-        let response = await fetch(event.request);
-        
-        // If we get a 404 response, attempt to fetch a fresh copy.
-        if (response.status === 404) {
-          console.log(`Response for ${event.request.url} was 404. Attempting to fetch an updated version.`);
-          try {
-            const updatedResponse = await fetch(event.request);
-            if (updatedResponse.status !== 404) {
-              // Update the precache with the new response.
-              const cache = await caches.open(workbox.core.cacheNames.precache);
-              cache.put(event.request, updatedResponse.clone());
-              console.log(`Cache updated for ${event.request.url}`);
-              return updatedResponse;
-            } else {
-              console.log(`Updated fetch for ${event.request.url} also returned 404.`);
-            }
-          } catch (err) {
-            console.error(`Error during updated fetch for ${event.request.url}:`, err);
-          }
-        }
-        return response;
-      } catch (error) {
-        console.error(`Fetch failed for ${event.request.url}:`, error);
-        throw error;
+  workbox.routing.registerRoute(
+  ({ request }) => request.destination === 'script' || request.destination === 'style' || request.destination === 'document',
+  async ({ event }) => {
+    try {
+      const response = await fetch(event.request);
+      if (response.status === 404) {
+        // Serve index.html as fallback for SPA, or some other fallback
+        return caches.match('/index.html');
       }
-    })());
-  });
+      return response;
+    } catch (error) {
+      // Offline fallback
+      return caches.match('/index.html');
+    }
+  }
+);
+
+
+  // Add a fetch event listener to catch 404 responses.
+self.addEventListener('fetch', event => {
+  event.respondWith((async () => {
+    try {
+      let response = await fetch(event.request);
+      // If not a 404, just return it
+      if (response.status !== 404) return response;
+
+      // If 404, try to serve index.html (for SPA) or a fallback
+      return await caches.match('/index.html');
+    } catch (err) {
+      // If offline, fallback to index.html
+      return await caches.match('/index.html');
+    }
+  })());
+});
+
 
   // ----- Development-only: Unregister service worker to clear stale caches -----
   self.addEventListener('activate', event => {

@@ -80,14 +80,12 @@ interface ResultsProps {
 const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
   const [bin, setBin] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [reviewIndex] = useState<number>(0);
   const params = useParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [date, setDate] = useState<Date>(new Date());
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [chartMode, setChartMode] = useState<'radar' | 'bar'>('radar');
 
   useEffect(() => {
     const fetchBinData = async () => {

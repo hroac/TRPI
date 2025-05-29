@@ -53,6 +53,7 @@ const Calendar: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
+  const [submitDisabled, disableSubmit] = useState(false);
   const calendarRef = useRef<FullCalendar>(null);
   const fetchedAdminEvents = useRef(false);
   const price = useRef(0);
@@ -219,6 +220,7 @@ const Calendar: React.FC = () => {
       alert('Please sign in with Google first.');
       return;
     }
+    disableSubmit(true);
     if(price.current) {
     setPremiumModalOpen(true);
     } else if ((newAppointment) && currentUser) {
@@ -231,6 +233,7 @@ const Calendar: React.FC = () => {
     }
     setPremiumModalOpen(false);
     alert('Your appointment has been created.');
+    disableSubmit(false)
     };
 
   const handlePaymentSuccess = () => {

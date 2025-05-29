@@ -9,6 +9,7 @@ const CLIENT_ID = '356497060674-ndjka8l1iod2obja36djpah0fckmaot9.apps.googleuser
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ subject: '', message: '', email: '' });
+  const [submitDisabled, disableSubmit] = useState(false);
   const tokenClient = useRef<any>(null);
   const formDataRef = useRef(formData);
 
@@ -79,6 +80,7 @@ useEffect(() => {
     if (res.ok) {
       alert('Email sent successfully!');
       setFormData(f => ({ ...f, subject: '', message: '' }));
+      disableSubmit(false)
     } else {
       console.error('Send failed:', await res.text());
       alert('Failed to send email.');
@@ -87,6 +89,7 @@ useEffect(() => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    disableSubmit(true)
     if (!formData.email) {
       // Not signed in yet → trigger Google One-Tap / popup
       window.google.accounts.id.prompt();

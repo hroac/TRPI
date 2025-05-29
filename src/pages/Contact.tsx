@@ -134,6 +134,7 @@ useEffect(() => {
                 variant="contained"
                 color="secondary"
                 type="submit"
+                disabled={submitDisabled}
               >
                 Send
               </Button>

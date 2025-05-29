@@ -306,7 +306,7 @@ const Calendar: React.FC = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setModalOpen(false)}>Cancel</Button>
-              <Button variant="contained" onClick={handleRequestAppointment}>Create Appointment (Cost: {price.current.toFixed(2)})</Button>
+              <Button disabled={submitDisabled} variant="contained" onClick={handleRequestAppointment}>Create Appointment (Cost: {price.current.toFixed(2)})</Button>
             </DialogActions>
           </Dialog>
 

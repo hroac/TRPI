@@ -1,6 +1,6 @@
 // Import Workbox from the CDN.
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
-const { googleAnalytics } = require('workbox-google-analytics');
+
 
 
 if (workbox) {
@@ -10,6 +10,18 @@ if (workbox) {
   workbox.precaching.cleanupOutdatedCaches();
 
 
+  workbox.routing.registerRoute(
+    ({url}) => url.origin === 'https://api.jsonbin.io',
+    new workbox.strategies.NetworkFirst({
+      cacheName: 'jsonbin-cache',
+      plugins: [
+        new workbox.expiration.ExpirationPlugin({
+          maxEntries: 30,          // Only keep last 30 bins
+          maxAgeSeconds: 60 * 60,  // 1 hour
+        }),
+      ],
+    }),
+  );
   // Precache assets. In production, __WB_MANIFEST is replaced with the list of files.
   workbox.precaching.precacheAndRoute(
     self.__WB_MANIFEST || [
@@ -84,7 +96,7 @@ workbox.core.setCacheNameDetails({
   runtime: 'runtime'
 });
 
-googleAnalytics.initialize();
+workbox.googleAnalytics.initialize();
 
   // Add a fetch event listener to catch 404 responses.
 self.addEventListener('fetch', event => {

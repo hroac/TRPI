@@ -112,7 +112,7 @@ async function jsonBinGet<T>(path: string, xJsonPath?: string): Promise<T> {
 }
 
 async function jsonBinPut<T>(path: string, body: T) {
-  console.log(path, 'putting')
+  //console.log(path, 'putting')
   const res = await fetch(`${JSONBIN_BASE}${path}`, {
     method: 'PUT',
     headers: baseHeaders,
@@ -309,15 +309,15 @@ const setSize = (index: number, size: number) => {
   });
 
   /* filtered + sorted list --------------------------------------- */
-  //console.log(messages)
-  //console.log(selTags)
+  ////console.log(messages)
+  ////console.log(selTags)
   const filtered = useMemo(() => {
     const byTag = messages.filter(m => !selTags.length || selTags.includes(m.tag));
     return byTag.sort(
       (a, b) => new Date(a.timestamp).valueOf() - new Date(b.timestamp).valueOf()
     );
   }, [messages, selTags]);
-  console.log(filtered)
+  //console.log(filtered)
 useEffect(() => {
   listRef.current?.resetAfterIndex(0, true); // true = also recompute scroll height
 }, [filtered.length]);
@@ -343,7 +343,7 @@ useEffect(() => {
       const curBinId = metaLive.currentBinId;
       const curPath  = `/b/${curBinId}`;
       let curBin     = rq.getQueryData<ChatBin>(['bin', curBinId]);
-     // console.log(curBinId, curBin)
+     // //console.log(curBinId, curBin)
       if (!curBin)   curBin = await jsonBinGet<ChatBin>(`${curPath}/latest`);
 
       /* rollover if full ----------------------------------------- */
@@ -419,7 +419,7 @@ useEffect(() => {
 
     setDraft('');
     setReply(null);
-    console.log(msg)
+    //console.log(msg)
     sendMut.mutate(msg);
   }, [draft, reply, selTags, userName, userColor, sendMut]);
 

@@ -10,6 +10,11 @@ const CLIENT_ID = '356497060674-ndjka8l1iod2obja36djpah0fckmaot9.apps.googleuser
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ subject: '', message: '', email: '' });
   const tokenClient = useRef<any>(null);
+  const formDataRef = useRef(formData);
+
+useEffect(() => {
+  formDataRef.current = formData;
+}, [formData]);
 
   useEffect(() => {
     // Initialize Google One-Tap / Credential response
@@ -54,9 +59,9 @@ const Contact: React.FC = () => {
   const sendEmail = async (accessToken: string) => {
     const raw = createEmail({
       to: 'rsk.rook@gmail.com',
-      from: formData.email,
-      subject: formData.subject,
-      message: formData.message,
+    from: formDataRef.current.email,
+      subject: formDataRef.current.subject,
+      message: formDataRef.current.message,
     });
 
     const res = await fetch(

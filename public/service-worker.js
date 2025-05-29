@@ -1,11 +1,14 @@
 // Import Workbox from the CDN.
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
+const { googleAnalytics } = require('workbox-google-analytics');
+
 
 if (workbox) {
   console.log("Workbox is loaded");
 
   // Clean up any caches that are no longer present in the precache manifest.
   workbox.precaching.cleanupOutdatedCaches();
+
 
   // Precache assets. In production, __WB_MANIFEST is replaced with the list of files.
   workbox.precaching.precacheAndRoute(
@@ -49,6 +52,39 @@ if (workbox) {
   }
 );
 
+
+workbox.routing.setCatchHandler(async ({event}) => {
+  if (event.request.destination === 'document') {
+    return caches.match('/404.html');
+  }
+  return Response.error();
+});
+
+workbox.routing.registerRoute(
+  /\/results\/\w+/,
+  new workbox.strategies.CacheFirst({
+    cacheName: 'results-pages',
+    plugins: [new workbox.expiration.ExpirationPlugin({ maxEntries: 10 })]
+  })
+);
+
+
+workbox.core.setCacheNameDetails({
+  prefix: 'TRPI',
+  suffix: new Date()
+    .toLocaleString('en-GB', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }),
+  precache: 'precache',
+  runtime: 'runtime'
+});
+
+googleAnalytics.initialize();
 
   // Add a fetch event listener to catch 404 responses.
 self.addEventListener('fetch', event => {

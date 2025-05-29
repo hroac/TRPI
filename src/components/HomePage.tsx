@@ -12,6 +12,8 @@ import {
   DialogTitle,
   DialogContent,
   IconButton,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Carousel from '../components/Carousel';
@@ -335,6 +337,8 @@ const Home = () => {
   const [reviews, setReviews] = useState<Record<string, Review>>({});
   const [isBinsLoading, setIsBinsLoading] = useState<boolean>(false);
   const [isReviewsLoading, setIsReviewsLoading] = useState<boolean>(false);
+   const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const fetched : React.MutableRefObject<boolean> = useRef(false)
 
@@ -376,7 +380,8 @@ const Home = () => {
       pointBorderColor: '#fff',
       pointRadius: 4,
       borderWidth: 2,
-      fill: true
+      fill: true,
+      clip: 1,
     }
   ],
 };
@@ -393,9 +398,9 @@ const options = {
       angleLines: { display: true },
       min: 0,
       max: 100,
-      pointLabels: { font: { size: 18 } },
-      ticks: { stepSize: 20, font: { size: 15 }, backdropColor: 'transparent' }
-    }
+      pointLabels: { font: { size: isMobile ? 14 : 18 } },
+        ticks: { stepSize: 20, font: { size: isMobile ? 12 : 15 }, backdropColor: 'transparent' }
+       }
   }
 };
 

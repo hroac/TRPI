@@ -212,6 +212,7 @@ const radarData = {
       pointRadius: 3,
       borderWidth: 2,
       order: 1, // explicit, but not required
+      clip: 0,
     },
     // DRAWN SECOND: User (top, more solid)
     {
@@ -224,6 +225,7 @@ const radarData = {
       pointRadius: 4,
       borderWidth: 3,
       order: 2, // explicit, but not required
+      clip: 0,
     }
   ]
 };
@@ -239,8 +241,8 @@ const radarData = {
       r: {
         angleLines: { display: true },
         min: 0, max: 100,
-        pointLabels: { font: { size: 18 } },
-        ticks: { stepSize: 20, font: { size: 15 }, backdropColor: 'transparent' }
+        pointLabels: { font: { size: isMobile ? 14 : 18 } },
+        ticks: { stepSize: 20, font: { size: isMobile ? 12 : 15 }, backdropColor: 'transparent' }
       }
     }
   };
@@ -248,7 +250,7 @@ const radarData = {
   const chartSlides = [
   {
     content: (
-      <Box display="flex" justifyContent="center" height={isMobile ? '300px' : '500px'}>
+      <Box display="flex" justifyContent="center" height={isMobile ? '600px' : '500px'}>
         <Radar data={radarData} options={radarOptions} />
       </Box>
     )
@@ -285,7 +287,7 @@ const radarData = {
           Loading Test Results...
         </Typography>
         <Box my={3}>
-          <Bar data={barData} options={barOptions} />
+          <Radar data={radarData} options={radarOptions} />
         </Box>
       </Paper>
     );

@@ -17,7 +17,11 @@ import {
   useMediaQuery,
   useTheme,
   Tooltip,
-  Stack
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -191,7 +195,11 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
   const [submitted, setSubmitted] = useState<boolean>(false)
+ const [password, setPassword] = useState<string>('');
+  const [openPasswordModal, setOpenPasswordModal] = useState(slug ? true : false ); // Modal is pre-opened by default
+  const [meta, setMeta] = useState<any>({});
   const type = typesData.find(t => t.type === matchedMBTIType);
+
 const longStages = [
   statements.slice(0,3), // Stage 0
   statements.slice(3, 7),  // stage 1
@@ -216,7 +224,9 @@ const longStages = [
       try {
         const all = await MetaBin.getAll();
         if (all[slug]) {
+          const meta = await MetaBin.getMeta();
           setMapping(all[slug]);
+          setMeta(Object.values(meta)[0])
           console.log('set slug')
         } else {
           console.warn(`Slug "${slug}" not found; proceeding without modal.`);
@@ -228,6 +238,11 @@ const longStages = [
       }
     })();
   }, [slug]);
+
+    useEffect(() => {
+
+    setOpenPasswordModal(!meta.password || password !== meta.password)
+  }, [password, meta])
 
   const unlock = () => {
    setLastStage(0)
@@ -752,6 +767,27 @@ const determineIndex = (trait: string, index: number) : number => {
           onSubmit={handleModalSubmit}
           onClose={() => setShowModal(false)}
         />
+      )}
+
+      {openPasswordModal && (
+         <Dialog open={openPasswordModal} onClose={() => {
+          console.log([password, meta.password, password !== meta.password])
+          setOpenPasswordModal(password !== meta.password)
+         }} fullWidth maxWidth="sm">
+              <DialogTitle>Enter The Password</DialogTitle>
+              <DialogContent dividers>
+                <Box>
+                   <TextField
+                              label="Password"
+                              value={password}
+                              onChange={e =>  setPassword(e.target.value)}
+                              required
+                              fullWidth
+                              margin="normal"
+                            />
+                </Box>
+                </DialogContent>
+          </Dialog>
       )}
     </Paper>
   </Box>

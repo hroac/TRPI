@@ -1,12 +1,8 @@
 import axios from 'axios';
 
 const JSONBIN_KEY = '$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG';
-const META_BIN_ID = '68348edd8960c979a5a159b2';
+const META_BIN_ID = '6834a3d68a456b7966a5a18b';
 
-export interface SlugMap {
-  slug: string;
-  binId: string;
-}
 
 interface RawRecord {
   record: string;

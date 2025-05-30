@@ -17,7 +17,11 @@ import {
   useMediaQuery,
   useTheme,
   Tooltip,
-  Stack
+  Stack,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -155,9 +159,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const navigate = useNavigate();
   const { company: slug, departement: departement } = useParams<{ company?: string, departement?: string; }>();
   const [mapping, setMapping]     = useState<string | null>(null);
+  const [meta, setMeta] = useState<any>({});
   const [loading, setLoading]     = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const resultsRef = useRef<any>(null);
   const initialStatements = () => {
     const statements = localStorage.getItem('statements')
     const parsed = statements && JSON.parse(statements)
@@ -197,6 +201,8 @@ console.log('new statements')
   const [excludedTypes, setExludedTypes] = useState<Array<string>>([])
   const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
+  const [password, setPassword] = useState<string>('');
+  const [openPasswordModal, setOpenPasswordModal] = useState(slug ? true : false ); // Modal is pre-opened by default
   const [submitted, setSubmitted] = useState<boolean>(false)
   const type = typesData.find(t => t.type === matchedMBTIType);
   const stages = [
@@ -218,8 +224,12 @@ console.log('new statements')
     (async () => {
       try {
         const all = await MetaBin.getAll();
+        console.log(all)
         if (all[slug]) {
+        const meta = await MetaBin.getMeta();
+        console.log(meta)
           setMapping(all[slug]);
+          setMeta(Object.values(meta)[0])
           console.log('set slug')
         } else {
           console.warn(`Slug "${slug}" not found; proceeding without modal.`);
@@ -231,6 +241,11 @@ console.log('new statements')
       }
     })();
   }, [slug]);
+
+  useEffect(() => {
+
+    setOpenPasswordModal(!meta.password || password !== meta.password)
+  }, [password, meta])
 
 
   const unlock = () => {
@@ -824,6 +839,28 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
           onSubmit={handleModalSubmit}
           onClose={() => setShowModal(false)}
         />
+        
+      )}
+
+      {openPasswordModal && (
+         <Dialog open={openPasswordModal} onClose={() => {
+          console.log([password, meta.password, password !== meta.password])
+          setOpenPasswordModal(password !== meta.password)
+         }} fullWidth maxWidth="sm">
+              <DialogTitle>Enter The Password</DialogTitle>
+              <DialogContent dividers>
+                <Box>
+                   <TextField
+                              label="Password"
+                              value={password}
+                              onChange={e =>  setPassword(e.target.value)}
+                              required
+                              fullWidth
+                              margin="normal"
+                            />
+                </Box>
+                </DialogContent>
+          </Dialog>
       )}
     </Paper>
   </Box>

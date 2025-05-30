@@ -240,9 +240,10 @@ const longStages = [
   }, [slug]);
 
     useEffect(() => {
-
-    setOpenPasswordModal(!meta.password || password !== meta.password)
-  }, [password, meta])
+      if(meta && slug) {
+      setOpenPasswordModal(!meta.password || password !== meta.password)
+      }
+    }, [password, meta])
 
   const unlock = () => {
    setLastStage(0)

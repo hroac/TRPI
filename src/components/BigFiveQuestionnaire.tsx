@@ -243,8 +243,9 @@ console.log('new statements')
   }, [slug]);
 
   useEffect(() => {
-
+    if(meta && slug) {
     setOpenPasswordModal(!meta.password || password !== meta.password)
+    }
   }, [password, meta])
 
 

@@ -11,7 +11,6 @@ import {
 
 interface SlugModalProps {
   open: boolean;
-  defaultCompany?: string;
   onSubmit: (data: {
     name: string;
     email: string;
@@ -22,10 +21,9 @@ interface SlugModalProps {
   onClose: () => void;
 }
 
-const SlugModal: React.FC<SlugModalProps> = ({ open, defaultCompany, onSubmit, onClose }) => {
+const SlugModal: React.FC<SlugModalProps> = ({ open, onSubmit, onClose }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [company, setCompany] = useState(defaultCompany || '');
   const [jobTitle, setJobTitle] = useState('');
   const [jobDescription, setJobDescription] = useState('');
 
@@ -34,15 +32,14 @@ const SlugModal: React.FC<SlugModalProps> = ({ open, defaultCompany, onSubmit, o
     if (open) {
       setName('');
       setEmail('');
-      setCompany(defaultCompany || '');
       setJobTitle('');
       setJobDescription('');
     }
-  }, [open, defaultCompany]);
+  }, [open]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ name, email, company, jobTitle, jobDescription });
+    onSubmit({ name, email, jobTitle, jobDescription });
   };
 
   return (
@@ -64,13 +61,6 @@ const SlugModal: React.FC<SlugModalProps> = ({ open, defaultCompany, onSubmit, o
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Company"
-            value={company}
-            onChange={e => setCompany(e.target.value)}
             fullWidth
             margin="normal"
           />

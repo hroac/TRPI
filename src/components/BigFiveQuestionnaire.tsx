@@ -153,7 +153,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   onComplete,
 }) => {
   const navigate = useNavigate();
-  const { company: slug } = useParams<{ company?: string }>();
+  const { company: slug, departement: departement } = useParams<{ company?: string, departement?: string; }>();
   const [mapping, setMapping]     = useState<string | null>(null);
   const [loading, setLoading]     = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -450,7 +450,6 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
   const handleModalSubmit = async (personal: {
     name: string;
     email: string;
-    company?: string;
     jobTitle: string;
     jobDescription?: string;
   }) => {
@@ -484,7 +483,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping});
+    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement});
     navigate(`/result/${binId}`);
   }
 
@@ -822,7 +821,6 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
       {showModal && (
         <SlugModal
         open={showModal}
-          defaultCompany={slug}
           onSubmit={handleModalSubmit}
           onClose={() => setShowModal(false)}
         />

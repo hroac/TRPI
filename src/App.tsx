@@ -87,6 +87,7 @@ export default function App() {
        name: responses.name,
        email: responses.email,
       company: responses.company,
+      departement: responses.departement,
       jobTitle: responses.jobTitle,
       jobDescription: responses.jobDescription,
       type: responses.mbtiType,
@@ -168,6 +169,7 @@ export default function App() {
           >
             <Routes>
               <Route path="/" element={<Homepage />} />
+              <Route path="/test/:company/:departement" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/test/:company" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/result/:binId" element={<ResultsPage binId={binId} />} />
@@ -184,6 +186,7 @@ export default function App() {
               <Route path="/compare" element={<TypeComparator />} />
               <Route path="/scheduler" element={<Scheduler />} />
               <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/assessment/:company/:departement" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/assessment/:company" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/oracle" element={<ChatTRPI apiPath="https://chattrpi-production.up.railway.app/api/trpi-chat" userId={guid()} />}/>

@@ -149,7 +149,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   onComplete,
 }) => {
   const navigate = useNavigate();
-  const { company: slug } = useParams<{ company?: string }>();
+  const { company: slug, departement: departement } = useParams<{ company?: string, departement?: string }>();
   const [mapping, setMapping]     = useState<string | null>(null);
   const [loading, setLoading]     = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -397,7 +397,6 @@ const flushCurrentStage = () => {
   const handleModalSubmit = async (personal: {
     name: string;
     email: string;
-    company?: string;
     jobTitle: string;
     jobDescription?: string;
   }) => {
@@ -426,7 +425,7 @@ const flushCurrentStage = () => {
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping});
+    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement});
     navigate(`/result/${binId}`);
   }
 
@@ -749,8 +748,7 @@ const determineIndex = (trait: string, index: number) : number => {
       
       {showModal && (
         <SlugModal
-        open={showModal}
-          defaultCompany={slug}
+          open={showModal}
           onSubmit={handleModalSubmit}
           onClose={() => setShowModal(false)}
         />

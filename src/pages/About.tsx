@@ -321,51 +321,54 @@ const AboutPage: React.FC<{
             </Typography>
           )}
 
-          {/* Upgrade options – only shown if upgrades available */}
-          {!profileText && !loading && bin && bin.userId === guid() && availableUpgrades.length > 0 && (
-            <Box>
-              <Box display={'flex'} justifyContent={'flexStart'}>
-                <FormControl component="fieldset" sx={{ mt: 3 }}>
-                  <FormLabel component="legend">Upgrade report</FormLabel>
-                  <RadioGroup
-                    value={reportLevel}
-                    onChange={e =>
-                      setReportLevel(e.target.value as ReportLevel)
-                    }
-                    sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}
-                  >
-                    {availableUpgrades.map(level => (
-                      <FormControlLabel
-                        key={level}
-                        value={level}
-                        control={<Radio />}
-                        label={
-                          level === 'casual'
-                            ? 'Casual (Free)'
-                            : level === 'advanced'
-                            ? 'Advanced (Free)'
-                            : 'Expert (€0.99)'
-                        }
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-              </Box>
+         {!loading && bin && bin.userId === guid() && (
+  <Box>
+    <Box display={'flex'} justifyContent={'flexStart'}>
+      <FormControl component="fieldset" sx={{ mt: 3 }}>
+        <FormLabel component="legend">
+          {availableUpgrades.length === 1
+            ? 'Regenerate your report'
+            : 'Upgrade or regenerate your report'}
+        </FormLabel>
+        <RadioGroup
+          value={reportLevel}
+          onChange={e => setReportLevel(e.target.value as ReportLevel)}
+          sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}
+        >
+          {availableUpgrades.map(level => (
+            <FormControlLabel
+              key={level}
+              value={level}
+              control={<Radio />}
+              label={
+                level === 'casual'
+                  ? 'Casual (Free)'
+                  : level === 'advanced'
+                  ? 'Advanced (Free)'
+                  : 'Expert (€0.99)'
+              }
+            />
+          ))}
+        </RadioGroup>
+      </FormControl>
+    </Box>
+    <Button
+      variant="contained"
+      color="primary"
+      fullWidth={!isMobile}
+      sx={{ mt: 2 }}
+      onClick={handleGenerateClick}
+      disabled={loading}
+    >
+      {reportLevel === 'expert'
+        ? (availableUpgrades.length === 1
+            ? 'Regenerate Expert Profile (€0.99)'
+            : 'Generate Expert Profile – €0.99')
+        : `Generate ${reportLevel.charAt(0).toUpperCase() + reportLevel.slice(1)} Profile (Free)`}
+    </Button>
+  </Box>
+)}
 
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth={!isMobile}
-                sx={{ mt: 2 }}
-                onClick={handleGenerateClick}
-                disabled={loading}
-              >
-                {reportLevel === 'expert'
-                  ? 'Generate Expert Profile – €0.99'
-                  : `Generate ${reportLevel.charAt(0).toUpperCase() + reportLevel.slice(1)} Profile (Free)`}
-              </Button>
-            </Box>
-          )}
 
           {/* Optionally, if they've already generated the highest level */}
           {!profileText && !loading && bin && bin.userId === guid() && availableUpgrades.length === 0 && (

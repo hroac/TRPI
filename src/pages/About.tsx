@@ -138,7 +138,7 @@ const AboutPage: React.FC<{
   const currentLevel: ReportLevel = (bin?.detailLevel as ReportLevel) || 'casual';
   const availableUpgrades: ReportLevel[] = useMemo(
     () => REPORT_LEVELS.filter(
-      level => getReportLevelIndex(level) > getReportLevelIndex(currentLevel)
+      level => getReportLevelIndex(level) >= getReportLevelIndex(currentLevel)
     ),
     [currentLevel]
   );

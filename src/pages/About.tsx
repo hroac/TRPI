@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
@@ -64,6 +64,13 @@ const buildAssessmentNarrative = (
     .join('\n');
 
 /* ------------------------------------------------------------ */
+/*  Constants for report level logic                            */
+/* ------------------------------------------------------------ */
+const REPORT_LEVELS = ['casual', 'advanced', 'expert'] as const;
+type ReportLevel = typeof REPORT_LEVELS[number];
+const getReportLevelIndex = (level: ReportLevel) => REPORT_LEVELS.indexOf(level);
+
+/* ------------------------------------------------------------ */
 /*  Component                                                   */
 /* ------------------------------------------------------------ */
 const AboutPage: React.FC<{
@@ -96,22 +103,9 @@ const AboutPage: React.FC<{
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  /* ------------------ local state ---------------------------- */
-  const [premiumModalOpen, setPremiumModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [profileText, setProfileText] = useState<string>(description);
-  const [reportLevel, setReportLevel] = useState<'casual' | 'advanced' | 'expert'>('casual');
-
   /* ------------------ assessment narrative ------------------- */
   const stmnts = stages.flat();
   const assessmentNarrative = buildAssessmentNarrative(statements, stmnts, allResponses);
-
-  /* ------------------ generator map -------------------------- */
-  const levelToGenerator = {
-    casual: generateLaymanReport,
-    advanced: generateEnthusiastReport,
-    expert: generateExpertReport,
-  } as const;
 
   /* ------------------ chart data ----------------------------- */
   const chartData = {
@@ -139,6 +133,31 @@ const AboutPage: React.FC<{
       },
     ],
   };
+
+  /* ------------------ current generated detail level ---------- */
+  const currentLevel: ReportLevel = (bin?.detailLevel as ReportLevel) || 'casual';
+  const availableUpgrades: ReportLevel[] = useMemo(
+    () => REPORT_LEVELS.filter(
+      level => getReportLevelIndex(level) > getReportLevelIndex(currentLevel)
+    ),
+    [currentLevel]
+  );
+
+  /* ------------------ local state ---------------------------- */
+  // Default radio to first upgrade (if available), or just 'casual'
+  const [reportLevel, setReportLevel] = useState<ReportLevel>(
+    availableUpgrades[0] || 'casual'
+  );
+  const [premiumModalOpen, setPremiumModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [profileText, setProfileText] = useState<string>(description);
+
+  /* ------------------ generator map -------------------------- */
+  const levelToGenerator = {
+    casual: generateLaymanReport,
+    advanced: generateEnthusiastReport,
+    expert: generateExpertReport,
+  } as const;
 
   /* ------------------ FREE or PREMIUM generation ------------- */
   const generateFreeReport = async () => {
@@ -184,13 +203,12 @@ const AboutPage: React.FC<{
     setPremiumModalOpen(false);
     setLoading(true);
     let prfl = functionPairings.find(pairing => pairing.type === bin.type) || functionPairings[0];
-      let suffixType = findClosestComplement(bin.type, bin.bigFiveResponses)?.type || '';
-      let suffixMode = functionPairings.find(pairing => pairing.type === suffixType) || functionPairings[0];
+    let suffixType = findClosestComplement(bin.type, bin.bigFiveResponses)?.type || '';
+    let suffixMode = functionPairings.find(pairing => pairing.type === suffixType) || functionPairings[0];
 
-      (prfl as any).suffix = suffixType.slice(1, 3);
-      (prfl as any).suffixType = suffixType;
-      (prfl as any).suffixMode = suffixMode;
-
+    (prfl as any).suffix = suffixType.slice(1, 3);
+    (prfl as any).suffixType = suffixType;
+    (prfl as any).suffixMode = suffixMode;
 
     try {
       const descriptionText = await generateExpertReport({
@@ -225,17 +243,16 @@ const AboutPage: React.FC<{
                   const idx = stmnts.filter((s) => s.trait === stmt.trait).indexOf(stmt);
                   const raw = allResponses?.[stmt.trait]?.[idx];
                   const num: number = parseFloat(raw);
-                  const value = getSubtext(stmt, num)
-                  
+                  const value = getSubtext(stmt, num);
+
                   return (
                     <Paper sx={{ p: 3, mb: 5 }} key={idx}>
                       <Typography variant="h6">{stmt.text}</Typography>
                       <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
                       <Box mt={1}>
                         <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-                          
-                         
-                         <strong>Your Answer:</strong>{Number.isNaN(num) ? raw : ` ${Math.round(num * 100)}%`} {value || ""}
+                          <strong>Your Answer:</strong>
+                          {Number.isNaN(num) ? raw : ` ${Math.round(num * 100)}%`} {value || ""}
                         </Typography>
                         {!Number.isNaN(num) && (
                           <LinearProgress variant="determinate" value={num * 100} />
@@ -269,7 +286,14 @@ const AboutPage: React.FC<{
       {showBigFive && (
         <Box display="flex" justifyContent="center" my={4}>
           <Box width={isMobile ? '90%' : '60%'}>
-            <Bar data={chartData} options={{ responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } },}} />
+            <Bar
+              data={chartData}
+              options={{
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, max: 100 } },
+              }}
+            />
           </Box>
         </Box>
       )}
@@ -297,47 +321,58 @@ const AboutPage: React.FC<{
             </Typography>
           )}
 
-         
+          {/* Upgrade options – only shown if upgrades available */}
+          {!profileText && !loading && bin && bin.userId === guid() && availableUpgrades.length > 0 && (
+            <Box>
+              <Box display={'flex'} justifyContent={'flexStart'}>
+                <FormControl component="fieldset" sx={{ mt: 3 }}>
+                  <FormLabel component="legend">Upgrade report</FormLabel>
+                  <RadioGroup
+                    value={reportLevel}
+                    onChange={e =>
+                      setReportLevel(e.target.value as ReportLevel)
+                    }
+                    sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}
+                  >
+                    {availableUpgrades.map(level => (
+                      <FormControlLabel
+                        key={level}
+                        value={level}
+                        control={<Radio />}
+                        label={
+                          level === 'casual'
+                            ? 'Casual (Free)'
+                            : level === 'advanced'
+                            ? 'Advanced (Free)'
+                            : 'Expert (€0.99)'
+                        }
+                      />
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+              </Box>
 
-      {!profileText && !loading && bin && bin.userId === guid() ? (
-        <Box>
-   <Box display={'flex'} justifyContent={'flexStart'}>
-          <FormControl component="fieldset" sx={{ mt: 3 }}>
-  <FormLabel component="legend">Report detail</FormLabel>
-
-  {/* Vertical by default — no `row` prop */}
-  <RadioGroup
-    value={reportLevel}
-    onChange={e =>
-      setReportLevel(e.target.value as 'casual' | 'advanced' | 'expert')
-    }
-    sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}
-  >
-    <FormControlLabel value="casual"   control={<Radio />} label="Casual (Free)" />
-    <FormControlLabel value="advanced" control={<Radio />} label="Advanced (Free)" />
-    <FormControlLabel value="expert"   control={<Radio />} label="Expert (€0.99)" />
-  </RadioGroup>
-</FormControl>
-
-         </Box>
-
-          {/* Generate button */}
-          {bin && bin.userId === guid() && (
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth={!isMobile}
-              sx={{ mt: 2 }}
-              onClick={handleGenerateClick}
-              disabled={loading}
-            >
-              {reportLevel === 'expert'
-                ? 'Generate Expert Profile – €0.99'
-                : `Generate ${reportLevel.charAt(0).toUpperCase() + reportLevel.slice(1)} Profile (Free)`}
-            </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth={!isMobile}
+                sx={{ mt: 2 }}
+                onClick={handleGenerateClick}
+                disabled={loading}
+              >
+                {reportLevel === 'expert'
+                  ? 'Generate Expert Profile – €0.99'
+                  : `Generate ${reportLevel.charAt(0).toUpperCase() + reportLevel.slice(1)} Profile (Free)`}
+              </Button>
+            </Box>
           )}
-        </Box>
-      ) : (<></>)}
+
+          {/* Optionally, if they've already generated the highest level */}
+          {!profileText && !loading && bin && bin.userId === guid() && availableUpgrades.length === 0 && (
+            <Typography sx={{ mt: 3, fontStyle: 'italic', color: 'text.secondary' }}>
+              You have already generated the most detailed report available.
+            </Typography>
+          )}
         </CardContent>
       </Card>
 

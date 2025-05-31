@@ -23,3 +23,4 @@ src/utils/*.js
 src/utils/*.json
 src/utils/*.pdf
 src/utils/*.py
+src/utils/radar.html

@@ -50,7 +50,7 @@ const AppHelmet: React.FC = () => (
     <meta name="title" content="Trait Indicator - Find your MBTI type based on the Big Five!" />
     <meta
       name="description"
-      content="Explore the Trait Response Personality Indicator (TRPI) model, a unique approach that integrates MBTI, the Big Five, and the 4F responses. Discover how past experiences shape personality and use this insight for personal growth and resilience."
+      content="Explore the Trait Response Personality Indicator (TRPI) model, a unique approach that integrates Jung, the Big Five, and the 4F responses. Discover how past experiences shape personality and use this insight for personal growth and resilience."
     />
 
     <meta property="og:title" content="Understanding Personality with TRPI" />

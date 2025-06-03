@@ -1,8 +1,8 @@
 {
-    "name": "traumaindicator",
+    "name": "traitindicator",
     "version": "1.0.0",
     "private": true,
-    "homepage": "https://traumaindicator.com/#",
+    "homepage": "https://traitindicator.com/#",
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
@@ -32,6 +32,7 @@
         "google-tts-api": "^2.0.2",
         "http-proxy-middleware": "^3.0.3",
         "languagedetect": "^2.0.0",
+        "ml-kmeans": "^6.0.0",
         "pdfjs-dist": "2.16.105",
         "react": "^18.0.0",
         "react-chartjs-2": "^5.2.0",
@@ -44,6 +45,7 @@
         "react-scripts": "^5.0.1",
         "react-virtualized-auto-sizer": "^1.0.26",
         "react-window": "^1.8.11",
+        "seedrandom": "^3.0.5",
         "styled-components": "^6.1.13",
         "swiper": "^11.1.14",
         "three": "^0.174.0",

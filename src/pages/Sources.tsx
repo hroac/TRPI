@@ -25,44 +25,44 @@ const sources = [
     `,
   },
   {
-    src: '/pdfs/The Trait Response Personality Indicator.pdf',
-    link: 'https://osf.io/827yk',
-    title: 'The Trait Response Personality Indicator (TRPI)',
+    src: '/pdfs/Replicating and Extending the Link Between Jung and the Big Five.pdf',
+    link: 'https://osf.io/2rm5j', // You may update with the correct OSF link if needed
+    title: 'Replicating and Extending the Link Between Jung and the Big Five',
     description: `
-      Validates the TRPI framework through MBTI-Big Five correlations and introduces four cognitive clusters:
-      Concrete Observers, Concrete Evaluators, Abstract Observers, and Abstract Evaluators.
-      Extends traditional personality typing by integrating stress response modes and dynamic cluster analysis.
+      Establishes a robust, cross-validated mapping between Jungian types and Big Five trait profiles using TRPI data (n=2,916).
+      Replicates classic MBTI–Big Five relationships, validates 16-type classification (mean r = 0.833), and introduces four cognitive clusters beyond classical dichotomies.
     `,
   },
   {
-    src: '/pdfs/Validating the Briggs-Myers Types.pdf',
-    link: 'https://osf.io/2rm5j',
-    title: 'Validating the Briggs-Myers Types',
+    src: '/pdfs/From Traits to Types Validating Jungian and Freudian Concepts with the Big Five.pdf',
+    link: 'https://osf.io/827yk', // You may update with the correct OSF link if needed
+    title: 'From Traits to Types: Validating Jungian and Freudian Concepts with the Big Five',
     description: `
-      Replicates classic MBTI–Big Five relationships with a sample of 1900 participants.
-      Shows strong trait correlations (r = 0.5–0.9) and introduces cluster validation via cognitive styles and cross-validated typological matching.
+      Integrates trait, type, and neurocognitive models in TRPI. 
+      Demonstrates that Big Five traits form two meta-traits—Ego (short-context, N-E axis) and Superego (long-context, A-C axis)—grounded in hemispheric context processing.
+      K-means clustering empirically recovers TRPI’s four survival modes (Freeze, Fight, Fawn, Flight), each mapping to specific function pairings and Big Five profiles.
     `,
   },
   {
-    src: '/pdfs/Predicting Stress Responses Through the Big Five.pdf',
-    link: 'https://osf.io/v462q',
-    title: 'Predicting Stress Responses Through the Big Five',
+    src: '/pdfs/Behavorial Clustering Of Jungian Types.pdf',
+    link: '', // Add your OSF or other link if available
+    title: 'Behavioral Clustering of Jungian Types: Linking the 4F Trauma Modes, Big‑Five Traits, and Cognitive Functions',
     description: `
-      Maps Big Five traits to TRPI's 4F model:
-      Extraversion → Fight, Neuroticism → Flight, Conscientiousness → Freeze, Agreeableness → Fawn.
-      Provides empirical support linking personality traits to specific stress response strategies.
+      Applies k-means clustering to TRPI trait vectors (C, E, A, N) from 2,916 participants, empirically recovering the four 4F modes.
+      Each mode is defined by a dominant trait: Freeze (C), Fight (E), Fawn (A), Flight (N).
+      Shows high non-random correspondence between behavioral clusters, Big Five dominance, and Jungian type, supporting the TRPI’s dynamic function–trait linkage.
     `,
   },
   {
     src: '/pdfs/Hemispheric Lateralization of Context Length and the Organization of the Big Five Traits.pdf',
-    link: 'https://osf.io/cg2b5',
+    link: 'https://osf.io/cg2b5', // You may update with the correct OSF link if needed
     title: 'Hemispheric Lateralization of Context Length and the Organization of the Big Five Traits',
     description: `
-      Demonstrates that the Big Five traits organize into two meta-traits based on hemispheric context length:
-      Neuroticism–Extraversion (Ego/short-context) and Agreeableness–Conscientiousness (Superego/long-context).
-      Provides neurocognitive grounding for TRPI’s distinction between short- and long-context processing as the basis for personality.
+      Demonstrates, via factor analysis on a weighted Big Five dataset (n=2,916), that personality traits organize into two meta-traits:
+      1) Neuroticism–Extraversion (short-context/Ego, left hemisphere), and 2) Agreeableness–Conscientiousness (long-context/Superego, right hemisphere).
+      Provides neurocognitive grounding for the TRPI’s distinction between context processing preferences as the foundation of personality structure.
     `,
-  }
+  },
 ]
 ;
 

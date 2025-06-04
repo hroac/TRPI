@@ -60,7 +60,6 @@ const SlugModal: React.FC<SlugModalProps> = ({ open, onSubmit, onClose }) => {
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            required
             fullWidth
             margin="normal"
           />

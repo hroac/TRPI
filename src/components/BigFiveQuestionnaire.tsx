@@ -229,7 +229,7 @@ console.log('new statements')
         const meta = await MetaBin.getMeta();
         console.log(meta)
           setMapping(all[slug]);
-          setMeta(Object.values(meta)[0])
+          setMeta(meta[slug])
           console.log('set slug')
         } else {
           console.warn(`Slug "${slug}" not found; proceeding without modal.`);

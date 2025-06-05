@@ -134,20 +134,21 @@ const AboutPage: React.FC<{
     ],
   };
 
-  /* ------------------ current generated detail level ---------- */
+  /* ------------------ report-level state --------------------- */
+  const hasGenerated = Boolean(bin?.description || description);
   const currentLevel: ReportLevel = (bin?.detailLevel as ReportLevel) || 'casual';
-  const availableUpgrades: ReportLevel[] = useMemo(
-    () => REPORT_LEVELS.filter(
-      level => getReportLevelIndex(level) >= getReportLevelIndex(currentLevel)
-    ),
-    [currentLevel]
-  );
+
+  // Determine which radio options should be visible
+  const availableOptions: ReportLevel[] = useMemo(() => {
+    if (!hasGenerated) return [...REPORT_LEVELS]; // first visit
+    const higher = REPORT_LEVELS.filter(
+      lvl => getReportLevelIndex(lvl) > getReportLevelIndex(currentLevel)
+    );
+    return higher.length ? higher : ['expert'];   // keep expert for regeneration
+  }, [hasGenerated, currentLevel]);
 
   /* ------------------ local state ---------------------------- */
-  // Default radio to first upgrade (if available), or just 'casual'
-  const [reportLevel, setReportLevel] = useState<ReportLevel>(
-    availableUpgrades[0] || 'casual'
-  );
+  const [reportLevel, setReportLevel] = useState<ReportLevel>(availableOptions[0]);
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [profileText, setProfileText] = useState<string>(description);
@@ -181,7 +182,7 @@ const AboutPage: React.FC<{
       const state = {
         detailLevel: reportLevel,
         ...bin,
-      }
+      };
       state['description'] = descriptionText;
       await JsonBinApi.updateResultsInJsonBin(state);
       setProfileText(descriptionText);
@@ -221,7 +222,7 @@ const AboutPage: React.FC<{
         ...data.demographics,
         detailLevel: 'expert',
         ...bin,
-      }
+      };
 
       state['description'] = descriptionText;
       await JsonBinApi.updateResultsInJsonBin(state);
@@ -252,7 +253,7 @@ const AboutPage: React.FC<{
                       <Box mt={1}>
                         <Typography sx={{ whiteSpace: 'pre-wrap' }}>
                           <strong>Your Answer:</strong>
-                          {Number.isNaN(num) ? raw : ` ${Math.round(num * 100)}%`} {value || ""}
+                          {Number.isNaN(num) ? raw : ` ${Math.round(num * 100)}%`} {value || ''}
                         </Typography>
                         {!Number.isNaN(num) && (
                           <LinearProgress variant="determinate" value={num * 100} />
@@ -302,7 +303,12 @@ const AboutPage: React.FC<{
       <Box display="flex" justifyContent="center">
         <Typography
           variant="h4"
-          sx={{ fontStyle: 'italic', fontWeight: 'bold', mb: 2, fontSize: isMobile ? '1.5rem' : '2rem' }}
+          sx={{
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            mb: 2,
+            fontSize: isMobile ? '1.5rem' : '2rem',
+          }}
         >
           {`"${typeInfo.quote}"`}
         </Typography>
@@ -321,61 +327,64 @@ const AboutPage: React.FC<{
             </Typography>
           )}
 
-         {!loading && bin && bin.userId === guid() && (
-  <Box>
-    <Box display={'flex'} justifyContent={'flexStart'}>
-      <FormControl component="fieldset" sx={{ mt: 3 }}>
-        <FormLabel component="legend">
-          {availableUpgrades.length === 1
-            ? 'Regenerate your report'
-            : 'Upgrade or regenerate your report'}
-        </FormLabel>
-        <RadioGroup
-          value={reportLevel}
-          onChange={e => setReportLevel(e.target.value as ReportLevel)}
-          sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}
-        >
-          {availableUpgrades.map(level => (
-            <FormControlLabel
-              key={level}
-              value={level}
-              control={<Radio />}
-              label={
-                level === 'casual'
-                  ? 'Casual (Free)'
-                  : level === 'advanced'
-                  ? 'Advanced (Free)'
-                  : 'Expert (€0.99)'
-              }
-            />
-          ))}
-        </RadioGroup>
-      </FormControl>
-    </Box>
-    <Button
-      variant="contained"
-      color="primary"
-      fullWidth={!isMobile}
-      sx={{ mt: 2 }}
-      onClick={handleGenerateClick}
-      disabled={loading}
-    >
-      {reportLevel === 'expert'
-        ? (availableUpgrades.length === 1
-            ? 'Regenerate Expert Profile (€0.99)'
-            : 'Generate Expert Profile – €0.99')
-        : `Generate ${reportLevel.charAt(0).toUpperCase() + reportLevel.slice(1)} Profile (Free)`}
-    </Button>
-  </Box>
-)}
-
+          {!loading && bin && bin.userId === guid() && (
+            <Box>
+              <Box display={'flex'} justifyContent={'flexStart'}>
+                <FormControl component="fieldset" sx={{ mt: 3 }}>
+                  <FormLabel component="legend">
+                    {availableOptions.length === 1
+                      ? 'Regenerate your report'
+                      : 'Upgrade your report'}
+                  </FormLabel>
+                  <RadioGroup
+                    value={reportLevel}
+                    onChange={e => setReportLevel(e.target.value as ReportLevel)}
+                    sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}
+                  >
+                    {availableOptions.map(level => (
+                      <FormControlLabel
+                        key={level}
+                        value={level}
+                        control={<Radio />}
+                        label={
+                          level === 'casual'
+                            ? 'Casual (Free)'
+                            : level === 'advanced'
+                            ? 'Advanced (Free)'
+                            : 'Expert (€0.99)'
+                        }
+                      />
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+              </Box>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth={!isMobile}
+                sx={{ mt: 2 }}
+                onClick={handleGenerateClick}
+                disabled={loading}
+              >
+                {reportLevel === 'expert'
+                  ? availableOptions.length === 1
+                    ? 'Regenerate Expert Profile (€0.99)'
+                    : 'Generate Expert Profile – €0.99'
+                  : `Generate ${reportLevel.charAt(0).toUpperCase() + reportLevel.slice(1)} Profile (Free)`}
+              </Button>
+            </Box>
+          )}
 
           {/* Optionally, if they've already generated the highest level */}
-          {!profileText && !loading && bin && bin.userId === guid() && availableUpgrades.length === 0 && (
-            <Typography sx={{ mt: 3, fontStyle: 'italic', color: 'text.secondary' }}>
-              You have already generated the most detailed report available.
-            </Typography>
-          )}
+          {!profileText &&
+            !loading &&
+            bin &&
+            bin.userId === guid() &&
+            availableOptions.length === 0 && (
+              <Typography sx={{ mt: 3, fontStyle: 'italic', color: 'text.secondary' }}>
+                You have already generated the most detailed report available.
+              </Typography>
+            )}
         </CardContent>
       </Card>
 

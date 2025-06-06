@@ -19,246 +19,247 @@ interface Bin {
 
 export const MBTIProfiles = [
   {
-      "name": "ENTP",
-      "traits": {
-          "openness": 0.8,
-          "conscientiousness": 0.50,
-          "extraversion": 0.75,
-          "agreeableness": 0.45,
-          "neuroticism": 0.35
-      },
-      "mode": "Fight",
-      "gold": "INFJ",
-      "silver": "INTJ",
-      "bronze": "ESFP",
-      "copper": "ISFJ"
+    "name": "ENTP",
+    "traits": {
+      "openness": 0.80,
+      "conscientiousness": 0.50,
+      "extraversion": 0.75,
+      "agreeableness": 0.50,
+      "neuroticism": 0.35
+    },
+    "mode": "Fight",
+    "gold": "INFJ",
+    "silver": "INTJ",
+    "bronze": "ESFP",
+    "copper": "ISFJ"
   },
   {
-      "name": "ESTP",
-      "traits": {
-          "openness": 0.65,
-          "conscientiousness": 0.6,
-          "extraversion": 0.8,
-          "agreeableness": 0.4,
-          "neuroticism": 0.5
-      },
-      "mode": "Fight",
-      "gold": "ISFJ",
-      "silver": "ISTJ",
-      "bronze": "ENFP",
-      "copper": "INFJ"
+    "name": "ESTP",
+    "traits": {
+      "openness": 0.65,
+      "conscientiousness": 0.55,
+      "extraversion": 0.80,
+      "agreeableness": 0.40,
+      "neuroticism": 0.50
+    },
+    "mode": "Fight",
+    "gold": "ISFJ",
+    "silver": "ISTJ",
+    "bronze": "ENFP",
+    "copper": "INFJ"
   },
   {
-      "name": "INTP",
-      "traits": {
-          "openness": 0.6,
-          "conscientiousness": 0.4,
-          "extraversion": 0.45,
-          "agreeableness": 0.35,
-          "neuroticism": 0.3
-      },
-      "mode": "Fight",
-      "gold": "ESTJ",
-      "silver": "ENTJ",
-      "bronze": "ISFP",
-      "copper": "ESFJ"
+    "name": "INTP",
+    "traits": {
+      "openness": 0.70,
+      "conscientiousness": 0.45,
+      "extraversion": 0.50,
+      "agreeableness": 0.40,
+      "neuroticism": 0.35
+    },
+    "mode": "Fight",
+    "gold": "ESTJ",
+    "silver": "ENTJ",
+    "bronze": "ISFP",
+    "copper": "ESFJ"
   },
   {
-      "name": "ISTP",
-      "traits": {
-          "openness": 0.45,
-          "conscientiousness": 0.45,
-          "extraversion": 0.5,
-          "agreeableness": 0.4,
-          "neuroticism": 0.45
-      },
-      "mode": "Fight",
-      "gold": "ENTJ",
-      "silver": "ESTJ",
-      "bronze": "INFP",
-      "copper": "ENFJ"
+    "name": "ISTP",
+    "traits": {
+      "openness": 0.50,
+      "conscientiousness": 0.45,
+      "extraversion": 0.55,
+      "agreeableness": 0.40,
+      "neuroticism": 0.50
+    },
+    "mode": "Fight",
+    "gold": "ENTJ",
+    "silver": "ESTJ",
+    "bronze": "INFP",
+    "copper": "ENFJ"
   },
   {
-      "name": "INTJ",
-      "traits": {
-          "openness": 0.75,
-          "conscientiousness": 0.75,
-          "extraversion": 0.55,
-          "agreeableness": 0.35,
-          "neuroticism": 0.5
-      },
-      "mode": "Freeze",
-      "gold": "ENFP",
-      "silver": "ENTP",
-      "bronze": "ISFJ",
-      "copper": "ESFP"
+    "name": "INTJ",
+    "traits": {
+      "openness": 0.75,
+      "conscientiousness": 0.70,
+      "extraversion": 0.50,
+      "agreeableness": 0.35,
+      "neuroticism": 0.50
+    },
+    "mode": "Freeze",
+    "gold": "ENFP",
+    "silver": "ENTP",
+    "bronze": "ISFJ",
+    "copper": "ESFP"
   },
   {
-      "name": "ISTJ",
-      "traits": {
-          "openness": 0.4,
-          "conscientiousness": 0.6,
-          "extraversion": 0.4,
-          "agreeableness": 0.4,
-          "neuroticism": 0.5
-      },
-      "mode": "Freeze",
-      "gold": "ESFP",
-      "silver": "ESTP",
-      "bronze": "INFJ",
-      "copper": "ENFP"
+    "name": "ISTJ",
+    "traits": {
+      "openness": 0.45,
+      "conscientiousness": 0.65,
+      "extraversion": 0.40,
+      "agreeableness": 0.40,
+      "neuroticism": 0.55
+    },
+    "mode": "Freeze",
+    "gold": "ESFP",
+    "silver": "ESTP",
+    "bronze": "INFJ",
+    "copper": "ENFP"
   },
   {
-      "name": "ENTJ",
-      "traits": {
-          "openness": 0.7,
-          "conscientiousness": 0.9,
-          "extraversion": 0.75,
-          "agreeableness": 0.4,
-          "neuroticism": 0.3
-      },
-      "mode": "Freeze",
-      "gold": "ISTP",
-      "silver": "INTP",
-      "bronze": "ESFJ",
-      "copper": "ISFP"
+    "name": "ENTJ",
+    "traits": {
+      "openness": 0.70,
+      "conscientiousness": 0.80,
+      "extraversion": 0.70,
+      "agreeableness": 0.45,
+      "neuroticism": 0.30
+    },
+    "mode": "Freeze",
+    "gold": "ISTP",
+    "silver": "INTP",
+    "bronze": "ESFJ",
+    "copper": "ISFP"
   },
   {
-      "name": "ESTJ",
-      "traits": {
-          "openness": 0.4,
-          "conscientiousness": 0.75,
-          "extraversion": 0.65,
-          "agreeableness": 0.4,
-          "neuroticism": 0.5
-      },
-      "mode": "Freeze",
-      "gold": "INTP",
-      "silver": "ISTP",
-      "bronze": "ENFJ",
-      "copper": "INFP"
+    "name": "ESTJ",
+    "traits": {
+      "openness": 0.45,
+      "conscientiousness": 0.80,
+      "extraversion": 0.65,
+      "agreeableness": 0.40,
+      "neuroticism": 0.50
+    },
+    "mode": "Freeze",
+    "gold": "INTP",
+    "silver": "ISTP",
+    "bronze": "ENFJ",
+    "copper": "INFP"
   },
   {
-      "name": "ISFJ",
-      "traits": {
-          "openness": 0.45,
-          "conscientiousness": 0.55,
-          "extraversion": 0.35,
-          "agreeableness": 0.75,
-          "neuroticism": 0.65
-      },
-      "mode": "Fawn",
-      "gold": "ESTP",
-      "silver": "ESFP",
-      "bronze": "INTJ",
-      "copper": "ENTP"
+    "name": "ISFJ",
+    "traits": {
+      "openness": 0.45,
+      "conscientiousness": 0.60,
+      "extraversion": 0.40,
+      "agreeableness": 0.75,
+      "neuroticism": 0.70
+    },
+    "mode": "Fawn",
+    "gold": "ESTP",
+    "silver": "ESFP",
+    "bronze": "INTJ",
+    "copper": "ENTP"
   },
   {
-      "name": "INFJ",
-      "traits": {
-          "openness": 0.8,
-          "conscientiousness": 0.6,
-          "extraversion": 0.5,
-          "agreeableness": 0.8,
-          "neuroticism": 0.65
-      },
-      "mode": "Fawn",
-      "gold": "ENTP",
-      "silver": "ENFP",
-      "bronze": "ISTJ",
-      "copper": "ESTP"
+    "name": "INFJ",
+    "traits": {
+      "openness": 0.80,
+      "conscientiousness": 0.55,
+      "extraversion": 0.45,
+      "agreeableness": 0.75,
+      "neuroticism": 0.65
+    },
+    "mode": "Fawn",
+    "gold": "ENTP",
+    "silver": "ENFP",
+    "bronze": "ISTJ",
+    "copper": "ESTP"
   },
   {
-      "name": "ESFJ",
-      "traits": {
-          "openness": 0.5,
-          "conscientiousness": 0.65,
-          "extraversion": 0.55,
-          "agreeableness": 0.70,
-          "neuroticism": 0.45
-      },
-      "mode": "Fawn",
-      "gold": "INFP",
-      "silver": "ISFP",
-      "bronze": "ENTJ",
-      "copper": "INTP"
+    "name": "ESFJ",
+    "traits": {
+      "openness": 0.50,
+      "conscientiousness": 0.65,
+      "extraversion": 0.55,
+      "agreeableness": 0.70,
+      "neuroticism": 0.45
+    },
+    "mode": "Fawn",
+    "gold": "INFP",
+    "silver": "ISFP",
+    "bronze": "ENTJ",
+    "copper": "INTP"
   },
   {
-      "name": "ENFJ",
-      "traits": {
-          "openness": 0.8,
-          "conscientiousness": 0.7,
-          "extraversion": 0.75,
-          "agreeableness": 0.8,
-          "neuroticism": 0.5
-      },
-      "mode": "Fawn",
-      "gold": "ISFP",
-      "silver": "INFP",
-      "bronze": "ESTJ",
-      "copper": "ISTP"
+    "name": "ENFJ",
+    "traits": {
+      "openness": 0.80,
+      "conscientiousness": 0.65,
+      "extraversion": 0.75,
+      "agreeableness": 0.80,
+      "neuroticism": 0.40
+    },
+    "mode": "Fawn",
+    "gold": "ISFP",
+    "silver": "INFP",
+    "bronze": "ESTJ",
+    "copper": "ISTP"
   },
   {
-      "name": "ESFP",
-      "traits": {
-          "openness": 0.6,
-          "conscientiousness": 0.50,
-          "extraversion": 0.6,
-          "agreeableness": 0.6,
-          "neuroticism": 0.65
-      },
-      "mode": "Flight",
-      "gold": "ISTJ",
-      "silver": "ISFJ",
-      "bronze": "ENTP",
-      "copper": "INTJ"
+    "name": "ESFP",
+    "traits": {
+      "openness": 0.60,
+      "conscientiousness": 0.50,
+      "extraversion": 0.60,
+      "agreeableness": 0.60,
+      "neuroticism": 0.65
+    },
+    "mode": "Flight",
+    "gold": "ISTJ",
+    "silver": "ISFJ",
+    "bronze": "ENTP",
+    "copper": "INTJ"
   },
   {
-      "name": "ENFP",
-      "traits": {
-          "openness": 0.8,
-          "conscientiousness": 0.55,
-          "extraversion": 0.6,
-          "agreeableness": 0.6,
-          "neuroticism": 0.8
-      },
-      "mode": "Flight",
-      "gold": "INTJ",
-      "silver": "INFJ",
-      "bronze": "ESTP",
-      "copper": "ISTJ"
+    "name": "ENFP",
+    "traits": {
+      "openness": 0.80,
+      "conscientiousness": 0.50,
+      "extraversion": 0.60,
+      "agreeableness": 0.60,
+      "neuroticism": 0.75
+    },
+    "mode": "Flight",
+    "gold": "INTJ",
+    "silver": "INFJ",
+    "bronze": "ESTP",
+    "copper": "ISTJ"
   },
   {
-      "name": "ISFP",
-      "traits": {
-          "openness": 0.5,
-          "conscientiousness": 0.45,
-          "extraversion": 0.4,
-          "agreeableness": 0.45,
-          "neuroticism": 0.7
-      },
-      "mode": "Flight",
-      "gold": "ESTJ",
-      "silver": "ESFJ",
-      "bronze": "INTP",
-      "copper": "ENTJ"
+    "name": "ISFP",
+    "traits": {
+      "openness": 0.50,
+      "conscientiousness": 0.50,
+      "extraversion": 0.40,
+      "agreeableness": 0.45,
+      "neuroticism": 0.70
+    },
+    "mode": "Flight",
+    "gold": "ESTJ",
+    "silver": "ESFJ",
+    "bronze": "INTP",
+    "copper": "ENTJ"
   },
   {
-      "name": "INFP",
-      "traits": {
-          "openness": 0.7,
-          "conscientiousness": 0.45,
-          "extraversion": 0.4,
-          "agreeableness": 0.6,
-          "neuroticism": 0.9
-      },
-      "mode": "Flight",
-      "gold": "ESFJ",
-      "silver": "ENFJ",
-      "bronze": "ISTP",
-      "copper": "ESTJ"
+    "name": "INFP",
+    "traits": {
+      "openness": 0.60,
+      "conscientiousness": 0.45,
+      "extraversion": 0.40,
+      "agreeableness": 0.60,
+      "neuroticism": 0.85
+    },
+    "mode": "Flight",
+    "gold": "ESFJ",
+    "silver": "ENFJ",
+    "bronze": "ISTP",
+    "copper": "ESTJ"
   }
-]
+];
+
 
 // Weights keyed by type, in Big-Five order: [O, C, E, A, N]
 export const MBTIWeights: Record<string, number[]> = {

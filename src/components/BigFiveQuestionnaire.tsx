@@ -843,7 +843,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
         
       )}
 
-      {openPasswordModal && (
+      {meta.password && openPasswordModal && (
          <Dialog open={openPasswordModal} onClose={() => {
           console.log([password, meta.password, password !== meta.password])
           setOpenPasswordModal(password !== meta.password)

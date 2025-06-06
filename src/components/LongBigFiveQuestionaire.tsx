@@ -770,7 +770,7 @@ const determineIndex = (trait: string, index: number) : number => {
         />
       )}
 
-      {openPasswordModal && (
+      {meta.password && openPasswordModal && (
          <Dialog open={openPasswordModal} onClose={() => {
           console.log([password, meta.password, password !== meta.password])
           setOpenPasswordModal(password !== meta.password)

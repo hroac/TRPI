@@ -107,7 +107,7 @@ self.addEventListener('fetch', event => {
       if (response.status !== 404) return response;
 
       // If 404, try to serve index.html (for SPA) or a fallback
-      return await caches.match('/index.html');
+      return await caches.match('/404.html');
     } catch (err) {
       // If offline, fallback to index.html
       return await caches.match('/index.html');

@@ -731,7 +731,7 @@ const determineIndex = (trait: string, index: number) : number => {
 
       {/* Navigation Buttons */}
       <Box display="flex" justifyContent="space-between" mt={3}>
-        <Button onClick={handleBack} variant="contained" color="primary" disabled={currentStage === 0}>
+        <Button onClick={handleBack} variant="contained" color="secondary" disabled={currentStage === 0}>
           Back
         </Button>
         {lastStage >= 11 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (

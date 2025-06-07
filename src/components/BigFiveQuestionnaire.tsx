@@ -804,7 +804,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
 
       {/* Navigation Buttons */}
       <Box display="flex" justifyContent="space-between" mt={3}>
-        <Button onClick={handleBack} disabled={currentStage === 0} variant="contained" color="primary">
+        <Button onClick={handleBack} disabled={currentStage === 0} variant="contained" color="secondary">
           Back
         </Button>
         {lastStage >= 8 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (

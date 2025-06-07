@@ -823,12 +823,12 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
           </Tooltip>
         )}
         {currentStage === stages.length - 1 ? (
-          <Button onClick={slug ? () => {setShowModal(true)} : handleSubmit} variant="contained" color="primary" disabled={submitted}>
+          <Button onClick={slug ? () => {setShowModal(true)} : handleSubmit} variant="contained" color="secondary" disabled={submitted}>
             {submitted ? 'Submitted' : 'Submit'}
              
           </Button>
         ) : (
-          <Button onClick={handleNext} variant="contained" color="primary">
+          <Button onClick={handleNext} variant="contained" color="secondary">
             Next
           </Button>
         )}

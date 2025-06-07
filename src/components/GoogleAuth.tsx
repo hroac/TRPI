@@ -16,7 +16,7 @@ export default function GoogleAuthButton({
 }) {
   const login = useGoogleLogin({
     flow: 'implicit',
-    scope: 'https://www.googleapis.com/auth/calendar',
+    scope: 'https://www.googleapis.com/auth/calendar.events',
     onSuccess,
     onError,
   });

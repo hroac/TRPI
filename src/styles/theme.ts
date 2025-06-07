@@ -3,7 +3,7 @@ import { createTheme } from '@mui/material/styles';
 const softRetroTheme = createTheme({
   palette: {
     primary: {
-      main: '#4a706e', // sage green
+      main: '#527e79', // sage green
       contrastText: '#ffffff',
     },
     secondary: {
@@ -83,9 +83,9 @@ const softRetroTheme = createTheme({
     MuiSlider: {
       styleOverrides: {
         root: {
-          color: '#4a706e',
+          color: '#527e79',
           '& .MuiSlider-thumb': {
-            backgroundColor: '#4a706e',
+            backgroundColor: '#527e79',
             border: '2px solid #2f4f4f',
             width: 14,
             height: 14,
@@ -94,10 +94,10 @@ const softRetroTheme = createTheme({
             },
           },
           '& .MuiSlider-track': {
-            backgroundColor: '#4a706e',
+            backgroundColor: '#527e79',
           },
           '& .MuiSlider-rail': {
-            backgroundColor: '#4a706e',
+            backgroundColor: '#527e79',
           },
         },
       },

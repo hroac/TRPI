@@ -14,6 +14,7 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
+  Paper,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Carousel from '../components/Carousel';
@@ -551,6 +552,14 @@ const options = {
 
   return (
     <Container sx={{ mt: '128px' }}>
+      <Paper elevation={4} sx={{
+              //background: 'linear-gradient(180deg, rgb(247, 248, 252), rgb(217 236 236))',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              padding: '30px', borderRadius: '15px'
+            }}>
       <HeroSection />
       <TypeMatrix />
       <ChatSection/>
@@ -583,6 +592,7 @@ const options = {
           />
         </DialogContent>
       </Dialog>
+      </Paper>
     </Container>
   );
 };

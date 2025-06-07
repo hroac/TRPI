@@ -28,7 +28,7 @@ function DiscordIcon(props: any) {
 
 const Footer: React.FC = () => {
   return (
-    <Box component="footer" bgcolor="primary.main" color="white" py={3} mt={4}>
+    <Box sx={{position: 'relative', top: '-220px', zIndex: 2}} component="footer" bgcolor="primary.main" color="white" py={3} mt={4}>
       <Container maxWidth="lg">
         <Grid container spacing={3} justifyContent="space-between">
           {/* About Us Section */}

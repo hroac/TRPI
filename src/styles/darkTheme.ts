@@ -8,7 +8,7 @@ const darkTheme = createTheme({
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#4a706e', // muted green
+      main: '#527e79', // muted green
       contrastText: '#ffffff',
     },
     background: {
@@ -69,7 +69,7 @@ const darkTheme = createTheme({
           textTransform: 'none',
           color: '#ffffff',
           borderRadius: 6,
-          backgroundColor: '#4a706e',
+          backgroundColor: '#527e79',
           ':hover': {
             backgroundColor: '#5c827a',
           },
@@ -79,14 +79,14 @@ const darkTheme = createTheme({
     MuiSlider: {
       styleOverrides: {
         root: {
-          color: '#4a706e',
+          color: '#527e79',
           '& .MuiSlider-thumb': {
             backgroundColor: '#2f4f4f',
             width: 12,
             height: 12,
           },
           '& .MuiSlider-track': {
-            backgroundColor: '#4a706e',
+            backgroundColor: '#527e79',
           },
           '& .MuiSlider-rail': {
             backgroundColor: '#333333',

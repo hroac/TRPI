@@ -2,7 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box,
+  Card,
   Container,
+  Paper,
   ThemeProvider
 } from '@mui/material';
 import {
@@ -159,13 +161,31 @@ export default function App() {
 
           {/* Main content wrapper */}
           <Box
-            sx={{
-              background: 'linear-gradient(0deg, rgb(247, 248, 252), rgb(217 236 236))',
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-            }}
+          sx={{
+    position: 'relative',
+    minHeight: '100vh',  // Optional, for full-page background
+    overflow: 'hidden',
+    // The background image pseudo-element:
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      zIndex: 0,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      width: '100%',
+      height: '100%',
+      background: 'url("/background.png") center/cover no-repeat',
+      opacity: 0.3,
+      pointerEvents: 'none',
+    },
+    // Ensure all direct children are above the background
+    '& > *': {
+      position: 'relative',
+      zIndex: 1,
+    },
+  }}
           >
             <Routes>
               <Route path="/" element={<Homepage />} />

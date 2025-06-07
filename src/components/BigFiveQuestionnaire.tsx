@@ -804,7 +804,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
 
       {/* Navigation Buttons */}
       <Box display="flex" justifyContent="space-between" mt={3}>
-        <Button onClick={handleBack} disabled={currentStage === 0} variant="contained" color="secondary">
+        <Button onClick={handleBack} disabled={currentStage === 0} variant="contained" color="primary">
           Back
         </Button>
         {lastStage >= 8 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
@@ -823,12 +823,12 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
           </Tooltip>
         )}
         {currentStage === stages.length - 1 ? (
-          <Button onClick={slug ? () => {setShowModal(true)} : handleSubmit} variant="contained" color="secondary" disabled={submitted}>
+          <Button onClick={slug ? () => {setShowModal(true)} : handleSubmit} variant="contained" color="primary" disabled={submitted}>
             {submitted ? 'Submitted' : 'Submit'}
              
           </Button>
         ) : (
-          <Button onClick={handleNext} variant="contained" color="secondary">
+          <Button onClick={handleNext} variant="contained" color="primary">
             Next
           </Button>
         )}

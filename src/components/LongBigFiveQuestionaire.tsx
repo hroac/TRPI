@@ -731,7 +731,7 @@ const determineIndex = (trait: string, index: number) : number => {
 
       {/* Navigation Buttons */}
       <Box display="flex" justifyContent="space-between" mt={3}>
-        <Button onClick={handleBack} variant="contained" color="secondary" disabled={currentStage === 0}>
+        <Button onClick={handleBack} variant="contained" color="primary" disabled={currentStage === 0}>
           Back
         </Button>
         {lastStage >= 11 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
@@ -750,12 +750,12 @@ const determineIndex = (trait: string, index: number) : number => {
           </Tooltip>
         )}
         {currentStage === longStages.length - 1 ? (
-          <Button onClick={slug ? () => {setShowModal(true)} : handleSubmit} variant="contained" color="secondary" disabled={submitted}>
+          <Button onClick={slug ? () => {setShowModal(true)} : handleSubmit} variant="contained" color="primary" disabled={submitted}>
             {submitted ? 'Submitted' : 'Submit'}
              
           </Button>
         ) : (
-          <Button onClick={handleNext} variant="contained" color="secondary">
+          <Button onClick={handleNext} variant="contained" color="primary">
             Next
           </Button>
         )}

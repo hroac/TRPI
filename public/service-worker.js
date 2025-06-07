@@ -54,7 +54,7 @@ if (workbox) {
       const response = await fetch(event.request);
       if (response.status === 404) {
         // Serve index.html as fallback for SPA, or some other fallback
-        return caches.match('/index.html');
+        return caches.match('/404.html');
       }
       return response;
     } catch (error) {

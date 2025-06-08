@@ -138,94 +138,36 @@ const TRPIExplanation: React.FC = () => {
   </AccordionDetails>
 </Accordion>
 
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Id, Ego, and Superego in Cognitive Function Theory</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography variant="body2" paragraph>
-            Reinterpreting classic psychological constructs, we map the Id, Ego, and Superego onto cognitive functions and their roles in perception, judgment, and defense mechanisms within personality psychology.
-          </Typography>
-
-          <Typography variant="body2" paragraph>
-            <strong>The Id: Instinctual Perception (Se, Si, Ne, Ni)</strong>
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <em>Role:</em> The Id represents our instinctual way of taking in information and experiencing the world through perceiving functions.
-          </Typography>
-          <Box component="ul" sx={{ paddingLeft: '20px' }}>
-            <li>
-              <Typography variant="body2">
-                <strong>Se (Extraverted Sensing):</strong> Engages with the present moment and sensory experiences.
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                <strong>Si (Introverted Sensing):</strong> Relies on past experiences and memories.
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                <strong>Ne (Extraverted Intuition):</strong> Explores possibilities and generates ideas.
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                <strong>Ni (Introverted Intuition):</strong> Focuses on deep insights and future implications.
-              </Typography>
-            </li>
-          </Box>
-         {/*  <Typography variant="body2" paragraph>
-            <em>Trauma:</em> If the Id is disrupted, perception may become distorted, causing stress on the individual's ability to process information effectively.
-          </Typography> */}
-
-          <Typography sx={{mt: 2}} variant="body2" paragraph>
-            <strong>The Ego: Internal Demands (Ti, Fi) For Perceiving Types</strong>
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <em>Role:</em> For Perceiving types, the Ego consists of their subjective judging functions, guiding decision-making and structuring perceptions.
-          </Typography>
-          <Box component="ul" sx={{ paddingLeft: '20px' }}>
-            <li>
-              <Typography variant="body2">
-                <strong>Ti (Introverted Thinking):</strong> Analyzes and categorizes concepts internally.
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                <strong>Fi (Introverted Feeling):</strong> Assesses experiences based on internal values.
-              </Typography>
-            </li>
-          </Box>
-          <Typography sx={{mt: 2}} variant="body2" paragraph>
-            <em>Trauma:</em> When the Ego is overwhelmed, judgment functions may become rigid or unbalanced, leading to overreliance on the superego or withdrawal into concrete logic or abstract values.
-          </Typography>
-
-          <Typography variant="body2" paragraph>
-            <strong>The Superego: External Rules (Te, Fe) for Judging Types</strong>
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <em>Role:</em> For Judging types, the Superego comprises their objective judging functions, activating defensive mechanisms under stress.
-          </Typography>
-          <Box component="ul" sx={{ paddingLeft: '20px' }}>
-            <li>
-              <Typography variant="body2">
-                <strong>Te (Extraverted Thinking):</strong> May impose excessive control or rigidity.
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                <strong>Fe (Extraverted Feeling):</strong> Might seek approval excessively or over-adapt to others.
-              </Typography>
-            </li>
-          </Box>
-          <Typography sx={{mt: 2}} variant="body2" paragraph>
-            <em>Trauma:</em> The Superego reflects unresolved trauma, leading to exaggerated or maladaptive responses.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="h6">Id, Superid, Ego &amp; Superego</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography variant="body2" paragraph>
+          TRPI weaves Freud’s structure with Jung’s functions to show who steers when:
+        </Typography>
+        <Box component="ul" sx={{ pl: 3 }}>
+          <li>
+            <Typography variant="body2"><strong>Id</strong>: Raw perception &amp; impulse (Se / Ne).</Typography>
+          </li>
+          <li>
+            <Typography variant="body2"><strong>Superid</strong>: Stored memory &amp; foresight (Si / Ni).</Typography>
+          </li>
+          <li>
+            <Typography variant="body2"><strong>Ego</strong>: Personal logic &amp; values (Ti / Fi).</Typography>
+          </li>
+          <li>
+            <Typography variant="body2"><strong>Superego</strong>: Shared rules &amp; norms (Te / Fe).</Typography>
+          </li>
+        </Box>
+        <Typography variant="body2">
+          Only <em>one</em> perceiving mode and <em>one</em> judging mode are conscious at a
+          time. When the dominant flips attitude, the whole psyche reorganises.
+        </Typography>
+      </AccordionDetails>
+    </Accordion>
       
-      <Accordion>
+      {/* <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Trauma, Brain Hemispheres, and Cognitive Shifts</Typography>
         </AccordionSummary>
@@ -262,7 +204,7 @@ const TRPIExplanation: React.FC = () => {
             Some individuals may close off from the world instead of processing trauma through their Superego. This avoidance can lead to a dominant reliance on judgment functions, focusing on structure and decision-making to maintain control.
           </Typography>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
 
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -389,7 +331,35 @@ const TRPIExplanation: React.FC = () => {
         </Box>
       </AccordionDetails>
     </Accordion>
-
+ <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="h6">Individuation Road‑Map</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography variant="body2" paragraph>
+          Growth is sequential: each default response must integrate its opposite in
+          turn.
+        </Typography>
+        <Box component="ul" sx={{ pl: 3 }}>
+          <li>
+            <Typography variant="body2"><strong>Fight</strong> → Fawn → Freeze → Flight</Typography>
+          </li>
+          <li>
+            <Typography variant="body2"><strong>Freeze</strong> → Flight → Fight → Fawn</Typography>
+          </li>
+          <li>
+            <Typography variant="body2"><strong>Fawn</strong> → Fight → Flight → Freeze</Typography>
+          </li>
+          <li>
+            <Typography variant="body2"><strong>Flight</strong> → Freeze → Fawn → Fight</Typography>
+          </li>
+        </Box>
+        <Typography variant="body2">
+          Mastery means cycling all four—switching gears on purpose rather than being
+          yanked by circumstance.
+        </Typography>
+      </AccordionDetails>
+    </Accordion>
       <Card sx={{ marginBottom: '20px' }}>
         <CardContent>
           <Typography variant="h5" gutterBottom>

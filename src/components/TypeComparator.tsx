@@ -709,6 +709,7 @@ const flattenResponses = (responses: any) : number[] => {
 
   return (
     <Container maxWidth="lg" sx={{ marginTop: '100px', textAlign: 'center' }}>
+    <Paper elevation={4} sx={{ padding: '30px', borderRadius: '15px' }}>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
         Type Comparator
       </Typography>
@@ -1437,6 +1438,7 @@ const flattenResponses = (responses: any) : number[] => {
           </Box>
         </Box>
       </Modal>
+    </Paper>
     </Container>
   );
 };

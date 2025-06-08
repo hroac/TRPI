@@ -28,6 +28,7 @@ if (workbox) {
       { url: "/", revision: "10" },
       { url: "/index.html", revision: "10" },
       { url: "/manifest.json", revision: "2" },
+       { url: "/background.png", revision: "1" },
       // Add other files as needed.
     ]
   );
@@ -35,6 +36,19 @@ if (workbox) {
   // Force the waiting service worker to become active.
   workbox.core.skipWaiting();
   workbox.core.clientsClaim();
+
+  workbox.routing.registerRoute(
+  ({request, url}) => request.destination === 'image' && url.pathname.endsWith('/background.png'),
+  new workbox.strategies.CacheFirst({
+    cacheName: 'background-images',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 1,
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      }),
+    ],
+  })
+);
 
   // Example runtime caching strategy using Stale-While-Revalidate.
   workbox.routing.registerRoute(

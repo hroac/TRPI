@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Paper,
   TextField,
   Typography,
 } from '@mui/material';
@@ -251,77 +252,79 @@ const Calendar: React.FC = () => {
   const calendarEvents = appointments.map(appt => ({ id: appt.id, title: appt.title, start: appt.start, end: appt.end, extendedProps: { appointment: appt } }));
 
   return (
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <ThemeProvider theme={theme}>
-        <style>{`
-          .fc .fc-button { background-color: ${theme.palette.primary.main} !important; border-color: ${theme.palette.primary.main} !important; color: ${theme.palette.primary.contrastText} !important; }
-          .fc .fc-button:hover { background-color: ${theme.palette.secondary.main} !important; border-color: ${theme.palette.secondary.main} !important; }
-          .fc .fc-button:focus { box-shadow: 0 0 0 2px ${theme.palette.secondary.light} !important; }
-        `}</style>
+    
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <ThemeProvider theme={theme}>
+          <style>{`
+            .fc .fc-button { background-color: ${theme.palette.primary.main} !important; border-color: ${theme.palette.primary.main} !important; color: ${theme.palette.primary.contrastText} !important; }
+            .fc .fc-button:hover { background-color: ${theme.palette.secondary.main} !important; border-color: ${theme.palette.secondary.main} !important; }
+            .fc .fc-button:focus { box-shadow: 0 0 0 2px ${theme.palette.secondary.light} !important; }
+          `}</style>
+          <Box sx={{mt: '100px'}}/>
+          <Paper elevation={4}>
 
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h4" align="center" gutterBottom>Calendar</Typography>
+          <Box sx={{ p: 2 }}>
 
-
-          {currentUser && (
-            <Typography variant="subtitle1" align="center">Logged in as: {currentUser.email}</Typography>
-          )}
-
-
-         <Box mt={3} pt={1}>
-            {!currentUser && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-              <GoogleAuthButton onSuccess={async (tokenResponse: any) => {
-                const email = await fetchUserInfo(tokenResponse.access_token);
-                setCurrentUser({ accessToken: tokenResponse.access_token, email });
-              }} />
-            </Box>
-          )}
-         </Box>
-
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={{ left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' }}
-            initialView="dayGridMonth"
-            selectable
-            selectMirror
-            events={calendarEvents}
-            select={handleDateSelect}
-            eventClick={handleEventClick}
-            ref={calendarRef}
-            height="auto"
-          />
+            {currentUser && (
+              <Typography variant="subtitle1" align="center">Logged in as: {currentUser.email}</Typography>
+            )}
 
 
-          <Dialog open={modalOpen} onClose={() => setModalOpen(false)} fullWidth>
-            <DialogTitle>New Appointment</DialogTitle>
-            <DialogContent>
-              <Typography variant="subtitle1">Date: {newAppointment.date}</Typography>
-              <Typography variant="subtitle1">Time: {newAppointment.startTime} - {newAppointment.endTime}</Typography>
-              <Typography variant="subtitle2" gutterBottom>Total Price: {price.current.toFixed(2)} EUR</Typography>
+          <Box mt={3} pt={1}>
+              {!currentUser && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+                <GoogleAuthButton onSuccess={async (tokenResponse: any) => {
+                  const email = await fetchUserInfo(tokenResponse.access_token);
+                  setCurrentUser({ accessToken: tokenResponse.access_token, email });
+                }} />
+              </Box>
+            )}
+          </Box>
 
-              <TextField label="Title" fullWidth margin="normal" value={newAppointment.title} onChange={e => setNewAppointment(prev => ({ ...prev, title: e.target.value }))} />
-              <TextField label="Start Time" type="time" fullWidth margin="normal" InputLabelProps={{ shrink: true }} inputProps={{ step: 1800 }} value={newAppointment.startTime} onChange={e => setNewAppointment(prev => ({ ...prev, startTime: e.target.value }))} />
-              <TextField label="End Time" type="time" fullWidth margin="normal" InputLabelProps={{ shrink: true }} inputProps={{ step: 1800 }} value={newAppointment.endTime} onChange={e => setNewAppointment(prev => ({ ...prev, endTime: e.target.value }))} />
-              <TextField label="Description" fullWidth margin="normal" multiline rows={3} value={newAppointment.description} onChange={e => setNewAppointment(prev => ({ ...prev, description: e.target.value }))} />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setModalOpen(false)}>Cancel</Button>
-              <Button disabled={submitDisabled} variant="contained" onClick={handleRequestAppointment}>Create Appointment (Cost: {price.current.toFixed(2)})</Button>
-            </DialogActions>
-          </Dialog>
+            <FullCalendar
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              headerToolbar={{ left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' }}
+              initialView="dayGridMonth"
+              selectable
+              selectMirror
+              events={calendarEvents}
+              select={handleDateSelect}
+              eventClick={handleEventClick}
+              ref={calendarRef}
+              height="auto"
+            />
 
-          <PremiumModal
-            open={premiumModalOpen}
-            onClose={() => setPremiumModalOpen(false)}
-            title="Appointment Payment Required"
-            description={`Creating this appointment costs €${price.current.toFixed(2)}.`}
-            price={price.current}
-            handlePaymentSuccess={handlePaymentSuccess}
-          />
-        </Box>
-      </ThemeProvider>
-    </GoogleOAuthProvider>
+
+            <Dialog open={modalOpen} onClose={() => setModalOpen(false)} fullWidth>
+              <DialogTitle>New Appointment</DialogTitle>
+              <DialogContent>
+                <Typography variant="subtitle1">Date: {newAppointment.date}</Typography>
+                <Typography variant="subtitle1">Time: {newAppointment.startTime} - {newAppointment.endTime}</Typography>
+                <Typography variant="subtitle2" gutterBottom>Total Price: {price.current.toFixed(2)} EUR</Typography>
+
+                <TextField label="Title" fullWidth margin="normal" value={newAppointment.title} onChange={e => setNewAppointment(prev => ({ ...prev, title: e.target.value }))} />
+                <TextField label="Start Time" type="time" fullWidth margin="normal" InputLabelProps={{ shrink: true }} inputProps={{ step: 1800 }} value={newAppointment.startTime} onChange={e => setNewAppointment(prev => ({ ...prev, startTime: e.target.value }))} />
+                <TextField label="End Time" type="time" fullWidth margin="normal" InputLabelProps={{ shrink: true }} inputProps={{ step: 1800 }} value={newAppointment.endTime} onChange={e => setNewAppointment(prev => ({ ...prev, endTime: e.target.value }))} />
+                <TextField label="Description" fullWidth margin="normal" multiline rows={3} value={newAppointment.description} onChange={e => setNewAppointment(prev => ({ ...prev, description: e.target.value }))} />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+                <Button disabled={submitDisabled} variant="contained" onClick={handleRequestAppointment}>Create Appointment (Cost: {price.current.toFixed(2)})</Button>
+              </DialogActions>
+            </Dialog>
+
+            <PremiumModal
+              open={premiumModalOpen}
+              onClose={() => setPremiumModalOpen(false)}
+              title="Appointment Payment Required"
+              description={`Creating this appointment costs €${price.current.toFixed(2)}.`}
+              price={price.current}
+              handlePaymentSuccess={handlePaymentSuccess}
+            />
+          </Box>
+          </Paper>
+        </ThemeProvider>
+      </GoogleOAuthProvider>
   );
 };
 

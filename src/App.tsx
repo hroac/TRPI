@@ -44,6 +44,7 @@ import ChatTRPI from './components/ChatTRPI';
 /* ───── Live-chat modal (NEW) ───── */
 import ChatContent from './components/LiveChat';   // logic-heavy chat body
 import ChatModal, { ChatProvider } from './components/LiveChatModal';
+import NotFoundPage from './pages/NotFound';
 
 /* ───── Helmet meta ───── */
 const AppHelmet: React.FC = () => (
@@ -210,6 +211,7 @@ export default function App() {
               <Route path="/assessment/:company" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/oracle" element={<ChatTRPI apiPath="https://chattrpi-production.up.railway.app/api/trpi-chat" userId={guid()} />}/>
+              <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
 
             {/* Footer pinned near bottom */}

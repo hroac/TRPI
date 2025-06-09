@@ -360,7 +360,7 @@ const AboutPage: React.FC<{
                   </RadioGroup>
                 </FormControl>
               </Box>
-              <Button
+              {availableOptions.length === 1 && reportLevel === 'expert' &&  <Button
                 variant="contained"
                 color="primary"
                 fullWidth={!isMobile}
@@ -368,12 +368,12 @@ const AboutPage: React.FC<{
                 onClick={handleGenerateClick}
                 disabled={loading}
               >
-                {reportLevel === 'expert'
+                {reportLevel === REPORT_LEVELS[2]
                   ? availableOptions.length === 1
                     ? 'Regenerate Expert Profile (€0.99)'
                     : 'Generate Expert Profile – €0.99'
-                  : `Generate ${reportLevel.charAt(0).toUpperCase() + reportLevel.slice(1)} Profile (Free)`}
-              </Button>
+                  : `Generate ${(reportLevel as ReportLevel).charAt(0).toUpperCase() + (reportLevel as ReportLevel).slice(1)} Profile (Free)`}
+              </Button>}
             </Box>
           )}
 

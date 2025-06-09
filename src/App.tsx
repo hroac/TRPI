@@ -179,7 +179,7 @@ export default function App() {
       bottom: 0,
       width: '100%',
       height: '100%',
-      background: 'url("/background.png") center/cover no-repeat',
+      background: 'url("/background.png") repeat',
       opacity: 0.3,
       pointerEvents: 'none',
     },

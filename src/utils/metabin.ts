@@ -14,7 +14,7 @@ export default class MetaBin {
   /**
    * Read the entire slug→binId mapping (managed by hand).
    */
-  static async getMeta(): Promise<Record<string, string>> {
+  static async getMeta(): Promise<Record<string, any>> {
     const resp = await axios.get(
       `https://api.jsonbin.io/v3/b/${META_BIN_ID}`,
       {
@@ -23,7 +23,7 @@ export default class MetaBin {
         },
       }
     );
-    return resp.data.record as Record<string, string>;
+    return resp.data.record as Record<string, any>;
   }
 
  static async getAll(): Promise<Record<string, string>> {

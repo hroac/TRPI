@@ -154,7 +154,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   onComplete,
 }) => {
   const navigate = useNavigate();
-  const { company: slug, departement: departement, binId: binId } = useParams<{ company?: string, departement?: string, binId: string }>();
+  const { company: slug, departement: departement, binId: lastBinId } = useParams<{ company?: string, departement?: string, binId: string }>();
   const [mapping, setMapping]     = useState<string | null>(null);
   const [loading, setLoading]     = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -242,13 +242,13 @@ const longStages = [
   }, [slug]);
 
   useEffect(() => {
-    if (!binId) {
+    if (!lastBinId) {
       setLoading(false);
       return;
     }
     (async () => {
       try {
-       const bin = await JsonBinApi.getBinById(binId);
+       const bin = await JsonBinApi.getBinById(lastBinId);
        setBin(bin);
        setResponses(JSON.parse(JSON.stringify(bin.responses)));
 
@@ -258,7 +258,7 @@ const longStages = [
         setLoading(false);
       }
     })();
-  }, [binId]);
+  }, [lastBinId]);
 
     useEffect(() => {
       if(meta && slug) {
@@ -463,7 +463,7 @@ const flushCurrentStage = () => {
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement});
+    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement, prev: lastBinId});
     navigate(`/result/${binId}`);
   }
 
@@ -495,7 +495,7 @@ const flushCurrentStage = () => {
     localStorage.removeItem('longResponses')
     localStorage.removeItem('longStage')
     localStorage.removeItem('longLastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements: longStatements, accuracy, list: mbtiType.scores});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements: longStatements, accuracy, list: mbtiType.scores, prev: lastBinId});
     navigate(`/result/${binId}`); // Ensure your result route can handle potentially different data
   };
 

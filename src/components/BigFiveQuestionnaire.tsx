@@ -158,7 +158,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   onComplete,
 }) => {
   const navigate = useNavigate();
-  const { company: slug, departement: departement, binId: binId } = useParams<{ company?: string, departement?: string; binId: string; }>();
+  const { company: slug, departement: departement, binId: lastBinId } = useParams<{ company?: string, departement?: string; binId: string; }>();
   const [mapping, setMapping]     = useState<string | null>(null);
   const [meta, setMeta] = useState<any>({});
   const [loading, setLoading]     = useState(true);
@@ -243,13 +243,13 @@ console.log('new statements')
   }, [slug]);
 
     useEffect(() => {
-    if (!binId) {
+    if (!lastBinId) {
       setLoading(false);
       return;
     }
     (async () => {
       try {
-       const bin = await JsonBinApi.getBinById(binId);
+       const bin = await JsonBinApi.getBinById(lastBinId);
        setBin(bin);
        setResponses(JSON.parse(JSON.stringify(bin.responses)));
 
@@ -259,7 +259,7 @@ console.log('new statements')
         setLoading(false);
       }
     })();
-  }, [binId]);
+  }, [lastBinId]);
 
   useEffect(() => {
     if(meta && slug) {
@@ -524,7 +524,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement});
+    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement, prev: lastBinId});
     navigate(`/result/${binId}`);
   }
 
@@ -559,7 +559,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores, prev: lastBinId});
     navigate(`/result/${binId}`);
   };
 

@@ -6,6 +6,10 @@ import {
   Paper,
   useTheme,
   useMediaQuery,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from '@mui/material';
 import {
   Radar,
@@ -38,21 +42,48 @@ const SlugResults: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [collectionId, setCollectionId] = useState<string | null>(null);
+  const [meta, setMeta] = useState<any>({});
+  const [password, setPassword] = useState('');
+  const [openPasswordModal, setOpenPasswordModal] = useState<boolean>(Boolean(company));
 
+  // Load mapping + meta on mount
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!company) {
-          setLoading(false);
-          return;
-        }
-        const mapping = await MetaBin.getAll();
-        const collectionId = mapping[company];
-        if (!collectionId) {
-          setLoading(false);
-          return;
-        }
+    if (!company) {
+      setLoading(false);
+      return;
+    }
 
+    (async () => {
+      try {
+        const mapping = await MetaBin.getAll();
+        const metaMap = await MetaBin.getMeta();
+        if (mapping[company]) {
+          setCollectionId(mapping[company]);
+          setMeta(metaMap[company] || {});
+        }
+      } catch (err) {
+        console.error('Error loading slug metadata:', err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [company]);
+
+  // Update password modal status when meta or password changes
+  useEffect(() => {
+    if (company) {
+      setOpenPasswordModal(!!meta.password && password !== meta.password);
+    }
+  }, [password, meta, company]);
+
+  // Fetch bins when unlocked
+  useEffect(() => {
+    if (!collectionId || openPasswordModal) return;
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
         const bins = await JsonBinApi.getBinsInCollectionById(collectionId);
         const newSlides: Slide[] = [];
 
@@ -134,7 +165,7 @@ const SlugResults: React.FC = () => {
     };
 
     fetchData();
-  }, [company, isMobile]);
+  }, [collectionId, isMobile, openPasswordModal]);
 
   if (loading) {
     return (
@@ -153,9 +184,33 @@ const SlugResults: React.FC = () => {
   }
 
   return (
-    <Paper sx={{ mt: '75px', p: 2 }}>
-      <Carousel slides={slides} settings={{ slidesPerView: 1, loop: false, autoHeight: true, autoplay: false }} />
-    </Paper>
+    <>
+      <Paper sx={{ mt: '75px', p: 2 }}>
+        <Carousel slides={slides} settings={{ slidesPerView: 1, loop: false, autoHeight: true }} />
+      </Paper>
+      {meta.password && (
+        <Dialog
+          open={openPasswordModal}
+          onClose={() => setOpenPasswordModal(!!meta.password && password !== meta.password)}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle>Enter The Password</DialogTitle>
+          <DialogContent dividers>
+            <Box>
+              <TextField
+                label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                fullWidth
+                margin="normal"
+              />
+            </Box>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 };
 

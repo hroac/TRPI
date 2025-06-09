@@ -445,7 +445,7 @@ const AboutPage: React.FC<{
                 color="primary"
                 fullWidth={!isMobile}
                 sx={{ mt: 2 }}
-                onClick={() => navigate(`/results/${bin.prev}`)}
+                onClick={() => navigate(`/result/${bin.prev}`)}
               >Previous results</Button>}
       {
         guid() === bin.userId && Object.values(bin.responses)?.length !== 0 && <Box>

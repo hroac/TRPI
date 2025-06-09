@@ -440,6 +440,13 @@ const AboutPage: React.FC<{
       <Box mt={5}>
         <RelatedTypesBox type={type || mbtiType || ''} />
       </Box>
+      {bin && bin.prev &&   <Button
+                variant="contained"
+                color="primary"
+                fullWidth={!isMobile}
+                sx={{ mt: 2 }}
+                onClick={() => navigate(`/results/${bin.prev}`)}
+              >Previous results</Button>}
       {
         guid() === bin.userId && Object.values(bin.responses)?.length !== 0 && <Box>
           <Tooltip title="Or have a friend do it!">

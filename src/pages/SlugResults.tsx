@@ -154,7 +154,7 @@ const SlugResults: React.FC = () => {
 
   return (
     <Paper sx={{ mt: '75px', p: 2 }}>
-      <Carousel slides={slides} settings={{ slidesPerView: 1, loop: false, autoHeight: true }} />
+      <Carousel slides={slides} settings={{ slidesPerView: 1, loop: false, autoHeight: true, autoplay: false }} />
     </Paper>
   );
 };

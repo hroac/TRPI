@@ -145,48 +145,62 @@ const SlugResults: React.FC = () => {
               const desc = splitDescription(bin.description || profile.description || '');
 
               return (
+                    <Box
+                key={item.record}
+                component={Link}
+                to={`/result/${item.record}`}
+                sx={{
+                  display: 'flex',
+                  flexDirection: { xs: 'column', md: 'row' }, // Wraps on mobile, side by side desktop
+                  alignItems: { xs: 'stretch', md: 'flex-start' },
+                  gap: 2,
+                  borderRadius: 2,
+                  px: 1,
+                  py: 1.5,
+                  mb: 1,
+                  background: theme.palette.background.paper,
+                  boxShadow: 1,
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  transition: 'box-shadow 0.2s',
+                  '&:hover': { boxShadow: 4, background: theme.palette.action.hover },
+                  minHeight: 320,
+                }}
+              >
                 <Box
-                  key={item.record}
-                  component={Link}
-                  to={`/result/${item.record}`}
                   sx={{
+                    width: { xs: '100%', md: 220 },
+                    minWidth: { xs: '100%', md: 180 },
+                    maxWidth: { xs: '100%', md: 260 },
+                    height: { xs: 180, md: 220 },
+                    flexShrink: 0,
+                    mb: { xs: 2, md: 0 },
                     display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: 2,
-                    borderRadius: 2,
-                    px: 1,
-                    py: 1.5,
-                    mb: 1,
-                    background: theme.palette.background.paper,
-                    boxShadow: 1,
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    transition: 'box-shadow 0.2s',
-                    '&:hover': { boxShadow: 4, background: theme.palette.action.hover },
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Box sx={{ minWidth: isMobile ? 90 : 120, maxWidth: isMobile ? 410 : 540, aspectRatio: '1/1.1' }}>
-                    <Radar data={radarData} options={radarOptions} />
-                  </Box>
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="h4" sx={{ opacity: 0.7, mb: 0.3 }}>
-                      {bin.primary4FType} &ndash; {bin.type}
-                    </Typography>
-                    {desc.map((d, idx) => (
-                      <Typography key={idx} variant="body2" paragraph sx={{ mb: 0, maxHeight: isMobile ? 52 : 70, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        <ReactMarkdown>
-                        {d}
-                        </ReactMarkdown>
-                      </Typography>
-                    ))}
-                   {/*  <Typography key={0} variant="body2" paragraph>
-                        <ReactMarkdown>
-                          {desc[0]}
-
-                        </ReactMarkdown>
-                      </Typography> */}
-                  </Box>
+                  <Radar data={radarData} options={radarOptions} />
                 </Box>
+                <Box
+                  sx={{
+                    flex: 1,
+                    minWidth: 0,
+                    overflow: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Typography variant="h4" sx={{ opacity: 0.7, mb: 1 }}>
+                    {bin.primary4FType} &ndash; {bin.type}
+                  </Typography>
+                  {desc.map((d, idx) => (
+                    <Typography key={idx} variant="body2" paragraph sx={{ mb: 0 }}>
+                      <ReactMarkdown>{d}</ReactMarkdown>
+                    </Typography>
+                  ))}
+                </Box>
+              </Box>
               );
             })
           );

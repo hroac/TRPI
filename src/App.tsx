@@ -35,6 +35,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TrpiTalk from './components/TRPITalk';
 import Sources from './pages/Sources';
 import Reviews from './pages/Reviews';
+import SlugResults from './pages/SlugResults';
 import TypeComparator from './components/TypeComparator';
 import Scheduler from './pages/Scheduler';
 import TermsOfService from './pages/Terms';
@@ -198,6 +199,8 @@ export default function App() {
               <Route path="/:company/test/:binId" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/test/:binId" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/result/:binId" element={<ResultsPage binId={binId} />} />
+              <Route path="/:company/results" element={<SlugResults />} />
+              <Route path="/:company/:departement/results" element={<SlugResults />} />
               <Route path="/input" element={<BigFiveInputPage onComplete={handleComplete} />} />
               <Route path="/about/:type" element={<AboutPage />} />
               <Route path="/about" element={<TRPIExplanation />} />

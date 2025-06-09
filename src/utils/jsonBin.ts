@@ -91,6 +91,44 @@ class JsonBinApi {
         }
     }
 
+    // Method to retrieve all bins in a provided collection
+    static async getBinsInCollectionById(collectionId: string) {
+        const results: any[] = [];
+        const seen = new Set<string>();
+        let page = 1;
+        const pageSize = 10;
+
+        while (true) {
+            const url = `https://api.jsonbin.io/v3/c/${collectionId}/bins?page=${page}&limit=${pageSize}`;
+
+            try {
+                const response = await axios.get(url, {
+                    headers: {
+                        'X-Master-Key': API_KEY,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const data = Array.isArray(response.data) ? response.data : [];
+                let added = 0;
+                for (const item of data) {
+                    if (!seen.has(item.record)) {
+                        seen.add(item.record);
+                        results.push(item);
+                        added++;
+                    }
+                }
+                if (added < pageSize) break;
+                page++;
+            } catch (error) {
+                console.error('Error retrieving bins from collection:', error);
+                break;
+            }
+        }
+
+        return results;
+    }
+
     // Method to retrieve a specific bin by bin ID
     static async getBinById(binId: string) {
         const url = `https://api.jsonbin.io/v3/b/${binId}`;

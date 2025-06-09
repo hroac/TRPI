@@ -455,7 +455,7 @@ const AboutPage: React.FC<{
                 color="primary"
                 fullWidth={!isMobile}
                 sx={{ mt: 2 }}
-                onClick={() => navigate(`/test/${bin.binId}`)}
+                onClick={() => navigate(bin.company ? bin.departement ? `/${bin.company}/${bin.departement}/test/${bin.binId}` : `/${bin.company}/test/${bin.binId}` : `/test/${bin.binId}`)}
               >Retake the test!</Button>
               </Tooltip>
       </Box>

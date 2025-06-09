@@ -140,7 +140,7 @@ const TRPIExplanation: React.FC = () => {
 
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6">Id, Superid, Ego &amp; Superego</Typography>
+        <Typography variant="h6">Id &amp; Superid and Ego &amp; Superego</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Typography variant="body2" paragraph>

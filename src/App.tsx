@@ -190,9 +190,12 @@ export default function App() {
           >
             <Routes>
               <Route path="/" element={<Homepage />} />
-              <Route path="/test/:company/:departement" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
-              <Route path="/test/:company" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/:company/:departement/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/:company/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/:company/:departement/test/:binId" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/:company/test/:binId" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/test/:binId" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/result/:binId" element={<ResultsPage binId={binId} />} />
               <Route path="/input" element={<BigFiveInputPage onComplete={handleComplete} />} />
               <Route path="/about/:type" element={<AboutPage />} />
@@ -207,8 +210,11 @@ export default function App() {
               <Route path="/compare" element={<TypeComparator />} />
               <Route path="/scheduler" element={<Scheduler />} />
               <Route path="/terms" element={<TermsOfService />} />
-              <Route path="/assessment/:company/:departement" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
-              <Route path="/assessment/:company" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/:company/:departement/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/:company/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/:company/:departement/assessment/:binId" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/:company/assessment/:binId" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/oracle" element={<ChatTRPI apiPath="https://chattrpi-production.up.railway.app/api/trpi-chat" userId={guid()} />}/>
               <Route path="*" element={<NotFoundPage/>}/>

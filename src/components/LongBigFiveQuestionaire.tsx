@@ -51,6 +51,7 @@ import PremiumModal from './PremiumModal';
 import { statements as fixedStatements, allStatements } from '../utils/mbtiMapping';
 import SlugModal from './slugModal';
 import MetaBin from '../utils/metabin';
+import JsonBinApi from '../utils/jsonBin';
 
 /** ------------------------------------------------------------------
  *  Utility helpers
@@ -153,7 +154,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   onComplete,
 }) => {
   const navigate = useNavigate();
-  const { company: slug, departement: departement } = useParams<{ company?: string, departement?: string }>();
+  const { company: slug, departement: departement, binId: binId } = useParams<{ company?: string, departement?: string, binId: string }>();
   const [mapping, setMapping]     = useState<string | null>(null);
   const [loading, setLoading]     = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -199,6 +200,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const [openPasswordModal, setOpenPasswordModal] = useState(slug ? true : false ); // Modal is pre-opened by default
   const [meta, setMeta] = useState<any>({});
   const type = typesData.find(t => t.type === matchedMBTIType);
+const [bin, setBin] = useState<Record<any, any>>();
 
 const longStages = [
   statements.slice(0,3), // Stage 0
@@ -239,6 +241,25 @@ const longStages = [
     })();
   }, [slug]);
 
+  useEffect(() => {
+    if (!binId) {
+      setLoading(false);
+      return;
+    }
+    (async () => {
+      try {
+       const bin = await JsonBinApi.getBinById(binId);
+       setBin(bin);
+       setResponses(JSON.parse(JSON.stringify(bin.responses)));
+
+      } catch (err) {
+        console.error('Error fetching previous bin:', err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [binId]);
+
     useEffect(() => {
       if(meta && slug) {
       setOpenPasswordModal(!meta.password || password !== meta.password)
@@ -257,15 +278,16 @@ const longStages = [
   }
 
   const reset = () => {
-    //console.log(longStatements)
-    setLastStage(0)
-    setCurrentStage(0)
-    setResponses(longStatements.reduce((acc, s) => {
-     if (!acc[s.trait]) acc[s.trait] = [];
-     acc[s.trait].push(0.500001);
-     return acc;
-   }, {} as { [trait: string]: number[]}));
-   localStorage.removeItem('longResponses');
+ if(bin) {
+      setResponses(JSON.parse(JSON.stringify(bin.responses)))
+    } else {
+      setResponses(statements.reduce((acc, s) => {
+        if (!acc[s.trait]) acc[s.trait] = [];
+        acc[s.trait].push(0.500001);
+        return acc;
+      }, {} as { [trait: string]: number[] }));
+      localStorage.removeItem('longResponses');
+    }
    localStorage.removeItem('longStage');
    localStorage.removeItem('longLastStage');
 //console.log(responses)
@@ -588,11 +610,11 @@ const determineIndex = (trait: string, index: number) : number => {
             <RestartAlt/>
           </IconButton>
           </Tooltip>
-          <Tooltip title="Get different statements">
+          {!bin && <Tooltip title="Get different statements">
           <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
-          </Tooltip>
+          </Tooltip>}
           <Tooltip title=" Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
@@ -613,11 +635,11 @@ const determineIndex = (trait: string, index: number) : number => {
             <RestartAlt/>
           </IconButton>
           </Tooltip>
-          <Tooltip title="Get different statements">
+          {!bin && <Tooltip title="Get different statements">
           <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
-          </Tooltip>
+          </Tooltip>}
           <Tooltip title="Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
@@ -701,11 +723,16 @@ const determineIndex = (trait: string, index: number) : number => {
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}
-                sx={{color: `${currentStage < lastStage ? 'secondary.main' : 'primary'}`, '& .MuiSlider-track': {
+                sx={{color: `${currentStage < lastStage ? 'secondary.main' : 'primary'}`, zIndex: 1, '& .MuiSlider-track': {
                   backgroundColor: `${currentStage < lastStage ? 'secondary.main' : 'primary'}`,
                   border: `${currentStage < lastStage ? '2px solid #fa695e' : ''}`
                 }}}
               />
+              {bin && (
+                    <Box sx={{position: 'relative', bottom: '21px', zIndex:0}}>
+                      <LinearProgress color="primary" variant="determinate" value={bin.responses[s.trait][determineIndex(s.trait, index)] * 100} />
+                    </Box>
+                  )}
             </Grid>
             <Grid item>
               <Typography variant="subtitle2" gutterBottom>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
 import { findClosestComplement, functionPairings, MBTIProfiles } from '../utils/mbtiMapping';
@@ -23,6 +23,7 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  Tooltip,
 } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import Carousel from '../components/Carousel';
@@ -152,6 +153,7 @@ const AboutPage: React.FC<{
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [profileText, setProfileText] = useState<string>(description);
+  const navigate = useNavigate();
 
   /* ------------------ generator map -------------------------- */
   const levelToGenerator = {
@@ -438,6 +440,19 @@ const AboutPage: React.FC<{
       <Box mt={5}>
         <RelatedTypesBox type={type || mbtiType || ''} />
       </Box>
+      {
+        guid() === bin.userId && Object.values(bin.responses)?.length !== 0 && <Box>
+          <Tooltip title="Or have a friend do it!">
+         <Button
+                variant="contained"
+                color="primary"
+                fullWidth={!isMobile}
+                sx={{ mt: 2 }}
+                onClick={() => navigate(`/test/${bin.binId}`)}
+              >Retake the test!</Button>
+              </Tooltip>
+      </Box>
+      }
 
       {/* Payment modal for expert only */}
       <QuestionnaireModal

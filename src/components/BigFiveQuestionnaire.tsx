@@ -51,6 +51,7 @@ import PremiumModal from './PremiumModal';
 import { statements as fixedStatements, allStatements } from '../utils/mbtiMapping';
 import MetaBin from '../utils/metabin';
 import SlugModal from './slugModal';
+import JsonBinApi from '../utils/jsonBin';
 
 
 /** ------------------------------------------------------------------
@@ -157,7 +158,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   onComplete,
 }) => {
   const navigate = useNavigate();
-  const { company: slug, departement: departement } = useParams<{ company?: string, departement?: string; }>();
+  const { company: slug, departement: departement, binId: binId } = useParams<{ company?: string, departement?: string; binId: string; }>();
   const [mapping, setMapping]     = useState<string | null>(null);
   const [meta, setMeta] = useState<any>({});
   const [loading, setLoading]     = useState(true);
@@ -186,8 +187,7 @@ console.log('new statements')
   }, {} as { [trait: string]: number[] })
 };
 
-
-
+  const [bin, setBin] = useState<Record<any, any>>();
   const [responses, setResponses] = useState(initialResponses)
   const [currentStage, setCurrentStage] = useState(parseInt(localStorage.getItem('lastStage') || "0"));
   const [lastStage, setLastStage] = useState(parseInt(localStorage.getItem('stage')|| "0"))
@@ -242,6 +242,25 @@ console.log('new statements')
     })();
   }, [slug]);
 
+    useEffect(() => {
+    if (!binId) {
+      setLoading(false);
+      return;
+    }
+    (async () => {
+      try {
+       const bin = await JsonBinApi.getBinById(binId);
+       setBin(bin);
+       setResponses(JSON.parse(JSON.stringify(bin.responses)));
+
+      } catch (err) {
+        console.error('Error fetching previous bin:', err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [binId]);
+
   useEffect(() => {
     if(meta && slug) {
     setOpenPasswordModal(!meta.password || password !== meta.password)
@@ -263,12 +282,18 @@ console.log('new statements')
   const reset = () => {
     setLastStage(0)
     setCurrentStage(0)
-    setResponses(statements.reduce((acc, s) => {
-     if (!acc[s.trait]) acc[s.trait] = [];
-     acc[s.trait].push(0.500001);
-     return acc;
-   }, {} as { [trait: string]: number[] }));
-   localStorage.removeItem('responses');
+
+    if(bin) {
+      setResponses(JSON.parse(JSON.stringify(bin.responses)))
+    } else {
+      setResponses(statements.reduce((acc, s) => {
+        if (!acc[s.trait]) acc[s.trait] = [];
+        acc[s.trait].push(0.500001);
+        return acc;
+      }, {} as { [trait: string]: number[] }));
+      localStorage.removeItem('responses');
+    }
+  
    localStorage.removeItem('stage');
    localStorage.removeItem('lastStage');
 
@@ -661,11 +686,11 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
             <RestartAlt/>
           </IconButton>
           </Tooltip>
-          <Tooltip title="Get different statements">
+         {!bin &&  <Tooltip title="Get different statements">
           <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
-          </Tooltip>
+          </Tooltip>}
           <Tooltip title="Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
@@ -686,11 +711,11 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
             <RestartAlt/>
           </IconButton>
           </Tooltip>
-          <Tooltip title="Get different statements">
+          {!bin && <Tooltip title="Get different statements">
           <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
-          </Tooltip>
+          </Tooltip>}
           <Tooltip title="Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
@@ -774,11 +799,16 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}
-                sx={{color: `${currentStage < lastStage ? 'secondary.main' : 'primary'}`, '& .MuiSlider-track': {
+                sx={{color: `${currentStage < lastStage ? 'secondary.main' : 'primary'}`, zIndex: 1, '& .MuiSlider-track': {
                   backgroundColor: `${currentStage < lastStage ? 'secondary.main' : 'primary'}`,
                   border: `${currentStage < lastStage ? '2px solid #fa695e' : ''}`
                 }}}
               />
+               {bin && (
+                    <Box sx={{position: 'relative', bottom: '21px', zIndex:0}}>
+                      <LinearProgress color="primary" variant="determinate" value={bin.responses[s.trait][determineIndex(s.trait, index)] * 100} />
+                    </Box>
+                  )}
             </Grid>
             <Grid item>
               <Typography variant="subtitle2" gutterBottom>

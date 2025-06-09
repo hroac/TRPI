@@ -95,11 +95,12 @@ class JsonBinApi {
     static async getBinsInCollectionById(collectionId: string) {
         const results: any[] = [];
         const seen = new Set<string>();
-        let page = 1;
-        const pageSize = 10;
+        let lastBinId: string | null = null;
 
         while (true) {
-            const url = `https://api.jsonbin.io/v3/c/${collectionId}/bins?page=${page}&limit=${pageSize}`;
+            const url = lastBinId
+                ? `https://api.jsonbin.io/v3/c/${collectionId}/bins/${lastBinId}`
+                : `https://api.jsonbin.io/v3/c/${collectionId}/bins`;
 
             try {
                 const response = await axios.get(url, {
@@ -110,16 +111,19 @@ class JsonBinApi {
                 });
 
                 const data = Array.isArray(response.data) ? response.data : [];
-                let added = 0;
+                if (!data.length) break;
+
+                let newLast: string | null = null;
                 for (const item of data) {
                     if (!seen.has(item.record)) {
                         seen.add(item.record);
                         results.push(item);
-                        added++;
+                        newLast = item.record;
                     }
                 }
-                if (added < pageSize) break;
-                page++;
+
+                if (!newLast || data.length < 10) break;
+                lastBinId = newLast;
             } catch (error) {
                 console.error('Error retrieving bins from collection:', error);
                 break;

@@ -98,7 +98,7 @@ class JsonBinApi {
         let lastBinId: string | null = null;
 
         while (true) {
-            const url = lastBinId
+            const url: any = lastBinId
                 ? `https://api.jsonbin.io/v3/c/${collectionId}/bins/${lastBinId}`
                 : `https://api.jsonbin.io/v3/c/${collectionId}/bins`;
 

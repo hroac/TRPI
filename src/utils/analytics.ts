@@ -6,7 +6,7 @@ function hasGtag(): boolean {
 
 export function trackEvent(action: string, params: Record<string, any> = {}): void {
   if (hasGtag()) {
-    (window as any).gtag('event', action, params:{ ...params, userId: guid()});
+    (window as any).gtag('event', action, { ...params, userId: guid()});
   }
 }
 

@@ -27,6 +27,7 @@ import axios from 'axios';
 import Stories from './Stories';
 import LiveChat from './LiveChat';
 import { typesData } from './typesData';
+import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 
 ChartJS.register(Filler)
 interface Review {
@@ -84,6 +85,11 @@ const HeroSection = () => {
               borderRadius: 4,
               boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
             }}
+            onClick={() =>
+              trackEvent(AnalyticsEvents.HomeStartTest, {
+                event_category: 'Home',
+              })
+            }
           >
             Start the Test
           </Button>
@@ -134,6 +140,11 @@ const HeroSection = () => {
               borderRadius: 4,
               boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
             }}
+            onClick={() =>
+              trackEvent(AnalyticsEvents.HomeStartTalk, {
+                event_category: 'Home',
+              })
+            }
           >
             Try TRPI Talk
           </Button>
@@ -184,6 +195,11 @@ const HeroSection = () => {
               borderRadius: 4,
               boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
             }}
+            onClick={() =>
+              trackEvent(AnalyticsEvents.HomeStartAssessment, {
+                event_category: 'Home',
+              })
+            }
           >
             Take the Test!
           </Button>

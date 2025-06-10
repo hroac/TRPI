@@ -19,5 +19,13 @@ export const AnalyticsEvents = {
   ResultsViewed: 'results_viewed',
   ResultsSaved: 'results_saved',
   ChatOpened: 'chat_opened',
-  ChatMessageSent: 'chat_message_sent'
+  ChatMessageSent: 'chat_message_sent',
+  LiveChatOpened: 'live_chat_opened',
+  LiveChatMessageSent: 'live_chat_message_sent',
+  MenuClick: 'menu_click',
+  HomeStartTest: 'home_start_test',
+  HomeStartTalk: 'home_start_talk',
+  HomeStartAssessment: 'home_start_assessment',
+  SchedulerViewed: 'scheduler_viewed',
+  AppointmentBooked: 'appointment_booked'
 } as const;

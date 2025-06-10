@@ -35,6 +35,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 import {
  VariableSizeList as VList,
   ListOnScrollProps,
@@ -420,6 +421,9 @@ useEffect(() => {
     setDraft('');
     setReply(null);
     //console.log(msg)
+    trackEvent(AnalyticsEvents.LiveChatMessageSent, {
+      event_category: 'LiveChat',
+    });
     sendMut.mutate(msg);
   }, [draft, reply, selTags, userName, userColor, sendMut]);
 

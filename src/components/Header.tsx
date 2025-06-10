@@ -20,6 +20,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Link, useNavigate } from 'react-router-dom';
+import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 
 interface MenuItemWithModal {
   label: string;
@@ -60,16 +61,26 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
   };
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
+    trackEvent(AnalyticsEvents.MenuClick, {
+      event_category: 'Navigation',
+      label: open ? 'drawer_open' : 'drawer_close',
+    });
   };
   const toggleSubmenu = (label: string) => () => {
     setOpenSubmenus(prev => ({ ...prev, [label]: !prev[label] }));
   };
 
   const handleItemClick = (item: MenuItemWithModal) => () => {
+    trackEvent(AnalyticsEvents.MenuClick, {
+      event_category: 'Navigation',
+      label: item.label,
+    });
     if (item.modalComponent) {
-      // store the element they passed
       setModalElement(item.modalComponent);
       setModalOpen(true);
+      if (item.label.toLowerCase().includes('live chat')) {
+        trackEvent(AnalyticsEvents.LiveChatOpened, { event_category: 'LiveChat' });
+      }
     } else if (item.path) {
       navigate(item.path);
     }
@@ -77,6 +88,10 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
   const closeModal = () => {
     setModalOpen(false);
     setModalElement(null);
+    trackEvent(AnalyticsEvents.MenuClick, {
+      event_category: 'Navigation',
+      label: 'modal_close',
+    });
   };
 
   return (

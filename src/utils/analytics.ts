@@ -1,10 +1,12 @@
+import { guid } from "./guid";
+
 function hasGtag(): boolean {
   return typeof window !== 'undefined' && typeof (window as any).gtag === 'function';
 }
 
 export function trackEvent(action: string, params: Record<string, any> = {}): void {
   if (hasGtag()) {
-    (window as any).gtag('event', action, params);
+    (window as any).gtag('event', action, params:{ ...params, userId: guid()});
   }
 }
 

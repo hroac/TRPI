@@ -18,6 +18,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import PremiumModal from '../components/PremiumModal';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import GoogleAuthButton from '../components/GoogleAuth';
+import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 
 interface Appointment {
   id: string;
@@ -58,6 +59,10 @@ const Calendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
   const fetchedAdminEvents = useRef(false);
   const price = useRef(0);
+
+  useEffect(() => {
+    trackEvent(AnalyticsEvents.SchedulerViewed, { event_category: 'Scheduler' });
+  }, []);
 
   useEffect(() => {
   let computedPrice = 0;
@@ -232,6 +237,12 @@ const Calendar: React.FC = () => {
       await fetchEvents('primary', currentUser.email)
       setNewAppointment({ date: '', startTime: '', endTime: '', title: '', description: '' });
       setModalOpen(false);
+      trackEvent(AnalyticsEvents.AppointmentBooked, {
+        event_category: 'Scheduler',
+        event_label: 'Appointment Booked',
+        date: newAppointment.date,
+        service: newAppointment.title,
+      });
     }
     setPremiumModalOpen(false);
     alert('Your appointment has been created.');
@@ -244,6 +255,12 @@ const Calendar: React.FC = () => {
       createGoogleCalendarEvent(newAppointment, 'primary');
       setNewAppointment({ date: '', startTime: '', endTime: '', title: '', description: '' });
       setModalOpen(false);
+      trackEvent(AnalyticsEvents.AppointmentBooked, {
+        event_category: 'Scheduler',
+        event_label: 'Appointment Booked',
+        date: newAppointment.date,
+        service: newAppointment.title,
+      });
     }
     setPremiumModalOpen(false);
     alert('Payment successful! Your appointment is created.');

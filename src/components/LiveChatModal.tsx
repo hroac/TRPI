@@ -1,5 +1,6 @@
 // useChatLauncher.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 // ChatModal.tsx
 import {
   Dialog,
@@ -55,8 +56,17 @@ const ChatContext = createContext<ChatCtx | undefined>(undefined);
 
 export function ChatProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const openChat = () => setOpen(true);
-  const closeChat = () => setOpen(false);
+  const openChat = () => {
+    trackEvent(AnalyticsEvents.LiveChatOpened, { event_category: 'LiveChat' });
+    setOpen(true);
+  };
+  const closeChat = () => {
+    trackEvent(AnalyticsEvents.MenuClick, {
+      event_category: 'LiveChat',
+      label: 'close',
+    });
+    setOpen(false);
+  };
 
   return (
     <ChatContext.Provider value={{ openChat }}>

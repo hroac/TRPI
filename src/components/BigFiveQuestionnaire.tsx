@@ -52,6 +52,7 @@ import { statements as fixedStatements, allStatements } from '../utils/mbtiMappi
 import MetaBin from '../utils/metabin';
 import SlugModal from './slugModal';
 import JsonBinApi from '../utils/jsonBin';
+import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 
 
 /** ------------------------------------------------------------------
@@ -163,6 +164,10 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [meta, setMeta] = useState<any>({});
   const [loading, setLoading]     = useState(true);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    trackEvent(AnalyticsEvents.TestStarted, { event_category: 'Test' });
+  }, []);
   const initialStatements = () => {
     const statements = localStorage.getItem('statements')
     const parsed = statements && JSON.parse(statements)
@@ -406,6 +411,7 @@ console.log('new statements')
     window.scrollTo(0, 0);
     if (currentStage < stages.length - 1) {
       setCurrentStage(currentStage + 1);
+      trackEvent(AnalyticsEvents.StageAdvanced, { stage: currentStage + 1 });
       localStorage.setItem('stage', (currentStage + 1).toString());
 
       const stageAnswers: any = !currentStage ? Object.values(responses)[0] : Object.values({
@@ -529,6 +535,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
   }
 
   const handleSubmit = async () => {
+    trackEvent(AnalyticsEvents.TestCompleted, { event_category: 'Test' });
     setSubmitted(true)
     const weightedScores = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait].map((score: any, i: any) => 

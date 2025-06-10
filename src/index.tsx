@@ -5,6 +5,7 @@ import App from './App';
 // Import any global CSS or assets here
 import './styles/index.css';
 import serviceWorkerRegistration from './serviceWorkerRegistration';
+import { initGlobalEventTracking } from './utils/analytics';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -13,4 +14,7 @@ root.render(
   </React.StrictMode>
 );
 
+initGlobalEventTracking();
+
 serviceWorkerRegistration()
+

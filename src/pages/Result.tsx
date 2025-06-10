@@ -43,6 +43,7 @@ import RadarIcon from '@mui/icons-material/DonutLarge'; // Substitute for radar,
 import { typesData } from '../utils/typesData';
 import Carousel from '../components/Carousel';
 import { Autoplay } from 'swiper/modules';
+import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, RadialLinearScale, Title, ChartTooltip, Legend, PointElement, LineElement, Filler);
@@ -98,6 +99,10 @@ const ResultsPage: React.FC<ResultsProps> = ({ binId }) => {
             const binData = await JsonBinApi.getBinById(binParam);
             binData.binId = binParam;
             setBin(binData);
+            trackEvent(AnalyticsEvents.ResultsViewed, {
+              event_category: 'Results',
+              binId: binParam,
+            });
           }
         } else {
           const parsed = JSON.parse(local);

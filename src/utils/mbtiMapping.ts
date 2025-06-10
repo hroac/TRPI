@@ -9382,6 +9382,114 @@ export const allStatements = [
       }
     }
   },
+{
+  "text": "I actively seek out new ideas and perspectives, even when they conflict with my current beliefs.",
+  "trait": "openness",
+  "weight": 1.3,
+  "aspect": "Open-Mindedness",
+  "subtext": {
+    "0-10":  { "text": "I avoid considering ideas that differ from mine.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "10-20": { "text": "I rarely entertain viewpoints that challenge me.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "20-30": { "text": "I sometimes listen to unfamiliar ideas but seldom adopt them.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "30-40": { "text": "I occasionally explore new perspectives, yet prefer what I know.", "exclude": [ "ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP" ] },
+    "40-50": { "text": "I fairly often keep an open mind toward different viewpoints.", "exclude": [] },
+    "50-60": { "text": "I frequently seek out perspectives that broaden my thinking.", "exclude": [] },
+    "60-70": { "text": "I regularly examine ideas that challenge my assumptions.", "exclude": [ "ISTJ","ESTJ" ] },
+    "70-80": { "text": "I highly value engaging with opinions unlike my own.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ" ] },
+    "80-90": { "text": "I am very eager to integrate radically different perspectives.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ISFP" ] },
+    "90-100":{ "text": "I thrive on ideas that transform my worldview.", "exclude": [ "INTP","ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ESFP","ISFP" ] }
+  }
+},
+{
+  "text": "I find it enriching to immerse myself in cultures and traditions different from my own.",
+  "trait": "openness",
+  "weight": 1.2,
+  "aspect": "Open-Mindedness",
+  "subtext": {
+    "0-10":  { "text": "I avoid unfamiliar customs and stick to what I know.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "10-20": { "text": "I rarely show interest in cultures unlike mine.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "20-30": { "text": "I sometimes sample new cultural experiences but feel hesitant.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "30-40": { "text": "I occasionally explore other cultures but prefer the familiar.", "exclude": [ "ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP" ] },
+    "40-50": { "text": "I fairly often enjoy learning about new cultures.", "exclude": [] },
+    "50-60": { "text": "I frequently seek out cross-cultural experiences.", "exclude": [] },
+    "60-70": { "text": "I regularly immerse myself in diverse cultural settings.", "exclude": [ "ISTJ","ESTJ" ] },
+    "70-80": { "text": "I highly value connecting with people from varied backgrounds.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ" ] },
+    "80-90": { "text": "I am very enthusiastic about embracing unfamiliar traditions.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ISFP" ] },
+    "90-100":{ "text": "I actively seek transformative cultural experiences.", "exclude": [ "INTP","ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ESFP","ISFP" ] }
+  }
+},
+{
+  "text": "I welcome constructive criticism that challenges my assumptions.",
+  "trait": "openness",
+  "weight": 1.1,
+  "aspect": "Open-Mindedness",
+  "subtext": {
+    "0-10":  { "text": "I dismiss feedback that questions my views.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "10-20": { "text": "I rarely consider criticism of my ideas.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "20-30": { "text": "I sometimes listen to feedback but seldom change.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "30-40": { "text": "I occasionally act on constructive feedback.", "exclude": [ "ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP" ] },
+    "40-50": { "text": "I fairly often appreciate criticism that helps me grow.", "exclude": [] },
+    "50-60": { "text": "I frequently use feedback to improve my thinking.", "exclude": [] },
+    "60-70": { "text": "I regularly invite diverse critiques of my ideas.", "exclude": [ "ISTJ","ESTJ" ] },
+    "70-80": { "text": "I highly value rigorous challenges to my assumptions.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ" ] },
+    "80-90": { "text": "I am very proactive in seeking critical viewpoints.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ISFP" ] },
+    "90-100":{ "text": "I thrive on feedback that radically reshapes my perspective.", "exclude": [ "INTP","ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ESFP","ISFP" ] }
+  }
+},
+{
+  "text": "I enjoy re-examining long-held traditions from fresh viewpoints.",
+  "trait": "openness",
+  "weight": 1.0,
+  "aspect": "Open-Mindedness",
+  "subtext": {
+    "0-10":  { "text": "I reject questioning established customs.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "10-20": { "text": "I rarely question traditional ways.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "20-30": { "text": "I sometimes consider new takes on tradition, but cautiously.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "30-40": { "text": "I occasionally revisit traditions through different lenses.", "exclude": [ "ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP" ] },
+    "40-50": { "text": "I fairly often rethink established norms.", "exclude": [] },
+    "50-60": { "text": "I frequently explore alternative takes on tradition.", "exclude": [] },
+    "60-70": { "text": "I regularly challenge norms to discover new insights.", "exclude": [ "ISTJ","ESTJ" ] },
+    "70-80": { "text": "I highly value questioning historical conventions.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ" ] },
+    "80-90": { "text": "I am very keen on re-evaluating time-honored beliefs.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ISFP" ] },
+    "90-100":{ "text": "I consistently deconstruct traditions to foster innovation.", "exclude": [ "INTP","ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ESFP","ISFP" ] }
+  }
+},
+{
+  "text": "I readily adjust my opinions when presented with convincing evidence.",
+  "trait": "openness",
+  "weight": 1.2,
+  "aspect": "Open-Mindedness",
+  "subtext": {
+    "0-10":  { "text": "I ignore evidence that contradicts my beliefs.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "10-20": { "text": "I rarely revise my views, even when faced with facts.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "20-30": { "text": "I sometimes acknowledge evidence but resist changing.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "30-40": { "text": "I occasionally revise my stance when data is strong.", "exclude": [ "ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP" ] },
+    "40-50": { "text": "I fairly often update my views when convinced.", "exclude": [] },
+    "50-60": { "text": "I frequently let solid evidence guide my opinions.", "exclude": [] },
+    "60-70": { "text": "I regularly change my mind in light of new facts.", "exclude": [ "ISTJ","ESTJ" ] },
+    "70-80": { "text": "I highly value evidence-based belief revision.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ" ] },
+    "80-90": { "text": "I am very quick to adopt better-supported conclusions.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ISFP" ] },
+    "90-100":{ "text": "I consistently refine my worldview to align with the strongest evidence.", "exclude": [ "INTP","ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ESFP","ISFP" ] }
+  }
+},
+{
+  "text": "I believe conversations with people who think differently are essential for personal growth.",
+  "trait": "openness",
+  "weight": 1.1,
+  "aspect": "Open-Mindedness",
+  "subtext": {
+    "0-10":  { "text": "I avoid discussions with those who disagree with me.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "10-20": { "text": "I rarely engage with opposing viewpoints.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "20-30": { "text": "I sometimes talk with differing thinkers but keep distance.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
+    "30-40": { "text": "I occasionally discuss ideas with people who disagree.", "exclude": [ "ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP" ] },
+    "40-50": { "text": "I fairly often appreciate conversations that challenge me.", "exclude": [] },
+    "50-60": { "text": "I frequently seek dialogue with diverse thinkers.", "exclude": [] },
+    "60-70": { "text": "I regularly learn from discussions with differing opinions.", "exclude": [ "ISTJ","ESTJ" ] },
+    "70-80": { "text": "I highly value debate with contrasting perspectives.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ" ] },
+    "80-90": { "text": "I am very enthusiastic about engaging with opposing views.", "exclude": [ "ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ISFP" ] },
+    "90-100":{ "text": "I continuously seek out and integrate insights from radically different thinkers.", "exclude": [ "INTP","ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ESFP","ISFP" ] }
+  }
+},
   {
     "text": "I have a deep appreciation for the beauty in art, nature, and innovative ideas.",
     "trait": "openness",

@@ -18,6 +18,7 @@ import {
   incrementChatTrpiUsage,
   resetChatTrpiUsage,
 } from "../utils/chatUsageTracker";
+import { trackEvent, AnalyticsEvents } from "../utils/analytics";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -60,6 +61,7 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
 
   componentDidMount() {
     // Load message history, if it exists
+    trackEvent(AnalyticsEvents.ChatOpened, { event_category: 'Chat' });
     try {
       const saved = localStorage.getItem("trpiChatHistory");
       if (saved) {
@@ -134,6 +136,8 @@ export default class ChatTRPI extends Component<ChatTRPIProps, ChatTRPIState> {
     // Deduct one use
     incrementChatTrpiUsage();
     this.setState({ remainingUses: getChatTrpiRemainingUses() });
+
+    trackEvent(AnalyticsEvents.ChatMessageSent, { event_category: 'Chat' });
 
     const userMsg: ChatMessage = { role: "user", content: input.trim() };
     this.setState({

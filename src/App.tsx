@@ -41,6 +41,7 @@ import Scheduler from './pages/Scheduler';
 import TermsOfService from './pages/Terms';
 import PremiumModal from './components/PremiumModal';
 import ChatTRPI from './components/ChatTRPI';
+import { trackEvent, AnalyticsEvents } from './utils/analytics';
 
 /* ───── Live-chat modal (NEW) ───── */
 import ChatContent from './components/LiveChat';   // logic-heavy chat body
@@ -108,6 +109,10 @@ export default function App() {
 
     setBinId(newBinId);
     localStorage.setItem('binId', newBinId);
+    trackEvent(AnalyticsEvents.ResultsSaved, {
+      event_category: 'Results',
+      binId: newBinId,
+    });
     return newBinId;
   };
 

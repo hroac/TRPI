@@ -186,6 +186,7 @@ export default function App() {
       height: '100%',
       background: 'url("/background.png") repeat',
       opacity: 0.3,
+      filter: 'blur(8px)',
       pointerEvents: 'none',
     },
     // Ensure all direct children are above the background

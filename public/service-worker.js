@@ -116,6 +116,7 @@ workbox.googleAnalytics.initialize();
 self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     try {
+      if(!event.request.destination.toString().includes('traitindicator')) return
       let response = await fetch(event.request);
       // If not a 404, just return it
       if (response.status !== 404) return response;

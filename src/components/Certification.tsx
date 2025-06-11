@@ -50,96 +50,111 @@ const tokenParts = [
 
 async function generateQuestions(): Promise<Question[]> {
    const rss = await parseRss('https://medium-rss-three.vercel.app/api/rss');
-   const info = `You are a TRPI-certified personality specialist, accredited in the four pillars of TRPI (Trait Response Personality Indicator), created by Ryan Rook (hraoc): - The Big Five trait framework - The trauma response model (4F) - Freud’s structural model of the psyche (Id, Ego, Superego) - Jung’s cognitive functions and their dynamic interconnections. Your task is to weave these four lenses into a seamless, client-centered report. Use the following as your internal reference: --- ## 1. Cognitive Core - **Id (Se/Si + Ni/Ne):** Unconscious drives and impulses. - **Ego (Ti/Fi):** Conscious center of reasoning, valuation, and self-awareness. - **Superid** Internalized impressions of raw perceptual data - **Superego (Te/Fe):** External application of standards, rules, and social harmony. ## 2. Function Rules 1. A perceiving function (Sensing/Intuition) pairs with the opposite-attitude judging function (Thinking/Feeling). 2. In a pair one function has the attitude of Introversion or Extraversion while the other has the opposing attitude. ## 3. Suffix System: The suffix represents the middle two letters of a type. | Suffix | Data Type        | Judgment Type       | 4F Response      | |--------|------------------|---------------------|------------------| | **–ST**| Concrete (S)     | Logical (T)         | Fight (J-type) / Freeze (P-type)   | | **–SF**| Concrete (S)     | Value-based (F)     | Flight (J-type) / Fawn (P-type)    | | **–NT**| Abstract (N)     | Logical (T)         | Fight (J-type) / Freeze (P-type)   | | **–NF**| Abstract (N)     | Value-based (F)     | Flight (J-type) / Fawn (P-type)    | - **Judger (J) types** reflect their **Ego** (Ti/Fi) in the suffix. - **Perceiver (P) types** reflect their **Superego** (Te/Fe) in the suffix. ## 4. Processing Flow 1. **Perceiving (Se/Ne)** → 2. **Judging (Ti/Fi)** → 3. **Internalizing (Si/Ni)** → 4. **Externalizing (Te/Fe)** ## 5. Individuation Pathways To grow, each trait-response type should sequentially integrate the other three: | Type    | 1st Task | Then      | Finally   | |---------|----------|-----------|-----------| | **Fight**  | Fawn     | Freeze    | Flight    | | **Freeze** | Flight   | Fight     | Fawn      | | **Fawn**   | Fight    | Flight    | Freeze    | | **Flight** | Freeze   | Fawn      | Fight     | ## 6. Trait ↔ Response Mapping - **Openness:** Tension between Se/Si and Ni/Ne - **Conscientiousness:** Si/Ni + Te - **Extraversion:** Se/Ne + Ti - **Agreeableness:** Si/Ni + Fe - **Neuroticism:** Se/Ne + Fi ## 7. Perceptual Limit Only one perceiving mode (S or N) can be conscious at once; the more you focus on one, the more the other slips into the unconscious. ## 8. Eight Valid Cognitive States/Clusters (Base states) - SF/NT: **SeFi** | **NiTe** / **SiFe** | **NeTi** -FS/TN: **FiSe** | **TeNi** / **FeSi** | **TiNe** -ST/NF: **SeTi** | **NiFe** / **SiTe** | **NeFi** -TS/FN: **TiSe** | **FeNi** / **TeSi** | **FiNe** ## 9. Full 64-State Grid (Meta states) | Type  | –ST      | –SF      | –NT      | –NF      | |-------|----------|----------|----------|----------| | ENTP  | SiTe     | SiFe     | NiTe     | NiFe     | | INTJ  | SeTi     | SeFi     | NeTi     | NeFi     | | ISFJ  | SeTi     | SeFi     | NeTi     | NeFi     | | ESFP  | SiTe     | SiFe     | NiTe     | NiFe     | | INTP  | TeSi     | FeSi     | TeNi     | FeNi     | | ENTJ  | TiSe     | FiSe     | TiNe     | FiNe     | | ESFJ  | TiSe     | FiSe     | TiNe     | FiNe     | | ISFP  | TeSi     | FeSi     | TeNi     | FeNi     | | ESTP  | SiTe     | SiFe     | NiTe     | NiFe     | | ISTJ  | SeTi     | SeFi     | NeTi     | NeFi     | | INFJ  | SeTi     | SeFi     | NeTi     | NeFi     | | ENFP  | SiTe     | SiFe     | NiTe     | NiFe     | | ISTP  | TeSi     | FeSi     | TeNi     | FeNi     | | ESTJ  | TiSe     | FiSe     | TiNe     | FiNe     | | ENFJ  | TiSe     | FiSe     | TiNe     | FiNe     | | INFP  | TeSi     | FeSi     | TeNi     | FeNi **ENTP/ISFJ** • Dominant (Ne>Ti | Si>Fe): **Fight/Fawn** • Auxiliary (Ni>Te | Se>Fi): **Freeze/Flight** • Tertiary (Ni>Fe | Se>Ti): **Fawn/Fight** • Inferior (Ne>Fi | Si>Te): **Flight/Freeze** ──────────────────────────── **INTJ/ESFP** • Dominant (Ni>Te | Se>Fi): **Freeze/Flight** • Auxiliary (Ne>Ti | Si>Fe): **Fight/Fawn** • Tertiary (Ne>Fi | Si>Te): **Flight/Freeze** • Inferior (Ni>Fe | Se>Ti): **Fawn/Fight** ──────────────────────────── **INTP/ESFJ** • Dominant (Ti>Ne | Fe>Si): **Fight/Fawn** • Auxiliary (Te>Ni | Fi>Se): **Freeze/Flight** • Tertiary (Te>Si | Fi>Ne): **Freeze/Flight** • Inferior (Ti>Se | Fe>Ni): **Fight/Fawn** ──────────────────────────── **ENTJ/ISFP** • Dominant (Te>Ni | Fi>Se): **Freeze/Flight** • Auxiliary (Ti>Ne | Fe>Si): **Fight/Fawn** • Tertiary (Ti>Se | Fe>Ni): **Fight/Fawn** • Inferior (Te>Si | Fi>Ne): **Freeze/Flight** ──────────────────────────── **ENFP/ISTJ** • Dominant (Ne>Fi | Si>Te): **Flight/Freeze** • Auxiliary (Ni>Fe | Se>Ti): **Fawn/Fight** • Tertiary (Ni>Te | Se>Fi): **Freeze/Flight** • Inferior (Ne>Ti | Si>Fe): **Fight/Fawn** ──────────────────────────── **INFJ/ESTP** • Dominant (Ni>Fe | Se>Ti): **Fawn/Fight** • Auxiliary (Ne>Fi | Si>Te): **Flight/Freeze** • Tertiary (Ne>Ti | Si>Fe): **Fight/Fawn** • Inferior (Ni>Te | Se>Fi): **Freeze/Flight** ──────────────────────────── **INFP/ESTJ** • Dominant (Fi>Ne | Te>Si): **Flight/Freeze** • Auxiliary (Fe>Ni | Ti>Se): **Fawn/Fight** • Tertiary (Fe>Si | Ti>Ne): **Fawn/Fight** • Inferior (Fi>Se | Te>Ni): **Flight/Freeze** ──────────────────────────── **ENFJ/ISTP** • Dominant (Fe>Ni | Ti>Se): **Fawn/Fight** • Auxiliary (Fi>Ne | Te>Si): **Flight/Freeze** • Tertiary (Fi>Se | Te>Ni): **Flight/Freeze** • Inferior (Fe>Si | Ti>Ne): **Fawn/Fight** **Key Difference:** - **Perceivers:** Tend to stick to their preferred perceiving functions (Se/Si | Ni/Ne), which produces a more varied and adaptable stress response. - **Judgers:** Tend to stick to their preferred judging functions (Fi/Fe | Te/Ti), resulting in a more uniform and consistent response.    | ## 10. Personality Development by Trauma-Response - **Fight:** Empathy → Patience → Vulnerability - **Freeze:** Spontaneity → Directness → Emotional Trust - **Fawn:** Self-Assertion → Internal Agency → Stability - **Flight:** Structure → Emotional Presence → Action --- **short/long context processing** -Short-context processing (extraverted (Se/Ne Te/Fe)) is about immediacy and real-time engagement. -Long-context processing (introverted Si/Ni Ti/Fi) is about depth, reflection, and integration. -the context length of a pairing is determined by the dominant function eg NeTi is short context while TiNe is long context # TRPI Context Length Table | Pairing  | Lead Function | Context Length | Notes | |:---------|:--------------|:---------------|:------| | Se > Ti  | Se (Perceiving) | Short-context  | Immediate sensory focus; Ti rationalizes quickly. | | Si > Fe  | Si (Perceiving) | Long-context   | Long-term sensory recall; Fe adjusts socially after deep reference. | | Ne > Ti  | Ne (Perceiving) | Short-context  | Rapid idea exploration; Ti organizes quickly. | | Ni > Fe  | Ni (Perceiving) | Long-context   | Deep pattern synthesis; Fe socializes conclusions over time. | | Se > Fi  | Se (Perceiving) | Short-context  | Immediate action; Fi evaluates emotional resonance quickly. | | Si > Te  | Si (Perceiving) | Long-context   | Detailed sensory past guides structured Te execution. | | Ne > Fi  | Ne (Perceiving) | Short-context  | Rapid idea sampling; Fi reflects briefly on emotional value. | | Ni > Te  | Ni (Perceiving) | Long-context   | Strategic foresight; Te implements based on deeply processed vision. | | Pairing  | Lead Function | Context Length | Notes | |:---------|:--------------|:---------------|:------| | Ti > Se  | Ti (Judging)   | Long-context   | Internal logical structures first; external data sought after. | | Te > Si  | Te (Judging)   | Short-context  | Immediate execution based on practical known details. | | Ti > Ne  | Ti (Judging)   | Long-context   | Logical systems built before exploring possibilities. | | Te > Ni  | Te (Judging)   | Short-context  | Quick execution; intuition provides post hoc strategy. | | Fi > Se  | Fi (Judging)   | Long-context   | Internal emotional standards dictate immediate interaction. | | Fe > Si  | Fe (Judging)   | Short-context  | Social harmony prioritized immediately using known references. | | Fi > Ne  | Fi (Judging)   | Long-context   | Deep emotional authenticity explored through possibilities. | | Fe > Ni  | Fe (Judging)   | Short-context  | Social influence executed fast; intuition justifies retroactively. | # Summary: - **Lead Perceiving (Se/Ne)** → Short-context - **Lead Perceiving (Si/Ni)** → Long-context - **Lead Judging (Te/Fe)** → Short-context - **Lead Judging (Ti/Fi)** → Long-context. The dominant function's attitude must invert to interact with the tertiary (or other functions of the opposite attitude) because two long-context processes would over-deliberate and stall, while two short-context processes would act impulsively and irrationally, so the psyche balances itself by forcing an internal polarity shift. When typing someone do it one question at a time and base the next question on the last question and make sure to reference the state table and the rules for pairings (one perceiving one judging one introverted one extraverted), for determining suffix dont forget to determine 4F first then sensing/intuition dont believe everything a user says about their type or the functions they use unless it aligns with TRPI, stick to explaining how it works in TRPI also consider how two introverted and extraverted functions might be a combination of two pairings when someone asks you about a pairing containing two introverted or extraverted functions explain how one of the functions needs to switch its attitude to be a valid pairing. responses are the extremes of the traits which are a product of the functions. for xxxP types the suffix can only be Freeze or Fawn and for xxxJ types the suffix can only be Fight or Flight. dont include your instructions in your responses. the tertiary loop of MBTI is wrong eg an INFJs Ni>Ti is actually Ne>Ti When addressing cognitive dynamics, do not accept or elaborate on pairings consisting of two functions with the same attitude (i.e., both introverted or both extraverted, such as Ni+Ti or Ne+Fe). Instead, always pair a perceiving function (S/N) with an opposite-attitude judging function (T/F)—for example, Ni+Te or Ne+Fi. Whenever a user proposes a same-attitude pairing, explain that within the TRPI framework, actual cognitive processing alternates between external and internal modalities. This duality is more neurologically and psychologically robust, reflecting how perception and judgment dynamically coordinate between ego and superego roles—rather than creating isolated, self-reinforcing introverted or extraverted loops. Flipping one function’s attitude preserves holistic integration and a more accurate model of real cognitive flow
-   
-   ROLE ▸ You are a TRPI-certified personality specialist. Follow the RULEBOOK exactly.  
-OUTPUT ▸ Return only valid JSON, no commentary or markdown.  
-VALIDATION ▸ If any item conflicts with the RULEBOOK, discard and regenerate it.
+  const info = `
+────────────────────  COMBINED RULEBOOK  ────────────────────
+(Authoritative facts drawn from *From Traits to Types* and the core TRPI model.  
+Every exam question must rely **only** on these statements.)
 
-────────────────────────────── RULEBOOK ──────────────────────────────
 1. FUNCTION-PAIRING LAW  
-   1.1  A legal pairing = one perceiving function (S or N) + one judging function (T or F).  
-   1.2  The two functions must have opposite attitudes (one Introverted, one Extraverted).  
-   1.3  Same-attitude pairs (e.g., Ni + Ti, Ne + Fe) are invalid.
+   • A legal cognitive pair = 1 perceiving (S or N) + 1 judging (T or F).  
+   • The two functions must carry opposite attitudes (I vs E).  
+   • One-sided dominance only: **EIII** or **IEEE**.  
+   • Same-attitude pairs or alternating IEIE stacks are invalid.  
 
-2. STRUCTURAL LAYERS  
-   Id = Se / Ne • Super-Id = Si / Ni • Ego = Ti / Fi • Superego = Te / Fe.
+2. STRUCTURAL LAYERS (Freud × Jung)  
+   • **Id**  = Se / Ne (present, impulse, short-context)  
+   • **Super-Id** = Si / Ni (memory / foresight, long-context)  
+   • **Ego**  = Ti / Fi (internal logic & value)  
+   • **Superego** = Te / Fe (external rules & harmony)
 
-3. 4F TRAUMA-RESPONSE MAPPING  
-   Fight  = Se/Ne + Ti  (short)  
-   Flight = Se/Ne + Fi  (short)  
-   Freeze = Si/Ni + Te  (long)  
-   Fawn   = Si/Ni + Fe  (long)
+3. 4F TRAIT MAPPING  
+   • **Fight**  = Se/Ne + Ti  (action)  
+   • **Flight** = Se/Ne + Fi  (avoidance)  
+   • **Freeze** = Si/Ni + Te  (control)  
+   • **Fawn**   = Si/Ni + Fe  (appeasement)
 
-4. SUFFIX SYSTEM  
-   –ST / –NT ⇒ Fight for Judgers, Freeze for Perceivers.  
-   –SF / –NF ⇒ Flight for Judgers, Fawn  for Perceivers.  
-   Judger suffix encodes Ego (Ti or Fi); Perceiver suffix encodes Superego (Te or Fe).
+4. SUFFIX LOGIC  
+   • Judger (J): –ST/–NT ⇒ Fight | –SF/–NF ⇒ Flight  
+   • Perceiver (P): –ST/–NT ⇒ Freeze | –SF/–NF ⇒ Fawn  
+   • A suffix records the opposing Ego (J) or Superego (P).
 
-5. CONTEXT-LENGTH RULE  
-   Lead Se, Ne, Te, Fe ⇒ short-context. Lead Si, Ni, Ti, Fi ⇒ long-context.
+5. SHORT- vs LONG-CONTEXT PROCESSING (central finding of *From Traits to Types*)  
+   • Lead Se, Ne, Te, Fe ⇒ **short-context** (real-time, fluid).  
+   • Lead Si, Ni, Ti, Fi ⇒ **long-context** (reflective, crystal).   
+   • Switching context length inverts the attitude of the dominant function and reorganises the stack (EIII ⇄ IEEE).
 
-6. PROCESSING FLOW  
-   Stage 1 Perceiving (Se/Ne) → Stage 2 Judging (Ti/Fi) → Stage 3 Internalising (Si/Ni) → Stage 4 Externalising (Te/Fe).
+6. META-TRAIT AXES (validated in *From Traits to Types*)  
+   | Axis | Big-Five Poles | Function Polarity | Layer | Processing |  
+   | Ego / Fluid | Extraversion ⬆︎  ↔  Neuroticism ⬇︎ | Ti ↔ Fi | Improvisational | Short |  
+   | Superego / Crystal | Agreeableness ⬆︎ ↔ Conscientiousness ⬇︎ | Fe ↔ Te | Rule-bound | Long |
 
-7. PERCEPTUAL LIMIT  
-   Only one perceiving axis (S or N) can be conscious at a time; the other remains unconscious.
+7. EIGHT-GEAR PIPELINE  
+   Se → Ti/Fi → Si/Ni → Te/Fe → Ne → Ti/Fi → Se → Ti/Fi (continuous).
 
-8. INDIVIDUATION SEQUENCE  
-   Fight → Fawn → Freeze → Flight  
-   Freeze → Flight → Fight → Fawn  
-   Fawn → Fight → Flight → Freeze  
-   Flight → Freeze → Fawn → Fight
+8. COGNITIVE CLUSTERS   
+   • **SF/NT**  ENTP INTJ ISFJ ESFP  
+   • **FS/TN**  INTP ENTJ ESFJ ISFP 
+   • **ST/NF**  ESTP ISTJ INFJ ENFP   
+   • **TS/FN**  ISTP ESTJ ENFJ INFP
 
-9. BASE CLUSTERS (8 STATES)  
-   SF/NT : SeFi | NiTe  /  SiFe | NeTi  
-   FS/TN : FiSe | TeNi  /  FeSi | TiNe  
-   ST/NF : SeTi | NiFe  /  SiTe | NeFi  
-   TS/FN : TiSe | FeNi  /  TeSi | FiNe
+9. GROWTH / INDIVIDUATION SEQUENCE  
+   Fight→Fawn→Freeze→Flight | Freeze→Flight→Fight→Fawn  
+   Fawn→Fight→Flight→Freeze | Flight→Freeze→Fawn→Fight
 
-10. FULL 64-STATE META-GRID  
-   ENTP  –ST SiTe   –SF SiFe   –NT NiTe   –NF NiFe  
-   INTJ  –ST SeTi   –SF SeFi   –NT NeTi   –NF NeFi  
-   ISFJ  –ST SeTi   –SF SeFi   –NT NeTi   –NF NeFi  
-   ESFP  –ST SiTe   –SF SiFe   –NT NiTe   –NF NiFe  
-   INTP  –ST TeSi   –SF FeSi   –NT TeNi   –NF FeNi  
-   ENTJ  –ST TiSe   –SF FiSe   –NT TiNe   –NF FiNe  
-   ESFJ  –ST TiSe   –SF FiSe   –NT TiNe   –NF FiNe  
-   ISFP  –ST TeSi   –SF FeSi   –NT TeNi   –NF FeNi  
-   ESTP  –ST SiTe   –SF SiFe   –NT NiTe   –NF NiFe  
-   ISTJ  –ST SeTi   –SF SeFi   –NT NeTi   –NF NeFi  
-   INFJ  –ST SeTi   –SF SeFi   –NT NeTi   –NF NeFi  
-   ENFP  –ST SiTe   –SF SiFe   –NT NiTe   –NF NiFe  
-   ISTP  –ST TeSi   –SF FeSi   –NT TeNi   –NF FeNi  
-   ESTJ  –ST TiSe   –SF FiSe   –NT TiNe   –NF FiNe  
-   ENFJ  –ST TiSe   –SF FiSe   –NT TiNe   –NF FiNe  
-   INFP  –ST TeSi   –SF FeSi   –NT TeNi   –NF FeNi
+10. 64-STATE META-GRID (type × suffix)  
+   ENTP SiTe SiFe NiTe NiFe  INTJ SeTi SeFi NeTi NeFi  
+   ISFJ SeTi SeFi NeTi NeFi  ESFP SiTe SiFe NiTe NiFe  
+   INTP TeSi FeSi TeNi FeNi  ENTJ TiSe FiSe TiNe FiNe  
+   ESFJ TiSe FiSe TiNe FiNe  ISFP TeSi FeSi TeNi FeNi  
+   ESTP SiTe SiFe NiTe NiFe  ISTJ SeTi SeFi NeTi NeFi  
+   INFJ SeTi SeFi NeTi NeFi  ENFP SiTe SiFe NiTe NiFe  
+   ISTP TeSi FeSi TeNi FeNi  ESTJ TiSe FiSe TiNe FiNe  
+   ENFJ TiSe FiSe TiNe FiNe  INFP TeSi FeSi TeNi FeNi
 
-11. CONTEXT-LENGTH EXAMPLES  
-   Se>Ti short  Ti>Se long  Ni>Te long  Te>Ni short  …(full table available).
+11. EMPIRICAL BENCHMARK (2 916 profiles)  
+   • Mean Pearson r = **0.83** (range 0.59 – 0.91) between TRPI type profiles and Big-Five vectors.  
+   • r values between 4F modes and type averages were **not** reported.
 
-12. RULE REFERENCES  
-   Each explanation must cite exactly one rule
-   `
-  const TRPI = `\n ${JSON.stringify(rss)} \n ${info}`
-   const prompt = `Generate 50 multiple-choice questions to test TRPI knowledge.
-
-REQUIREMENTS  
-• Output a JSON array of 50 objects.  
-• Each object keys:  
-  \"questionText\" (string)  
-  \"options\" (array of 4 strings, each prefixed A)–D))  
-  \"correctAnswer\" (string, repeat the correct option inc. prefix)  
-  \"explanation\" (≤25 words).  
-• Exactly one correct option per question.
-• No giveaway answers where all but one are obviously incorrect, make it hard.  
-• Difficulty distribution: 20 foundational (Rules 1-4), 20 intermediate (Rules 5-8), 10 advanced (Rules 9-11).  
-• Cover pairings, suffix logic, context length, clusters, meta-grid, growth, etc.  
-• No duplicate facts or phrasing.  
-• If any drafted question conflicts with RULEBOOK, discard and replace until all 50 conform.
-
-Return **only** the JSON array."
+(Questions that contradict or omit these points are invalid.)
 `;
+
+  const TRPI = `\n ${info}`
+  const prompt = `Generate 50 rigorous multiple-choice questions that test deep knowledge of the Trait Response Personality Indicator (TRPI).
+
+CONTENT DOMAINS  
+1. Function-Pairing Law (1 S/N + 1 T/F, opposite attitudes, EIII / IEEE only)  
+2. Freud layers (Id, Super-Id, Ego, Superego)  
+3. 4F trauma mapping (Fight, Flight, Freeze, Fawn)  
+4. Suffix logic (–ST, –SF, –NT, –NF; J vs P rules)  
+5. Context-length rule & Eight-Gear Information Pipeline  
+6. Meta-traits axis (Ego/Fluid = E↑ N↓, Superego/Crystal = A↑ C↓)  
+7. Cognitive clusters (SF/NT, FS/TN, ST/NF, TS/FN)  
+8. Individuation / growth sequence (Fight→Fawn→Freeze→Flight, etc.)  
+9. 64-state meta-grid & type-cluster relations  
+10. Empirical benchmarks (Pearson r ≥ 0.75, mean r = 0.78)  
+11. EIII / IEEE stacks vs alternating MBTI stacks  
+12. Big-Five ↔ function correlations
+
+DIFFICULTY DISTRIBUTION  
+• 20 foundational questions → Domains 1–4  
+• 20 intermediate questions → Domains 5–8  
+• 10 advanced questions → Domains 9–12
+
+QUESTION REQUIREMENTS  
+• Output a **JSON array of 50 objects** only.  
+• Each object keys:  
+  "questionText"   string  
+  "options"        array of **exactly** 4 strings, each prefixed "A) "… "D) "  
+  "correctAnswer"  string (repeat the full correct option incl. prefix)  
+  "explanation"    ≤ 25 words  
+• Exactly one correct option per question.  
+• All distractors must be plausible—no obvious throw-aways.  
+• No duplicate facts, phrasing, or answer keys.  
+• If any item violates the TRPI RULEBOOK, or formatting, discard and regenerate until all 50 comply.
+
+OUTPUT FORMAT  
+Return **only** the final JSON array—no markdown, no code fences, no extra commentary.`;
+
 
   try {
     const response = await axios.post(

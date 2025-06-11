@@ -131,7 +131,8 @@ REQUIREMENTS
   \"options\" (array of 4 strings, each prefixed A)–D))  
   \"correctAnswer\" (string, repeat the correct option inc. prefix)  
   \"explanation\" (≤25 words).  
-• Exactly one correct option per question.  
+• Exactly one correct option per question.
+• No giveaway answers where all but one are obviously incorrect, make it hard.  
 • Difficulty distribution: 20 foundational (Rules 1-4), 20 intermediate (Rules 5-8), 10 advanced (Rules 9-11).  
 • Cover pairings, suffix logic, context length, clusters, meta-grid, growth, etc.  
 • No duplicate facts or phrasing.  

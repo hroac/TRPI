@@ -289,10 +289,10 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
       <Paper elevation={3} sx={{ p: 2, maxWidth: 700, mx: 'auto', mt: 10, minHeight: '400px' }}>
        
         <Stack>
-           <Box display={'flex'} justifyContent={'center'}>
+           <Box display={'flex'} justifyContent={'center'} mt={16}>
            <Typography variant="h6" gutterBottom>Generating questions...</Typography>
            </Box>
-           <Box display={'flex'} justifyContent={'center'}>
+           <Box display={'flex'} justifyContent={'center'} mt={1}>
          <CircularProgress/>
        </Box>
         </Stack>

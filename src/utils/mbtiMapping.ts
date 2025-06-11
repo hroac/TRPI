@@ -9386,7 +9386,7 @@ export const allStatements = [
   "text": "I actively seek out new ideas and perspectives, even when they conflict with my current beliefs.",
   "trait": "openness",
   "weight": 1.3,
-  "aspect": "Open-Mindedness",
+  "aspect": "Exploration",
   "subtext": {
     "0-10":  { "text": "I avoid considering ideas that differ from mine.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
     "10-20": { "text": "I rarely entertain viewpoints that challenge me.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
@@ -9404,7 +9404,7 @@ export const allStatements = [
   "text": "I find it enriching to immerse myself in cultures and traditions different from my own.",
   "trait": "openness",
   "weight": 1.2,
-  "aspect": "Open-Mindedness",
+  "aspect": "Exploration",
   "subtext": {
     "0-10":  { "text": "I avoid unfamiliar customs and stick to what I know.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
     "10-20": { "text": "I rarely show interest in cultures unlike mine.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
@@ -9422,7 +9422,7 @@ export const allStatements = [
   "text": "I welcome constructive criticism that challenges my assumptions.",
   "trait": "openness",
   "weight": 1.1,
-  "aspect": "Open-Mindedness",
+  "aspect": "Exploration",
   "subtext": {
     "0-10":  { "text": "I dismiss feedback that questions my views.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
     "10-20": { "text": "I rarely consider criticism of my ideas.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
@@ -9440,7 +9440,7 @@ export const allStatements = [
   "text": "I enjoy re-examining long-held traditions from fresh viewpoints.",
   "trait": "openness",
   "weight": 1.0,
-  "aspect": "Open-Mindedness",
+  "aspect": "Exploration",
   "subtext": {
     "0-10":  { "text": "I reject questioning established customs.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
     "10-20": { "text": "I rarely question traditional ways.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
@@ -9458,7 +9458,7 @@ export const allStatements = [
   "text": "I readily adjust my opinions when presented with convincing evidence.",
   "trait": "openness",
   "weight": 1.2,
-  "aspect": "Open-Mindedness",
+  "aspect": "Exploration",
   "subtext": {
     "0-10":  { "text": "I ignore evidence that contradicts my beliefs.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
     "10-20": { "text": "I rarely revise my views, even when faced with facts.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
@@ -9476,7 +9476,7 @@ export const allStatements = [
   "text": "I believe conversations with people who think differently are essential for personal growth.",
   "trait": "openness",
   "weight": 1.1,
-  "aspect": "Open-Mindedness",
+  "aspect": "Exploration",
   "subtext": {
     "0-10":  { "text": "I avoid discussions with those who disagree with me.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
     "10-20": { "text": "I rarely engage with opposing viewpoints.", "exclude": [ "ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP" ] },
@@ -9731,7 +9731,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I am profoundly affected by the emotional depth in music and films.",
+    "text": "I am affected by the emotional depth in music and films.",
     "trait": "openness",
     "weight": 1.1,
     "aspect": "Aesthetic Openness",

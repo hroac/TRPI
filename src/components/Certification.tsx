@@ -55,8 +55,8 @@ async function generateQuestions(): Promise<Question[]> {
 (Authoritative facts drawn from *From Traits to Types* and the core TRPI model.  
 Every exam question must rely **only** on these statements.)
 
-1. FUNCTION-PAIRING LAW  
-   • A legal cognitive pair = 1 perceiving (S or N) + 1 judging (T or F).  
+1. FUNCTION-PAIRINGs  
+   • A cognitive pair = 1 perceiving (S or N) + 1 judging (T or F).  
    • The two functions must carry opposite attitudes (I vs E).  
    • One-sided dominance only: **EIII** or **IEEE**.  
    • Same-attitude pairs or alternating IEIE stacks are invalid.  
@@ -78,12 +78,12 @@ Every exam question must rely **only** on these statements.)
    • Perceiver (P): –ST/–NT ⇒ Freeze | –SF/–NF ⇒ Fawn  
    • A suffix records the opposing Ego (J) or Superego (P).
 
-5. SHORT- vs LONG-CONTEXT PROCESSING (central finding of *From Traits to Types*)  
+5. SHORT- vs LONG-CONTEXT PROCESSING  
    • Lead Se, Ne, Te, Fe ⇒ **short-context** (real-time, fluid).  
    • Lead Si, Ni, Ti, Fi ⇒ **long-context** (reflective, crystal).   
    • Switching context length inverts the attitude of the dominant function and reorganises the stack (EIII ⇄ IEEE).
 
-6. META-TRAIT AXES (validated in *From Traits to Types*)  
+6. META-TRAIT AXES 
    | Axis | Big-Five Poles | Function Polarity | Layer | Processing |  
    | Ego / Fluid | Extraversion ⬆︎  ↔  Neuroticism ⬇︎ | Ti ↔ Fi | Improvisational | Short |  
    | Superego / Crystal | Agreeableness ⬆︎ ↔ Conscientiousness ⬇︎ | Fe ↔ Te | Rule-bound | Long |
@@ -138,7 +138,7 @@ CONTENT DOMAINS
 DIFFICULTY DISTRIBUTION  
 • 20 foundational questions → Domains 1–4  
 • 20 intermediate questions → Domains 5–8  
-• 10 advanced questions → Domains 9–12
+• 10 advanced questions → Domains 9–11
 
 QUESTION REQUIREMENTS  
 • Output a **JSON array of 50 objects** only.  

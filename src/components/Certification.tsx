@@ -13,7 +13,7 @@ import {
   Stack,
 } from '@mui/material';
 import JsonBinApi from '../utils/jsonBin';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import parseRss from '../utils/rss'
 
@@ -183,7 +183,7 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
   const [type, setType] = useState<string | undefined>(initialType);
   const [testDate, setTestDate] = useState<string | undefined>(initialDate);
   const ref = useRef(false)
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     if(mode === 'study') {
@@ -276,7 +276,11 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
         questions: answers,
         collectionId: CERT_COLLECTION,
       };
-      JsonBinApi.saveResultsToJsonBin(payload).then((id) => setSavedBinId(id)).catch(() => {});
+      JsonBinApi.saveResultsToJsonBin(payload).then((id) => {
+        setSavedBinId(id);
+        navigate(`/certification/${id}`)
+      }).catch(() => {});
+      
     }
   }, [summary]);
 

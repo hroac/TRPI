@@ -116,6 +116,7 @@ Every exam question must rely **only** on these statements.)
    • r values between 4F modes and type averages were **not** reported.
 
 (Questions that contradict or omit these points are invalid.)
+(“For educational purposes only—no diagnostic or therapeutic advice)
 `;
 
   const TRPI = `\n ${info}`

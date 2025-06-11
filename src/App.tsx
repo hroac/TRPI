@@ -41,6 +41,7 @@ import Scheduler from './pages/Scheduler';
 import TermsOfService from './pages/Terms';
 import PremiumModal from './components/PremiumModal';
 import ChatTRPI from './components/ChatTRPI';
+import Certification from './components/Certification';
 import { trackEvent, AnalyticsEvents } from './utils/analytics';
 
 /* ───── Live-chat modal (NEW) ───── */
@@ -136,6 +137,7 @@ export default function App() {
     { label: 'Tools' },
     { label: 'Big Five Input', path: '/input', parent: 'Tools' },
     { label: 'Type Comparator', path: '/compare', parent: 'Tools' },
+    { label: 'Certification', path: '/certification', parent: 'Tools' },
     { label: 'Other' },
     { label: 'Sources', path: '/sources', parent: 'Other' },
     { label: 'Reviews', path: '/reviews', parent: 'Other' },
@@ -226,6 +228,8 @@ export default function App() {
               <Route path="/:company/:departement/assessment/:binId" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/:company/assessment/:binId" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
+              <Route path="/certification" element={<Certification userId={guid()} />} />
+              <Route path="/certification/:binId" element={<Certification userId={guid()} />} />
               <Route path="/oracle" element={<ChatTRPI apiPath="https://chattrpi-production.up.railway.app/api/trpi-chat" userId={guid()} />}/>
               <Route path="*" element={<NotFoundPage/>}/>
             </Routes>

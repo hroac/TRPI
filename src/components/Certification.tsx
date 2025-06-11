@@ -252,7 +252,7 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
           TRPI Certification
         </Typography>
         <FormControlLabel
-          control={<Switch checked={mode === 'exam'} onChange={() => mode === 'study' ? '' : ref.current = false && setMode(mode === 'study' ? 'exam' : 'study') } />}
+          control={<Switch checked={mode === 'exam'} onChange={() => (mode === 'study' ? '' : ref.current = false) && setMode(mode === 'study' ? 'exam' : 'study') } />}
           label={mode === 'exam' ? 'Exam Mode' : 'Study Mode'}
         />
       </Box>

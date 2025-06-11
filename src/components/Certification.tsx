@@ -132,14 +132,14 @@ CONTENT DOMAINS
 7. Cognitive clusters (SF/NT, FS/TN, ST/NF, TS/FN)  
 8. Individuation / growth sequence (Fight→Fawn→Freeze→Flight, etc.)  
 9. 64-state meta-grid & type-cluster relations  
-10. Empirical benchmarks (Pearson r ≥ 0.75, mean r = 0.78)  
+10. Empirical benchmarks (Pearson, mean r = 0.83)  
 11. EIII / IEEE stacks vs alternating MBTI stacks  
 12. Big-Five ↔ function correlations
 
 DIFFICULTY DISTRIBUTION  
 • 20 foundational questions → Domains 1–4  
 • 20 intermediate questions → Domains 5–8  
-• 10 advanced questions → Domains 9–11
+• 10 advanced questions → Domains 9–12
 
 QUESTION REQUIREMENTS  
 • Output a **JSON array of 50 objects** only.  

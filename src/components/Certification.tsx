@@ -105,7 +105,7 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
     if (!ref.current && !binId) {
       ref.current = true
       
-      generateQuestions().then(setQuestions).catch((e:any) => {console.log(e)};
+      generateQuestions().then(setQuestions).catch((e:any) => {console.log(e)});
 
     }
   }, [binId, ref]);

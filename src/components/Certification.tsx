@@ -192,6 +192,8 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
   const binId = params.binId;
   const [mode, setMode] = useState<'study' | 'exam'>('study');
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [studyQuestions, setStudyQuestions] = useState<Question[]>([]);
+  const [examQuestions, setExamQuestions] = useState<Question[]>([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState('');
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
@@ -372,12 +374,19 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
               setMode('exam');
               setIndex(0);
               setAnswers([]);
+
+              if(examQuestions.length) {
+                setQuestions(examQuestions);
+                return;
+              }
+              setStudyQuestions(JSON.parse(JSON.stringify(questions)))
               setQuestions([]);
 
-              generateQuestions().then(setQuestions)
+              generateQuestions().then((qstns) => {setQuestions(qstns); setExamQuestions(qstns)})
               return;
             }
             setMode('study')
+            setQuestions(studyQuestions)
            }} />}
           label={mode === 'exam' ? 'Exam Mode' : 'Study Mode'}
         />

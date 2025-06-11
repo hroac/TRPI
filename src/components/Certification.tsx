@@ -150,7 +150,8 @@ QUESTION REQUIREMENTS
   "explanation"    ≤ 25 words  
 • Exactly one correct option per question.  
 • All distractors must be plausible—no obvious throw-aways.  
-• No duplicate facts, phrasing, or answer keys.  
+• No duplicate facts, phrasing, or answer keys.
+• Double check that the other options are not also valid answers, if so discard them and regenerate.  
 • If any item violates the TRPI RULEBOOK, or formatting, discard and regenerate until all 50 comply.
 
 OUTPUT FORMAT  

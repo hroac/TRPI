@@ -10,6 +10,7 @@ import {
   Switch,
   Divider,
   CircularProgress,
+  Stack,
 } from '@mui/material';
 import JsonBinApi from '../utils/jsonBin';
 import { useParams } from 'react-router-dom';
@@ -189,9 +190,15 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
   if (loading) {
     return (
       <Paper elevation={3} sx={{ p: 2, maxWidth: 700, mx: 'auto', mt: 10 }}>
-       <Box display={'flex'} justifyContent={'center'}>
+       
+        <Stack>
+           <Box display={'flex'} justifyContent={'center'}>
+           <Typography variant="h6" gutterBottom>Generating questions...</Typography>
+           </Box>
+           <Box display={'flex'} justifyContent={'center'}>
          <CircularProgress/>
        </Box>
+        </Stack>
       </Paper>
     );
   }

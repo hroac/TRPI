@@ -172,31 +172,38 @@ export default function App() {
           {/* Main content wrapper */}
           <Box
           sx={{
+  position: 'relative',
+  minHeight: '100vh',
+  overflow: 'hidden',
+  // The background image pseudo-element:
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    zIndex: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    background: 'url("/background.png") repeat',
+    opacity: 0.3,
+    filter: 'blur(8px)',
+    pointerEvents: 'none',
+    animation: 'verticalScroll 60s linear infinite',
+    // Inline keyframes for MUI's sx:
+    '@keyframes verticalScroll': {
+      '0%':   { backgroundPosition: '0 0' },
+      '100%': { backgroundPosition: '0 100vh' },
+    },
+  },
+  // Ensure all direct children are above the background
+  '& > *': {
     position: 'relative',
-    minHeight: '100vh',  // Optional, for full-page background
-    overflow: 'hidden',
-    // The background image pseudo-element:
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      zIndex: 0,
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      width: '100%',
-      height: '100%',
-      background: 'url("/background.png") repeat',
-      opacity: 0.3,
-      filter: 'blur(8px)',
-      pointerEvents: 'none',
-    },
-    // Ensure all direct children are above the background
-    '& > *': {
-      position: 'relative',
-      zIndex: 1,
-    },
-  }}
+    zIndex: 1,
+  },
+}}
+
           >
             <Routes>
               <Route path="/" element={<Homepage />} />

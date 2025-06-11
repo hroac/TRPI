@@ -55,7 +55,7 @@ async function generateQuestions(): Promise<Question[]> {
 (Authoritative facts drawn from *From Traits to Types* and the core TRPI model.  
 Every exam question must rely **only** on these statements.)
 
-1. FUNCTION-PAIRINGs  
+1. FUNCTION-PAIRINGS
    • A cognitive pair = 1 perceiving (S or N) + 1 judging (T or F).  
    • The two functions must carry opposite attitudes (I vs E).  
    • One-sided dominance only: **EIII** or **IEEE**.  
@@ -123,7 +123,7 @@ Every exam question must rely **only** on these statements.)
   const prompt = `Generate 50 rigorous multiple-choice questions that test deep knowledge of the Trait Response Personality Indicator (TRPI).
 
 CONTENT DOMAINS  
-1. Function-Pairing Law (1 S/N + 1 T/F, opposite attitudes, EIII / IEEE only)  
+1. Function-Pairings (1 S/N + 1 T/F, opposite attitudes, EIII / IEEE only)  
 2. Freud layers (Id, Super-Id, Ego, Superego)  
 3. 4F trauma mapping (Fight, Flight, Freeze, Fawn)  
 4. Suffix logic (–ST, –SF, –NT, –NF; J vs P rules)  

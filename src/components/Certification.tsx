@@ -101,9 +101,11 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
 
   // Generate a new set of questions when starting a new certification
   useEffect(() => {
+    console.log(ref.current, questions)
     if (!ref.current && !binId) {
       ref.current = true
-      generateQuestions().then(setQuestions).catch(() => {});
+      
+      generateQuestions().then(setQuestions).catch((e:any) => {console.log(e});
 
     }
   }, [binId, ref]);

@@ -99,6 +99,12 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
   const [testDate, setTestDate] = useState<string | undefined>(initialDate);
   const ref = useRef(false)
 
+
+  useEffect(() => {
+    if(mode === 'study') {
+
+    }
+  }, [mode])
   // Generate a new set of questions when starting a new certification
   useEffect(() => {
     console.log(ref.current, questions)
@@ -254,7 +260,18 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
           TRPI Certification
         </Typography>
         <FormControlLabel
-          control={<Switch checked={mode === 'exam'} onChange={() => {(mode === 'study' ? '' : ref.current = false); setMode(mode === 'study' ? 'exam' : 'study') }} />}
+          control={<Switch checked={mode === 'exam'} onChange={() => {
+            if(mode === 'study') {
+              setMode('exam');
+              setIndex(0);
+              setAnswers([]);
+              setQuestions([]);
+
+              generateQuestions().then(setQuestions)
+              return;
+            }
+            setMode('study')
+           }} />}
           label={mode === 'exam' ? 'Exam Mode' : 'Study Mode'}
         />
       </Box>

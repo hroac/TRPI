@@ -69,6 +69,13 @@ const shuffle = <T,>(arr: T[]): T[] => {
   return a;
 };
 
+const formatTime = (seconds: number): string => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+};
+
 /** Build a unique signature for a statement without relying on an `id` field */
 const signature = (s: Statement) => `${s.trait}|${s.text}`;
 
@@ -209,12 +216,14 @@ console.log('new statements')
   const [password, setPassword] = useState<string>('');
   const [openPasswordModal, setOpenPasswordModal] = useState(slug ? true : false ); // Modal is pre-opened by default
   const [submitted, setSubmitted] = useState<boolean>(false)
-  const SECONDS_PER_ITEM = 10;
-  const [minutesLeft, setMinutesLeft] = useState<number>(() => {
+  const [secondsPerItem, setSecondsPerItem] = useState<number>(10);
+  const [secondsLeft, setSecondsLeft] = useState<number>(() => {
     const all = Object.values(initialResponses()).flat() as number[];
     const unanswered = all.filter(v => v === 0.500001).length;
-    return (unanswered * SECONDS_PER_ITEM) / 60;
+    return unanswered * secondsPerItem;
   });
+  const [firstStageTimes, setFirstStageTimes] = useState<number[]>([]);
+  const [currentStartTime, setCurrentStartTime] = useState<number>(Date.now());
   const type = typesData.find(t => t.type === matchedMBTIType);
   const stages = [
     statements.slice(0, 3), // Stage 0
@@ -281,8 +290,21 @@ console.log('new statements')
   useEffect(() => {
     const all = Object.values(responses).flat() as number[];
     const unanswered = all.filter(v => v === 0.500001).length;
-    setMinutesLeft((unanswered * SECONDS_PER_ITEM) / 60);
-  }, [responses]);
+    setSecondsLeft(unanswered * secondsPerItem);
+  }, [responses, secondsPerItem]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSecondsLeft(prev => Math.max(prev - 1, 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (currentStage === 0 && firstStageTimes.length === 0) {
+      setCurrentStartTime(Date.now());
+    }
+  }, [currentStage, firstStageTimes.length]);
 
 
   const unlock = () => {
@@ -406,15 +428,26 @@ console.log('new statements')
         setSelectedStatement(sub.text)
         return;
       }
+      const prevVal = responses[trait][index];
       setResponses((prev: any) => {
         const updatedResponses = { ...prev };
         updatedResponses[trait][index] = value as number;
         const sub = getSubtext(trait, index, value as number);
-        setSelectedStatement(sub.text)
-
-        localStorage.setItem('responses', JSON.stringify(updatedResponses))
+        setSelectedStatement(sub.text);
+        localStorage.setItem('responses', JSON.stringify(updatedResponses));
         return updatedResponses;
       });
+
+      if(currentStage === 0 && prevVal === 0.500001) {
+        const diff = (Date.now() - currentStartTime) / 1000;
+        setFirstStageTimes(times => {
+          const updated = [...times, diff];
+          const avg = updated.reduce((a, b) => a + b, 0) / updated.length;
+          setSecondsPerItem(avg);
+          return updated;
+        });
+        setCurrentStartTime(Date.now());
+      }
     };
 
   const handleNext = () => {
@@ -846,19 +879,19 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
       </Box>
 
       {/* Progress Bar */}
-      <Typography variant="subtitle1" align="center">
-        Approx. {minutesLeft.toFixed(1)} minute{minutesLeft.toFixed(1) === '1.0' ? '' : 's'} left
-      </Typography>
       <Box my={3}>
         <LinearProgress color="secondary" variant="determinate" value={progress} />
         <LinearProgress color="secondary" variant="determinate" value={progress} />
       </Box>
 
       {/* Navigation Buttons */}
-      <Box display="flex" justifyContent="space-between" mt={3}>
+      <Box display="flex" alignItems="center" mt={3}>
         <Button onClick={handleBack} disabled={currentStage === 0} variant="contained" color="primary">
           Back
         </Button>
+        <Typography variant="subtitle1" sx={{ flexGrow: 1, textAlign: 'center' }}>
+          {formatTime(secondsLeft)}
+        </Typography>
         {lastStage >= 8 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
           <Tooltip title={`${type.mode} \n ${(accuracy).toFixed(1)}%`}>
             <Box
@@ -877,7 +910,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
         {currentStage === stages.length - 1 ? (
           <Button onClick={slug ? () => {setShowModal(true)} : handleSubmit} variant="contained" color="primary" disabled={submitted}>
             {submitted ? 'Submitted' : 'Submit'}
-             
+
           </Button>
         ) : (
           <Button onClick={handleNext} variant="contained" color="primary">

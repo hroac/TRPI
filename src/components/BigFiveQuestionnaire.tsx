@@ -70,10 +70,9 @@ const shuffle = <T,>(arr: T[]): T[] => {
 };
 
 const formatTime = (seconds: number): string => {
-  const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   const s = Math.floor(seconds % 60);
-  return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+  return [m, s].map(v => String(v).padStart(2, '0')).join(':');
 };
 
 /** Build a unique signature for a statement without relying on an `id` field */
@@ -179,10 +178,10 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const statements = localStorage.getItem('statements')
     const parsed = statements && JSON.parse(statements)
     if(Array.isArray(parsed)) {
-    //console.log(statements, parsed, (statements||[]).length)
+    ////console.log(statements, parsed, (statements||[]).length)
       return parsed
     }
-console.log('new statements')
+//console.log('new statements')
     const newStatements = JSON.stringify(fixedStatements);
     localStorage.setItem('statements', newStatements);
     return fixedStatements
@@ -216,14 +215,14 @@ console.log('new statements')
   const [password, setPassword] = useState<string>('');
   const [openPasswordModal, setOpenPasswordModal] = useState(slug ? true : false ); // Modal is pre-opened by default
   const [submitted, setSubmitted] = useState<boolean>(false)
-  const [secondsPerItem, setSecondsPerItem] = useState<number>(10);
+  const [secondsPerItem, setSecondsPerItem] = useState<number>(0);
   const [secondsLeft, setSecondsLeft] = useState<number>(() => {
     const all = Object.values(initialResponses()).flat() as number[];
     const unanswered = all.filter(v => v === 0.500001).length;
     return unanswered * secondsPerItem;
   });
   const [firstStageTimes, setFirstStageTimes] = useState<number[]>([]);
-  const [currentStartTime, setCurrentStartTime] = useState<number>(Date.now());
+  const [firstAnswerTime, setFirstAnswerTime] = useState<number>(Date.now());
   const type = typesData.find(t => t.type === matchedMBTIType);
   const stages = [
     statements.slice(0, 3), // Stage 0
@@ -244,13 +243,13 @@ console.log('new statements')
     (async () => {
       try {
         const all = await MetaBin.getAll();
-        console.log(all)
+       
         if (all[slug]) {
         const meta = await MetaBin.getMeta();
-        console.log(meta)
+
           setMapping(all[slug]);
           setMeta(meta[slug])
-          console.log('set slug')
+          //console.log('set slug')
         } else {
           console.warn(`Slug "${slug}" not found; proceeding without modal.`);
         }
@@ -300,11 +299,11 @@ console.log('new statements')
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
+/*   useEffect(() => {
     if (currentStage === 0 && firstStageTimes.length === 0) {
       setCurrentStartTime(Date.now());
     }
-  }, [currentStage, firstStageTimes.length]);
+  }, [currentStage, firstStageTimes.length]); */
 
 
   const unlock = () => {
@@ -345,7 +344,7 @@ console.log('new statements')
     const replacements = selectFreshStatements((allStatements as Statement[]), stages, currentStage);
     if (replacements.length !== len) return;
 
-    //console.log(statements, replacements);
+    ////console.log(statements, replacements);
     stages[currentStage] = replacements;
     const newStatements = stages.flat();
     //replacements.forEach((r, i) => { newStatements[start + i] = r; });
@@ -374,7 +373,7 @@ console.log('new statements')
       return acc;
     }, {} as { [trait: string]: number[] });
     setResponses(((prevResponses: any) => {
-      //console.log(prevResponses, randomResponses);
+      ////console.log(prevResponses, randomResponses);
       return {...prevResponses, ...randomResponses}
     }))
    // setLastStage(0)
@@ -421,14 +420,21 @@ console.log('new statements')
   const handleSliderChange =
     (trait: string, index: number) =>
     (event: Event, value: number | number[], activeThumb: number) => {
-     // //console.log('handleSliderChange',  currentStage, lastStage)
+     // ////console.log('handleSliderChange',  currentStage, lastStage)
       if(currentStage < lastStage) {
         const sub = getSubtext(trait, index, responses[trait][index] as number);
 
         setSelectedStatement(sub.text)
         return;
       }
+
+   
+      
       const prevVal = responses[trait][index];
+
+      if(prevVal === 0.500001) {
+        setFirstAnswerTime(Date.now())
+      }
       setResponses((prev: any) => {
         const updatedResponses = { ...prev };
         updatedResponses[trait][index] = value as number;
@@ -439,20 +445,20 @@ console.log('new statements')
       });
 
       if(currentStage === 0 && prevVal === 0.500001) {
-        const diff = (Date.now() - currentStartTime) / 1000;
+        const diff = (Date.now() - firstAnswerTime) / 1000;
         setFirstStageTimes(times => {
           const updated = [...times, diff];
           const avg = updated.reduce((a, b) => a + b, 0) / updated.length;
-          setSecondsPerItem(avg);
+          setSecondsPerItem(avg * (stages.length - 1));
+          //console.log(avg, updated)
           return updated;
         });
-        setCurrentStartTime(Date.now());
       }
     };
 
   const handleNext = () => {
-    //console.log('current stage first: ', currentStage )
-    //console.log('isCurrentStage: ', currentStage, lastStage);
+    ////console.log('current stage first: ', currentStage )
+    ////console.log('isCurrentStage: ', currentStage, lastStage);
     window.scrollTo(0, 0);
     if (currentStage < stages.length - 1) {
       setCurrentStage(currentStage + 1);
@@ -474,7 +480,7 @@ console.log('new statements')
         localStorage.setItem('lastStage', (currentStage + 1).toString());
 
       }
-      //console.log('current stage first: ', currentStage + 1)
+      ////console.log('current stage first: ', currentStage + 1)
 
     }
     setSelectedStatement(null)
@@ -594,7 +600,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
 
     const stmnts = buildStatementObject(weightedScores, statements).filter(stmnt => stmnt.trait !== 'openness');
     const excluded = getExcludedTypes(stmnts)
-    console.log("excluded!: ", excluded)
+    //console.log("excluded!: ", excluded)
     //const primary4F = determinePrimary4FType(weightedScores);
     const mbtiType = matchMBTI(weightedScores, excluded.filter(x => x.length === 4))//matchMBTIType(weightedScores, primary4F);
     const profile = typesData.find(t => t.type === mbtiType.type);
@@ -637,7 +643,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
   }
 
   const handleMatrixSelect = (type: string) => {
-    //console.log('Selected Type:', type)
+    ////console.log('Selected Type:', type)
     if (type === 'XXXX') {
       // If the user doesn't know their type, we can just log it or set states accordingly
      // setPrimary4FType(null);
@@ -650,7 +656,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     const profile: any = MBTIProfiles.find((p) => p.name === type)?.traits;
     setSelectedMbtiType(type);
     if (profile) {
-      //console.log(profile)
+      ////console.log(profile)
       const stageResponses = stages.slice(0, stages.length).flat();
 
     const updatedResponses = stageResponses.reduce((acc, s) => {
@@ -890,7 +896,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
           Back
         </Button>
         <Typography variant="subtitle1" sx={{ flexGrow: 1, textAlign: 'center' }}>
-          {formatTime(secondsLeft)}
+          { secondsLeft > 0 && formatTime(secondsLeft)}
         </Typography>
         {lastStage >= 8 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
           <Tooltip title={`${type.mode} \n ${(accuracy).toFixed(1)}%`}>
@@ -930,7 +936,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
 
       {meta.password && openPasswordModal && (
          <Dialog open={openPasswordModal} onClose={() => {
-          console.log([password, meta.password, password !== meta.password])
+          //console.log([password, meta.password, password !== meta.password])
           setOpenPasswordModal(password !== meta.password)
          }} fullWidth maxWidth="sm">
               <DialogTitle>Enter The Password</DialogTitle>

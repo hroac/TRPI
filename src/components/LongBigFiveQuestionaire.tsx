@@ -68,10 +68,9 @@ const shuffle = <T,>(arr: T[]): T[] => {
 };
 
 const formatTime = (seconds: number): string => {
-  const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   const s = Math.floor(seconds % 60);
-  return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+  return [m, s].map(v => String(v).padStart(2, '0')).join(':');
 };
 
 /** Build a unique signature for a statement without relying on an `id` field */
@@ -208,15 +207,15 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const [meta, setMeta] = useState<any>({});
   const type = typesData.find(t => t.type === matchedMBTIType);
   const [bin, setBin] = useState<Record<any, any>>();
-  const [secondsPerItem, setSecondsPerItem] = useState<number>(10);
+  const [secondsPerItem, setSecondsPerItem] = useState<number>(0);
   const [secondsLeft, setSecondsLeft] = useState<number>(() => {
     const all = Object.values(initialResponses()).flat() as number[];
     const unanswered = all.filter(v => v === 0.500001).length;
     return unanswered * secondsPerItem;
   });
   const [firstStageTimes, setFirstStageTimes] = useState<number[]>([]);
-  const [currentStartTime, setCurrentStartTime] = useState<number>(Date.now());
-
+  const [firstAnswerTime, setFirstAnswerTime] = useState<number>(Date.now());
+  
 const longStages = [
   statements.slice(0,3), // Stage 0
   statements.slice(3, 7),  // stage 1
@@ -294,11 +293,6 @@ const longStages = [
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (currentStage === 0 && firstStageTimes.length === 0) {
-      setCurrentStartTime(Date.now());
-    }
-  }, [currentStage, firstStageTimes.length]);
 
   const unlock = () => {
    setLastStage(0)
@@ -418,6 +412,10 @@ const flushCurrentStage = () => {
 //console.log(trait, index, value)
 //console.log(responses)
       const prevVal = responses[trait][index];
+
+      if(prevVal === 0.500001) {
+        setFirstAnswerTime(Date.now())
+      }
       setResponses((prev: any) => {
         const updatedResponses = { ...prev };
         updatedResponses[trait][index] = value;
@@ -428,14 +426,13 @@ const flushCurrentStage = () => {
       });
 
       if(currentStage === 0 && prevVal === 0.500001) {
-        const diff = (Date.now() - currentStartTime) / 1000;
+        const diff = (Date.now() - firstAnswerTime) / 1000;
         setFirstStageTimes(times => {
           const updated = [...times, diff];
           const avg = updated.reduce((a, b) => a + b, 0) / updated.length;
-          setSecondsPerItem(avg);
+          setSecondsPerItem(avg * (longStages.length - 1));
           return updated;
         });
-        setCurrentStartTime(Date.now());
       }
     };
 
@@ -807,7 +804,7 @@ const determineIndex = (trait: string, index: number) : number => {
           Back
         </Button>
         <Typography variant="subtitle1" sx={{ flexGrow: 1, textAlign: 'center' }}>
-          {formatTime(secondsLeft)}
+          {secondsLeft > 0 && formatTime(secondsLeft)}
         </Typography>
         {lastStage >= 11 && matchedMBTIType && matchedMBTIType !== 'XXXX' && type && (
           <Tooltip title={`${type.mode} \n ${(accuracy).toFixed(1)}%`}>

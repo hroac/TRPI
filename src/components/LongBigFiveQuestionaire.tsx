@@ -194,13 +194,19 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
   const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
-  const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
-  const [submitted, setSubmitted] = useState<boolean>(false)
- const [password, setPassword] = useState<string>('');
+  const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
+  const [submitted, setSubmitted] = useState<boolean>(false)
+  const [password, setPassword] = useState<string>('');
   const [openPasswordModal, setOpenPasswordModal] = useState(slug ? true : false ); // Modal is pre-opened by default
   const [meta, setMeta] = useState<any>({});
-  const type = typesData.find(t => t.type === matchedMBTIType);
-const [bin, setBin] = useState<Record<any, any>>();
+  const type = typesData.find(t => t.type === matchedMBTIType);
+  const [bin, setBin] = useState<Record<any, any>>();
+  const SECONDS_PER_ITEM = 10;
+  const [minutesLeft, setMinutesLeft] = useState<number>(() => {
+    const all = Object.values(initialResponses()).flat() as number[];
+    const unanswered = all.filter(v => v === 0.500001).length;
+    return (unanswered * SECONDS_PER_ITEM) / 60;
+  });
 
 const longStages = [
   statements.slice(0,3), // Stage 0
@@ -260,11 +266,17 @@ const longStages = [
     })();
   }, [lastBinId]);
 
-    useEffect(() => {
+  useEffect(() => {
       if(meta && slug) {
       setOpenPasswordModal(!meta.password || password !== meta.password)
       }
-    }, [password, meta])
+  }, [password, meta])
+
+  useEffect(() => {
+    const all = Object.values(responses).flat() as number[];
+    const unanswered = all.filter(v => v === 0.500001).length;
+    setMinutesLeft((unanswered * SECONDS_PER_ITEM) / 60);
+  }, [responses]);
 
   const unlock = () => {
    setLastStage(0)
@@ -751,6 +763,9 @@ const determineIndex = (trait: string, index: number) : number => {
       </Box>
 
       {/* Progress Bar */}
+      <Typography variant="subtitle1" align="center">
+        Approx. {minutesLeft.toFixed(1)} minute{minutesLeft.toFixed(1) === '1.0' ? '' : 's'} left
+      </Typography>
       <Box my={3}>
         <LinearProgress color="secondary" variant="determinate" value={progress} />
         <LinearProgress color="secondary" variant="determinate" value={progress} />

@@ -11,11 +11,13 @@ import {
   Divider,
   CircularProgress,
   Stack,
+  Tooltip,
 } from '@mui/material';
 import JsonBinApi from '../utils/jsonBin';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import parseRss from '../utils/rss'
+import Notification from './Notification';
 
 interface Question {
   questionText: string;
@@ -48,8 +50,73 @@ const tokenParts = [
   'MkZBdnhvRGliVjZPM1Z4Q29ZejU2dzJ1QUdPOExsUEJTOHVvRFFNQnl5cjRB',
 ];
 
-async function generateQuestions(): Promise<Question[]> {
-   const rss = await parseRss('https://medium-rss-three.vercel.app/api/rss');
+
+
+const Certification: React.FC<CertificationProps> = ({ userId, type: initialType, testDate: initialDate }) => {
+  const params = useParams<{ binId?: string }>();
+  const binId = params.binId;
+  const [mode, setMode] = useState<'study' | 'exam'>('study');
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [studyQuestions, setStudyQuestions] = useState<Question[]>([]);
+  const [examQuestions, setExamQuestions] = useState<Question[]>([]);
+  const [index, setIndex] = useState(0);
+  const [selected, setSelected] = useState('');
+  const [answers, setAnswers] = useState<AnswerRecord[]>([]);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [summary, setSummary] = useState(false);
+  const [savedBinId, setSavedBinId] = useState<string>('');
+  const [type, setType] = useState<string | undefined>(initialType);
+  const [testDate, setTestDate] = useState<string | undefined>(initialDate);
+  const [error, setError] = useState<string> ('');
+  const ref = useRef(false)
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(mode === 'study') {
+
+    }
+  }, [mode])
+  // Generate a new set of questions when starting a new certification
+  useEffect(() => {
+    console.log(ref.current, questions)
+    if (!ref.current && !binId) {
+      ref.current = true
+      
+      generateQuestions().then(setQuestions).catch((e:any) => {console.log(e)});
+
+    }
+  }, [binId, ref]);
+
+  useEffect(() => {
+    if ((!initialType || !initialDate) && binId) {
+      JsonBinApi.getBinById(binId)
+        .then((d: any) => {
+          if (!type && d.type) setType(d.type);
+          if (!testDate && d.date) setTestDate(d.date);
+        })
+        .catch(() => {});
+    }
+  }, [binId]);
+
+  // If URL includes a binId, fetch stored answers and show summary
+  useEffect(() => {
+    if (binId) {
+      JsonBinApi.getBinById(binId)
+        .then((d: any) => {
+          if (Array.isArray(d.questions)) {
+            setQuestions(d.questions);
+            setAnswers(d.questions);
+            setSummary(true);
+            setSavedBinId(binId);
+          }
+          if (d.type) setType(d.type);
+          if (d.testDate) setTestDate(d.testDate);
+        })
+        .catch(() => {});
+    }
+  }, [binId]);
+
+  async function generateQuestions(): Promise<Question[]> {
   const info = `
 ────────────────────  COMBINED RULEBOOK  ────────────────────
 (Authoritative facts drawn from *From Traits to Types* and the core TRPI model.  
@@ -59,7 +126,8 @@ Every exam question must rely **only** on these statements.)
    • A cognitive pair = 1 perceiving (S or N) + 1 judging (T or F).  
    • The two functions must carry opposite attitudes (I vs E).  
    • One-sided dominance only: **EIII** or **IEEE**.  
-   • Same-attitude pairs or alternating IEIE stacks are invalid.  
+   • Same-attitude pairs or alternating IEIE stacks are invalid. 
+   • A pairing can either be open minded (eg SiTe) or close minded (eg TeSi). 
 
 2. STRUCTURAL LAYERS (Freud × Jung)  
    • **Id**  = Se / Ne (present, impulse, short-context)  
@@ -77,7 +145,7 @@ Every exam question must rely **only** on these statements.)
    • Judger (J): –ST/–NT ⇒ Fight | –SF/–NF ⇒ Flight  
    • Perceiver (P): –ST/–NT ⇒ Freeze | –SF/–NF ⇒ Fawn  
    • A suffix records the opposing Ego (J) or Superego (P).
-
+   • The opposing Ego/Superego can either be open minded (leading with a perceiving function eg NeTi) or close minded (leading with a judging function eg TiNe).
 5. SHORT- vs LONG-CONTEXT PROCESSING  
    • Lead Se, Ne, Te, Fe ⇒ **short-context** (real-time, fluid).  
    • Lead Si, Ni, Ti, Fi ⇒ **long-context** (reflective, crystal).   
@@ -182,73 +250,11 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
   } catch (err) {
     console.error('Failed to generate questions:', err);
     // Fallback sample questions if generation fails
+    setError(JSON.stringify(err))
     return [
     ];
   }
 }
-
-const Certification: React.FC<CertificationProps> = ({ userId, type: initialType, testDate: initialDate }) => {
-  const params = useParams<{ binId?: string }>();
-  const binId = params.binId;
-  const [mode, setMode] = useState<'study' | 'exam'>('study');
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [studyQuestions, setStudyQuestions] = useState<Question[]>([]);
-  const [examQuestions, setExamQuestions] = useState<Question[]>([]);
-  const [index, setIndex] = useState(0);
-  const [selected, setSelected] = useState('');
-  const [answers, setAnswers] = useState<AnswerRecord[]>([]);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [summary, setSummary] = useState(false);
-  const [savedBinId, setSavedBinId] = useState<string>('');
-  const [type, setType] = useState<string | undefined>(initialType);
-  const [testDate, setTestDate] = useState<string | undefined>(initialDate);
-  const ref = useRef(false)
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if(mode === 'study') {
-
-    }
-  }, [mode])
-  // Generate a new set of questions when starting a new certification
-  useEffect(() => {
-    console.log(ref.current, questions)
-    if (!ref.current && !binId) {
-      ref.current = true
-      
-      generateQuestions().then(setQuestions).catch((e:any) => {console.log(e)});
-
-    }
-  }, [binId, ref]);
-
-  useEffect(() => {
-    if ((!initialType || !initialDate) && binId) {
-      JsonBinApi.getBinById(binId)
-        .then((d: any) => {
-          if (!type && d.type) setType(d.type);
-          if (!testDate && d.date) setTestDate(d.date);
-        })
-        .catch(() => {});
-    }
-  }, [binId]);
-
-  // If URL includes a binId, fetch stored answers and show summary
-  useEffect(() => {
-    if (binId) {
-      JsonBinApi.getBinById(binId)
-        .then((d: any) => {
-          if (Array.isArray(d.questions)) {
-            setQuestions(d.questions);
-            setAnswers(d.questions);
-            setSummary(true);
-            setSavedBinId(binId);
-          }
-          if (d.type) setType(d.type);
-          if (d.testDate) setTestDate(d.testDate);
-        })
-        .catch(() => {});
-    }
-  }, [binId]);
 
   const current = questions[index];
   const loading = !summary && questions.length === 0;
@@ -313,7 +319,9 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
            <Typography variant="h6" gutterBottom>Generating questions...</Typography>
            </Box>
            <Box display={'flex'} justifyContent={'center'} mt={1}>
-         <CircularProgress/>
+        <Tooltip title={'Be patient! \n loading the questions takes about 3 minutes'}>
+           <CircularProgress/>
+        </Tooltip>
        </Box>
         </Stack>
       </Paper>
@@ -416,6 +424,14 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
           {showFeedback ? (index + 1 === questions.length ? 'Finish' : 'Next') : 'Submit'}
         </Button>
       </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3 }}>
+                <Notification
+                  open={error !== ''}
+                  message={error}
+                  type="error"
+                  onClose={() => setError('')}
+                />
+              </Box>
     </Paper>
   );
 };

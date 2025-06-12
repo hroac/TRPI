@@ -209,6 +209,9 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const [bin, setBin] = useState<Record<any, any>>();
   const [secondsPerItem, setSecondsPerItem] = useState<number>(0);
   const [secondsLeft, setSecondsLeft] = useState<number>(() => {
+     if(localStorage.getItem('longSecondsLeft')) {
+      return parseInt(localStorage.getItem('longSecondsLeft')?.toString() || '')
+    }
     const all = Object.values(initialResponses()).flat() as number[];
     const unanswered = all.filter(v => v === 0.500001).length;
     return unanswered * secondsPerItem;

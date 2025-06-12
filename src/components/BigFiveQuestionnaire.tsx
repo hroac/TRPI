@@ -217,6 +217,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [secondsPerItem, setSecondsPerItem] = useState<number>(0);
   const [secondsLeft, setSecondsLeft] = useState<number>(() => {
+    if(localStorage.getItem('secondsLeft')) {
+      return parseInt(localStorage.getItem('secondsLeft')?.toString() || '')
+    }
     const all = Object.values(initialResponses()).flat() as number[];
     const unanswered = all.filter(v => v === 0.500001).length;
     return unanswered * secondsPerItem;
@@ -290,6 +293,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const all = Object.values(responses).flat() as number[];
     const unanswered = all.filter(v => v === 0.500001).length;
     setSecondsLeft(unanswered * secondsPerItem);
+    localStorage.setItem('secondsLeft', (unanswered * secondsPerItem).toString())
   }, [responses, secondsPerItem]);
 
   useEffect(() => {

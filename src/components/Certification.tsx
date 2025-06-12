@@ -351,9 +351,6 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
         <Typography variant="body1" gutterBottom>
           Score: {score}% ({correct} / {questions.length})
         </Typography>
-        <Typography variant="body1" gutterBottom>
-          Result Bin: {savedBinId || 'saving...'}
-        </Typography>
         <Divider sx={{ my: 2 }} />
         {answers.map((a, i) => {
           console.log(a,a.isCorrect ? 'Correct' : `Incorrect. Correct answer: ${a.correctAnswer}`)

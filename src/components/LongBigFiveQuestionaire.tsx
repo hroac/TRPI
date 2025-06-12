@@ -286,7 +286,9 @@ const longStages = [
   useEffect(() => {
     const all = Object.values(responses).flat() as number[];
     const unanswered = all.filter(v => v === 0.500001).length;
-    setSecondsLeft(unanswered * secondsPerItem);
+    const time = unanswered * secondsPerItem;
+    
+    setSecondsLeft(time > 600000 ? 600000 : time);
   }, [responses, secondsPerItem]);
 
   useEffect(() => {

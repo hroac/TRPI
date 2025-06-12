@@ -146,6 +146,8 @@ Every exam question must rely **only** on these statements.)
    • Perceiver (P): –ST/–NT ⇒ Freeze | –SF/–NF ⇒ Fawn  
    • A suffix records the opposing Ego (J) or Superego (P).
    • The opposing Ego/Superego can either be open minded (leading with a perceiving function eg NeTi) or close minded (leading with a judging function eg TiNe).
+   • A 4F mode has two suffixes attached to it, eg for perceivers who experience Freeze it can be -ST or -NT, for a judger experiencing Fight it can be -ST or -NT, for a perceiver experiencing Fawn it can be -SF or -NF, for a judger experiencing Flight it can be -SF or -NF.
+   • The dominant response is dependant on context, however you are likely to prefer your base response (eg for ENTP-NT its Fight then Freeze)
 5. SHORT- vs LONG-CONTEXT PROCESSING  
    • Lead Se, Ne, Te, Fe ⇒ **short-context** (real-time, fluid).  
    • Lead Si, Ni, Ti, Fi ⇒ **long-context** (reflective, crystal).   
@@ -153,8 +155,8 @@ Every exam question must rely **only** on these statements.)
 
 6. META-TRAIT AXES 
    | Axis | Big-Five Poles | Function Polarity | Layer | Processing |  
-   | Ego / Fluid | Extraversion ⬆︎  ↔  Neuroticism ⬇︎ | Ti ↔ Fi | Improvisational | Short |  
-   | Superego / Crystal | Agreeableness ⬆︎ ↔ Conscientiousness ⬇︎ | Fe ↔ Te | Rule-bound | Long |
+   | Ego / Fluid Intelligence | Extraversion ⬆︎  ↔  Neuroticism ⬇︎ | Ti ↔ Fi | Improvisational | Short |  
+   | Superego / Crystallized Intelligence | Agreeableness ⬆︎ ↔ Conscientiousness ⬇︎ | Fe ↔ Te | Rule-bound | Long |
 
 7. EIGHT-GEAR PIPELINE  
    Se → Ti/Fi → Si/Ni → Te/Fe → Ne → Ti/Fi → Se → Ti/Fi (continuous).
@@ -205,9 +207,9 @@ CONTENT DOMAINS
 12. Big-Five ↔ function correlations
 
 DIFFICULTY DISTRIBUTION  
-• 20 foundational questions → Domains 1–4  
-• 20 intermediate questions → Domains 5–8  
-• 10 advanced questions → Domains 9–12
+• 15 foundational questions → Domains 1–4  
+• 15 intermediate questions → Domains 5–8  
+• 20 advanced questions → Domains 9–12
 
 QUESTION REQUIREMENTS  
 • Output a **JSON array of 50 objects** only.  

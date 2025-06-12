@@ -209,6 +209,12 @@ console.log('new statements')
   const [password, setPassword] = useState<string>('');
   const [openPasswordModal, setOpenPasswordModal] = useState(slug ? true : false ); // Modal is pre-opened by default
   const [submitted, setSubmitted] = useState<boolean>(false)
+  const SECONDS_PER_ITEM = 10;
+  const [minutesLeft, setMinutesLeft] = useState<number>(() => {
+    const all = Object.values(initialResponses()).flat() as number[];
+    const unanswered = all.filter(v => v === 0.500001).length;
+    return (unanswered * SECONDS_PER_ITEM) / 60;
+  });
   const type = typesData.find(t => t.type === matchedMBTIType);
   const stages = [
     statements.slice(0, 3), // Stage 0
@@ -271,6 +277,12 @@ console.log('new statements')
     setOpenPasswordModal(!meta.password || password !== meta.password)
     }
   }, [password, meta])
+
+  useEffect(() => {
+    const all = Object.values(responses).flat() as number[];
+    const unanswered = all.filter(v => v === 0.500001).length;
+    setMinutesLeft((unanswered * SECONDS_PER_ITEM) / 60);
+  }, [responses]);
 
 
   const unlock = () => {
@@ -834,6 +846,9 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
       </Box>
 
       {/* Progress Bar */}
+      <Typography variant="subtitle1" align="center">
+        Approx. {minutesLeft.toFixed(1)} minute{minutesLeft.toFixed(1) === '1.0' ? '' : 's'} left
+      </Typography>
       <Box my={3}>
         <LinearProgress color="secondary" variant="determinate" value={progress} />
         <LinearProgress color="secondary" variant="determinate" value={progress} />

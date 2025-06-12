@@ -335,7 +335,10 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       }, {} as { [trait: string]: number[] }));
       localStorage.removeItem('responses');
     }
-  
+
+   setFirstAnswerTime(Date.now())
+   setSecondsPerItem(0)
+   localStorage.removeItem('secondsLeft')
    localStorage.removeItem('stage');
    localStorage.removeItem('lastStage');
 

@@ -319,8 +319,10 @@ const longStages = [
       }, {} as { [trait: string]: number[] }));
       localStorage.removeItem('longResponses');
     }
+    setFirstAnswerTime(Date.now())
    localStorage.removeItem('longStage');
    localStorage.removeItem('longLastStage');
+   localStorage.removeItem('longSecondsLeft')
 //console.log(responses)
    }
 

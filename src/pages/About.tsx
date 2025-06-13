@@ -392,7 +392,7 @@ const AboutPage: React.FC<{
 
       {/* Carousel */}
       <Carousel slides={slides} settings={{ slidesPerView: 1, loop: true, autoHeight: true }} />
-
+   <Paper elevation={4} sx={{ padding: '30px', borderRadius: '15px' }}>
       {/* Stereotype vs Reality */}
       <Box mt={5}>
         <Grid container spacing={4}>
@@ -468,6 +468,7 @@ const AboutPage: React.FC<{
         handlePaymentSuccess={handlePaymentSuccess}
         price={0.99}
       />
+    </Paper>
     </Box>
   );
 };

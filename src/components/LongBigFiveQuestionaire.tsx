@@ -284,12 +284,16 @@ const longStages = [
   }, [password, meta])
 
   useEffect(() => {
-    const all = Object.values(responses).flat() as number[];
-    const unanswered = all.filter(v => v === 0.500001).length;
-    const time = unanswered * secondsPerItem;
     
-    setSecondsLeft(time > 1200 ? 1200 : time);
-  }, [responses, secondsPerItem]);
+    if(currentStage === 0) {
+      const all = Object.values(responses).flat() as number[];
+      const unanswered = all.filter(v => v === 0.500001).length;
+      const time = unanswered * secondsPerItem;
+      
+      setSecondsLeft(time > 1200 ? 1200 : time);
+      localStorage.setItem('longSecondsLeft', (unanswered * secondsPerItem).toString())
+    }
+  }, [currentStage, responses, secondsPerItem]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -322,6 +326,7 @@ const longStages = [
       localStorage.removeItem('longResponses');
     }
     setFirstAnswerTime(Date.now())
+    setSecondsPerItem(0)
    localStorage.removeItem('longStage');
    localStorage.removeItem('longLastStage');
    localStorage.removeItem('longSecondsLeft')

@@ -290,13 +290,15 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   }, [password, meta])
 
   useEffect(() => {
-    const all = Object.values(responses).flat() as number[];
-    const unanswered = all.filter(v => v === 0.500001).length;
-    const time = unanswered * secondsPerItem;
-    
-    setSecondsLeft(time > 1200 ? 1200 : time);
+    if(currentStage === 0) {
+      const all = Object.values(responses).flat() as number[];
+      const unanswered = all.filter(v => v === 0.500001).length;
+      const time = unanswered * secondsPerItem;
+      
+      setSecondsLeft(time > 1200 ? 1200 : time);
     localStorage.setItem('secondsLeft', (unanswered * secondsPerItem).toString())
-  }, [responses, secondsPerItem]);
+    }
+  }, [currentStage, responses, secondsPerItem]);
 
   useEffect(() => {
     const interval = setInterval(() => {

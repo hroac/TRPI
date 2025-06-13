@@ -664,11 +664,11 @@ const determineIndex = (trait: string, index: number) : number => {
             <RestartAlt/>
           </IconButton>
           </Tooltip>
-          {!bin && <Tooltip title="Get different statements">
+          {/* {!bin && <Tooltip title="Get different statements">
           <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
-          </Tooltip>}
+          </Tooltip>} */}
           <Tooltip title=" Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
@@ -689,11 +689,11 @@ const determineIndex = (trait: string, index: number) : number => {
             <RestartAlt/>
           </IconButton>
           </Tooltip>
-          {!bin && <Tooltip title="Get different statements">
+          {/* {!bin && <Tooltip title="Get different statements">
           <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
-          </Tooltip>}
+          </Tooltip>} */}
           <Tooltip title="Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />

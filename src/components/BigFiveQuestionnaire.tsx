@@ -755,11 +755,11 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
             <RestartAlt/>
           </IconButton>
           </Tooltip>
-         {!bin &&  <Tooltip title="Get different statements">
+         {/* {!bin &&  <Tooltip title="Get different statements">
           <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
-          </Tooltip>}
+          </Tooltip>} */}
           <Tooltip title="Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />
@@ -780,11 +780,11 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
             <RestartAlt/>
           </IconButton>
           </Tooltip>
-          {!bin && <Tooltip title="Get different statements">
+          {/* {!bin && <Tooltip title="Get different statements">
           <IconButton onClick={flushCurrentStage} color="primary">
             <ShuffleOn />
           </IconButton>
-          </Tooltip>}
+          </Tooltip>} */}
           <Tooltip title="Use a preset">
           <IconButton onClick={handleOpenModal} color="primary">
             <SwitchAccount />

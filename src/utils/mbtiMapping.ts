@@ -9437,7 +9437,7 @@ export const allStatements = [
   }
 },
 {
-  "text": "I enjoy re-examining long-held traditions from fresh viewpoints.",
+  "text": "I re-examine long-held traditions from fresh viewpoints.",
   "trait": "openness",
   "weight": 1.0,
   "aspect": "Exploration",

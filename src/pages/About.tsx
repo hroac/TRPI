@@ -25,7 +25,20 @@ import {
   FormLabel,
   Tooltip,
 } from '@mui/material';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Radar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  RadialLinearScale,
+  Title,
+  Tooltip as ChartTooltip,
+  Legend,
+  PointElement,
+  LineElement,
+  Filler,
+} from 'chart.js';
 import Carousel from '../components/Carousel';
 import JsonBinApi from '../utils/jsonBin';
 import QuestionnaireModal from '../components/QuestionnaireModal';
@@ -37,6 +50,19 @@ import {
 import { guid } from '../utils/guid';
 import Ranking from '../components/Ranking';
 import ReactMarkdown from 'react-markdown';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  RadialLinearScale,
+  Title,
+  ChartTooltip,
+  Legend,
+  PointElement,
+  LineElement,
+  Filler
+);
 
 /* ------------------------------------------------------------ */
 /*  helpers for assessment narrative                            */
@@ -109,20 +135,23 @@ const AboutPage: React.FC<{
   const assessmentNarrative = buildAssessmentNarrative(statements, stmnts, allResponses);
 
   /* ------------------ chart data ----------------------------- */
-  const chartData = {
-    labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
+  const chartLabels = ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'];
+  const chartDataArray = profile?.traits
+    ? [
+        profile.traits.openness * 100,
+        profile.traits.conscientiousness * 100,
+        profile.traits.extraversion * 100,
+        profile.traits.agreeableness * 100,
+        profile.traits.neuroticism * 100,
+      ]
+    : [0, 0, 0, 0, 0];
+
+  const barData = {
+    labels: chartLabels,
     datasets: [
       {
         label: 'Big Five Scores',
-        data: profile?.traits
-          ? [
-              profile.traits.openness * 100,
-              profile.traits.conscientiousness * 100,
-              profile.traits.extraversion * 100,
-              profile.traits.agreeableness * 100,
-              profile.traits.neuroticism * 100,
-            ]
-          : [0, 0, 0, 0, 0],
+        data: chartDataArray,
         backgroundColor: [
           'rgba(75, 192, 192, 0.6)',
           'rgba(54, 162, 235, 0.6)',
@@ -130,10 +159,75 @@ const AboutPage: React.FC<{
           'rgba(153, 102, 255, 0.6)',
           'rgba(255, 99, 132, 0.6)',
         ],
+        borderColor: [
+          'rgba(75, 192, 192, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 99, 132, 1)',
+        ],
         borderWidth: 1,
       },
     ],
   };
+
+  const barOptions = {
+    responsive: true,
+    plugins: { legend: { display: false }, title: { display: true, text: 'Big Five Personality Scores' } },
+    scales: { y: { beginAtZero: true, max: 100 } },
+    maintainAspectRatio: true,
+  };
+
+  const radarData = {
+    labels: chartLabels,
+    datasets: [
+      {
+        label: 'Big Five Scores',
+        data: chartDataArray,
+        backgroundColor: 'rgba(75,192,192,0.35)',
+        borderColor: 'rgba(75,192,192,1)',
+        pointBackgroundColor: 'rgba(75,192,192,1)',
+        pointBorderColor: '#fff',
+        pointRadius: 3,
+        borderWidth: 2,
+        fill: true,
+      },
+    ],
+  };
+
+  const radarOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' as const, labels: { font: { size: 15 } } },
+      title: { display: true, text: 'Big Five Personality Scores' },
+    },
+    scales: {
+      r: {
+        angleLines: { display: true },
+        min: 0,
+        max: 100,
+        pointLabels: { font: { size: isMobile ? 14 : 18 } },
+        ticks: { stepSize: 20, font: { size: isMobile ? 12 : 15 }, backdropColor: 'transparent' },
+      },
+    },
+  };
+
+  const chartSlides = [
+    {
+      content: (
+        <Box display="flex" justifyContent="center" height={isMobile ? '600px' : '500px'}>
+          <Radar data={radarData} options={radarOptions} />
+        </Box>
+      ),
+    },
+    {
+      content: (
+        <Box display="flex" justifyContent="center" height={isMobile ? '300px' : '500px'}>
+          <Bar data={barData} options={barOptions} />
+        </Box>
+      ),
+    },
+  ];
 
   /* ------------------ report-level state --------------------- */
   const hasGenerated = Boolean(bin?.description || description);
@@ -289,14 +383,7 @@ const AboutPage: React.FC<{
       {showBigFive && (
         <Box display="flex" justifyContent="center" my={4}>
           <Box width={isMobile ? '90%' : '60%'}>
-            <Bar
-              data={chartData}
-              options={{
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, max: 100 } },
-              }}
-            />
+            <Carousel slides={chartSlides} settings={{ slidesPerView: 1, loop: false, autoHeight: true }} />
           </Box>
         </Box>
       )}

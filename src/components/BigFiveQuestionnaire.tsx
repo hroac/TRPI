@@ -294,7 +294,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
     const unanswered = all.filter(v => v === 0.500001).length;
     const time = unanswered * secondsPerItem;
     
-    setSecondsLeft(time > 600000 ? 600000 : time);
+    setSecondsLeft(time > 1200 ? 1200 : time);
     localStorage.setItem('secondsLeft', (unanswered * secondsPerItem).toString())
   }, [responses, secondsPerItem]);
 

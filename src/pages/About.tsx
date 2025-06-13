@@ -360,7 +360,7 @@ const AboutPage: React.FC<{
                   </RadioGroup>
                 </FormControl>
               </Box>
-              {availableOptions.length === 1 && reportLevel === 'expert' &&  <Button
+              { <Button
                 variant="contained"
                 color="primary"
                 fullWidth={!isMobile}
@@ -448,7 +448,7 @@ const AboutPage: React.FC<{
                 onClick={() => navigate(`/result/${bin.prev}`)}
               >Previous results</Button>}
       {
-        guid() === bin.userId && Object.values(bin.responses)?.length !== 0 && <Box>
+       bin && guid() === bin.userId && Object.values(bin.responses)?.length !== 0 && <Box>
           <Tooltip title="Or have a friend do it!">
          <Button
                 variant="contained"

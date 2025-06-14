@@ -370,6 +370,7 @@ const AboutPage: React.FC<{
   /* ------------------ JSX ---------------------- */
   return (
     <Box sx={{ mt: '10px' }} padding={isMobile ? 2 : 4}>
+    <Paper elevation={4} sx={{ padding: '30px', marginTop: '50px', borderRadius: '15px' }}>
       {/* Header */}
       <Typography variant={isMobile ? 'h5' : 'h4'} align="center" gutterBottom>
         {type || mbtiType} –{' '}
@@ -402,6 +403,7 @@ const AboutPage: React.FC<{
           {`"${typeInfo.quote}"`}
         </Typography>
       </Box>
+      </Paper>
 
       {/* Description & controls */}
       <Card variant="outlined" sx={{ my: 3, p: 2 }}>

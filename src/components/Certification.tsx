@@ -155,11 +155,17 @@ Every exam question must rely **only** on these statements.)
 
 6. META-TRAIT AXES 
    | Axis | Big-Five Poles | Function Polarity | Layer | Processing |  
-   | Ego / Fluid Intelligence | Extraversion ⬆︎  ↔  Neuroticism ⬇︎ | Ti ↔ Fi | Improvisational | Short |  
-   | Superego / Crystallized Intelligence | Agreeableness ⬆︎ ↔ Conscientiousness ⬇︎ | Fe ↔ Te | Rule-bound | Long |
+   | Ego / Fluid Intelligence | Extraversion  ↔  Neuroticism  | Ti ↔ Fi | Improvisational | Short |  
+   | Superego / Crystallized Intelligence | Agreeableness  ↔ Conscientiousness  | Fe ↔ Te | Rule-bound | Long |
 
-7. EIGHT-GEAR PIPELINE  
-   Se → Ti/Fi → Si/Ni → Te/Fe → Ne → Ti/Fi → Se → Ti/Fi (continuous).
+7. Function definition & interaction
+    rely on Jungs original definitions of the functions
+    observation = objective
+    impression = subjective
+  • Se + Fi/Ti creates an impression (Si)
+  • Si + Fe/Te creates an observation (Se)
+  • Ne + Fi/Ti creates an impression (Si)
+  • Ni + Fe/Te creates an observation (Se)
 
 8. COGNITIVE CLUSTERS   
    • **SF/NT**  ENTP INTJ ISFJ ESFP  
@@ -223,6 +229,51 @@ QUESTION REQUIREMENTS
 • No duplicate facts, phrasing, or answer keys.
 • Double check that the other options are not also valid answers, if so discard them and regenerate.  
 • If any item violates the TRPI RULEBOOK, or formatting, discard and regenerate until all 50 comply.
+
+EXAMPLES:
+When moving from long- to short-context processing, the dominant function becomes…
+A) medium context
+B) shorter context
+C) short context
+D) immediate context
+
+After inverting attitudes from EIII, what attitude does the dominant function assume?
+  A) Introverted
+  B) Ambiverted
+  C) Extraverted
+  D) Both
+
+  On the Ego/Fluid meta-trait axis, which of the following statements is true?
+  A) Neuroticism ⬇︎ Extraversion ⬆︎
+  B) Conscientiousness ⬇︎ Neuroticism ⬆︎
+  C) Extraversion ⬇︎ Agreeableness ⬆︎
+  D) Neuroticism ⬇︎ Conscientiousness ⬆︎
+  
+  Which suffix can label a Perceiver demonstrating a Fawn response?
+  A) ST
+  B) NJ
+  C) FJ
+  D) SF
+
+  For a Perceiver in Freeze mode, which suffix is allowable under TRPI
+  A) SF
+  B) TJ
+  C) NF
+  D) ST
+
+  Which suffix is NOT permitted for a Judger experiencing Flight according to TRPI rules?
+  A) NT
+  B) FP
+  C) NF
+  D) ST
+
+  Complete this sequence: Freeze ... 
+   A) Freeze Fight Flight Fawn
+  B) Freeze Fawn Fight Flight
+  C) Freeze Flight Fight Fawn
+  D) Freeze Flight Fawn Fight
+
+  
 
 OUTPUT FORMAT  
 Return **only** the final JSON array—no markdown, no code fences, no extra commentary.`;

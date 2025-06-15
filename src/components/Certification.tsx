@@ -273,7 +273,16 @@ After inverting attitudes from EIII, what attitude does the dominant function as
   C) Freeze Flight Fight Fawn
   D) Freeze Flight Fawn Fight
 
-  
+  Which attitude pattern is accepted as a legal stack in TRPI?
+
+  A) EIII/IEEE
+  B) EIEI/IEIE
+  C) EIII/IEEE
+  D) EEEE/IIII
+
+
+
+
 
 OUTPUT FORMAT  
 Return **only** the final JSON array—no markdown, no code fences, no extra commentary.`;

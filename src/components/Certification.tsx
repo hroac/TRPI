@@ -7,14 +7,13 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
-  Switch,
   Divider,
   CircularProgress,
   Stack,
   Tooltip,
-  IconButton,
   Tabs,
   Tab,
+  IconButton,
 } from '@mui/material';
 import ArticleIcon from '@mui/icons-material/Article';
 import JsonBinApi from '../utils/jsonBin';
@@ -22,7 +21,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Notification from './Notification';
 import ArticleModal from './ArticleModal';
-import PersonalDetailsModal from './PersonalDetailsModal';
+import NameModal from './NameModal';
 
 interface Question {
   questionText: string;
@@ -46,6 +45,7 @@ interface CertificationProps {
 }
 
 const CERT_COLLECTION = '6848ac258561e97a502221b5';
+const TAB_LABELS = ['Exams', 'Jung', 'Freud', 'Neuroscience', 'Trait Responses', 'Big Five'];
 
 // ----------- OpenAI Token Helpers -----------
 const decodeToken = (parts: string[]) => parts.map((t) => atob(t)).join('');
@@ -60,10 +60,13 @@ const tokenParts = [
 const Certification: React.FC<CertificationProps> = ({ userId, type: initialType, testDate: initialDate }) => {
   const params = useParams<{ binId?: string }>();
   const binId = params.binId;
-  const [mode, setMode] = useState<'study' | 'exam'>('study');
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [studyQuestions, setStudyQuestions] = useState<Question[]>([]);
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
+  const [jungQuestions, setJungQuestions] = useState<Question[]>([]);
+  const [freudQuestions, setFreudQuestions] = useState<Question[]>([]);
+  const [neuroQuestions, setNeuroQuestions] = useState<Question[]>([]);
+  const [traitQuestions, setTraitQuestions] = useState<Question[]>([]);
+  const [bigFiveQuestions, setBigFiveQuestions] = useState<Question[]>([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState('');
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
@@ -73,25 +76,20 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
   const [type, setType] = useState<string | undefined>(initialType);
   const [testDate, setTestDate] = useState<string | undefined>(initialDate);
   const [error, setError] = useState<string> ('');
+  const [articleOpen, setArticleOpen] = useState(false);
+  const [nameModalOpen, setNameModalOpen] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [tab, setTab] = useState(0);
   const ref = useRef(false)
   const navigate = useNavigate();
-  const [tabIndex, setTabIndex] = useState(0);
-  const [openArticles, setOpenArticles] = useState(false);
-  const [openDetails, setOpenDetails] = useState(false);
-
-  useEffect(() => {
-    if(mode === 'study') {
-
-    }
-  }, [mode])
   // Generate a new set of questions when starting a new certification
   useEffect(() => {
-    console.log(ref.current, questions)
     if (!ref.current && !binId) {
-      ref.current = true
-      
-      generateQuestions().then(setQuestions).catch((e:any) => {console.log(e)});
-
+      ref.current = true;
+      generateQuestions().then((qs) => {
+        setExamQuestions(qs);
+        setQuestions(qs);
+      }).catch(() => {});
     }
   }, [binId, ref]);
 
@@ -105,6 +103,71 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
         .catch(() => {});
     }
   }, [binId]);
+
+  // Load questions when switching tabs
+  useEffect(() => {
+    setIndex(0);
+    setSelected('');
+    setShowFeedback(false);
+    setSummary(false);
+    setAnswers([]);
+
+    if (tab === 0) {
+      if (examQuestions.length) {
+        setQuestions(examQuestions);
+      } else {
+        generateQuestions().then((qs) => {
+          setExamQuestions(qs);
+          setQuestions(qs);
+        }).catch(() => {});
+      }
+    } else if (tab === 1) {
+      if (jungQuestions.length) {
+        setQuestions(jungQuestions);
+      } else {
+        generateJungQuestions().then((qs) => {
+          setJungQuestions(qs);
+          setQuestions(qs);
+        }).catch(() => {});
+      }
+    } else if (tab === 2) {
+      if (freudQuestions.length) {
+        setQuestions(freudQuestions);
+      } else {
+        generateFreudQuestions().then((qs) => {
+          setFreudQuestions(qs);
+          setQuestions(qs);
+        }).catch(() => {});
+      }
+    } else if (tab === 3) {
+      if (neuroQuestions.length) {
+        setQuestions(neuroQuestions);
+      } else {
+        generateNeuroQuestions().then((qs) => {
+          setNeuroQuestions(qs);
+          setQuestions(qs);
+        }).catch(() => {});
+      }
+    } else if (tab === 4) {
+      if (traitQuestions.length) {
+        setQuestions(traitQuestions);
+      } else {
+        generateTraitQuestions().then((qs) => {
+          setTraitQuestions(qs);
+          setQuestions(qs);
+        }).catch(() => {});
+      }
+    } else if (tab === 5) {
+      if (bigFiveQuestions.length) {
+        setQuestions(bigFiveQuestions);
+      } else {
+        generateBigFiveQuestions().then((qs) => {
+          setBigFiveQuestions(qs);
+          setQuestions(qs);
+        }).catch(() => {});
+      }
+    }
+  }, [tab]);
 
   // If URL includes a binId, fetch stored answers and show summary
   useEffect(() => {
@@ -204,7 +267,7 @@ Every exam question must rely **only** on these statements.)
 `;
 
   const TRPI = `\n ${info}`
-  const prompt = `Generate 50 rigorous multiple-choice questions that test deep knowledge of the Trait Response Personality Indicator (TRPI).
+  const prompt = `Generate 50 rigorous multiple-choice questions that test deep knowledge of the Trait Response Personality Indicator (TRPI) and the Big Five correlations.
 
 CONTENT DOMAINS  
 1. Function-Pairings (1 S/N + 1 T/F, opposite attitudes, EIII / IEEE only)  
@@ -326,6 +389,70 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
   }
 }
 
+  async function generateJungQuestions(): Promise<Question[]> {
+    const info = `Function pairings, structural layers, short- vs long-context rules, and Jung's function definitions.`;
+    const TRPI = `\n ${info}`;
+    const prompt = `Generate 20 multiple-choice questions focused on Jungian aspects of TRPI. Use the same JSON format as the main exam.`;
+    return generateFromPrompt(TRPI, prompt);
+  }
+
+  async function generateFreudQuestions(): Promise<Question[]> {
+    const info = `Freud layers mapped to Jungian functions and how they interact in TRPI.`;
+    const TRPI = `\n ${info}`;
+    const prompt = `Generate 20 multiple-choice questions covering the Freudian layers portion of TRPI. Use the JSON format.`;
+    return generateFromPrompt(TRPI, prompt);
+  }
+
+  async function generateNeuroQuestions(): Promise<Question[]> {
+    const info = `Meta-trait axes, cognitive clusters and context processing rules in TRPI.`;
+    const TRPI = `\n ${info}`;
+    const prompt = `Generate 20 neuroscience-focused TRPI questions. Return the JSON array.`;
+    return generateFromPrompt(TRPI, prompt);
+  }
+
+  async function generateTraitQuestions(): Promise<Question[]> {
+    const info = `4F trait mapping, suffix logic and growth sequence from the TRPI rulebook.`;
+    const TRPI = `\n ${info}`;
+    const prompt = `Generate 20 questions about trait responses in TRPI. Use the same JSON output.`;
+    return generateFromPrompt(TRPI, prompt);
+  }
+
+  async function generateBigFiveQuestions(): Promise<Question[]> {
+    const info = `Big-Five correlations, meta-traits axis and empirical benchmark data from TRPI.`;
+    const TRPI = `\n ${info}`;
+    const prompt = `Generate 20 questions on the Big Five correlations within TRPI. Format as JSON.`;
+    return generateFromPrompt(TRPI, prompt);
+  }
+
+  async function generateFromPrompt(systemPrompt: string, userPrompt: string): Promise<Question[]> {
+    try {
+      const response = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          model: 'o3-2025-04-16',
+          messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
+          temperature: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decodeToken(tokenParts)}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      let text: string = response.data.choices?.[0]?.message?.content || '';
+      const tag = '```json';
+      if (text.startsWith(tag)) {
+        text = text.substring(text.indexOf(tag) + tag.length, text.lastIndexOf('```')).trim();
+      }
+      return JSON.parse(text);
+    } catch (err) {
+      console.error('Failed to generate questions:', err);
+      setError(JSON.stringify(err));
+      return [];
+    }
+  }
+
   const current = questions[index];
   const loading = !summary && questions.length === 0;
 
@@ -341,10 +468,10 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
     };
     console.log(record)
     setAnswers((a) => [...a, record]);
-    if (mode === 'study') {
-      setShowFeedback(true);
-    } else {
+    if (tab === 0) {
       nextQuestion();
+    } else {
+      setShowFeedback(true);
     }
   };
 
@@ -359,7 +486,7 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
   };
 
   useEffect(() => {
-    if (summary && !savedBinId && !binId) {
+    if (tab === 0 && summary && !savedBinId && !binId) {
       const correct = answers.filter((a) => a.isCorrect).length;
       const score = Math.round((correct / questions.length) * 100);
       const payload = {
@@ -378,34 +505,41 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
       }).catch(() => {});
       
     }
-  }, [summary]);
+  }, [summary, tab]);
+
+  let inner: React.ReactNode;
 
   if (loading) {
-    return (
-      <Paper elevation={3} sx={{ p: 2, maxWidth: 700, mx: 'auto', mt: 10, minHeight: '400px' }}>
-       
-        <Stack>
-           <Box display={'flex'} justifyContent={'center'} mt={16}>
-           <Typography variant="h6" gutterBottom>Generating questions...</Typography>
-           </Box>
-           <Box display={'flex'} justifyContent={'center'} mt={1}>
-        <Tooltip title={'Be patient! \n loading the questions takes about 3 minutes'}>
-           <CircularProgress/>
-        </Tooltip>
-       </Box>
-        </Stack>
-      </Paper>
+    inner = (
+      <Stack>
+        <Box display={'flex'} justifyContent={'center'} mt={16}>
+          <Typography variant="h6" gutterBottom>Generating questions...</Typography>
+        </Box>
+        <Box display={'flex'} justifyContent={'center'} mt={1}>
+          <Tooltip title={'Be patient! \n loading the questions takes about 3 minutes'}>
+            <CircularProgress />
+          </Tooltip>
+        </Box>
+      </Stack>
     );
-  }
-
-  if (summary) {
+  } else if (summary) {
     const correct = answers.filter((a) => a.isCorrect).length;
     const score = Math.round((correct / questions.length) * 100);
-    return (
-      <Paper elevation={3} sx={{ p: 2, maxWidth: 700, mx: 'auto', mt: 10 }}>
+    inner = (
+      <Box>
         <Typography variant="h6" gutterBottom>
           Certification Summary
         </Typography>
+        {userName && (
+          <Typography variant="body2" gutterBottom>
+            Name: {userName}
+          </Typography>
+        )}
+        {!userName && (
+          <Button variant="contained" size="small" onClick={() => setNameModalOpen(true)} sx={{ mb: 1 }}>
+            Add Details
+          </Button>
+        )}
         {type && (
           <Typography variant="body2" gutterBottom>
             TRPI Type: {type}
@@ -420,9 +554,7 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
           Score: {score}% ({correct} / {questions.length})
         </Typography>
         <Divider sx={{ my: 2 }} />
-        {answers.map((a, i) => {
-          console.log(a,a.isCorrect ? 'Correct' : `Incorrect. Correct answer: ${a.correctAnswer}`)
-          return (
+        {answers.map((a, i) => (
           <Box key={i} sx={{ mb: 2 }}>
             <Typography variant="subtitle1">Q{i + 1}. {a.questionText}</Typography>
             <Typography variant="body2">Your answer: {a.userAnswer}</Typography>
@@ -431,97 +563,74 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
             </Typography>
             <Typography variant="body2">{a.explanation}</Typography>
           </Box>
-        )
-        })}
+        ))}
+      </Box>
+    );
+  } else {
+    inner = (
+      <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            {tab === 0 ? 'TRPI Certification' : `Study: ${TAB_LABELS[tab]}`}
+          </Typography>
+          <IconButton onClick={() => setArticleOpen(true)} sx={{ mr: 1 }}>
+            <ArticleIcon />
+          </IconButton>
+        </Box>
+        <Divider sx={{ mb: 2 }} />
+        <Typography variant="subtitle1" gutterBottom>
+          Question {index + 1} of {questions.length}
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 2 }}>
+          {current.questionText}
+        </Typography>
+        <RadioGroup value={selected} onChange={(e) => setSelected(e.target.value)}>
+          {current.options.map((o) => (
+            <FormControlLabel key={o} value={o} control={<Radio />} label={o} />
+          ))}
+        </RadioGroup>
+        {showFeedback && (
+          <Box sx={{ mt: 2, mb: 2 }}>
+            <Typography color={selected.startsWith(current.correctAnswer) ? 'success.main' : 'error.main'}>
+              {selected.startsWith(current.correctAnswer) ? 'Correct!' : 'Incorrect.'}
+            </Typography>
+            <Typography variant="body2">{current.explanation}</Typography>
+          </Box>
+        )}
         <Box sx={{ mt: 2 }}>
-          <Button variant="contained" onClick={() => setOpenDetails(true)}>
-            Enter Details
+          <Button variant="contained" onClick={showFeedback ? nextQuestion : handleSubmit} disabled={!selected}>
+            {showFeedback ? (index + 1 === questions.length ? 'Finish' : 'Next') : 'Submit'}
           </Button>
         </Box>
-        <PersonalDetailsModal open={openDetails} onClose={() => setOpenDetails(false)} />
-      </Paper>
+      </Box>
     );
   }
 
   return (
     <Paper elevation={3} sx={{ p: 2, maxWidth: 700, mx: 'auto', mt: 10 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Tabs value={tabIndex} onChange={(_, v) => setTabIndex(v)} sx={{ flexGrow: 1 }}>
-          <Tab label="Exam" />
-          <Tab label="Jung" />
-          <Tab label="Freud" />
-          <Tab label="Neuroscience" />
-          <Tab label="Trait Responses" />
-        </Tabs>
-        <IconButton onClick={() => setOpenArticles(true)}>
-          <ArticleIcon />
-        </IconButton>
+      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }} variant="scrollable" scrollButtons="auto">
+        {TAB_LABELS.map((l, i) => (
+          <Tab key={i} label={l} />
+        ))}
+      </Tabs>
+      {inner}
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3 }}>
+        <Notification
+          open={error !== ''}
+          message={error}
+          type="error"
+          onClose={() => setError('')}
+        />
       </Box>
-      <Divider sx={{ mb: 2 }} />
-      {tabIndex === 0 ? (
-        <>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              TRPI Certification
-            </Typography>
-            <FormControlLabel
-              control={<Switch checked={mode === 'exam'} onChange={() => {
-                if(mode === 'study') {
-                  setMode('exam');
-                  setIndex(0);
-                  setAnswers([]);
-                  if(examQuestions.length) {
-                    setQuestions(examQuestions);
-                    return;
-                  }
-                  setStudyQuestions(JSON.parse(JSON.stringify(questions)))
-                  setQuestions([]);
-                  generateQuestions().then((qstns) => {setQuestions(qstns); setExamQuestions(qstns)})
-                  return;
-                }
-                setMode('study')
-                setQuestions(studyQuestions)
-               }} />}
-              label={mode === 'exam' ? 'Exam Mode' : 'Study Mode'}
-            />
-          </Box>
-          <Typography variant="subtitle1" gutterBottom>
-            Question {index + 1} of {questions.length}
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            {current.questionText}
-          </Typography>
-          <RadioGroup value={selected} onChange={(e) => setSelected(e.target.value)}>
-            {current.options.map((o) => (
-              <FormControlLabel key={o} value={o} control={<Radio />} label={o} />
-            ))}
-          </RadioGroup>
-          {showFeedback && (
-            <Box sx={{ mt: 2, mb: 2 }}>
-              <Typography color={selected.startsWith(current.correctAnswer) ? 'success.main' : 'error.main'}>
-                {selected.startsWith(current.correctAnswer) ? 'Correct!' : 'Incorrect.'}
-              </Typography>
-              <Typography variant="body2">{current.explanation}</Typography>
-            </Box>
-          )}
-          <Box sx={{ mt: 2 }}>
-            <Button variant="contained" onClick={showFeedback ? nextQuestion : handleSubmit} disabled={!selected}>
-              {showFeedback ? (index + 1 === questions.length ? 'Finish' : 'Next') : 'Submit'}
-            </Button>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3 }}>
-            <Notification
-              open={error !== ''}
-              message={error}
-              type="error"
-              onClose={() => setError('')}
-            />
-          </Box>
-        </>
-      ) : (
-        <Typography variant="body1">Open the article icon to study resources.</Typography>
-      )}
-      <ArticleModal open={openArticles} onClose={() => setOpenArticles(false)} />
+      <ArticleModal open={articleOpen} onClose={() => setArticleOpen(false)} />
+      <NameModal
+        open={nameModalOpen}
+        onClose={() => setNameModalOpen(false)}
+        onSubmit={(n) => {
+          setUserName(n);
+          setNameModalOpen(false);
+        }}
+      />
     </Paper>
   );
 };

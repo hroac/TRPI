@@ -45,7 +45,7 @@ interface CertificationProps {
 }
 
 const CERT_COLLECTION = '6848ac258561e97a502221b5';
-const TAB_LABELS = ['Exams', 'Jung', 'Freud', 'Neuroscience', 'Trait Responses', 'Big Five'];
+const TAB_LABELS = ['TRPI', 'Jung', 'Freud', 'Neuroscience', 'Trait Responses', 'Big Five'];
 
 // ----------- OpenAI Token Helpers -----------
 const decodeToken = (parts: string[]) => parts.map((t) => atob(t)).join('');

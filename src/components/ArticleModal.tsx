@@ -59,7 +59,7 @@ const ArticleModal: React.FC<ArticleModalProps> = ({ open, onClose }) => {
       </DialogTitle>
       <DialogContent dividers sx={{ height: '70vh', p: 0 }}>
         <Box sx={{ display: 'flex', height: '100%' }}>
-          <Box sx={{ width: '30%', overflowY: 'auto', borderRight: '1px solid #ccc' }}>
+          <Box sx={{ minWidth: '300px', overflowY: 'auto', borderRight: '1px solid #ccc' }}>
             <List>
               {articles.map((a, i) => (
                 <ListItem disablePadding key={i}>

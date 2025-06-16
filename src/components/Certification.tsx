@@ -12,12 +12,17 @@ import {
   CircularProgress,
   Stack,
   Tooltip,
+  IconButton,
+  Tabs,
+  Tab,
 } from '@mui/material';
+import ArticleIcon from '@mui/icons-material/Article';
 import JsonBinApi from '../utils/jsonBin';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import parseRss from '../utils/rss'
 import Notification from './Notification';
+import ArticleModal from './ArticleModal';
+import PersonalDetailsModal from './PersonalDetailsModal';
 
 interface Question {
   questionText: string;
@@ -70,6 +75,9 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
   const [error, setError] = useState<string> ('');
   const ref = useRef(false)
   const navigate = useNavigate();
+  const [tabIndex, setTabIndex] = useState(0);
+  const [openArticles, setOpenArticles] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
 
   useEffect(() => {
     if(mode === 'study') {
@@ -425,6 +433,12 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
           </Box>
         )
         })}
+        <Box sx={{ mt: 2 }}>
+          <Button variant="contained" onClick={() => setOpenDetails(true)}>
+            Enter Details
+          </Button>
+        </Box>
+        <PersonalDetailsModal open={openDetails} onClose={() => setOpenDetails(false)} />
       </Paper>
     );
   }
@@ -432,65 +446,82 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
   return (
     <Paper elevation={3} sx={{ p: 2, maxWidth: 700, mx: 'auto', mt: 10 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          TRPI Certification
-        </Typography>
-        <FormControlLabel
-          control={<Switch checked={mode === 'exam'} onChange={() => {
-            if(mode === 'study') {
-              setMode('exam');
-              setIndex(0);
-              setAnswers([]);
-
-              if(examQuestions.length) {
-                setQuestions(examQuestions);
-                return;
-              }
-              setStudyQuestions(JSON.parse(JSON.stringify(questions)))
-              setQuestions([]);
-
-              generateQuestions().then((qstns) => {setQuestions(qstns); setExamQuestions(qstns)})
-              return;
-            }
-            setMode('study')
-            setQuestions(studyQuestions)
-           }} />}
-          label={mode === 'exam' ? 'Exam Mode' : 'Study Mode'}
-        />
+        <Tabs value={tabIndex} onChange={(_, v) => setTabIndex(v)} sx={{ flexGrow: 1 }}>
+          <Tab label="Exam" />
+          <Tab label="Jung" />
+          <Tab label="Freud" />
+          <Tab label="Neuroscience" />
+          <Tab label="Trait Responses" />
+        </Tabs>
+        <IconButton onClick={() => setOpenArticles(true)}>
+          <ArticleIcon />
+        </IconButton>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle1" gutterBottom>
-        Question {index + 1} of {questions.length}
-      </Typography>
-      <Typography variant="body1" sx={{ mb: 2 }}>
-        {current.questionText}
-      </Typography>
-      <RadioGroup value={selected} onChange={(e) => setSelected(e.target.value)}>
-        {current.options.map((o) => (
-          <FormControlLabel key={o} value={o} control={<Radio />} label={o} />
-        ))}
-      </RadioGroup>
-      {showFeedback && (
-        <Box sx={{ mt: 2, mb: 2 }}>
-          <Typography color={selected.startsWith(current.correctAnswer) ? 'success.main' : 'error.main'}>
-            {selected.startsWith(current.correctAnswer) ? 'Correct!' : 'Incorrect.'}
+      {tabIndex === 0 ? (
+        <>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              TRPI Certification
+            </Typography>
+            <FormControlLabel
+              control={<Switch checked={mode === 'exam'} onChange={() => {
+                if(mode === 'study') {
+                  setMode('exam');
+                  setIndex(0);
+                  setAnswers([]);
+                  if(examQuestions.length) {
+                    setQuestions(examQuestions);
+                    return;
+                  }
+                  setStudyQuestions(JSON.parse(JSON.stringify(questions)))
+                  setQuestions([]);
+                  generateQuestions().then((qstns) => {setQuestions(qstns); setExamQuestions(qstns)})
+                  return;
+                }
+                setMode('study')
+                setQuestions(studyQuestions)
+               }} />}
+              label={mode === 'exam' ? 'Exam Mode' : 'Study Mode'}
+            />
+          </Box>
+          <Typography variant="subtitle1" gutterBottom>
+            Question {index + 1} of {questions.length}
           </Typography>
-          <Typography variant="body2">{current.explanation}</Typography>
-        </Box>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            {current.questionText}
+          </Typography>
+          <RadioGroup value={selected} onChange={(e) => setSelected(e.target.value)}>
+            {current.options.map((o) => (
+              <FormControlLabel key={o} value={o} control={<Radio />} label={o} />
+            ))}
+          </RadioGroup>
+          {showFeedback && (
+            <Box sx={{ mt: 2, mb: 2 }}>
+              <Typography color={selected.startsWith(current.correctAnswer) ? 'success.main' : 'error.main'}>
+                {selected.startsWith(current.correctAnswer) ? 'Correct!' : 'Incorrect.'}
+              </Typography>
+              <Typography variant="body2">{current.explanation}</Typography>
+            </Box>
+          )}
+          <Box sx={{ mt: 2 }}>
+            <Button variant="contained" onClick={showFeedback ? nextQuestion : handleSubmit} disabled={!selected}>
+              {showFeedback ? (index + 1 === questions.length ? 'Finish' : 'Next') : 'Submit'}
+            </Button>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3 }}>
+            <Notification
+              open={error !== ''}
+              message={error}
+              type="error"
+              onClose={() => setError('')}
+            />
+          </Box>
+        </>
+      ) : (
+        <Typography variant="body1">Open the article icon to study resources.</Typography>
       )}
-      <Box sx={{ mt: 2 }}>
-        <Button variant="contained" onClick={showFeedback ? nextQuestion : handleSubmit} disabled={!selected}>
-          {showFeedback ? (index + 1 === questions.length ? 'Finish' : 'Next') : 'Submit'}
-        </Button>
-      </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3 }}>
-                <Notification
-                  open={error !== ''}
-                  message={error}
-                  type="error"
-                  onClose={() => setError('')}
-                />
-              </Box>
+      <ArticleModal open={openArticles} onClose={() => setOpenArticles(false)} />
     </Paper>
   );
 };

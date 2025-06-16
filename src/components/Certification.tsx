@@ -56,6 +56,158 @@ const tokenParts = [
 ];
 
 
+ const info = `
+────────────────────  COMBINED RULEBOOK  ────────────────────
+(Authoritative facts drawn from *From Traits to Types* and the core TRPI model.  
+Every exam question must rely **only** on these statements.)
+
+1. FUNCTION-PAIRINGS
+   • A cognitive pair = 1 perceiving (S or N) + 1 judging (T or F).  
+   • The two functions must carry opposite attitudes (I vs E).  
+   • One-sided dominance only: **EIII** or **IEEE**.  
+   • Same-attitude pairs or alternating IEIE stacks are invalid. 
+   • A pairing can either be open minded (eg SiTe) or close minded (eg TeSi). 
+
+2. STRUCTURAL LAYERS (Freud × Jung)  
+   • **Id**  = Se / Ne (present, impulse, short-context)  
+   • **Super-Id** = Si / Ni (memory / foresight, long-context)  
+   • **Ego**  = Ti / Fi (internal logic & value)  
+   • **Superego** = Te / Fe (external rules & harmony)
+
+3. 4F TRAIT MAPPING  
+   • **Fight**  = Se/Ne + Ti  (action)  
+   • **Flight** = Se/Ne + Fi  (avoidance)  
+   • **Freeze** = Si/Ni + Te  (control)  
+   • **Fawn**   = Si/Ni + Fe  (appeasement)
+
+4. SUFFIX LOGIC  
+   • Judger (J): –ST/–NT ⇒ Fight | –SF/–NF ⇒ Flight  
+   • Perceiver (P): –ST/–NT ⇒ Freeze | –SF/–NF ⇒ Fawn  
+   • A suffix records the opposing Ego (J) or Superego (P).
+   • The opposing Ego/Superego can either be open minded (leading with a perceiving function eg NeTi) or close minded (leading with a judging function eg TiNe).
+   • A 4F mode has two suffixes attached to it, eg for perceivers who experience Freeze it can be -ST or -NT, for a judger experiencing Fight it can be -ST or -NT, for a perceiver experiencing Fawn it can be -SF or -NF, for a judger experiencing Flight it can be -SF or -NF.
+   • The dominant response is dependant on context, however you are likely to prefer your base response (eg for ENTP-NT its Fight then Freeze)
+5. SHORT- vs LONG-CONTEXT PROCESSING  
+   • Lead Se, Ne, Te, Fe ⇒ **short-context** (real-time, fluid).  
+   • Lead Si, Ni, Ti, Fi ⇒ **long-context** (reflective, crystal).   
+   • Switching context length inverts the attitude of the dominant function and reorganises the stack (EIII ⇄ IEEE).
+
+6. META-TRAIT AXES 
+   | Axis | Big-Five Poles | Function Polarity | Layer | Processing |  
+   | Ego / Fluid Intelligence | Extraversion  ↔  Neuroticism  | Ti ↔ Fi | Improvisational | Short |  
+   | Superego / Crystallized Intelligence | Agreeableness  ↔ Conscientiousness  | Fe ↔ Te | Rule-bound | Long |
+
+7. Function definition & interaction
+    rely on Jungs original definitions of the functions
+    observation = objective
+    impression = subjective
+  • Se + Fi/Ti creates an impression (Si)
+  • Si + Fe/Te creates an observation (Se)
+  • Ne + Fi/Ti creates an impression (Si)
+  • Ni + Fe/Te creates an observation (Se)
+
+8. COGNITIVE CLUSTERS   
+   • **SF/NT**  ENTP INTJ ISFJ ESFP  
+   • **FS/TN**  INTP ENTJ ESFJ ISFP 
+   • **ST/NF**  ESTP ISTJ INFJ ENFP   
+   • **TS/FN**  ISTP ESTJ ENFJ INFP
+
+9. GROWTH / INDIVIDUATION SEQUENCE  
+   Fight→Fawn→Freeze→Flight | Freeze→Flight→Fight→Fawn  
+   Fawn→Fight→Flight→Freeze | Flight→Freeze→Fawn→Fight
+
+10. 64-STATE META-GRID (type × suffix)  
+   ENTP SiTe SiFe NiTe NiFe  INTJ SeTi SeFi NeTi NeFi  
+   ISFJ SeTi SeFi NeTi NeFi  ESFP SiTe SiFe NiTe NiFe  
+   INTP TeSi FeSi TeNi FeNi  ENTJ TiSe FiSe TiNe FiNe  
+   ESFJ TiSe FiSe TiNe FiNe  ISFP TeSi FeSi TeNi FeNi  
+   ESTP SiTe SiFe NiTe NiFe  ISTJ SeTi SeFi NeTi NeFi  
+   INFJ SeTi SeFi NeTi NeFi  ENFP SiTe SiFe NiTe NiFe  
+   ISTP TeSi FeSi TeNi FeNi  ESTJ TiSe FiSe TiNe FiNe  
+   ENFJ TiSe FiSe TiNe FiNe  INFP TeSi FeSi TeNi FeNi
+
+11. EMPIRICAL BENCHMARK (2 916 profiles)  
+   • Mean Pearson r = **0.83** (range 0.59 – 0.91) between TRPI type profiles and Big-Five vectors.  
+   • r values between 4F modes and type averages were **not** reported.
+
+(Questions that contradict or omit these points are invalid.)
+(“For educational purposes only—no diagnostic or therapeutic advice)
+`;
+
+  const TRPI = `\n ${info}`
+  const examples = `
+  EXAMPLES:
+When moving from long- to short-context processing, the dominant function becomes…
+A) medium context
+B) shorter context
+C) short context
+D) immediate context
+
+After inverting attitudes from EIII, what attitude does the dominant function assume?
+  A) Introverted
+  B) Ambiverted
+  C) Extraverted
+  D) Both
+
+  On the Ego/Fluid meta-trait axis, which of the following statements is true?
+  A) Neuroticism ⬇︎ Extraversion ⬆︎
+  B) Conscientiousness ⬇︎ Neuroticism ⬆︎
+  C) Extraversion ⬇︎ Agreeableness ⬆︎
+  D) Neuroticism ⬇︎ Conscientiousness ⬆︎
+  
+  Which suffix can label a Perceiver demonstrating a Fawn response?
+  A) ST
+  B) NJ
+  C) FJ
+  D) SF
+
+  For a Perceiver in Freeze mode, which suffix is allowable under TRPI
+  A) SF
+  B) TJ
+  C) NF
+  D) ST
+
+  Which suffix is NOT permitted for a Judger experiencing Flight according to TRPI rules?
+  A) NT
+  B) FP
+  C) NF
+  D) ST
+
+  Complete this sequence: Freeze ... 
+   A) Freeze Fight Flight Fawn
+  B) Freeze Fawn Fight Flight
+  C) Freeze Flight Fight Fawn
+  D) Freeze Flight Fawn Fight
+
+  Which attitude pattern is accepted as a legal stack in TRPI?
+
+  A) EIII/IEEE
+  B) EIEI/IEIE
+  C) EIII/IEEE
+  D) EEEE/IIII
+
+
+
+  `
+  const output = `QUESTION REQUIREMENTS  
+• Output a **JSON array of 50 objects** only.  
+• Each object keys:  
+  "questionText"   string  
+  "options"        array of **exactly** 4 strings, each prefixed "A) "… "D) "  
+  "correctAnswer"  string (repeat the full correct option incl. prefix)  
+  "explanation"    ≤ 25 words  
+• Exactly one correct option per question.  
+• All distractors must be plausible—no obvious throw-aways.  
+• No duplicate facts, phrasing, or answer keys.
+• Double check that the other options are not also valid answers, if so discard them and regenerate.  
+• If any item violates the TRPI RULEBOOK, or formatting, discard and regenerate until all items comply.
+
+
+
+OUTPUT FORMAT  
+Return **only** the final JSON array—no markdown, no code fences, no extra commentary.
+`
+
 
 const Certification: React.FC<CertificationProps> = ({ userId, type: initialType, testDate: initialDate }) => {
   const params = useParams<{ binId?: string }>();
@@ -188,85 +340,6 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
   }, [binId]);
 
   async function generateQuestions(): Promise<Question[]> {
-  const info = `
-────────────────────  COMBINED RULEBOOK  ────────────────────
-(Authoritative facts drawn from *From Traits to Types* and the core TRPI model.  
-Every exam question must rely **only** on these statements.)
-
-1. FUNCTION-PAIRINGS
-   • A cognitive pair = 1 perceiving (S or N) + 1 judging (T or F).  
-   • The two functions must carry opposite attitudes (I vs E).  
-   • One-sided dominance only: **EIII** or **IEEE**.  
-   • Same-attitude pairs or alternating IEIE stacks are invalid. 
-   • A pairing can either be open minded (eg SiTe) or close minded (eg TeSi). 
-
-2. STRUCTURAL LAYERS (Freud × Jung)  
-   • **Id**  = Se / Ne (present, impulse, short-context)  
-   • **Super-Id** = Si / Ni (memory / foresight, long-context)  
-   • **Ego**  = Ti / Fi (internal logic & value)  
-   • **Superego** = Te / Fe (external rules & harmony)
-
-3. 4F TRAIT MAPPING  
-   • **Fight**  = Se/Ne + Ti  (action)  
-   • **Flight** = Se/Ne + Fi  (avoidance)  
-   • **Freeze** = Si/Ni + Te  (control)  
-   • **Fawn**   = Si/Ni + Fe  (appeasement)
-
-4. SUFFIX LOGIC  
-   • Judger (J): –ST/–NT ⇒ Fight | –SF/–NF ⇒ Flight  
-   • Perceiver (P): –ST/–NT ⇒ Freeze | –SF/–NF ⇒ Fawn  
-   • A suffix records the opposing Ego (J) or Superego (P).
-   • The opposing Ego/Superego can either be open minded (leading with a perceiving function eg NeTi) or close minded (leading with a judging function eg TiNe).
-   • A 4F mode has two suffixes attached to it, eg for perceivers who experience Freeze it can be -ST or -NT, for a judger experiencing Fight it can be -ST or -NT, for a perceiver experiencing Fawn it can be -SF or -NF, for a judger experiencing Flight it can be -SF or -NF.
-   • The dominant response is dependant on context, however you are likely to prefer your base response (eg for ENTP-NT its Fight then Freeze)
-5. SHORT- vs LONG-CONTEXT PROCESSING  
-   • Lead Se, Ne, Te, Fe ⇒ **short-context** (real-time, fluid).  
-   • Lead Si, Ni, Ti, Fi ⇒ **long-context** (reflective, crystal).   
-   • Switching context length inverts the attitude of the dominant function and reorganises the stack (EIII ⇄ IEEE).
-
-6. META-TRAIT AXES 
-   | Axis | Big-Five Poles | Function Polarity | Layer | Processing |  
-   | Ego / Fluid Intelligence | Extraversion  ↔  Neuroticism  | Ti ↔ Fi | Improvisational | Short |  
-   | Superego / Crystallized Intelligence | Agreeableness  ↔ Conscientiousness  | Fe ↔ Te | Rule-bound | Long |
-
-7. Function definition & interaction
-    rely on Jungs original definitions of the functions
-    observation = objective
-    impression = subjective
-  • Se + Fi/Ti creates an impression (Si)
-  • Si + Fe/Te creates an observation (Se)
-  • Ne + Fi/Ti creates an impression (Si)
-  • Ni + Fe/Te creates an observation (Se)
-
-8. COGNITIVE CLUSTERS   
-   • **SF/NT**  ENTP INTJ ISFJ ESFP  
-   • **FS/TN**  INTP ENTJ ESFJ ISFP 
-   • **ST/NF**  ESTP ISTJ INFJ ENFP   
-   • **TS/FN**  ISTP ESTJ ENFJ INFP
-
-9. GROWTH / INDIVIDUATION SEQUENCE  
-   Fight→Fawn→Freeze→Flight | Freeze→Flight→Fight→Fawn  
-   Fawn→Fight→Flight→Freeze | Flight→Freeze→Fawn→Fight
-
-10. 64-STATE META-GRID (type × suffix)  
-   ENTP SiTe SiFe NiTe NiFe  INTJ SeTi SeFi NeTi NeFi  
-   ISFJ SeTi SeFi NeTi NeFi  ESFP SiTe SiFe NiTe NiFe  
-   INTP TeSi FeSi TeNi FeNi  ENTJ TiSe FiSe TiNe FiNe  
-   ESFJ TiSe FiSe TiNe FiNe  ISFP TeSi FeSi TeNi FeNi  
-   ESTP SiTe SiFe NiTe NiFe  ISTJ SeTi SeFi NeTi NeFi  
-   INFJ SeTi SeFi NeTi NeFi  ENFP SiTe SiFe NiTe NiFe  
-   ISTP TeSi FeSi TeNi FeNi  ESTJ TiSe FiSe TiNe FiNe  
-   ENFJ TiSe FiSe TiNe FiNe  INFP TeSi FeSi TeNi FeNi
-
-11. EMPIRICAL BENCHMARK (2 916 profiles)  
-   • Mean Pearson r = **0.83** (range 0.59 – 0.91) between TRPI type profiles and Big-Five vectors.  
-   • r values between 4F modes and type averages were **not** reported.
-
-(Questions that contradict or omit these points are invalid.)
-(“For educational purposes only—no diagnostic or therapeutic advice)
-`;
-
-  const TRPI = `\n ${info}`
   const prompt = `Generate 50 rigorous multiple-choice questions that test deep knowledge of the Trait Response Personality Indicator (TRPI) and the Big Five correlations.
 
 CONTENT DOMAINS  
@@ -288,75 +361,9 @@ DIFFICULTY DISTRIBUTION
 • 15 intermediate questions → Domains 5–8  
 • 20 advanced questions → Domains 9–12
 
-QUESTION REQUIREMENTS  
-• Output a **JSON array of 50 objects** only.  
-• Each object keys:  
-  "questionText"   string  
-  "options"        array of **exactly** 4 strings, each prefixed "A) "… "D) "  
-  "correctAnswer"  string (repeat the full correct option incl. prefix)  
-  "explanation"    ≤ 25 words  
-• Exactly one correct option per question.  
-• All distractors must be plausible—no obvious throw-aways.  
-• No duplicate facts, phrasing, or answer keys.
-• Double check that the other options are not also valid answers, if so discard them and regenerate.  
-• If any item violates the TRPI RULEBOOK, or formatting, discard and regenerate until all 50 comply.
-
-EXAMPLES:
-When moving from long- to short-context processing, the dominant function becomes…
-A) medium context
-B) shorter context
-C) short context
-D) immediate context
-
-After inverting attitudes from EIII, what attitude does the dominant function assume?
-  A) Introverted
-  B) Ambiverted
-  C) Extraverted
-  D) Both
-
-  On the Ego/Fluid meta-trait axis, which of the following statements is true?
-  A) Neuroticism ⬇︎ Extraversion ⬆︎
-  B) Conscientiousness ⬇︎ Neuroticism ⬆︎
-  C) Extraversion ⬇︎ Agreeableness ⬆︎
-  D) Neuroticism ⬇︎ Conscientiousness ⬆︎
-  
-  Which suffix can label a Perceiver demonstrating a Fawn response?
-  A) ST
-  B) NJ
-  C) FJ
-  D) SF
-
-  For a Perceiver in Freeze mode, which suffix is allowable under TRPI
-  A) SF
-  B) TJ
-  C) NF
-  D) ST
-
-  Which suffix is NOT permitted for a Judger experiencing Flight according to TRPI rules?
-  A) NT
-  B) FP
-  C) NF
-  D) ST
-
-  Complete this sequence: Freeze ... 
-   A) Freeze Fight Flight Fawn
-  B) Freeze Fawn Fight Flight
-  C) Freeze Flight Fight Fawn
-  D) Freeze Flight Fawn Fight
-
-  Which attitude pattern is accepted as a legal stack in TRPI?
-
-  A) EIII/IEEE
-  B) EIEI/IEIE
-  C) EIII/IEEE
-  D) EEEE/IIII
-
-
-
-
-
-OUTPUT FORMAT  
-Return **only** the final JSON array—no markdown, no code fences, no extra commentary.`;
+${examples}
+${output}
+`;
 
 
   try {
@@ -390,37 +397,33 @@ Return **only** the final JSON array—no markdown, no code fences, no extra com
 }
 
   async function generateJungQuestions(): Promise<Question[]> {
-    const info = `Function pairings, structural layers, short- vs long-context rules, and Jung's function definitions.`;
-    const TRPI = `\n ${info}`;
-    const prompt = `Generate 20 multiple-choice questions focused on Jungian aspects of TRPI. Use the same JSON format as the main exam.`;
+     const TRPI = `\n ${info}`;
+    const prompt = `${output} \n ${examples}\n Generate 20 multiple-choice questions focused on Jungian aspects of TRPI. Use the same JSON format as the main exam.`;
     return generateFromPrompt(TRPI, prompt);
   }
 
   async function generateFreudQuestions(): Promise<Question[]> {
-    const info = `Freud layers mapped to Jungian functions and how they interact in TRPI.`;
     const TRPI = `\n ${info}`;
-    const prompt = `Generate 20 multiple-choice questions covering the Freudian layers portion of TRPI. Use the JSON format.`;
+    const prompt = `${output} \n ${examples}\n Generate 20 multiple-choice questions covering the Freudian layers portion of TRPI. Use the JSON format.`;
     return generateFromPrompt(TRPI, prompt);
   }
 
   async function generateNeuroQuestions(): Promise<Question[]> {
-    const info = `Meta-trait axes, cognitive clusters and context processing rules in TRPI.`;
     const TRPI = `\n ${info}`;
-    const prompt = `Generate 20 neuroscience-focused TRPI questions. Return the JSON array.`;
+    const prompt = `${output} \n ${examples}\n Generate 20 short/long context focused TRPI questions. Return the JSON array.`;
     return generateFromPrompt(TRPI, prompt);
   }
 
   async function generateTraitQuestions(): Promise<Question[]> {
-    const info = `4F trait mapping, suffix logic and growth sequence from the TRPI rulebook.`;
     const TRPI = `\n ${info}`;
-    const prompt = `Generate 20 questions about trait responses in TRPI. Use the same JSON output.`;
+    const prompt = `${output} \n ${examples}\n Generate 20 questions about trait responses in TRPI. Use the same JSON output.`;
     return generateFromPrompt(TRPI, prompt);
   }
 
   async function generateBigFiveQuestions(): Promise<Question[]> {
-    const info = `Big-Five correlations, meta-traits axis and empirical benchmark data from TRPI.`;
-    const TRPI = `\n ${info}`;
-    const prompt = `Generate 20 questions on the Big Five correlations within TRPI. Format as JSON.`;
+    const extra = `Big-Five correlations, meta-traits axis and empirical benchmark data from TRPI.`;
+    const TRPI = `\n ${info} \n ${extra}`;
+    const prompt = `${output} \n ${examples}\n Generate 20 questions on the Big Five correlations within TRPI. Format as JSON.`;
     return generateFromPrompt(TRPI, prompt);
   }
 

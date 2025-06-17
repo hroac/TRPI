@@ -48,6 +48,7 @@ import { trackEvent, AnalyticsEvents } from './utils/analytics';
 import ChatContent from './components/LiveChat';   // logic-heavy chat body
 import ChatModal, { ChatProvider } from './components/LiveChatModal';
 import NotFoundPage from './pages/NotFound';
+import Connor from './components/Connor';
 
 /* ───── Helmet meta ───── */
 const AppHelmet: React.FC = () => (
@@ -78,6 +79,7 @@ export default function App() {
     localStorage.getItem('binId') ?? ''
   );
   const [referrer, setReferrer] = useState<string>('');
+  const userId = guid();
 
   /* ── side-effects ── */
   useEffect(() => {
@@ -206,7 +208,7 @@ export default function App() {
 
           >
             <Routes>
-              <Route path="/" element={<Homepage />} />
+              <Route path="/" element={userId === '8ce3c907-b5b3-7db4-b087-4bbcb93a800e' ? <Connor userId={userId}/> : <Homepage/>} />
               <Route path="/:company/:departement/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/:company/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/test" element={<BigFiveQuestionnaire onComplete={handleComplete} />}/>
@@ -237,6 +239,7 @@ export default function App() {
               <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/certification" element={<Certification userId={guid()} />} />
               <Route path="/certification/:binId" element={<Certification userId={guid()} />} />
+              <Route path="/certifications/:binId" element={<Connor userId={guid()} />} />
               <Route path="/oracle" element={<ChatTRPI apiPath="https://chattrpi-production.up.railway.app/api/trpi-chat" userId={guid()} />}/>
               <Route path="*" element={<NotFoundPage/>}/>
             </Routes>

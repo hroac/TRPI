@@ -460,7 +460,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         setFirstStageTimes(times => {
           const updated = [...times, diff];
           const avg = updated.reduce((a, b) => a + b, 0) / updated.length;
-          setSecondsPerItem(avg * (stages.length - 1 - avg));
+          setSecondsPerItem(avg * (stages.length - 1 - (avg / 2)));
           //console.log(avg, updated)
           return updated;
         });

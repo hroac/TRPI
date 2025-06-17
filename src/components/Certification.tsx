@@ -93,9 +93,9 @@ Every exam question must rely **only** on these statements.)
    • Switching context length inverts the attitude of the dominant function and reorganises the stack (EIII ⇄ IEEE).
 
 6. META-TRAIT AXES 
-   | Axis | Big-Five Poles | Function Polarity | Layer | Processing |  
-   | Ego / Fluid Intelligence | Extraversion  ↔  Neuroticism  | Ti ↔ Fi | Improvisational | Short |  
-   | Superego / Crystallized Intelligence | Agreeableness  ↔ Conscientiousness  | Fe ↔ Te | Rule-bound | Long |
+   | Axis | Big-Five Poles | Function Polarity |  
+   | Thinking  | Extraversion  ↔  Conscientiousness  | Te ↔ Ti | 
+   | Feeling | Agreeableness  ↔ Neuroticism  | Fe ↔ Fi | 
 
 7. Function definition & interaction
     rely on Jungs original definitions of the functions
@@ -149,9 +149,9 @@ After inverting attitudes from EIII, what attitude does the dominant function as
   C) Extraverted
   D) Both
 
-  On the Ego/Fluid meta-trait axis, which of the following statements is true?
+  On the Thinking meta-trait axis, which of the following statements is true?
   A) Neuroticism ⬇︎ Extraversion ⬆︎
-  B) Conscientiousness ⬇︎ Neuroticism ⬆︎
+  B) Conscientiousness ⬇︎ Extraversion ⬆︎
   C) Extraversion ⬇︎ Agreeableness ⬆︎
   D) Neuroticism ⬇︎ Conscientiousness ⬆︎
   
@@ -349,7 +349,7 @@ CONTENT DOMAINS
 3. 4F trauma mapping (Fight, Flight, Freeze, Fawn)  
 4. Suffix logic (–ST, –SF, –NT, –NF; J vs P rules)  
 5. Context-length rule & Eight-Gear Information Pipeline  
-6. Meta-traits axis (Ego/Fluid = E↑ N↓, Superego/Crystal = A↑ C↓)  
+6. Meta-traits axis (Thinking = C-E, Feeling = A-N)  
 7. Cognitive clusters (SF/NT, FS/TN, ST/NF, TS/FN)  
 8. Individuation / growth sequence (Fight→Fawn→Freeze→Flight, etc.)  
 9. 64-state meta-grid & type-cluster relations  
@@ -388,10 +388,10 @@ ${output}
       text = text.substring(text.indexOf(tag) + tag.length, text.lastIndexOf('```')).trim();
     }
     return JSON.parse(text);
-  } catch (err) {
+  } catch (err: any) {
     console.error('Failed to generate questions:', err);
     // Fallback sample questions if generation fails
-    setError(JSON.stringify(err))
+    setError(JSON.stringify(err.message))
     return [
     ];
   }
@@ -450,9 +450,9 @@ ${output}
         text = text.substring(text.indexOf(tag) + tag.length, text.lastIndexOf('```')).trim();
       }
       return JSON.parse(text);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to generate questions:', err);
-      setError(JSON.stringify(err));
+      setError(JSON.stringify(err.message));
       return [];
     }
   }

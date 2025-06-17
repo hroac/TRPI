@@ -668,7 +668,7 @@ export function findClosestComplement(baseType: string, userProfile: any) {
 
   for (const candidate of MBTIProfiles.filter(prf => complements.includes(prf.name))) {
     const distance1 = compareProfilesIgnoringDominantPearson(baseType, userProfile, candidate.traits);
-    const distance2 = compareProfilesIgnoringDominant(userProfile, candidate.traits)
+    const distance2 = compareProfilesIgnoringDominant(baseType, userProfile, candidate.traits)
     //console.log(candidate.name, distance1, distance2, distance1 - ((1 - distance2)/10))
     const dist = distance1 - ((1- distance2)/10);
     distances.push({ type: candidate.name, distance: dist })

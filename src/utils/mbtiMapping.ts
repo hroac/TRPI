@@ -555,7 +555,7 @@ const functionToTrait : Record<string, string> = {
 };
 
 function filterTraitKeysByType(typeCode: string, traitKeys: Record<string, any>) {
-  const judging = typeToJudging[typeCode.toUpperCase()];
+  const judging = typeToJudging[typeCode];
   const traitToRemove = functionToTrait[judging];
   return traitKeys.filter((key: any) => key !== traitToRemove);
 }

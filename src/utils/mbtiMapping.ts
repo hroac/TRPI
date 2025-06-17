@@ -528,6 +528,37 @@ export function generateComplements(baseType: any) {
   const last = flipJP(baseType[3]);
   return MID_LETTERS.map(mid => first + mid + last);
 }
+const typeToJudging : Record<string, string> = {
+  ENTP: "Ti",
+  INTP: "Ti",
+  ENFP: "Fi",
+  INFP: "Fi",
+  ENTJ: "Te",
+  INTJ: "Te",
+  ENFJ: "Fe",
+  INFJ: "Fe",
+  ESTP: "Ti",
+  ISTP: "Ti",
+  ESFP: "Fi",
+  ISFP: "Fi",
+  ESTJ: "Te",
+  ISTJ: "Te",
+  ESFJ: "Fe",
+  ISFJ: "Fe"
+};
+
+const functionToTrait : Record<string, string> = {
+  Fe: "agreeableness",
+  Fi: "neuroticism",
+  Te: "conscientiousness",
+  Ti: "extraversion"
+};
+
+function filterTraitKeysByType(typeCode: string, traitKeys: Record<string, any>) {
+  const judging = typeToJudging[typeCode.toUpperCase()];
+  const traitToRemove = functionToTrait[judging];
+  return traitKeys.filter((key: any) => key !== traitToRemove);
+}
 
 /**
  * Compare two Big‑Five profiles using Pearson correlation,
@@ -538,32 +569,26 @@ export function generateComplements(baseType: any) {
  * @returns         - Pearson r between the two reduced profiles (–1 to 1)
  */
 export function compareProfilesIgnoringDominantPearson(
+  baseType: string,
   profileA: Record<string, number>,
   profileB: Record<string, number>
 ): number {
   // 1. Build a list of trait keys, excluding 'openness'
   const traitKeys = Object.keys(profileA).filter(k => k !== "openness");
 
-  // 2. Find the dominant trait in A (among those non‑openness keys)
-  let dominant = traitKeys[0];
-  for (const key of traitKeys) {
-    if (profileA[key] > profileA[dominant]) {
-      dominant = key;
-    }
-  }
-
+  
   // 3. Final list of keys to compare: exclude both 'openness' and the dominant trait
-  const compareKeys = traitKeys.filter(k => k !== dominant);
+  const compareKeys = filterTraitKeysByType(baseType, traitKeys)
   //console.log(compareKeys)
 
   // 4. Extract the values
-  const aVals = compareKeys.map(k => profileA[k]);
-  const bVals = compareKeys.map(k => profileB[k]);
+  const aVals = compareKeys.map((k: any) => profileA[k]);
+  const bVals = compareKeys.map((k: any) => profileB[k]);
 
   // 5. Compute means
   const n = aVals.length;
-  const meanA = aVals.reduce((sum, v) => sum + v, 0) / n;
-  const meanB = bVals.reduce((sum, v) => sum + v, 0) / n;
+  const meanA = aVals.reduce((sum: any, v: any) => sum + v, 0) / n;
+  const meanB = bVals.reduce((sum: any, v: any) => sum + v, 0) / n;
 
   //console.log(aVals, bVals, meanA, meanB)
   // 6. Compute covariance and variances
@@ -598,23 +623,18 @@ export function compareProfilesIgnoringDominantPearson(
  * @param {Object} [weights] - Optional per‑trait weights
  * @returns {number}         - Euclidean distance over the four remaining traits
  */
-export function compareProfilesIgnoringDominant(profileA: any, profileB: any, weights = {}) {
+export function compareProfilesIgnoringDominant(baseType: string, profileA: any, profileB: any, weights = {}) {
   // Identify dominant trait in A, excluding 'openness'
   const traits = Object.keys(profileA).filter(k => k !== 'openness');
-  let dominant = traits[0];
-  for (const k of traits) {
-    if (profileA[k] > profileA[dominant]) {
-      dominant = k;
-    }
-  }
-
+  
+  const compareKeys = filterTraitKeysByType(baseType, traits)
 
 
   // Build reduced copies without that dominant trait
   const a = {};
   const b = {};
   for (const k in profileA) {
-    if (k !== dominant) {
+    if (compareKeys.includes(k)) {
       (a as any)[k] = profileA[k];
       (b as any)[k] = profileB[k];
     }
@@ -647,7 +667,7 @@ export function findClosestComplement(baseType: string, userProfile: any) {
   let best = { type: '', distance: 0 };
 
   for (const candidate of MBTIProfiles.filter(prf => complements.includes(prf.name))) {
-    const distance1 = compareProfilesIgnoringDominantPearson(userProfile, candidate.traits);
+    const distance1 = compareProfilesIgnoringDominantPearson(baseType, userProfile, candidate.traits);
     const distance2 = compareProfilesIgnoringDominant(userProfile, candidate.traits)
     //console.log(candidate.name, distance1, distance2, distance1 - ((1 - distance2)/10))
     const dist = distance1 - ((1- distance2)/10);

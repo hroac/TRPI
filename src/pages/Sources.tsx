@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 
 const sources = [
   {
-    src: '/pdfs/2302.14389v1.pdf',
-    link: 'https://arxiv.org/abs/2302.14389',
+    src: '/pdfs/nol_a_00125.pdf',
+    link: 'https://direct.mit.edu/nol/article/4/4/611/117823/Information-Restricted-Neural-Language-Models',
     title: 'Information-Restricted Neural Language Models',
     description: `
       Demonstrates hemispheric asymmetries in context integration through a large-scale fMRI meta-analysis.
@@ -16,53 +16,14 @@ const sources = [
     `,
   },
   {
-    src: '/pdfs/2305.13863v1.pdf',
-    link: 'https://arxiv.org/abs/2305.13863',
-    title: 'Probing Brain Context-Sensitivity with Masked-Attention Generation',
+    src: '/pdfs/From Traits to Types.pdf',
+    link: 'https://osf.io/mcqf4',
+    title: 'From Traits to Types: Validating Jungian Concepts Through the Big Five',
     description: `
-      Uses GPT-2 and masked-attention generation to model the brain's variable context window during language processing.
-      Confirms that the right hemisphere processes broader semantic context over time, aligning with long-context preferences like Intuition and Superego constructs in TRPI.
+      TRPI analyses demonstrate that temporal-context preferences serve as a functional bridge between Big Five traits and Jungian types, yielding a unified, multidimensional personality architecture. The hybrid clustering approach identified four distinct adaptive modes, each strongly associated with type, substantiating the empirical validity of the TRPI framework.
     `,
   },
-  {
-    src: '/pdfs/Replicating and Extending the Link Between Jung and the Big Five.pdf',
-    link: 'https://osf.io/2rm5j', // You may update with the correct OSF link if needed
-    title: 'Replicating and Extending the Link Between Jung and the Big Five',
-    description: `
-      Establishes a robust, cross-validated mapping between Jungian types and Big Five trait profiles using TRPI data (n=2,916).
-      Replicates classic MBTI–Big Five relationships, validates 16-type classification (mean r = 0.833), and introduces four cognitive clusters beyond classical dichotomies.
-    `,
-  },
-  {
-    src: '/pdfs/From Traits to Types Validating Jungian and Freudian Concepts with the Big Five.pdf',
-    link: 'https://osf.io/827yk', // You may update with the correct OSF link if needed
-    title: 'From Traits to Types: Validating Jungian and Freudian Concepts with the Big Five',
-    description: `
-      Integrates trait, type, and neurocognitive models in TRPI. 
-      Demonstrates that Big Five traits form two meta-traits—Ego (short-context, N-E axis) and Superego (long-context, A-C axis)—grounded in hemispheric context processing.
-      K-means clustering empirically recovers TRPI’s four survival modes (Freeze, Fight, Fawn, Flight), each mapping to specific function pairings and Big Five profiles.
-    `,
-  },
-  {
-    src: '/pdfs/Behavorial Clustering Of Jungian Types.pdf',
-    link: '', // Add your OSF or other link if available
-    title: 'Behavioral Clustering of Jungian Types: Linking the 4F Trauma Modes, Big‑Five Traits, and Cognitive Functions',
-    description: `
-      Applies k-means clustering to TRPI trait vectors (C, E, A, N) from 2,916 participants, empirically recovering the four 4F modes.
-      Each mode is defined by a dominant trait: Freeze (C), Fight (E), Fawn (A), Flight (N).
-      Shows high non-random correspondence between behavioral clusters, Big Five dominance, and Jungian type, supporting the TRPI’s dynamic function–trait linkage.
-    `,
-  },
-  {
-    src: '/pdfs/Hemispheric Lateralization of Context Length and the Organization of the Big Five Traits.pdf',
-    link: 'https://osf.io/cg2b5', // You may update with the correct OSF link if needed
-    title: 'Hemispheric Lateralization of Context Length and the Organization of the Big Five Traits',
-    description: `
-      Demonstrates, via factor analysis on a weighted Big Five dataset (n=2,916), that personality traits organize into two meta-traits:
-      1) Neuroticism–Extraversion (short-context/Ego, left hemisphere), and 2) Agreeableness–Conscientiousness (long-context/Superego, right hemisphere).
-      Provides neurocognitive grounding for the TRPI’s distinction between context processing preferences as the foundation of personality structure.
-    `,
-  },
+
 ]
 ;
 

@@ -783,7 +783,7 @@ const determineIndex = (trait: string, index: number) : number => {
                 }}}
               />
               {bin && (
-                    <Box sx={{position: 'relative', bottom: '21px', zIndex:0}}>
+                    <Box sx={{position: 'relative', bottom: isMobile ? '27px' : '21px' , zIndex:0}}>
                       <LinearProgress color="primary" variant="determinate" value={bin.responses[s.trait][determineIndex(s.trait, index)] * 100} />
                     </Box>
                   )}

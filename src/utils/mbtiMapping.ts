@@ -8904,7 +8904,7 @@ export const allStatements = [
         ]
       },
       "10-20": {
-        "text": "I occasionally feel mild anxiety in pressure situations.",
+        "text": "I occasionally feel mild anxiety in high pressure situations.",
         "exclude": [
           "ESTP",
           "INTJ",

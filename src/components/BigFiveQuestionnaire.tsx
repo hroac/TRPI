@@ -460,7 +460,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         setFirstStageTimes(times => {
           const updated = [...times, diff];
           const avg = updated.reduce((a, b) => a + b, 0) / updated.length;
-          setSecondsPerItem(avg * (stages.length - 1 - (avg / 2)));
+          setSecondsPerItem(avg * (stages.length - 1 - (avg / 1.35)));
           //console.log(avg, updated)
           return updated;
         });
@@ -874,7 +874,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
                 }}}
               />
                {bin && (
-                    <Box sx={{position: 'relative', bottom: '21px', zIndex:0}}>
+                    <Box sx={{position: 'relative', bottom: isMobile ? '27px' : '21px' , zIndex:0}}>
                       <LinearProgress color="primary" variant="determinate" value={bin.responses[s.trait][determineIndex(s.trait, index)] * 100} />
                     </Box>
                   )}

@@ -263,6 +263,7 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
     setShowFeedback(false);
     setSummary(false);
     setAnswers([]);
+    setQuestions([])
 
     if (tab === 0) {
       if (examQuestions.length) {
@@ -403,27 +404,27 @@ ${output}
   }
 
   async function generateFreudQuestions(): Promise<Question[]> {
-    const TRPI = `\n ${info}`;
-    const prompt = `${output} \n ${examples}\n Generate 20 multiple-choice questions covering the Freudian layers portion of TRPI. Use the JSON format.`;
+    const TRPI = `\n ${info} ${output} \n ${examples}\n`;
+    const prompt = `Generate 20 multiple-choice questions covering the Freudian layers portion of TRPI. Use the JSON format.`;
     return generateFromPrompt(TRPI, prompt);
   }
 
   async function generateNeuroQuestions(): Promise<Question[]> {
-    const TRPI = `\n ${info}`;
-    const prompt = `${output} \n ${examples}\n Generate 20 short/long context focused TRPI questions. Return the JSON array.`;
+    const TRPI = `\n ${info} ${output} \n ${examples}\n `;
+    const prompt = `Generate 20 short/long context focused TRPI questions. Return the JSON array.`;
     return generateFromPrompt(TRPI, prompt);
   }
 
   async function generateTraitQuestions(): Promise<Question[]> {
-    const TRPI = `\n ${info}`;
-    const prompt = `${output} \n ${examples}\n Generate 20 questions about trait responses in TRPI. Use the same JSON output.`;
+    const TRPI = `\n ${info} ${output} \n ${examples}\n `;
+    const prompt = `Generate 20 questions about trait responses in TRPI. Use the same JSON output.`;
     return generateFromPrompt(TRPI, prompt);
   }
 
   async function generateBigFiveQuestions(): Promise<Question[]> {
     const extra = `Big-Five correlations, meta-traits axis and empirical benchmark data from TRPI.`;
-    const TRPI = `\n ${info} \n ${extra}`;
-    const prompt = `${output} \n ${examples}\n Generate 20 questions on the Big Five correlations within TRPI. Format as JSON.`;
+    const TRPI = `\n ${info} \n ${extra} ${output} \n ${examples}\n`;
+    const prompt = `Generate 20 questions on the Big Five correlations within TRPI. Format as JSON.`;
     return generateFromPrompt(TRPI, prompt);
   }
 

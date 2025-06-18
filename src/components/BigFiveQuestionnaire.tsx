@@ -53,6 +53,7 @@ import MetaBin from '../utils/metabin';
 import SlugModal from './slugModal';
 import JsonBinApi from '../utils/jsonBin';
 import { trackEvent, AnalyticsEvents } from '../utils/analytics';
+import BackgroundInfoModal from './BackgroundInfoModal';
 
 
 /** ------------------------------------------------------------------
@@ -637,6 +638,9 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
   const handleCloseModal = () => setOpenModal(false);
   const handleOpenPremiumModal = () => SetPremiumModalOpen(true)
   const handleClosePremiumModal = () => SetPremiumModalOpen(false)
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
+  const handleOpenInfoModal = () => setInfoModalOpen(true);
+  const handleCloseInfoModal = () => setInfoModalOpen(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -765,6 +769,11 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
             <SwitchAccount />
           </IconButton>
           </Tooltip>
+          <Tooltip title="Background info">
+          <IconButton onClick={handleOpenInfoModal} color="primary">
+            <HelpOutline />
+          </IconButton>
+          </Tooltip>
         </Stack>
         ) : (
           <Grid spacing={4}>
@@ -790,12 +799,18 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
             <SwitchAccount />
           </IconButton>
           </Tooltip>
+          <Tooltip title="Background info">
+          <IconButton onClick={handleOpenInfoModal} color="primary">
+            <HelpOutline />
+          </IconButton>
+          </Tooltip>
         </Grid>
         )
       }
       </Box>
       {/* Modal for Matrix selection */}
       <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={unlock} price={0.99} title='Unlock Your Answers' description='Pay €0.99 to change your previous answers!'/>
+      <BackgroundInfoModal open={infoModalOpen} onClose={handleCloseInfoModal} />
 
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box

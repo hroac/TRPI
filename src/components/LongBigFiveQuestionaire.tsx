@@ -52,6 +52,7 @@ import { statements as fixedStatements, allStatements } from '../utils/mbtiMappi
 import SlugModal from './slugModal';
 import MetaBin from '../utils/metabin';
 import JsonBinApi from '../utils/jsonBin';
+import BackgroundInfoModal from './BackgroundInfoModal';
 
 /** ------------------------------------------------------------------
  *  Utility helpers
@@ -199,8 +200,9 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const [matchedType, setMatchedType] = useState<string | null>(null);
   const [selectedMbtiType, setSelectedMbtiType] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<string | null>(null)
-  const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
+  const [premiumModalOpen, SetPremiumModalOpen] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState(false); // Modal is pre-opened by default
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [password, setPassword] = useState<string>('');
   const [openPasswordModal, setOpenPasswordModal] = useState(slug ? true : false ); // Modal is pre-opened by default
@@ -554,12 +556,14 @@ const flushCurrentStage = () => {
   };
 
   const progress = ((currentStage + 1) / longStages.length) * 100;
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
-  const handleOpenPremiumModal = () => SetPremiumModalOpen(true)
-  const handleClosePremiumModal = () => SetPremiumModalOpen(false)
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+  const handleOpenPremiumModal = () => SetPremiumModalOpen(true)
+  const handleClosePremiumModal = () => SetPremiumModalOpen(false)
+  const handleOpenInfoModal = () => setInfoModalOpen(true);
+  const handleCloseInfoModal = () => setInfoModalOpen(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const flattenResponses = (responses: any) : number[] => {
     const allResponses : number[] = [];
@@ -674,6 +678,11 @@ const determineIndex = (trait: string, index: number) : number => {
             <SwitchAccount />
           </IconButton>
           </Tooltip>
+          <Tooltip title="Background info">
+          <IconButton onClick={handleOpenInfoModal} color="primary">
+            <HelpOutline />
+          </IconButton>
+          </Tooltip>
         </Stack>
         ) : (
           <Grid spacing={4}>
@@ -699,12 +708,18 @@ const determineIndex = (trait: string, index: number) : number => {
             <SwitchAccount />
           </IconButton>
           </Tooltip>
+          <Tooltip title="Background info">
+          <IconButton onClick={handleOpenInfoModal} color="primary">
+            <HelpOutline />
+          </IconButton>
+          </Tooltip>
         </Grid>
         )
       }
       </Box>
       {/* Modal for Matrix selection */}
       <PremiumModal open={premiumModalOpen} onClose={handleClosePremiumModal} handlePaymentSuccess={unlock} price={0.99} title='Unlock Your Answers' description='Pay €0.99 to change your previous answers!'/>
+      <BackgroundInfoModal open={infoModalOpen} onClose={handleCloseInfoModal} />
 
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box

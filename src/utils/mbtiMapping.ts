@@ -4189,7 +4189,7 @@ export const allStatements = [
   },
 
   {
-    "text": "I often organize social events to bring people together.",
+    "text": "I organize social events to bring people together.",
     "trait": "extraversion",
     "weight": 1.2,
     "aspect": "Enthusiasm",
@@ -5504,7 +5504,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I reliably assert my rights and stand up for myself.",
+    "text": "I assert my rights and stand up for myself.",
     "trait": "extraversion",
     "weight": 1.3,
     "aspect": "Assertiveness",
@@ -5754,7 +5754,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I consistently take charge in group settings and show leadership confidence.",
+    "text": "I take charge in group settings and show leadership confidence.",
     "trait": "extraversion",
     "weight": 1,
     "aspect": "Assertiveness",
@@ -8253,7 +8253,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I strongly value teamwork and cooperative collaboration.",
+    "text": "I value teamwork and cooperative collaboration.",
     "trait": "agreeableness",
     "weight": 0.9,
     "aspect": "Politeness",
@@ -8809,7 +8809,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I frequently act on impulse.",
+    "text": "I act on my impulses.",
     "trait": "neuroticism",
     "weight": 1.1,
     "aspect": "Volatility",
@@ -9191,7 +9191,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I frequently experience agitation and restlessness.",
+    "text": "I experience agitation and restlessness.",
     "trait": "neuroticism",
     "weight": 0.9,
     "aspect": "Volatility",
@@ -9581,7 +9581,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I often feel overwhelmed when confronted with stress.",
+    "text": "I feel overwhelmed when confronted with stress.",
     "trait": "neuroticism",
     "weight": 1.2,
     "aspect": "Withdrawal",
@@ -10101,7 +10101,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I typically experience anxiety in high-pressure situations.",
+    "text": "I experience anxiety in high-pressure situations.",
     "trait": "neuroticism",
     "weight": 1,
     "aspect": "Withdrawal",
@@ -10491,7 +10491,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I am prone to overthinking and experiencing unease about uncertain outcomes.",
+    "text": "I overthink and experience unease about uncertain outcomes.",
     "trait": "neuroticism",
     "weight": 1,
     "aspect": "Withdrawal",
@@ -10640,21 +10640,21 @@ export const allStatements = [
   },
 
   {
-    "text": "I critically analyse abstract mathematical problems for fun.",
+    "text": "I critically analyse abstract ideas for fun.",
     "trait": "openness",
     "weight": 1.1,
     "aspect": "Intellect",
     "subtext": {
-      "0-10":  { "text": "I rarely engage with abstract mathematics.",                        "exclude": ["ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP"] },
-      "10-20": { "text": "I occasionally glance at simple maths puzzles.",                    "exclude": ["ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP"] },
-      "20-30": { "text": "I sometimes attempt easy abstract problems.",                       "exclude": ["ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP"] },
-      "30-40": { "text": "I moderately enjoy tackling abstract maths in spare time.",         "exclude": ["ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP"] },
+      "0-10":  { "text": "I rarely engage with abstract ideas.",                        "exclude": ["ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP"] },
+      "10-20": { "text": "I occasionally glance at simple puzzles.",                    "exclude": ["ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP"] },
+      "20-30": { "text": "I sometimes attempt easy abstract ideas.",                       "exclude": ["ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP"] },
+      "30-40": { "text": "I moderately enjoy tackling abstract problems in spare time.",         "exclude": ["ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP"] },
       "40-50": { "text": "I fairly often work on abstract mathematical challenges.",          "exclude": [] },
-      "50-60": { "text": "I frequently choose complex maths problems for leisure.",           "exclude": [] },
-      "60-70": { "text": "I regularly dive into higher-order mathematics for fun.",           "exclude": ["ISTJ","ESTJ"] },
-      "70-80": { "text": "I highly relish analysing difficult, abstract maths.",              "exclude": ["ISTP","ISTJ","ESTJ","ISFJ"] },
-      "80-90": { "text": "I am very driven to solve advanced mathematical abstractions.",     "exclude": ["ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ISFP"] },
-      "90-100":{ "text": "I always immerse myself in the purest forms of mathematical theory.","exclude": ["ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ESFP","ISFP"] }
+      "50-60": { "text": "I frequently choose complex ideas for leisure.",           "exclude": [] },
+      "60-70": { "text": "I regularly dive into higher-order concepts for fun.",           "exclude": ["ISTJ","ESTJ"] },
+      "70-80": { "text": "I highly relish analysing difficult, abstract ideas.",              "exclude": ["ISTP","ISTJ","ESTJ","ISFJ"] },
+      "80-90": { "text": "I am very driven to solve advanced abstractions.",     "exclude": ["ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ISFP"] },
+      "90-100":{ "text": "I always immerse myself in the purest forms of abstractual thinking.","exclude": ["ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ESFP","ISFP"] }
     }
   },
 
@@ -10697,7 +10697,7 @@ export const allStatements = [
   },
 
   {
-    "text": "I programme simulations to satisfy my intellectual curiosity.",
+    "text": "I simulate experiences to satisfy my intellectual curiosity.",
     "trait": "openness",
     "weight": 1.1,
     "aspect": "Intellect",
@@ -10705,11 +10705,11 @@ export const allStatements = [
       "0-10":  { "text": "I rarely create simulations or models.",                          "exclude": ["ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP"] },
       "10-20": { "text": "I occasionally try simple simulations but lose interest.",        "exclude": ["ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP"] },
       "20-30": { "text": "I sometimes build basic models out of curiosity.",                "exclude": ["ENTP","ESTP","INTP","INTJ","ENTJ","INFJ","ESFJ","ENFJ","ESFP","ENFP","ISFP","INFP"] },
-      "30-40": { "text": "I moderately programme small simulations for fun learning.",      "exclude": ["ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP"] },
+      "30-40": { "text": "I moderately create small simulations for fun learning.",      "exclude": ["ENTP","ESTP","INTJ","ENTJ","INFJ","ENFJ","ENFP","INFP"] },
       "40-50": { "text": "I fairly often develop simulations to explore ideas.",            "exclude": [] },
-      "50-60": { "text": "I frequently code simulations to test hypotheses.",               "exclude": [] },
+      "50-60": { "text": "I frequently create simulations to test hypotheses.",               "exclude": [] },
       "60-70": { "text": "I regularly create sophisticated models for curiosity's sake.",   "exclude": ["ISTJ","ESTJ"] },
-      "70-80": { "text": "I highly employ programming to simulate complex systems.",        "exclude": ["ISTP","ISTJ","ESTJ","ISFJ"] },
+      "70-80": { "text": "I highly employ simulation to understand complex systems.",        "exclude": ["ISTP","ISTJ","ESTJ","ISFJ"] },
       "80-90": { "text": "I am very dedicated to building advanced intellectual simulations.","exclude": ["ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ISFP"] },
       "90-100":{ "text": "I always craft intricate simulations to explore theoretical ideas.","exclude": ["ISTP","ISTJ","ESTJ","ISFJ","ESFJ","ESFP","ISFP"] }
     }
@@ -10755,7 +10755,7 @@ export const allStatements = [
   },
 
   {
-    "text": "I immerse myself in diverse musical genres to savour their textures.",
+    "text": "I immerse myself in diverse musical genres.",
     "trait": "openness",
     "weight": 1.0,
     "aspect": "Exploration",
@@ -11197,7 +11197,7 @@ export const allStatements = [
     }
   },
   {
-    "text": "I often contemplate abstract concepts and explore profound questions.",
+    "text": "I contemplate abstract concepts and explore profound questions.",
     "trait": "openness",
     "weight": 0.9,
     "aspect": "Intellectual Openness",

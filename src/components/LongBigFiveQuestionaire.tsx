@@ -319,6 +319,8 @@ const longStages = [
   }
 
   const reset = () => {
+  setLastStage(0)
+    setCurrentStage(0)
  if(bin) {
       setResponses(JSON.parse(JSON.stringify(bin.responses)))
     } else {
@@ -331,6 +333,7 @@ const longStages = [
     }
     setFirstAnswerTime(Date.now())
     setSecondsPerItem(0)
+    setHonesty(true)
    localStorage.removeItem('longStage');
    localStorage.removeItem('longLastStage');
    localStorage.removeItem('longSecondsLeft')

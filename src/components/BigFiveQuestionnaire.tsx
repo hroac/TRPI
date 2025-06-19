@@ -332,6 +332,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const reset = () => {
     setLastStage(0)
     setCurrentStage(0)
+    setHonesty(true)
 
     if(bin) {
       setResponses(JSON.parse(JSON.stringify(bin.responses)))

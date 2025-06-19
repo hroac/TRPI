@@ -1166,7 +1166,7 @@ function selectStatements(statements: any[]) {
  * @param {Object} responses - { trait: [values...] }
  * @param {Array} selection - Array of global item indices (as presented to the user)
  * @param {number} [similarityThreshold=1]
- * @param {number} [oppositionThreshold=3]
+ * @param {number} [oppositionThreshold=1]
  * @returns {boolean} True if 3+ overlap and 3+ oppose mismatches, else false.
  */
 export function checkHonesty(
@@ -1178,6 +1178,8 @@ export function checkHonesty(
 ) {
   // Build the { [index]: value } map by trait, in order of appearance
   const responseMap: any = {};
+
+  if(selection.some((s: any) => !s.index && s.index !== 0)) return true;
   // Build per-trait position counters
   const traitCounters: any = {};
   for (let sel of selection) {
@@ -1218,7 +1220,7 @@ export function checkHonesty(
     }
   }
 
-  return (overlapMismatch >= 3) && (opposeMismatch >= 3);
+  return !(overlapMismatch >= 3) || !(opposeMismatch >= 3);
 }
 
 

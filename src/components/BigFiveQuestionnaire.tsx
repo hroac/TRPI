@@ -444,9 +444,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         return;
       }
 
-   
-      const honest = checkHonesty(allStatements, responses, statements)
-      setHonesty(honest)
+  
       
       const prevVal = responses[trait][index];
 
@@ -461,6 +459,9 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         localStorage.setItem('responses', JSON.stringify(updatedResponses));
         return updatedResponses;
       });
+
+      const honest = checkHonesty(allStatements, responses, statements, index)
+      setHonesty(honest)
 
       if(currentStage === 0 && prevVal === 0.500001) {
         const diff = (Date.now() - firstAnswerTime) / 1000;
@@ -992,6 +993,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
                 message={"Please be honest when answering!"}
                 type="warning"
                 onClose={() => {}}
+                sx={{position: 'absolute', left: isMobile ? '10%!important': '40%!important'}}
               />
             </Box>
     </Paper>

@@ -429,8 +429,7 @@ const flushCurrentStage = () => {
         return;
       }
 
- const honest = checkHonesty(allStatements, responses, statements)
-      setHonesty(honest)
+ 
 //console.log(trait, index, value)
 //console.log(responses)
       const prevVal = responses[trait][index];
@@ -446,6 +445,9 @@ const flushCurrentStage = () => {
         localStorage.setItem('longResponses', JSON.stringify(updatedResponses));
         return updatedResponses;
       });
+
+      const honest = checkHonesty(allStatements, responses, statements, index)
+      setHonesty(honest)
 
       if(currentStage === 0 && prevVal === 0.500001) {
         const diff = (Date.now() - firstAnswerTime) / 1000;
@@ -903,6 +905,7 @@ const determineIndex = (trait: string, index: number) : number => {
                       message={"Please be honest when answering!"}
                       type="warning"
                       onClose={() => {}}
+                sx={{position: 'absolute', left: isMobile ? '10%!important': '30%!important'}}
                     />
         </Box>
     </Paper>

@@ -6,11 +6,12 @@ interface NotificationProps {
   message: string;
   type: 'success' | 'error' | 'warning' | 'info';
   onClose: () => void;
+  sx?: any,
 }
 
-const Notification: React.FC<NotificationProps> = ({ open, message, type, onClose }) => {
+const Notification: React.FC<NotificationProps> = ({ open, message, type, onClose, sx }) => {
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={onClose}>
+    <Snackbar sx={sx || {}} open={open} autoHideDuration={6000} onClose={onClose}>
       <Alert onClose={onClose} severity={type} variant="filled">
         {message}
       </Alert>

@@ -1151,15 +1151,6 @@ function selectStatements(statements: any[]) {
 }
 
 /**
- * Returns true if 3+ overlapping/opposing pairs in the selection are inconsistent.
- * @param {Array} items - Statement objects (must have 'index', 'overlapping', 'opposing').
- * @param {Object} responses - { [index]: value }
- * @param {Array} selection - Array of selected item indices.
- * @param {number} [similarityThreshold=1]
- * @param {number} [oppositionThreshold=3]
- * @returns {boolean} True if 3 or more inconsistent pairs, else false.
- */
-/**
  * Flattens trait-based responses to global index-value map,
  * then runs the honesty check.
  * @param {Array} items - Full item objects (with 'index' and 'trait').
@@ -1169,59 +1160,85 @@ function selectStatements(statements: any[]) {
  * @param {number} [oppositionThreshold=1]
  * @returns {boolean} True if 3+ overlap and 3+ oppose mismatches, else false.
  */
+/**
+ * Sentinel value for “unchanged” sliders.
+ */
+const UNCHANGED = 0.500001;
+const isChanged = (v: number) => Math.abs(v - UNCHANGED) > 1e-6;
+
 export function checkHonesty(
-  items: any,
-  responses: any,
-  selection: any,
-  similarityThreshold = 3,
-  oppositionThreshold = 1
+  items: any[],
+  responses: Record<string, number[]>,
+  selection: { index: number }[],
+  stageIndex: number,
+  similarityThreshold = 0.5,
+  oppositionThreshold = 0.6
 ) {
-  // Build the { [index]: value } map by trait, in order of appearance
-  const responseMap: any = {};
+  // Don’t run on the very first page.
+  if (stageIndex === 0) return true;
 
-  if(selection.some((s: any) => !s.index && s.index !== 0)) return true;
-  // Build per-trait position counters
-  const traitCounters: any = {};
-  for (let sel of selection) {
-    const item = items[sel.index];
-    if (!traitCounters[item.trait]) traitCounters[item.trait] = 0;
-    const pos = traitCounters[item.trait];
-    const arr = responses[item.trait] || [];
-    responseMap[sel.index] = arr[pos];
-    traitCounters[item.trait]++;
+  // Abort if any selection is malformed
+  if (selection.some(s => s.index === undefined)) {
+    localStorage.removeItem('statements');
+    localStorage.removeItem('longStatements');
+    return false;
   }
 
-  // Now use your honesty checker logic
-  const selectedSet = new Set(selection);
+  /** Map from item index → user-response value */
+  const responseMap: Record<number, number> = {};
+  /** Per-trait cursor so we pull the correct response for each item */
+  const traitPos: Record<string, number> = {};
+
+  for (const sel of selection) {
+    const item      = items[sel.index];
+    const trait     = item.trait;
+    const pos       = traitPos[trait] ?? 0;
+    const valueArr  = responses[trait] ?? [];
+    responseMap[sel.index] = valueArr[pos];
+    traitPos[trait] = pos + 1;
+  }
+
+  /**
+   * Only indices whose sliders have *moved* (≠ 0.500001)
+   */
+  const changedSet = new Set<number>(
+    Object.entries(responseMap)
+          .filter(([, v]) => isChanged(v))
+          .map(([k]) => +k)
+  );
+
   let overlapMismatch = 0;
-  let opposeMismatch = 0;
+  let opposeMismatch  = 0;
 
-  for (let idx of selection) {
-    const item = items[idx];
+  for (const idx of changedSet) {
+    const item   = items[idx];
+    const myResp = responseMap[idx];
 
-    // Overlapping (should be similar)
-    for (let overlapIdx of item.overlapping || []) {
-      if (selectedSet.has(overlapIdx)) {
-        const diff = Math.abs(responseMap[idx] - responseMap[overlapIdx]);
-        if (diff > similarityThreshold) {
-          overlapMismatch++;
-        }
-      }
+    // ---------- handle overlaps ----------
+    for (const otherIdx of item.overlapping) {
+      if (!changedSet.has(otherIdx)) continue;           // other not changed
+      const diff = Math.abs(myResp - responseMap[otherIdx]);
+      if (diff > similarityThreshold) overlapMismatch++;
     }
 
-    // Opposing (should be dissimilar)
-    for (let opposeIdx of item.opposing || []) {
-      if (selectedSet.has(opposeIdx)) {
-        const diff = Math.abs(responseMap[idx] - responseMap[opposeIdx]);
-        if (diff < oppositionThreshold) {
-          opposeMismatch++;
-        }
-      }
+    // ---------- handle oppositions ----------
+    for (const otherIdx of item.opposing) {
+      if (!changedSet.has(otherIdx)) continue;
+      const diff = Math.abs(myResp - responseMap[otherIdx]);
+      if (diff < oppositionThreshold) opposeMismatch++;
     }
   }
 
-  return !(overlapMismatch >= 3) || !(opposeMismatch >= 3);
+  // If *any* mismatch was detected, honesty check fails.
+  const honest = overlapMismatch === 0 && opposeMismatch === 0;
+  return honest;
 }
+
+
+
+
+
+
 
 
 

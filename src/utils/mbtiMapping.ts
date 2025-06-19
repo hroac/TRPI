@@ -1180,12 +1180,12 @@ export function checkHonesty(
   const responseMap: any = {};
   // Build per-trait position counters
   const traitCounters: any = {};
-  for (let idx of selection) {
-    const item = items[idx];
+  for (let sel of selection) {
+    const item = items[sel.index];
     if (!traitCounters[item.trait]) traitCounters[item.trait] = 0;
     const pos = traitCounters[item.trait];
     const arr = responses[item.trait] || [];
-    responseMap[idx] = arr[pos];
+    responseMap[sel.index] = arr[pos];
     traitCounters[item.trait]++;
   }
 

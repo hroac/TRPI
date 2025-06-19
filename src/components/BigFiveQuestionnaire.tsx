@@ -637,7 +637,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores, prev: lastBinId});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty});
     navigate(`/result/${binId}`);
   };
 

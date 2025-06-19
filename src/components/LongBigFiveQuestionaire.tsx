@@ -562,7 +562,7 @@ const flushCurrentStage = () => {
     localStorage.removeItem('longResponses')
     localStorage.removeItem('longStage')
     localStorage.removeItem('longLastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements: longStatements, accuracy, list: mbtiType.scores, prev: lastBinId});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements: longStatements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty});
     navigate(`/result/${binId}`); // Ensure your result route can handle potentially different data
   };
 

@@ -92,6 +92,7 @@ export default function App() {
 
     const newBinId = await JsonBinApi.saveResultsToJsonBin({
       referrer,
+      honest: responses.honesty,
       prev: responses.prev,
        name: responses.name,
        email: responses.email,

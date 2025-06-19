@@ -1241,7 +1241,7 @@ export function checkHonesty(
       if (shouldSkip(me.trait, items[other].trait)) continue;
 
       const diff = Math.abs(myV - allMap[other]);
-      if (diff > similarityThreshold) {
+      if (isChanged(allMap[other]) && isChanged(myV) && diff > similarityThreshold) {
         overlapMismatch++;
         logMismatch('OVERLAP', idx, other, diff, me.text, items[other].text);
       }
@@ -1253,7 +1253,7 @@ export function checkHonesty(
       if (shouldSkip(me.trait, items[other].trait)) continue;
 
       const diff = Math.abs(myV - allMap[other]);
-      if (diff < oppositionThreshold) {
+      if (isChanged(allMap[other]) && isChanged(myV) && diff < oppositionThreshold) {
         opposeMismatch++;
         logMismatch('OPPOSE', idx, other, diff, me.text, items[other].text);
       }

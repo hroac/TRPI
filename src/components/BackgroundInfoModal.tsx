@@ -22,7 +22,7 @@ import {
 
 interface BackgroundInfoModalProps {
   open: boolean;
-  onClose: () => void;
+  onClose: (diagnostics: any) => void;
 }
 
 const countries = [
@@ -92,7 +92,10 @@ const BackgroundInfoModal: React.FC<BackgroundInfoModalProps> = ({ open, onClose
   const [academic, setAcademic] = useState('');
 
   const handleClose = () => {
-    onClose();
+    const diagnostics = {
+      gender, age, country, diagnosis, meds, medType, iq, education, handedness, languages, birthOrder, trauma, traumaText, academic
+    }
+    onClose(diagnostics);
   };
 
   return (

@@ -191,6 +191,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
     localStorage.setItem('longStatements', newStatements);
     return longStatements   
   }
+  const [diagnostics, setDiagnostics] = useState<any>();
   const [statements, setStatements] = useState<any[]>(initialStatements)
   const [responses, setResponses] = useState(initialResponses)
   const [currentStage, setCurrentStage] = useState(parseInt(localStorage.getItem('longLastStage') || "0"));
@@ -562,7 +563,7 @@ const flushCurrentStage = () => {
     localStorage.removeItem('longResponses')
     localStorage.removeItem('longStage')
     localStorage.removeItem('longLastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements: longStatements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements: longStatements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty, diagnostics});
     navigate(`/result/${binId}`); // Ensure your result route can handle potentially different data
   };
 
@@ -572,7 +573,10 @@ const flushCurrentStage = () => {
   const handleOpenPremiumModal = () => SetPremiumModalOpen(true)
   const handleClosePremiumModal = () => SetPremiumModalOpen(false)
   const handleOpenInfoModal = () => setInfoModalOpen(true);
-  const handleCloseInfoModal = () => setInfoModalOpen(false);
+    const handleCloseInfoModal = () => {
+   setDiagnostics(diagnostics)
+    setInfoModalOpen(false)
+  };
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 

@@ -105,6 +105,7 @@ export default function App() {
       bigFiveResponses: responses.profile,
       accuracy: responses.accuracy ?? 0,
       description: responses.description ?? '',
+      diagnostics: responses.diagnostics,
       responses: responses.responses ?? [],
       list: responses.list ?? {},
       statements: responses.statements ?? [],

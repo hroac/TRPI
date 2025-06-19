@@ -202,6 +202,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 };
 
   const [bin, setBin] = useState<Record<any, any>>();
+  const [diagnostics, setDiagnostics] = useState<any>();
   const [responses, setResponses] = useState(initialResponses)
   const [currentStage, setCurrentStage] = useState(parseInt(localStorage.getItem('lastStage') || "0"));
   const [lastStage, setLastStage] = useState(parseInt(localStorage.getItem('stage')|| "0"))
@@ -637,18 +638,24 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty, diagnostics});
     navigate(`/result/${binId}`);
   };
 
   const progress = ((currentStage + 1) / stages.length) * 100;
   const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const handleCloseModal = () => {
+    setOpenModal(false)  
+   
+  };
   const handleOpenPremiumModal = () => SetPremiumModalOpen(true)
   const handleClosePremiumModal = () => SetPremiumModalOpen(false)
   const [infoModalOpen, setInfoModalOpen] = useState(false);
   const handleOpenInfoModal = () => setInfoModalOpen(true);
-  const handleCloseInfoModal = () => setInfoModalOpen(false);
+  const handleCloseInfoModal = () => {
+   setDiagnostics(diagnostics)
+    setInfoModalOpen(false)
+  };
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 

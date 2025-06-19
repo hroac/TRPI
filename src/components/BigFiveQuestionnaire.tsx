@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
+  checkHonesty,
   determinePrimary4FType,
   matchMBTI,
   matchMBTIType,
@@ -54,6 +55,7 @@ import SlugModal from './slugModal';
 import JsonBinApi from '../utils/jsonBin';
 import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 import BackgroundInfoModal from './BackgroundInfoModal';
+import Notification from './Notification';
 
 
 /** ------------------------------------------------------------------
@@ -227,6 +229,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   });
   const [firstStageTimes, setFirstStageTimes] = useState<number[]>([]);
   const [firstAnswerTime, setFirstAnswerTime] = useState<number>(Date.now());
+  const [honesty, setHonesty] = useState<boolean>(true)
   const type = typesData.find(t => t.type === matchedMBTIType);
   const stages = [
     statements.slice(0, 3), // Stage 0
@@ -441,6 +444,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       }
 
    
+      const honest = checkHonesty(allStatements, responses, statements)
+      setHonesty(honest)
       
       const prevVal = responses[trait][index];
 
@@ -980,6 +985,14 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
                 </DialogContent>
           </Dialog>
       )}
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3 }}>
+              <Notification
+                open={!honesty}
+                message={"Please be honest when answering!"}
+                type="warning"
+                onClose={() => {}}
+              />
+            </Box>
     </Paper>
   </Box>
   );

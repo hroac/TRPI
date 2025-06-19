@@ -32,6 +32,7 @@ import {
   pearsonCorrelationBigFive,
   pearsonProfile,
 longStatements,
+checkHonesty,
 } from '../utils/mbtiMapping';
 import Matrix from './Matrix';
 import {
@@ -53,6 +54,7 @@ import SlugModal from './slugModal';
 import MetaBin from '../utils/metabin';
 import JsonBinApi from '../utils/jsonBin';
 import BackgroundInfoModal from './BackgroundInfoModal';
+import Notification from './Notification';
 
 /** ------------------------------------------------------------------
  *  Utility helpers
@@ -220,7 +222,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   });
   const [firstStageTimes, setFirstStageTimes] = useState<number[]>([]);
   const [firstAnswerTime, setFirstAnswerTime] = useState<number>(Date.now());
-  
+  const [honesty, setHonesty] = useState<boolean>(true)
 const longStages = [
   statements.slice(0,3), // Stage 0
   statements.slice(3, 7),  // stage 1
@@ -423,6 +425,9 @@ const flushCurrentStage = () => {
         setSelectedStatement(sub)
         return;
       }
+
+ const honest = checkHonesty(allStatements, responses, statements)
+      setHonesty(honest)
 //console.log(trait, index, value)
 //console.log(responses)
       const prevVal = responses[trait][index];
@@ -889,6 +894,14 @@ const determineIndex = (trait: string, index: number) : number => {
                 </DialogContent>
           </Dialog>
       )}
+       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3 }}>
+                    <Notification
+                      open={!honesty}
+                      message={"Please be honest when answering!"}
+                      type="warning"
+                      onClose={() => {}}
+                    />
+        </Box>
     </Paper>
   </Box>
   );

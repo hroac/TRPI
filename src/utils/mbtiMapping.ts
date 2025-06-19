@@ -1173,8 +1173,8 @@ export function checkHonesty(
   items: any,
   responses: any,
   selection: any,
-  similarityThreshold = 1,
-  oppositionThreshold = 3
+  similarityThreshold = 3,
+  oppositionThreshold = 1
 ) {
   // Build the { [index]: value } map by trait, in order of appearance
   const responseMap: any = {};

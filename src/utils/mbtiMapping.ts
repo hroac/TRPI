@@ -1163,8 +1163,9 @@ function selectStatements(statements: any[]) {
 /**
  * Sentinel value for “unchanged” sliders.
  */
-const UNCHANGED = 0.500001;
-const isChanged = (v: number) => Math.abs(v - UNCHANGED) > 1e-6;
+const STORAGE_KEY = 'honestyResponses';
+const UNCHANGED   = 0.500001;
+const isChanged   = (v: number) => Math.abs(v - UNCHANGED) > 1e-6;
 
 export function checkHonesty(
   items: any[],
@@ -1172,75 +1173,99 @@ export function checkHonesty(
   selection: { index: number }[],
   stageIndex: number,
   similarityThreshold = 0.5,
-  oppositionThreshold = 0.6
+  oppositionThreshold = 0.5
 ) {
-  // Don’t run on the very first page.
+  /* ────── early guards ────── */
   if (stageIndex === 0) return true;
-
-  // Abort if any selection is malformed
   if (selection.some(s => s.index === undefined)) {
     localStorage.removeItem('statements');
     localStorage.removeItem('longStatements');
+    console.log('[Honesty] malformed selection – abort');
     return false;
   }
 
-  /** Map from item index → user-response value */
-  const responseMap: Record<number, number> = {};
-  /** Per-trait cursor so we pull the correct response for each item */
-  const traitPos: Record<string, number> = {};
+  /* ────── rebuild page-local map (index → value) ────── */
+  const pageMap: Record<number, number> = {};
+  const traitCursor: Record<string, number> = {};
 
   for (const sel of selection) {
-    const item      = items[sel.index];
-    const trait     = item.trait;
-    const pos       = traitPos[trait] ?? 0;
-    const valueArr  = responses[trait] ?? [];
-    responseMap[sel.index] = valueArr[pos];
-    traitPos[trait] = pos + 1;
+    const trait = items[sel.index].trait;
+    const pos   = traitCursor[trait] ?? 0;
+    pageMap[sel.index] = (responses[trait] ?? [])[pos];
+    traitCursor[trait] = pos + 1;
   }
 
-  /**
-   * Only indices whose sliders have *moved* (≠ 0.500001)
-   */
+  /* ────── merge into persistent global map ────── */
+  const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  const allMap: Record<number, number> = { ...stored, ...pageMap };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(allMap));
+
+  /* ────── which sliders are “changed”? ────── */
   const changedSet = new Set<number>(
-    Object.entries(responseMap)
-          .filter(([, v]) => isChanged(v))
-          .map(([k]) => +k)
+    Object.keys(pageMap).filter(k => isChanged(pageMap[+k])).map(Number)
   );
+
+  console.log('[Honesty] changed this page:', [...changedSet]);
+
+  /* ────── comparison helpers ────── */
+  const shouldSkip = (baseTrait: string, otherTrait: string) =>
+    baseTrait === 'openness' && otherTrait !== baseTrait;   // openness stays intra-trait
 
   let overlapMismatch = 0;
   let opposeMismatch  = 0;
 
-  for (const idx of changedSet) {
-    const item   = items[idx];
-    const myResp = responseMap[idx];
+  const logMismatch = (
+    tag: 'OVERLAP' | 'OPPOSE',
+    a: number,
+    b: number,
+    diff: number,
+    textA: string,
+    textB: string,
+  ) => {
+    console.log(
+      `[${tag}] idx${a} ↔ idx${b}  diff=${diff.toFixed(3)}  `
+      + `${allMap[a]} vs ${allMap[b]}`
+      + '\n' + textA,
+      + '\n' + textB 
+    );
+  };
 
-    // ---------- handle overlaps ----------
-    for (const otherIdx of item.overlapping) {
-      if (!changedSet.has(otherIdx)) continue;           // other not changed
-      const diff = Math.abs(myResp - responseMap[otherIdx]);
-      if (diff > similarityThreshold) overlapMismatch++;
+  /* ────── run through *changed* sliders only ────── */
+  for (const idx of changedSet) {
+    const me   = items[idx];
+    const myV  = allMap[idx];
+
+    // — overlaps should be similar —
+    for (const other of me.overlapping) {
+      if (!(other in allMap)) continue;            // partner not answered yet
+      if (shouldSkip(me.trait, items[other].trait)) continue;
+
+      const diff = Math.abs(myV - allMap[other]);
+      if (diff > similarityThreshold) {
+        overlapMismatch++;
+        logMismatch('OVERLAP', idx, other, diff, me.text, items[other].text);
+      }
     }
 
-    // ---------- handle oppositions ----------
-    for (const otherIdx of item.opposing) {
-      if (!changedSet.has(otherIdx)) continue;
-      const diff = Math.abs(myResp - responseMap[otherIdx]);
-      if (diff < oppositionThreshold) opposeMismatch++;
+    // — oppositions should be dissimilar —
+    for (const other of me.opposing) {
+      if (!(other in allMap)) continue;
+      if (shouldSkip(me.trait, items[other].trait)) continue;
+
+      const diff = Math.abs(myV - allMap[other]);
+      if (diff < oppositionThreshold) {
+        opposeMismatch++;
+        logMismatch('OPPOSE', idx, other, diff, me.text, items[other].text);
+      }
     }
   }
 
-  // If *any* mismatch was detected, honesty check fails.
-  const honest = overlapMismatch === 0 && opposeMismatch === 0;
-  return honest;
+  console.log(
+    `[Honesty] overlapMismatch=${overlapMismatch}  opposeMismatch=${opposeMismatch}`
+  );
+
+  return overlapMismatch === 0 && opposeMismatch === 0;
 }
-
-
-
-
-
-
-
-
 
 function selectMoreStatements(statements: any[]) {
   const opennessStatements = statements.filter(s => s.trait === 'openness');
@@ -1456,10 +1481,7 @@ export const allStatements = [
             131,
             155
         ],
-        "opposing": [
-            115,
-            71
-        ],
+        "opposing": [],
         "index": 0
     },
     {
@@ -1590,10 +1612,7 @@ export const allStatements = [
             148,
             154
         ],
-        "opposing": [
-            118,
-            124
-        ],
+        "opposing": [],
         "index": 1
     },
     {
@@ -1718,10 +1737,7 @@ export const allStatements = [
         "overlapping": [
             157
         ],
-        "opposing": [
-            69,
-            144
-        ],
+        "opposing": [],
         "index": 2
     },
     {
@@ -1848,7 +1864,6 @@ export const allStatements = [
             158
         ],
         "opposing": [
-            16,
             144
         ],
         "index": 3
@@ -1982,7 +1997,6 @@ export const allStatements = [
             154
         ],
         "opposing": [
-            109,
             110
         ],
         "index": 4
@@ -2235,7 +2249,6 @@ export const allStatements = [
             34
         ],
         "opposing": [
-            120,
             115
         ],
         "index": 6
@@ -2737,9 +2750,7 @@ export const allStatements = [
                 ]
             }
         },
-        "overlapping": [
-            121
-        ],
+        "overlapping": [],
         "opposing": [
             120,
             84
@@ -4005,10 +4016,7 @@ export const allStatements = [
             }
         },
         "overlapping": [],
-        "opposing": [
-            62,
-            84
-        ],
+        "opposing": [],
         "index": 20
     },
     {
@@ -4787,10 +4795,7 @@ export const allStatements = [
             31,
             36
         ],
-        "opposing": [
-            135,
-            120
-        ],
+        "opposing": [],
         "index": 26
     },
     {
@@ -5313,10 +5318,7 @@ export const allStatements = [
             22,
             34
         ],
-        "opposing": [
-            118,
-            120
-        ],
+        "opposing": [],
         "index": 30
     },
     {
@@ -5448,10 +5450,7 @@ export const allStatements = [
             26,
             36
         ],
-        "opposing": [
-            110,
-            118
-        ],
+        "opposing": [],
         "index": 31
     },
     {
@@ -5579,10 +5578,7 @@ export const allStatements = [
             7,
             9
         ],
-        "opposing": [
-            71,
-            69
-        ],
+        "opposing": [],
         "index": 32
     },
     {
@@ -5712,8 +5708,7 @@ export const allStatements = [
             145
         ],
         "opposing": [
-            118,
-            109
+            118
         ],
         "index": 33
     },
@@ -6088,8 +6083,7 @@ export const allStatements = [
             31
         ],
         "opposing": [
-            118,
-            120
+            118
         ],
         "index": 36
     },
@@ -6883,8 +6877,7 @@ export const allStatements = [
             63
         ],
         "opposing": [
-            17,
-            144
+            17
         ],
         "index": 42
     },
@@ -7284,10 +7277,7 @@ export const allStatements = [
             64,
             83
         ],
-        "opposing": [
-            115,
-            120
-        ],
+        "opposing": [],
         "index": 45
     },
     {
@@ -7820,8 +7810,7 @@ export const allStatements = [
         },
         "overlapping": [
             33,
-            43,
-            145
+            43
         ],
         "opposing": [
             137,
@@ -8086,7 +8075,6 @@ export const allStatements = [
         },
         "overlapping": [],
         "opposing": [
-            138,
             16
         ],
         "index": 51
@@ -8355,10 +8343,7 @@ export const allStatements = [
             60,
             63
         ],
-        "opposing": [
-            144,
-            16
-        ],
+        "opposing": [],
         "index": 53
     },
     {
@@ -9022,10 +9007,7 @@ export const allStatements = [
             64,
             83
         ],
-        "opposing": [
-            2,
-            138
-        ],
+        "opposing": [],
         "index": 58
     },
     {
@@ -9154,8 +9136,7 @@ export const allStatements = [
         },
         "overlapping": [],
         "opposing": [
-            120,
-            17
+            120
         ],
         "index": 59
     },
@@ -9423,7 +9404,6 @@ export const allStatements = [
             90
         ],
         "opposing": [
-            138,
             16
         ],
         "index": 61
@@ -9557,7 +9537,6 @@ export const allStatements = [
             92
         ],
         "opposing": [
-            20,
             136
         ],
         "index": 62
@@ -9692,8 +9671,7 @@ export const allStatements = [
             60
         ],
         "opposing": [
-            35,
-            144
+            35
         ],
         "index": 63
     },
@@ -10234,8 +10212,7 @@ export const allStatements = [
             159
         ],
         "opposing": [
-            71,
-            120
+            71
         ],
         "index": 67
     },
@@ -10359,8 +10336,7 @@ export const allStatements = [
             88
         ],
         "opposing": [
-            35,
-            144
+            35
         ],
         "index": 68
     },
@@ -10479,7 +10455,6 @@ export const allStatements = [
         },
         "overlapping": [],
         "opposing": [
-            2,
             137
         ],
         "index": 69
@@ -11459,8 +11434,7 @@ export const allStatements = [
             }
         },
         "overlapping": [
-            95,
-            143
+            95
         ],
         "opposing": [
             119,
@@ -11828,10 +11802,7 @@ export const allStatements = [
         "overlapping": [
             86
         ],
-        "opposing": [
-            136,
-            120
-        ],
+        "opposing": [],
         "index": 80
     },
     {
@@ -12201,8 +12172,7 @@ export const allStatements = [
             64
         ],
         "opposing": [
-            124,
-            115
+            124
         ],
         "index": 83
     },
@@ -12595,8 +12565,7 @@ export const allStatements = [
             80
         ],
         "opposing": [
-            144,
-            120
+            144
         ],
         "index": 86
     },
@@ -12726,10 +12695,7 @@ export const allStatements = [
             84,
             88
         ],
-        "opposing": [
-            140,
-            144
-        ],
+        "opposing": [],
         "index": 87
     },
     {
@@ -12859,8 +12825,7 @@ export const allStatements = [
             87
         ],
         "opposing": [
-            135,
-            146
+            135
         ],
         "index": 88
     },
@@ -13116,7 +13081,6 @@ export const allStatements = [
             61
         ],
         "opposing": [
-            138,
             146
         ],
         "index": 90
@@ -13636,7 +13600,6 @@ export const allStatements = [
             73,
             85,
             96,
-            97,
             98
         ],
         "opposing": [
@@ -13766,8 +13729,7 @@ export const allStatements = [
             }
         },
         "overlapping": [
-            77,
-            143
+            77
         ],
         "opposing": [
             120,
@@ -13899,7 +13861,6 @@ export const allStatements = [
             73,
             85,
             94,
-            97,
             98
         ],
         "opposing": [
@@ -14030,15 +13991,9 @@ export const allStatements = [
         },
         "overlapping": [
             73,
-            85,
-            94,
-            96,
-            98
+            85
         ],
-        "opposing": [
-            128,
-            144
-        ],
+        "opposing": [],
         "index": 97
     },
     {
@@ -14165,8 +14120,7 @@ export const allStatements = [
             73,
             85,
             94,
-            96,
-            97
+            96
         ],
         "opposing": [
             119,
@@ -14414,7 +14368,6 @@ export const allStatements = [
             }
         },
         "overlapping": [
-            103,
             127,
             129
         ],
@@ -14786,14 +14739,9 @@ export const allStatements = [
                 ]
             }
         },
-        "overlapping": [
-            100,
-            127,
-            129
-        ],
+        "overlapping": [],
         "opposing": [
-            17,
-            75
+            17
         ],
         "index": 103
     },
@@ -15159,8 +15107,7 @@ export const allStatements = [
             }
         },
         "overlapping": [
-            123,
-            128
+            123
         ],
         "opposing": [
             88,
@@ -15284,8 +15231,7 @@ export const allStatements = [
             }
         },
         "overlapping": [
-            110,
-            113
+            110
         ],
         "opposing": [
             135,
@@ -15409,8 +15355,7 @@ export const allStatements = [
             }
         },
         "overlapping": [
-            119,
-            146
+            119
         ],
         "opposing": [
             17,
@@ -15660,7 +15605,6 @@ export const allStatements = [
             113
         ],
         "opposing": [
-            151,
             21
         ],
         "index": 110
@@ -15906,10 +15850,7 @@ export const allStatements = [
             }
         },
         "overlapping": [],
-        "opposing": [
-            20,
-            17
-        ],
+        "opposing": [],
         "index": 112
     },
     {
@@ -16028,13 +15969,9 @@ export const allStatements = [
             }
         },
         "overlapping": [
-            107,
             110
         ],
-        "opposing": [
-            135,
-            151
-        ],
+        "opposing": [],
         "index": 113
     },
     {
@@ -16428,8 +16365,7 @@ export const allStatements = [
             24
         ],
         "opposing": [
-            151,
-            16
+            151
         ],
         "index": 116
     },
@@ -16567,8 +16503,7 @@ export const allStatements = [
             126
         ],
         "opposing": [
-            75,
-            16
+            75
         ],
         "index": 117
     },
@@ -16834,7 +16769,6 @@ export const allStatements = [
             146
         ],
         "opposing": [
-            142,
             75
         ],
         "index": 119
@@ -17107,9 +17041,7 @@ export const allStatements = [
                 ]
             }
         },
-        "overlapping": [
-            10
-        ],
+        "overlapping": [],
         "opposing": [
             146,
             17
@@ -17250,7 +17182,6 @@ export const allStatements = [
             125
         ],
         "opposing": [
-            71,
             92
         ],
         "index": 122
@@ -17385,8 +17316,7 @@ export const allStatements = [
             }
         },
         "overlapping": [
-            106,
-            128
+            106
         ],
         "opposing": [
             119,
@@ -17939,7 +17869,6 @@ export const allStatements = [
         },
         "overlapping": [
             100,
-            103,
             129
         ],
         "opposing": [
@@ -18077,14 +18006,8 @@ export const allStatements = [
                 ]
             }
         },
-        "overlapping": [
-            106,
-            123
-        ],
-        "opposing": [
-            137,
-            88
-        ],
+        "overlapping": [],
+        "opposing": [],
         "index": 128
     },
     {
@@ -18218,7 +18141,6 @@ export const allStatements = [
         },
         "overlapping": [
             100,
-            103,
             127
         ],
         "opposing": [
@@ -18610,10 +18532,7 @@ export const allStatements = [
         "overlapping": [
             134
         ],
-        "opposing": [
-            84,
-            69
-        ],
+        "opposing": [],
         "index": 132
     },
     {
@@ -18872,8 +18791,7 @@ export const allStatements = [
             132
         ],
         "opposing": [
-            18,
-            118
+            18
         ],
         "index": 134
     },
@@ -19372,7 +19290,6 @@ export const allStatements = [
         },
         "overlapping": [],
         "opposing": [
-            58,
             72
         ],
         "index": 138
@@ -19497,7 +19414,6 @@ export const allStatements = [
         },
         "overlapping": [],
         "opposing": [
-            144,
             18
         ],
         "index": 139
@@ -19872,7 +19788,6 @@ export const allStatements = [
         },
         "overlapping": [],
         "opposing": [
-            119,
             16
         ],
         "index": 142
@@ -19990,13 +19905,9 @@ export const allStatements = [
                 ]
             }
         },
-        "overlapping": [
-            77,
-            95
-        ],
+        "overlapping": [],
         "opposing": [
-            144,
-            59
+            144
         ],
         "index": 143
     },
@@ -20118,7 +20029,6 @@ export const allStatements = [
         },
         "overlapping": [],
         "opposing": [
-            2,
             120
         ],
         "index": 144
@@ -20248,8 +20158,7 @@ export const allStatements = [
         },
         "overlapping": [
             33,
-            43,
-            49
+            43
         ],
         "opposing": [
             129,
@@ -20373,11 +20282,9 @@ export const allStatements = [
             }
         },
         "overlapping": [
-            108,
             119
         ],
         "opposing": [
-            88,
             92
         ],
         "index": 146
@@ -20646,8 +20553,7 @@ export const allStatements = [
             154
         ],
         "opposing": [
-            17,
-            144
+            17
         ],
         "index": 148
     },
@@ -21034,10 +20940,7 @@ export const allStatements = [
             149,
             158
         ],
-        "opposing": [
-            110,
-            113
-        ],
+        "opposing": [],
         "index": 151
     },
     {
@@ -21425,8 +21328,7 @@ export const allStatements = [
             148
         ],
         "opposing": [
-            128,
-            118
+            128
         ],
         "index": 154
     },
@@ -21554,8 +21456,7 @@ export const allStatements = [
             131
         ],
         "opposing": [
-            115,
-            118
+            115
         ],
         "index": 155
     },
@@ -21682,7 +21583,6 @@ export const allStatements = [
             27
         ],
         "opposing": [
-            75,
             144
         ],
         "index": 156
@@ -21810,7 +21710,6 @@ export const allStatements = [
             2
         ],
         "opposing": [
-            69,
             58
         ],
         "index": 157

@@ -457,11 +457,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         const sub = getSubtext(trait, index, value as number);
         setSelectedStatement(sub.text);
         localStorage.setItem('responses', JSON.stringify(updatedResponses));
+        
+      const honest = checkHonesty(allStatements, updatedResponses, statements, index)
+      setHonesty(honest)
         return updatedResponses;
       });
 
-      const honest = checkHonesty(allStatements, responses, statements, index)
-      setHonesty(honest)
 
       if(currentStage === 0 && prevVal === 0.500001) {
         const diff = (Date.now() - firstAnswerTime) / 1000;

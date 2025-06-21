@@ -345,7 +345,7 @@ const AboutPage: React.FC<{
                   const honest = checkHonesty(allStatements, allResponses, statements, idx)
 
                   return (
-                    <Paper sx={{ p: 3, mb: 5, background: honest ? '' : 'error' }} key={idx}>
+                    <Paper sx={{ p: 3, mb: 5, background: honest ? '' : '#fa695e50' }} key={idx}>
                       <Typography variant="h6">{stmt.text}</Typography>
                       <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
                       <Box mt={1}>

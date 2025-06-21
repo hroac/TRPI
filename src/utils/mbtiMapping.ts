@@ -1181,7 +1181,7 @@ export function checkHonesty(
     localStorage.removeItem('statements');
     localStorage.removeItem('longStatements');
     console.log('[Honesty] malformed selection – abort');
-    return false;
+    return true;
   }
 
   /* ────── rebuild page-local map (index → value) ────── */

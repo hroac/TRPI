@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
-import { findClosestComplement, functionPairings, MBTIProfiles } from '../utils/mbtiMapping';
+import { allStatements, checkHonesty, findClosestComplement, functionPairings, MBTIProfiles } from '../utils/mbtiMapping';
 import {
   Box,
   Grid,
@@ -50,6 +50,7 @@ import {
 import { guid } from '../utils/guid';
 import Ranking from '../components/Ranking';
 import ReactMarkdown from 'react-markdown';
+import { a } from 'framer-motion/dist/types.d-DDSxwf0n';
 
 ChartJS.register(
   CategoryScale,
@@ -341,9 +342,10 @@ const AboutPage: React.FC<{
                   const raw = allResponses?.[stmt.trait]?.[idx];
                   const num: number = parseFloat(raw);
                   const value = getSubtext(stmt, num);
+                  const honest = checkHonesty(allStatements, allResponses, statements, idx)
 
                   return (
-                    <Paper sx={{ p: 3, mb: 5 }} key={idx}>
+                    <Paper sx={{ p: 3, mb: 5, background: honest ? '' : 'error' }} key={idx}>
                       <Typography variant="h6">{stmt.text}</Typography>
                       <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
                       <Box mt={1}>

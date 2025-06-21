@@ -1210,7 +1210,7 @@ export function checkHonesty(
 
   /* ────── comparison helpers ────── */
   const shouldSkip = (baseTrait: string, otherTrait: string) =>
-    baseTrait === 'openness' && otherTrait !== baseTrait;   // openness stays intra-trait
+    (baseTrait === 'openness' && otherTrait !== baseTrait) || (otherTrait === 'openness' && otherTrait !== baseTrait);   // openness stays intra-trait
 
   let overlapMismatch = 0;
   let opposeMismatch  = 0;

@@ -457,7 +457,7 @@ const AboutPage: React.FC<{
                 fullWidth={!isMobile}
                 sx={{ mt: 2 }}
                 onClick={handleGenerateClick}
-                disabled={(description !== '' || availableOptions.length === 1) && loading}
+                disabled={(description !== '' && availableOptions.length !== 1) && loading}
               >
                 {reportLevel === REPORT_LEVELS[2]
                   ? availableOptions.length === 1

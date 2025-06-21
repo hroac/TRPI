@@ -1174,7 +1174,7 @@ export function checkHonesty(
   selection: { index: number }[],
   stageIndex: number,
   similarityThreshold = 0.5,
-  oppositionThreshold = 0.5
+  oppositionThreshold = 0.15
 ) {
   /* ────── early guards ────── */
   if (stageIndex === 0) return true;

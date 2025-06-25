@@ -460,7 +460,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         setSelectedStatement(sub.text);
         localStorage.setItem('responses', JSON.stringify(updatedResponses));
         
-      const honest = checkHonesty(allStatements, updatedResponses, statements, i)
+      const honest = checkHonesty(allStatements, updatedResponses, statements, i, sub.index).includes(sub.index)
       setHonesty(honest)
         return updatedResponses;
       });

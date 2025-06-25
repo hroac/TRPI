@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { typesData } from '../utils/typesData';
 import RelatedTypesBox from '../components/RelatedTypesBox';
@@ -24,6 +24,8 @@ import {
   FormControlLabel,
   FormLabel,
   Tooltip,
+  Dialog,
+  DialogTitle,
 } from '@mui/material';
 import { Bar, Radar } from 'react-chartjs-2';
 import {
@@ -248,6 +250,26 @@ const AboutPage: React.FC<{
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [profileText, setProfileText] = useState<string>(description);
+  const flat = stages.flat();
+  // Compute all dishonest indices ONCE, not per slide!
+const dishonest: number[] = useMemo(() => {
+  // For each page (stage), run checkHonesty for that stage
+  if (!Array.isArray(stages) || stages.length === 0) return [];
+  const out: number[] = [];
+  stages.forEach((page, pageIdx) => {
+    // Make sure you pass the correct selection (stmnts or statements, etc)
+    out.push(
+      ...checkHonesty(allStatements, allResponses, stages.flat(), pageIdx)
+    );
+  });
+  // Remove duplicates
+  return Array.from(new Set(out));
+}, [allStatements, allResponses, stages]);
+
+  const [openLie, setOpenLie] = useState<number>(-1)
+  const lieOpen = (lie: number) => setOpenLie(lie);
+  const lieClose = () => setOpenLie(-1);
+
   const navigate = useNavigate();
 
   /* ------------------ generator map -------------------------- */
@@ -256,6 +278,26 @@ const AboutPage: React.FC<{
     advanced: generateEnthusiastReport,
     expert: generateExpertReport,
   } as const;
+
+function getAnswerForStatement(
+  items: any,           // allStatements
+  responses: any,       // allResponses
+  selection: any,       // stmnts or stages.flat()
+  stmtIndex: any        // the .index of the statement you want the answer for
+) {
+  // Build the trait-cursor and answer map as in checkHonesty
+  const pageMap: any = {};
+  const traitCursor : any= {};
+  for (const sel of selection) {
+    const trait = items[sel.index].trait;
+    const pos = traitCursor[trait] ?? 0;
+    pageMap[sel.index] = (responses[trait] ?? [])[pos];
+    traitCursor[trait] = pos + 1;
+  }
+  return pageMap[stmtIndex];
+}
+
+
 
   /* ------------------ FREE or PREMIUM generation ------------- */
   const generateFreeReport = async () => {
@@ -331,40 +373,54 @@ const AboutPage: React.FC<{
   };
 
   /* ------------------ carousel slides ------------------------ */
-  const slides =
-    Object.values(allResponses).length && stages.length
-      ? stages.map((stage) => ({
-          content: (
-            <Paper>
-              <Stack spacing={2}>
-                {stage.map((stmt: any) => {
-                  const idx = stmnts.filter((s) => s.trait === stmt.trait).indexOf(stmt);
-                  const raw = allResponses?.[stmt.trait]?.[idx];
-                  const num: number = parseFloat(raw);
-                  const value = getSubtext(stmt, num);
-                  const honest = checkHonesty(allStatements, allResponses, statements, idx)
+ const slides =
+  Object.values(allResponses).length && stages.length
+    ? stages.map((stage, pageIdx) => ({
+        content: (
+          <Paper>
+            <Stack spacing={2}>
+              {stage.map((stmt: any, idx: number) => {
+                // Use dishonest to check highlight/click
+                const raw = allResponses?.[stmt.trait]?.[idx];
+                const num: number = parseFloat(raw);
+                const value = getSubtext(stmt, num);
 
-                  return (
-                    <Paper sx={{ p: 3, mb: 5, background: honest ? '' : '#fa695e50' }} key={idx}>
-                      <Typography variant="h6">{stmt.text}</Typography>
-                      <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
-                      <Box mt={1}>
-                        <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-                          <strong>Your Answer:</strong>
-                          {Number.isNaN(num) ? raw : ` ${Math.round(num * 100)}%`} {value || ''}
-                        </Typography>
-                        {!Number.isNaN(num) && (
-                          <LinearProgress variant="determinate" value={num * 100} />
-                        )}
-                      </Box>
-                    </Paper>
-                  );
-                })}
-              </Stack>
-            </Paper>
-          ),
-        }))
-      : [];
+                return (
+                  <Paper
+                    component="div"
+                    onClick={() => {
+                      if (dishonest.includes(stmt.index)) lieOpen(stmt.index);
+                    }}
+                    sx={{
+                      p: 3,
+                      mb: 5,
+                      background: dishonest.includes(stmt.index) ? '#fa695e50' : '',
+                      cursor: dishonest.includes(stmt.index) ? 'pointer' : 'default'
+                    }}
+                    key={stmt.index}
+                  >
+                    <Typography variant="h6">{stmt.text}</Typography>
+                    <Typography color="text.secondary">
+                      Trait: {stmt.trait.toUpperCase()}
+                    </Typography>
+                    <Box mt={1}>
+                      <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+                        <strong>Your Answer:</strong>
+                        {Number.isNaN(num) ? raw : ` ${Math.round(num * 100)}%`} {value || ''}
+                      </Typography>
+                      {!Number.isNaN(num) && (
+                        <LinearProgress variant="determinate" value={num * 100} />
+                      )}
+                    </Box>
+                  </Paper>
+                );
+              })}
+            </Stack>
+          </Paper>
+        ),
+      }))
+    : [];
+
 
   /* ------------------ guard -------------------- */
   if (!typeInfo) return <Typography variant="h5">Type information not available.</Typography>;
@@ -559,6 +615,49 @@ const AboutPage: React.FC<{
         handlePaymentSuccess={handlePaymentSuccess}
         price={0.99}
       />
+<Dialog open={openLie !== -1} onClose={lieClose} fullWidth maxWidth="md">
+  <DialogTitle sx={{ m: 0, p: 2 }}>Related Items</DialogTitle>
+  {(() => {
+    if (openLie === null) return;
+    const liedStmt = stmnts.find(s => s.index === openLie);
+    if (!liedStmt) return <Typography sx={{p: 3}}>No related statements.</Typography>;
+    const relatedIndices = [
+      ...(liedStmt.overlapping || []),
+      ...(liedStmt.opposing || [])
+    ];
+    return relatedIndices.map((index: any) => {
+      const stmt = stmnts.find(item => item.index === index) || allStatements.find(item => item.index === index);
+      if (!stmt) return null;
+      // Answer logic as before
+      const traitStmts = stmnts.filter(s => s.trait === stmt.trait);
+      const traitIdx = traitStmts.findIndex(s => s.index === stmt.index);
+      const raw = allResponses?.[stmt.trait]?.[traitIdx];
+      const num: number = parseFloat(raw);
+      const value = getSubtext(stmt, num);
+      return raw && (
+        <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>
+          <Typography variant="h6">{stmt.text}</Typography>
+          <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
+          <Box mt={1}>
+            <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+              <strong>Your Answer:</strong>
+              {raw === undefined
+                ? <i>No answer found.</i>
+                : Number.isNaN(num) ? raw
+                : ` ${Math.round(num * 100)}%`} {value || ''}
+            </Typography>
+            {!Number.isNaN(num) && (
+              <LinearProgress variant="determinate" value={num * 100} />
+            )}
+          </Box>
+        </Paper>
+      );
+    });
+  })()}
+</Dialog>
+
+
+
     </Paper>
     </Box>
   );

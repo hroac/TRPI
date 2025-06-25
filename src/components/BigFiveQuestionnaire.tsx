@@ -417,7 +417,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   }
 
   const getSubtext = (trait: string, index: number, value: number) => {
-    const statement = statements.filter((s) => s.trait === trait && s.index === index);
+    const statement = statements.find((s) => s.trait === trait && s.index === index);
     if (!statement) return null;
 
     const percentage = Math.round(value * 100);

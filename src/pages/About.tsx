@@ -616,24 +616,38 @@ function getAnswerForStatement(
         price={0.99}
       />
 <Dialog open={openLie !== -1} onClose={lieClose} fullWidth maxWidth="md">
-  <DialogTitle sx={{ m: 0, p: 2 }}>Related Items</DialogTitle>
+  <DialogTitle sx={{ m: 0, p: 2 }}>Conflicting Items Detected</DialogTitle>
   {(() => {
-    if (openLie === null) return;
-    const liedStmt = stmnts.find(s => s.index === openLie);
-    if (!liedStmt) return <Typography sx={{p: 3}}>No related statements.</Typography>;
-    const relatedIndices = [
-      ...(liedStmt.overlapping || []),
-      ...(liedStmt.opposing || [])
-    ];
-    return relatedIndices.map((index: any) => {
-      const stmt = stmnts.find(item => item.index === index) || allStatements.find(item => item.index === index);
+    if (openLie === -1) return null; // or some placeholder
+
+    // The statement that was flagged and opened this dialog
+    const sourceStatement = stmnts.find(s => s.index === openLie);
+
+    // This is the key change:
+    // We derive the items to show directly from the results of the honesty check.
+    // 1. Create a unique set of all indices involved in the conflict.
+    // 2. Filter out the index of the statement the user is currently viewing (`openLie`).
+    // 3. The result is the exact list of other statements that it conflicted with.
+    const conflictingItemIndices = [...new Set(dishonest)].filter(
+      index => index !== openLie
+    );
+
+    if (!sourceStatement || conflictingItemIndices.length === 0) {
+      return <Typography sx={{p: 3}}>No specific conflicting statement was found.</Typography>;
+    }
+
+    // Now, map over the CORRECTLY identified indices to display them.
+    return conflictingItemIndices.map((index: any) => {
+      const stmt = stmnts.find(item => item.index === index);
       if (!stmt) return null;
-      // Answer logic as before
+
+      // Your existing rendering logic for each item
       const traitStmts = stmnts.filter(s => s.trait === stmt.trait);
       const traitIdx = traitStmts.findIndex(s => s.index === stmt.index);
       const raw = allResponses?.[stmt.trait]?.[traitIdx];
       const num: number = parseFloat(raw);
       const value = getSubtext(stmt, num);
+
       return raw && (
         <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>
           <Typography variant="h6">{stmt.text}</Typography>

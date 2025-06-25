@@ -621,7 +621,7 @@ function getAnswerForStatement(
     if (openLie === -1) return null; // or some placeholder
 
     // The statement that was flagged and opened this dialog
-    const sourceStatement = stmnts.find(s => s.index === openLie);
+    const sourceStatement = allStatements.find(s => s.index === openLie);
 
     // This is the key change:
     // We derive the items to show directly from the results of the honesty check.
@@ -641,6 +641,7 @@ function getAnswerForStatement(
 
     conflictingItemIndices.forEach(index => {
       // Check the relationship against the source statement
+      console.log(allStatements[index])
       if (sourceStatement.opposing?.includes(index) || allStatements[index]?.opposing.includes(sourceStatement.index)) {
         opposedItems.push(index);
       } else if (sourceStatement.overlapping?.includes(index) || allStatements[index]?.overlapping.includes(sourceStatement.index)) {
@@ -651,7 +652,7 @@ function getAnswerForStatement(
     console.log(sourceStatement, opposedItems, overlappingItems, conflictingItemIndices, dishonest)
     return (
       <Box>
-        {overlappingItems.length && opposedItems.length ? (<Typography variant='h4'>Overlapping</Typography>): <></>}
+        {overlappingItems.length && opposedItems.length ? (<Typography sx={{ml: 3}} variant='body2'>Overlapping</Typography>): <></>}
         {
 overlappingItems.map((index: any) => {
       const stmt = stmnts.find(item => item.index === index);
@@ -684,7 +685,7 @@ overlappingItems.map((index: any) => {
       );
     })
         }
-        {overlappingItems.length && opposedItems.length ? (<Typography variant='h4'>Opposing</Typography>): <></>}
+        {overlappingItems.length && opposedItems.length ? (<Typography sx={{ml: 3}} variant='body2'>Opposing</Typography>): <></>}
         {
           opposedItems.map((index: any) => {
       const stmt = stmnts.find(item => item.index === index);

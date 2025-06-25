@@ -636,8 +636,24 @@ function getAnswerForStatement(
       return <Typography sx={{p: 3}}>No specific conflicting statement was found.</Typography>;
     }
 
-    // Now, map over the CORRECTLY identified indices to display them.
-    return conflictingItemIndices.map((index: any) => {
+    const opposedItems: any = [];
+    const overlappingItems: any = [];
+
+    conflictingItemIndices.forEach(index => {
+      // Check the relationship against the source statement
+      if (sourceStatement.opposing?.includes(index) || allStatements[index]?.opposing.includes(sourceStatement.index)) {
+        opposedItems.push(index);
+      } else if (sourceStatement.overlapping?.includes(index) || allStatements[index]?.overlapping.includes(sourceStatement.index)) {
+        overlappingItems.push(index);
+      }
+    });
+
+    console.log(sourceStatement, opposedItems, overlappingItems, conflictingItemIndices, dishonest)
+    return (
+      <Box>
+        {overlappingItems.length && opposedItems.length ? (<Typography variant='h4'>Overlapping</Typography>): <></>}
+        {
+overlappingItems.map((index: any) => {
       const stmt = stmnts.find(item => item.index === index);
       if (!stmt) return null;
 
@@ -666,7 +682,44 @@ function getAnswerForStatement(
           </Box>
         </Paper>
       );
-    });
+    })
+        }
+        {overlappingItems.length && opposedItems.length ? (<Typography variant='h4'>Opposing</Typography>): <></>}
+        {
+          opposedItems.map((index: any) => {
+      const stmt = stmnts.find(item => item.index === index);
+      if (!stmt) return null;
+
+      // Your existing rendering logic for each item
+      const traitStmts = stmnts.filter(s => s.trait === stmt.trait);
+      const traitIdx = traitStmts.findIndex(s => s.index === stmt.index);
+      const raw = allResponses?.[stmt.trait]?.[traitIdx];
+      const num: number = parseFloat(raw);
+      const value = getSubtext(stmt, num);
+
+      return (
+        <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>
+          <Typography variant="h6">{stmt.text}</Typography>
+          <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
+          <Box mt={1}>
+            <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+              <strong>Your Answer:</strong>
+              {raw === undefined
+                ? <i>No answer found.</i>
+                : Number.isNaN(num) ? raw
+                : ` ${Math.round(num * 100)}%`} {value || ''}
+            </Typography>
+            {!Number.isNaN(num) && (
+              <LinearProgress variant="determinate" value={num * 100} />
+            )}
+          </Box>
+        </Paper>
+      );
+    })
+        }
+      </Box>
+    )
+    // Now, map over the CORRECTLY identified indices to display them.
   })()}
 </Dialog>
 

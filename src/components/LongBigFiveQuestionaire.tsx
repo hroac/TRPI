@@ -911,8 +911,8 @@ const determineIndex = (trait: string, index: number) : number => {
                       message={"Please be honest when answering!"}
                       type="warning"
                       onClose={() => {}}
-                sx={{position: 'absolute', left: isMobile ? '10%!important': '30%!important'}}
-                    />
+                sx={{position: 'absolute', left: isMobile ? '10%!important': '40%!important'}}
+              />
         </Box>
     </Paper>
   </Box>

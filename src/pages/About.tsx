@@ -652,7 +652,7 @@ function getAnswerForStatement(
     console.log(sourceStatement, opposedItems, overlappingItems, conflictingItemIndices, dishonest)
     return (
       <Box>
-        {overlappingItems.length && opposedItems.length ? (<Typography sx={{ml: 3}} variant='body2'>Overlapping</Typography>): <></>}
+        {overlappingItems.length ? (<Typography sx={{ml: 3}} variant='body2'>Overlapping</Typography>): <></>}
         {
 overlappingItems.map((index: any) => {
       const stmt = stmnts.find(item => item.index === index);
@@ -685,7 +685,7 @@ overlappingItems.map((index: any) => {
       );
     })
         }
-        {overlappingItems.length && opposedItems.length ? (<Typography sx={{ml: 3}} variant='body2'>Opposing</Typography>): <></>}
+        {opposedItems.length ? (<Typography sx={{ml: 3}} variant='body2'>Opposing</Typography>): <></>}
         {
           opposedItems.map((index: any) => {
       const stmt = stmnts.find(item => item.index === index);

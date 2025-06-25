@@ -407,7 +407,7 @@ const flushCurrentStage = () => {
   }
 
   const getSubtext = (trait: string, index: number, value: number) => {
-    const statement = longStatements.filter((s) => s.trait === trait)[index];
+    const statement = longStatements.find((s) => s.trait === trait && s.index === index);
     if (!statement) return null;
 
     const percentage = Math.round(value * 100);
@@ -803,7 +803,7 @@ const determineIndex = (trait: string, index: number) : number => {
                   If you notice any indexing issues, adjust accordingly. */}
               <Slider
                value={responses[s.trait][determineIndex(s.trait, index)]}
-               onChange={handleSliderChange(s.trait, determineIndex(s.trait, index))}
+               onChange={handleSliderChange(s.trait, s.index)}
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}

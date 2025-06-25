@@ -445,7 +445,7 @@ const flushCurrentStage = () => {
         const sub = getSubtext(trait, index, value as number);
         setSelectedStatement(sub);
         localStorage.setItem('longResponses', JSON.stringify(updatedResponses));
-          const honest = !checkHonesty(allStatements, updatedResponses, statements, i).includes(sub.index)
+          const honest = !checkHonesty(allStatements, updatedResponses, statements, i).includes(index)
       setHonesty(honest)
         return updatedResponses;
       });

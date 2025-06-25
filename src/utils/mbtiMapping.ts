@@ -1177,7 +1177,7 @@ export function checkHonesty(
   oppositionThreshold = 0.15
 ) {
   /* ────── early guards ────── */
-  if (stageIndex === 0) return [];
+
   if (selection.some(s => s.index === undefined)) {
     localStorage.removeItem('statements');
     localStorage.removeItem('longStatements');
@@ -9736,7 +9736,8 @@ export const allStatements = [
       53,
       54,
       55,
-      56
+      56,
+      153
     ],
     "opposing": [
       21,
@@ -22167,7 +22168,7 @@ export const allStatements = [
         ]
       }
     },
-    "overlapping": [],
+    "overlapping": [148],
     "opposing": [
       16,
       144

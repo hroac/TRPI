@@ -648,7 +648,7 @@ function getAnswerForStatement(
       const num: number = parseFloat(raw);
       const value = getSubtext(stmt, num);
 
-      return raw && (
+      return (
         <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>
           <Typography variant="h6">{stmt.text}</Typography>
           <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>

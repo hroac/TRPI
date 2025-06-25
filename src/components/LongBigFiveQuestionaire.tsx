@@ -425,7 +425,7 @@ const flushCurrentStage = () => {
      // //console.log('handleSliderChange',  currentStage, lastStage)
       const {trait, index} = statement;
       if(currentStage < lastStage) {
-        const sub = getSubtext(trait, index, responses[trait][index] as number);
+        const sub = getSubtext(trait, index, responses[trait][i] as number);
 
         setSelectedStatement(sub)
         return;

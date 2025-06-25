@@ -539,7 +539,7 @@ const AboutPage: React.FC<{
                 onClick={() => navigate(`/result/${bin.prev}`)}
               >Previous results</Button>}
       {
-       bin && guid() === bin.userId && Object.values(bin.responses)?.length !== 0 && <Box>
+       bin && Object.values(bin.responses)?.length !== 0 && <Box>
           <Tooltip title="Or have a friend do it!">
          <Button
                 variant="contained"

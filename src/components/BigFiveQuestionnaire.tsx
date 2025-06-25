@@ -435,9 +435,10 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   };
 
   const handleSliderChange =
-    (trait: string, index: number) =>
+    (statement: any, i: number) =>
     (event: Event, value: number | number[], activeThumb: number) => {
      // ////console.log('handleSliderChange',  currentStage, lastStage)
+     const {trait, index} = statement;
       if(currentStage < lastStage) {
         const sub = getSubtext(trait, index, responses[trait][index] as number);
 
@@ -454,12 +455,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       }
       setResponses((prev: any) => {
         const updatedResponses = { ...prev };
-        updatedResponses[trait][index] = value as number;
+        updatedResponses[trait][i] = value as number;
         const sub = getSubtext(trait, index, value as number);
         setSelectedStatement(sub.text);
         localStorage.setItem('responses', JSON.stringify(updatedResponses));
         
-      const honest = checkHonesty(allStatements, updatedResponses, statements, index)
+      const honest = checkHonesty(allStatements, updatedResponses, statements, i)
       setHonesty(honest)
         return updatedResponses;
       });
@@ -894,7 +895,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
                   If you notice any indexing issues, adjust accordingly. */}
               <Slider
                value={responses[s.trait][determineIndex(s.trait, index)]}
-               onChange={handleSliderChange(s.trait, s.index)}
+               onChange={handleSliderChange(s, determineIndex(s.trait, index))}
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}

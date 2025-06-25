@@ -420,9 +420,10 @@ const flushCurrentStage = () => {
   };
 
   const handleSliderChange =
-    (trait: string, index: number) =>
+    (statement: any, i: number) =>
     (event: Event, value: number | number[], activeThumb: number) => { // Changed type of value to number
      // //console.log('handleSliderChange',  currentStage, lastStage)
+      const {trait, index} = statement;
       if(currentStage < lastStage) {
         const sub = getSubtext(trait, index, responses[trait][index] as number);
 
@@ -440,11 +441,11 @@ const flushCurrentStage = () => {
       }
       setResponses((prev: any) => {
         const updatedResponses = { ...prev };
-        updatedResponses[trait][index] = value;
+        updatedResponses[trait][i] = value;
         const sub = getSubtext(trait, index, value as number);
         setSelectedStatement(sub);
         localStorage.setItem('longResponses', JSON.stringify(updatedResponses));
-          const honest = checkHonesty(allStatements, updatedResponses, statements, index)
+          const honest = checkHonesty(allStatements, updatedResponses, statements, i)
       setHonesty(honest)
         return updatedResponses;
       });
@@ -803,7 +804,7 @@ const determineIndex = (trait: string, index: number) : number => {
                   If you notice any indexing issues, adjust accordingly. */}
               <Slider
                value={responses[s.trait][determineIndex(s.trait, index)]}
-               onChange={handleSliderChange(s.trait, s.index)}
+               onChange={handleSliderChange(s, determineIndex(s.trait, index))}
                 max={1}
                 step={0.01}
                 color={`${currentStage < lastStage ? 'error' : 'primary'}`}

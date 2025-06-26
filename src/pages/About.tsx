@@ -379,9 +379,13 @@ function getAnswerForStatement(
         content: (
           <Paper>
             <Stack spacing={2}>
-              {stage.map((stmt: any, idx: number) => {
+              {stage.map((stmt: any) => {
+                console.log(pageIdx)
                 // Use dishonest to check highlight/click
-                const raw = allResponses?.[stmt.trait]?.[idx];
+                const traitStmts = stmnts.filter(s => s.trait === stmt.trait);
+                const traitIdx = traitStmts.findIndex(s => s.index === stmt.index);
+      
+                 const raw = allResponses?.[stmt.trait]?.[traitIdx];
                 const num: number = parseFloat(raw);
                 const value = getSubtext(stmt, num);
 
@@ -622,19 +626,27 @@ function getAnswerForStatement(
 
     // The statement that was flagged and opened this dialog
     const sourceStatement = allStatements.find(s => s.index === openLie);
+     const conflictingItemIndices = [...new Set(dishonest)].filter(
+      index => index !== openLie
+    );
 
+     if (!sourceStatement || conflictingItemIndices.length === 0) {
+      return <Typography sx={{p: 3}}>No specific conflicting statement was found.</Typography>;
+    }
+     // Your existing rendering logic for each item
+      const traitStmts = stmnts.filter(s => s.trait === sourceStatement.trait);
+      const traitIdx = traitStmts.findIndex(s => s.index === sourceStatement.index);
+      const raw = allResponses?.[sourceStatement.trait]?.[traitIdx];
+      const num: number = parseFloat(raw);
+      const value = getSubtext(sourceStatement, num);
     // This is the key change:
     // We derive the items to show directly from the results of the honesty check.
     // 1. Create a unique set of all indices involved in the conflict.
     // 2. Filter out the index of the statement the user is currently viewing (`openLie`).
     // 3. The result is the exact list of other statements that it conflicted with.
-    const conflictingItemIndices = [...new Set(dishonest)].filter(
-      index => index !== openLie
-    );
+   
 
-    if (!sourceStatement || conflictingItemIndices.length === 0) {
-      return <Typography sx={{p: 3}}>No specific conflicting statement was found.</Typography>;
-    }
+   
 
     const opposedItems: any = [];
     const overlappingItems: any = [];
@@ -652,6 +664,22 @@ function getAnswerForStatement(
     console.log(sourceStatement, opposedItems, overlappingItems, conflictingItemIndices, dishonest)
     return (
       <Box>
+           <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }}>
+          <Typography variant="h6">{sourceStatement.text}</Typography>
+          <Typography color="text.secondary">Trait: {sourceStatement.trait.toUpperCase()}</Typography>
+          <Box mt={1}>
+            <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+              <strong>Your Answer:</strong>
+              {raw === undefined
+                ? <i>No answer found.</i>
+                : Number.isNaN(num) ? raw
+                : ` ${Math.round(num * 100)}%`} {value || ''}
+            </Typography>
+            {!Number.isNaN(num) && (
+              <LinearProgress variant="determinate" value={num * 100} />
+            )}
+          </Box>
+        </Paper>
         {overlappingItems.length ? (<Typography sx={{ml: 3}} variant='body2'>Overlapping</Typography>): <></>}
         {
 overlappingItems.map((index: any) => {

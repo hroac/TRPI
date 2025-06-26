@@ -380,7 +380,7 @@ function getAnswerForStatement(
           <Paper>
             <Stack spacing={2}>
               {stage.map((stmt: any) => {
-                console.log(pageIdx)
+                //console.log(pageIdx)
                 // Use dishonest to check highlight/click
                 const traitStmts = stmnts.filter(s => s.trait === stmt.trait);
                 const traitIdx = traitStmts.findIndex(s => s.index === stmt.index);
@@ -653,7 +653,7 @@ function getAnswerForStatement(
 
     conflictingItemIndices.forEach(index => {
       // Check the relationship against the source statement
-      console.log(allStatements[index])
+      //console.log(allStatements[index])
       if (sourceStatement.opposing?.includes(index) || allStatements[index]?.opposing.includes(sourceStatement.index)) {
         opposedItems.push(index);
       } else if (sourceStatement.overlapping?.includes(index) || allStatements[index]?.overlapping.includes(sourceStatement.index)) {
@@ -661,7 +661,7 @@ function getAnswerForStatement(
       }
     });
 
-    console.log(sourceStatement, opposedItems, overlappingItems, conflictingItemIndices, dishonest)
+    //console.log(sourceStatement, opposedItems, overlappingItems, conflictingItemIndices, dishonest)
     return (
       <Box>
            <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }}>

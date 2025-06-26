@@ -1174,7 +1174,7 @@ export function checkHonesty(
   selection: { index: number }[],
   stageIndex: number,
   similarityThreshold = 0.5,
-  oppositionThreshold = 0.15
+  oppositionThreshold = 0.10
 ) {
   /* ────── early guards ────── */
 
@@ -3422,7 +3422,6 @@ export const allStatements = [
       1,
       2,
       3,
-      42,
       57,
       136,
       137,
@@ -7355,7 +7354,6 @@ export const allStatements = [
       145
     ],
     "opposing": [
-      14,
       15,
       17,
       19,

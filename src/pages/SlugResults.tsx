@@ -360,7 +360,7 @@ const SlugResults: React.FC = () => {
                           <Typography variant="body2">{bin.jobTitle}</Typography>
                           <Typography variant="body2">{bin.department}</Typography>
                           <Typography variant="body2">{`${bin.primary4FType} – ${bin.type}`}</Typography>
-                          <Typography variant="body2">{desc}</Typography>
+                          <Typography variant="body2">{desc}...</Typography>
                         </Box>
                       }
                       arrow

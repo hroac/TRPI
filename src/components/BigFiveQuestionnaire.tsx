@@ -278,6 +278,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
       try {
        const bin = await JsonBinApi.getBinById(lastBinId);
        setBin(bin);
+       setStatements(JSON.parse(JSON.stringify(bin.statements)))
        setResponses(JSON.parse(JSON.stringify(bin.responses)));
 
       } catch (err) {

@@ -100,11 +100,12 @@ const SlugResults: React.FC = () => {
         }
       );
       if (!response.ok) throw new Error('Request failed');
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      const resp = await response.json();
+      const pdf = await (await fetch(resp.pdfPath)).blob();;
+      const url = window.URL.createObjectURL(pdf);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'TRPI_Report.pdf';
+      a.download = `TRPI_Report_${ new Date().toISOString().replace(/[:T]/g, '-').split('.')[0]}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();

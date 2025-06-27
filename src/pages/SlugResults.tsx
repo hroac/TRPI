@@ -58,6 +58,7 @@ const SlugResults: React.FC = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const [bins, setBins] = useState<any[]>([]);
   const [filterOptions, setFilterOptions] = useState({
     types: [] as string[],
@@ -71,9 +72,51 @@ const SlugResults: React.FC = () => {
     department: 'All',
     jobTitle: 'All',
   });
+  const [generating, setGenerating] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const applyFilters = (items: any[]) =>
+    items.filter(
+      (b) =>
+        (filters.type === 'All' || b.type === filters.type) &&
+        (filters.mode === 'All' || b.primary4FType === filters.mode) &&
+        (filters.department === 'All' || (b.departement || b.department) === filters.department) &&
+        (filters.jobTitle === 'All' || b.jobTitle === filters.jobTitle)
+    );
+
+  const handleDownload = async () => {
+    if (generating) return;
+    setGenerating(true);
+    try {
+      const payload = applyFilters(bins);
+      const response = await fetch(
+        'https://reportgenerator-development.up.railway.app/generate',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bins: payload }),
+        }
+      );
+      if (!response.ok) throw new Error('Request failed');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'TRPI_Report.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Download failed', err);
+      setSnackbarMessage('Failed to generate report.');
+      setOpenSnackbar(true);
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   const buildSlides = async (items: any[]) => {
     const newSlides: Slide[] = [];
@@ -206,10 +249,12 @@ const SlugResults: React.FC = () => {
           // If a password is needed, show modal
           if (metaMap[company] && metaMap[company].password) setOpenPasswordModal(true);
         } else {
+          setSnackbarMessage('No results found for this company.');
           setOpenSnackbar(true);
         }
       } catch (err) {
         console.error('Error loading slug metadata:', err);
+        setSnackbarMessage('Error loading company results.');
         setOpenSnackbar(true);
       } finally {
         setLoading(false);
@@ -228,6 +273,7 @@ const SlugResults: React.FC = () => {
       try {
         const binRefs = await JsonBinApi.getBinsInCollectionById(collectionId);
         if (!binRefs.length) {
+          setSnackbarMessage('No results found for this company.');
           setOpenSnackbar(true);
         }
         const fetched: any[] = [];
@@ -248,6 +294,7 @@ const SlugResults: React.FC = () => {
         await buildSlides(fetched);
       } catch (err) {
         console.error('Error loading slug results:', err);
+        setSnackbarMessage('Failed to load results.');
         setOpenSnackbar(true);
       } finally {
         setLoading(false);
@@ -261,12 +308,7 @@ const SlugResults: React.FC = () => {
   // 3. Rebuild slides when filters or bins change
   useEffect(() => {
     if (!bins.length) return;
-    const filtered = bins.filter(b =>
-      (filters.type === 'All' || b.type === filters.type) &&
-      (filters.mode === 'All' || b.primary4FType === filters.mode) &&
-      (filters.department === 'All' || (b.departement || b.department) === filters.department) &&
-      (filters.jobTitle === 'All' || b.jobTitle === filters.jobTitle)
-    );
+    const filtered = applyFilters(bins);
     buildSlides(filtered);
   }, [bins, filters, isMobile]);
 
@@ -289,19 +331,23 @@ const SlugResults: React.FC = () => {
     <>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
         <Paper
-          elevation={3}
+          elevation={4}
           sx={{
             mt: '75px',
-            p: { xs: 1, sm: 2 },
+            p: { xs: 2, sm: 3 },
             width: '100%',
-            maxWidth: 770,
-            minHeight: 340,
-            borderRadius: 3,
-            boxShadow: 6,
+            maxWidth: 900,
+            minHeight: 360,
+            borderRadius: 4,
+            boxShadow: 8,
             position: 'relative',
             overflow: 'visible',
+            background: 'linear-gradient(135deg,#ffffff 0%,#f5f7fb 100%)',
           }}
         >
+          <Typography variant="h5" sx={{ mb: 2, textAlign: 'center', fontWeight: 'bold', color: 'primary.main' }}>
+            {company} Results
+          </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2, alignItems: 'center' }}>
             <FormControl size="small" sx={{ minWidth: 120 }}>
               <InputLabel>Type</InputLabel>
@@ -357,9 +403,11 @@ const SlugResults: React.FC = () => {
             </FormControl>
             <Box sx={{ flexGrow: 1 }} />
             <Tooltip title="Download Analysis">
-              <IconButton color="primary" onClick={() => window.open('/TRPI_Custom_Report.html', '_blank') }>
-                <DownloadIcon />
-              </IconButton>
+              <span>
+                <IconButton color="primary" onClick={handleDownload} disabled={generating}>
+                  {generating ? <CircularProgress size={24} /> : <DownloadIcon />}
+                </IconButton>
+              </span>
             </Tooltip>
           </Box>
           {loading ? (
@@ -383,7 +431,7 @@ const SlugResults: React.FC = () => {
         }
       >
         <Alert severity="warning" variant="filled" sx={{ width: '100%' }}>
-          No results found for this company.
+          {snackbarMessage}
         </Alert>
       </Snackbar>
       {showPasswordDialog && (

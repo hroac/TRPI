@@ -246,11 +246,12 @@ export default function App() {
               <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
 
+            <Box sx={{mb: 30}}/>
             {/* Footer pinned near bottom */}
             <Box position="relative" top={225}>
               <Footer />
             </Box>
-          </Box>
+            </Box>
         </HashRouter>
       </ChatProvider>
     </ThemeProvider>

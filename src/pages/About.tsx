@@ -199,6 +199,7 @@ const AboutPage: React.FC<{
   };
 
   const radarOptions = {
+    devicePixelRatio: 3,
     responsive: true,
     plugins: {
       legend: { position: 'top' as const, labels: { font: { size: 15 } } },

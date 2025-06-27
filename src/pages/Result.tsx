@@ -235,6 +235,7 @@ const radarData = {
 
 
   const radarOptions = {
+    devicePixelRatio: 3,
     responsive: true,
     plugins: {
       legend: { position: 'top' as "top", labels: { font: { size: 15 } } },

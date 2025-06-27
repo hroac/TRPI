@@ -404,6 +404,7 @@ const Home = () => {
 };
 
 const options = {
+  devicePixelRatio: 3,
   responsive: true,
   fill: true,
   plugins: {

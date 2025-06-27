@@ -129,6 +129,7 @@ const SlugResults: React.FC = () => {
               };
 
               const radarOptions = {
+                devicePixelRatio: 3,
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {

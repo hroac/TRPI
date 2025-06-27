@@ -20,6 +20,7 @@ import {
   Fab,
   Pagination,
   useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Radar,
@@ -54,7 +55,30 @@ interface Bin {
   description: string;
 }
 
-const ITEMS_PER_PAGE = 81;
+const ITEMS_PER_PAGE = {
+                    xs: 1 * 7,
+                    sm: 2 * 7,
+                    md: 5 * 7,
+                    lg: 5 * 7,
+                    xl: 7 * 7,
+                  };
+
+
+
+function useCurrentBreakpoint() {
+  const theme = useTheme();
+  const isXl = useMediaQuery(theme.breakpoints.only('xl'));
+  const isLg = useMediaQuery(theme.breakpoints.only('lg'));
+  const isMd = useMediaQuery(theme.breakpoints.only('md'));
+  const isSm = useMediaQuery(theme.breakpoints.only('sm'));
+  // xs is the fallback if none match
+  if (isXl) return 'xl';
+  if (isLg) return 'lg';
+  if (isMd) return 'md';
+  if (isSm) return 'sm';
+  return 'xs';
+}
+
 
 const SlugResults: React.FC = () => {
   const { company } = useParams<{ company: string }>();
@@ -201,8 +225,8 @@ const SlugResults: React.FC = () => {
   const showPasswordDialog = meta.password && openPasswordModal && password !== meta.password;
 
   const filteredBins = applyFilters(bins);
-  const pageCount = Math.ceil(filteredBins.length / ITEMS_PER_PAGE) || 1;
-  const paginated = filteredBins.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(filteredBins.length / ITEMS_PER_PAGE[useCurrentBreakpoint()]) || 1;
+  const paginated = filteredBins.slice((page - 1) * ITEMS_PER_PAGE[useCurrentBreakpoint()], page * ITEMS_PER_PAGE[useCurrentBreakpoint()]);
 
   const format = (str: string) => {
   return str
@@ -232,7 +256,7 @@ const SlugResults: React.FC = () => {
             {company && format(company)} Results
           </Typography>
 
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2, alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2, justifyContent: 'center' }}>
             <FormControl size="small" sx={{ minWidth: 120 }}>
               <InputLabel>Type</InputLabel>
               <Select
@@ -427,7 +451,7 @@ const SlugResults: React.FC = () => {
           <Box
   sx={{
     position: 'absolute',
-    bottom: 24,
+    top: 48,
     right: 24,
     p: 1, // padding
     display: 'flex',

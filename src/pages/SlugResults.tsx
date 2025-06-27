@@ -338,8 +338,8 @@ const SlugResults: React.FC = () => {
                   gap: 2,
                   gridTemplateColumns: {
                     xs: 'repeat(1, 1fr)',
-                    sm: 'repeat(2, 1fr)',
-                    md: 'repeat(3, 1fr)',
+                    sm: 'repeat(3, 1fr)',
+                    md: 'repeat(5, 1fr)',
                     lg: 'repeat(5, 1fr)',
                     xl: 'repeat(7, 1fr)',
                   },

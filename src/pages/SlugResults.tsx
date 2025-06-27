@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -83,6 +83,7 @@ function useCurrentBreakpoint() {
 const SlugResults: React.FC = () => {
   const { company } = useParams<{ company: string }>();
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [collectionId, setCollectionId] = useState<string | null>(null);
@@ -91,6 +92,8 @@ const SlugResults: React.FC = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [bins, setBins] = useState<Bin[]>([]);
+  const [tap, setTap] = useState<string | null>(null);   // first-tap tracker
+
   const [filterOptions, setFilterOptions] = useState({
     types: [] as string[],
     modes: [] as string[],
@@ -386,6 +389,8 @@ const SlugResults: React.FC = () => {
                   return (
                     <Tooltip
                       key={bin.record}
+                      open={tap === bin.record}           // show after first tap
+                      onClose={() => setTap(null)}        // close on escape / click away
                       componentsProps={{
     tooltip: {
       sx: {
@@ -394,7 +399,7 @@ const SlugResults: React.FC = () => {
       }
     }}}
                       title={
-                        <Box sx={{ p: 1 }}>
+                        <Box  sx={{ p: 1 }}>
                           <Typography fontWeight="bold">{bin.name}</Typography>
                           <Typography variant="body2">{bin.jobTitle}</Typography>
                           <Typography variant="body2">{bin.department}</Typography>
@@ -406,6 +411,11 @@ const SlugResults: React.FC = () => {
                       enterTouchDelay={0}
                     >
                       <Box
+                      onClick={() =>
+      tap === bin.record
+        ? navigate(`/profile/${bin.record}`) // second tap → profile
+        : setTap(bin.record)                 // first tap → show tooltip
+    }
                         sx={{
                           width: 140,
                           height: 140,

@@ -413,7 +413,7 @@ const SlugResults: React.FC = () => {
                       <Box
                       onClick={() =>
       tap === bin.record
-        ? navigate(`/profile/${bin.record}`) // second tap → profile
+        ? navigate(`/result/${bin.record}`) // second tap → profile
         : setTap(bin.record)                 // first tap → show tooltip
     }
                         sx={{

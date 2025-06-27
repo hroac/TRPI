@@ -204,6 +204,14 @@ const SlugResults: React.FC = () => {
   const pageCount = Math.ceil(filteredBins.length / ITEMS_PER_PAGE) || 1;
   const paginated = filteredBins.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
+  const format = (str: string) => {
+  return str
+    .replace(/-/g, ' ') // Replace hyphens with spaces
+    .split(' ')         // Split into words
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter
+    .join(' ');         // Rejoin into a single string
+}
+
   return (
     <>
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
@@ -221,7 +229,7 @@ const SlugResults: React.FC = () => {
           }}
         >
           <Typography variant="h5" sx={{ mb: 2, textAlign: 'center', fontWeight: 'bold', color: 'primary.main' }}>
-            {company} Results
+            {company && format(company)} Results
           </Typography>
 
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2, alignItems: 'center' }}>
@@ -307,9 +315,9 @@ const SlugResults: React.FC = () => {
                   gridTemplateColumns: {
                     xs: 'repeat(1, 1fr)',
                     sm: 'repeat(2, 1fr)',
-                    md: 'repeat(4, 1fr)',
-                    lg: 'repeat(6, 1fr)',
-                    xl: 'repeat(9, 1fr)',
+                    md: 'repeat(3, 1fr)',
+                    lg: 'repeat(5, 1fr)',
+                    xl: 'repeat(7, 1fr)',
                   },
                 }}
               >
@@ -354,6 +362,13 @@ const SlugResults: React.FC = () => {
                   return (
                     <Tooltip
                       key={bin.record}
+                      componentsProps={{
+    tooltip: {
+      sx: {
+        background: "white",
+         border: `3px solid ${profile.bgColor}`,
+      }
+    }}}
                       title={
                         <Box sx={{ p: 1 }}>
                           <Typography fontWeight="bold">{bin.name}</Typography>
@@ -368,8 +383,8 @@ const SlugResults: React.FC = () => {
                     >
                       <Box
                         sx={{
-                          width: 110,
-                          height: 120,
+                          width: 140,
+                          height: 140,
                           mx: 'auto',
                           p: 1,
                           display: 'flex',
@@ -393,6 +408,9 @@ const SlugResults: React.FC = () => {
                         <Typography variant="caption" fontWeight="bold" sx={{ mt: 0.5, textAlign: 'center' }}>
                           {bin.name}
                         </Typography>
+                        <Typography variant="caption" fontWeight="bold" sx={{ mt: 0.5, textAlign: 'center' }}>
+                          {bin.type}
+                        </Typography>
                       </Box>
                     </Tooltip>
                   );
@@ -406,16 +424,29 @@ const SlugResults: React.FC = () => {
               )}
             </>
           )}
+          <Box
+  sx={{
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    p: 1, // padding
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 3,
+  }}
+>
                 <Tooltip title={generating ? 'Report takes 3-5 mins' : 'Download'}>
         <Fab
           color="primary"
           onClick={handleDownload}
           disabled={generating}
-          sx={{ position: 'fixed', bottom: 24, right: 24 }}
+         // sx={{ position: 'fixed', bottom: 24, right: 24 }}
         >
           {generating ? <CircularProgress size={24} color="inherit" /> : <DownloadIcon />}
         </Fab>
       </Tooltip>
+      </Box>
         </Paper>
       </Box>
 

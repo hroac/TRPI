@@ -14,6 +14,11 @@ import {
   Snackbar,
   Alert,
   IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Tooltip,
 } from '@mui/material';
 import {
   Radar,
@@ -34,6 +39,7 @@ import { MBTIProfiles } from '../utils/mbtiMapping';
 import { typesData } from '../utils/typesData';
 import splitDescription from '../utils/splitDescription';
 import CloseIcon from '@mui/icons-material/Close';
+import DownloadIcon from '@mui/icons-material/Download';
 import ReactMarkdown from 'react-markdown';
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, ChartTooltip, Legend);
@@ -52,9 +58,135 @@ const SlugResults: React.FC = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [bins, setBins] = useState<any[]>([]);
+  const [filterOptions, setFilterOptions] = useState({
+    types: [] as string[],
+    modes: [] as string[],
+    departments: [] as string[],
+    jobTitles: [] as string[],
+  });
+  const [filters, setFilters] = useState({
+    type: 'All',
+    mode: 'All',
+    department: 'All',
+    jobTitle: 'All',
+  });
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const buildSlides = async (items: any[]) => {
+    const newSlides: Slide[] = [];
+    for (let i = 0; i < items.length; i += 3) {
+      const group = items.slice(i, i + 3);
+
+      const rows = group.map((bin: any) => {
+        const profile = typesData.find(t => t.type === bin.type) || { bgColor: '#aaa' };
+        const radarData = {
+          labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
+          datasets: [
+            {
+              label: 'Scores',
+              data: [
+                bin.bigFiveResponses.openness * 100,
+                bin.bigFiveResponses.conscientiousness * 100,
+                bin.bigFiveResponses.extraversion * 100,
+                bin.bigFiveResponses.agreeableness * 100,
+                bin.bigFiveResponses.neuroticism * 100,
+              ],
+              backgroundColor: profile.bgColor + '55',
+              borderColor: profile.bgColor,
+              pointBackgroundColor: profile.bgColor,
+              borderWidth: 2,
+              fill: true,
+            },
+          ],
+        };
+
+        const radarOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              min: 0,
+              max: 100,
+              ticks: { stepSize: 20, backdropColor: 'transparent' },
+              pointLabels: { font: { size: isMobile ? 10 : 13 } },
+            },
+          },
+          plugins: { legend: { display: false } },
+        };
+
+        const desc = splitDescription(bin.description || profile.description || '');
+
+        return (
+          <Box
+            key={bin.record}
+            component={Link}
+            to={`/result/${bin.record}`}
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: { xs: 'stretch', md: 'flex-start' },
+              gap: 2,
+              borderRadius: 2,
+              px: 1,
+              py: 1.5,
+              mb: 1,
+              background: theme.palette.background.paper,
+              boxShadow: 1,
+              textDecoration: 'none',
+              color: 'inherit',
+              transition: 'box-shadow 0.2s',
+              '&:hover': { boxShadow: 4, background: theme.palette.action.hover },
+              minHeight: 320,
+            }}
+          >
+            <Box
+              sx={{
+                width: { xs: '100%', md: 220 },
+                minWidth: { xs: '100%', md: 180 },
+                maxWidth: { xs: '100%', md: 260 },
+                height: { xs: 180, md: 220 },
+                flexShrink: 0,
+                mb: { xs: 2, md: 0 },
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Radar data={radarData} options={radarOptions} />
+            </Box>
+            <Box
+              sx={{
+                flex: 1,
+                minWidth: 0,
+                overflow: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Typography variant="h4" sx={{ opacity: 0.7, mb: 1 }}>
+                {bin.primary4FType} – {bin.type}
+              </Typography>
+              <Typography variant="subtitle2" sx={{ mb: 0.5, color: 'text.secondary' }}>
+                {bin.jobTitle} {(bin.departement || bin.department) ? `| ${bin.departement || bin.department}` : ''}
+              </Typography>
+              {desc.map((d, idx) => (
+                <Typography key={idx} variant="body2" paragraph sx={{ mb: 0 }}>
+                  <ReactMarkdown>{d}</ReactMarkdown>
+                </Typography>
+              ))}
+            </Box>
+          </Box>
+        );
+      });
+
+      newSlides.push({ content: <Box display="flex" flexDirection="column" gap={2}>{rows}</Box> });
+    }
+
+    setSlides(newSlides);
+  };
 
   // 1. Load meta/mapping on mount
   useEffect(() => {
@@ -94,124 +226,26 @@ const SlugResults: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const bins = await JsonBinApi.getBinsInCollectionById(collectionId);
-        if (!bins.length) {
+        const binRefs = await JsonBinApi.getBinsInCollectionById(collectionId);
+        if (!binRefs.length) {
           setOpenSnackbar(true);
         }
-        const newSlides: Slide[] = [];
-        for (let i = 0; i < bins.length; i += 3) {
-          const group = bins.slice(i, i + 3);
-
-          const rows = await Promise.all(
-            group.map(async (item) => {
-              const bin = await JsonBinApi.getBinById(item.record);
-              const typeProfile: any = MBTIProfiles.find(p => p.name === bin.type) || {};
-              const profile = typesData.find(t => t.type === bin.type) || { bgColor: '#aaa' };
-              const radarData = {
-                labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
-                datasets: [
-                  {
-                    label: 'Scores',
-                    data: [
-                      bin.bigFiveResponses.openness * 100,
-                      bin.bigFiveResponses.conscientiousness * 100,
-                      bin.bigFiveResponses.extraversion * 100,
-                      bin.bigFiveResponses.agreeableness * 100,
-                      bin.bigFiveResponses.neuroticism * 100,
-                    ],
-                    backgroundColor: profile.bgColor + '55',
-                    borderColor: profile.bgColor,
-                    pointBackgroundColor: profile.bgColor,
-                    borderWidth: 2,
-                    fill: true,
-                  },
-                ],
-              };
-
-              const radarOptions = {
-                devicePixelRatio: 3,
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  r: {
-                    min: 0,
-                    max: 100,
-                    ticks: { stepSize: 20, backdropColor: 'transparent' },
-                    pointLabels: { font: { size: isMobile ? 10 : 13 } },
-                  },
-                },
-                plugins: { legend: { display: false } },
-              };
-
-              const desc = splitDescription(bin.description || profile.description || '');
-
-              return (
-                    <Box
-                key={item.record}
-                component={Link}
-                to={`/result/${item.record}`}
-                sx={{
-                  display: 'flex',
-                  flexDirection: { xs: 'column', md: 'row' }, // Wraps on mobile, side by side desktop
-                  alignItems: { xs: 'stretch', md: 'flex-start' },
-                  gap: 2,
-                  borderRadius: 2,
-                  px: 1,
-                  py: 1.5,
-                  mb: 1,
-                  background: theme.palette.background.paper,
-                  boxShadow: 1,
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  transition: 'box-shadow 0.2s',
-                  '&:hover': { boxShadow: 4, background: theme.palette.action.hover },
-                  minHeight: 320,
-                }}
-              >
-                <Box
-                  sx={{
-                    width: { xs: '100%', md: 220 },
-                    minWidth: { xs: '100%', md: 180 },
-                    maxWidth: { xs: '100%', md: 260 },
-                    height: { xs: 180, md: 220 },
-                    flexShrink: 0,
-                    mb: { xs: 2, md: 0 },
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Radar data={radarData} options={radarOptions} />
-                </Box>
-                <Box
-                  sx={{
-                    flex: 1,
-                    minWidth: 0,
-                    overflow: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <Typography variant="h4" sx={{ opacity: 0.7, mb: 1 }}>
-                    {bin.primary4FType} &ndash; {bin.type}
-                  </Typography>
-                  {desc.map((d, idx) => (
-                    <Typography key={idx} variant="body2" paragraph sx={{ mb: 0 }}>
-                      <ReactMarkdown>{d}</ReactMarkdown>
-                    </Typography>
-                  ))}
-                </Box>
-              </Box>
-              );
-            })
-          );
-
-          newSlides.push({
-            content: <Box display="flex" flexDirection="column" gap={2}>{rows}</Box>,
-          });
+        const fetched: any[] = [];
+        for (const item of binRefs) {
+          const bin = await JsonBinApi.getBinById(item.record);
+          fetched.push({ ...bin, record: item.record });
         }
+        setBins(fetched);
 
-        setSlides(newSlides);
+        const types = Array.from(new Set(fetched.map(b => b.type).filter(Boolean)));
+        const modes = Array.from(new Set(fetched.map(b => b.primary4FType).filter(Boolean)));
+        const departments = Array.from(new Set(
+          fetched.map(b => (b.departement || b.department)).filter(Boolean)
+        )).sort();
+        const jobTitles = Array.from(new Set(fetched.map(b => b.jobTitle).filter(Boolean))).sort();
+        setFilterOptions({ types: types.sort(), modes: modes.sort(), departments, jobTitles });
+
+        await buildSlides(fetched);
       } catch (err) {
         console.error('Error loading slug results:', err);
         setOpenSnackbar(true);
@@ -223,6 +257,18 @@ const SlugResults: React.FC = () => {
     fetchData();
     // eslint-disable-next-line
   }, [collectionId, meta.password, password, isMobile]);
+
+  // 3. Rebuild slides when filters or bins change
+  useEffect(() => {
+    if (!bins.length) return;
+    const filtered = bins.filter(b =>
+      (filters.type === 'All' || b.type === filters.type) &&
+      (filters.mode === 'All' || b.primary4FType === filters.mode) &&
+      (filters.department === 'All' || (b.departement || b.department) === filters.department) &&
+      (filters.jobTitle === 'All' || b.jobTitle === filters.jobTitle)
+    );
+    buildSlides(filtered);
+  }, [bins, filters, isMobile]);
 
   // Handle password check on enter
   const handlePasswordKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -256,6 +302,66 @@ const SlugResults: React.FC = () => {
             overflow: 'visible',
           }}
         >
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2, alignItems: 'center' }}>
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <InputLabel>Type</InputLabel>
+              <Select
+                label="Type"
+                value={filters.type}
+                onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+              >
+                <MenuItem value="All">All</MenuItem>
+                {filterOptions.types.map((t) => (
+                  <MenuItem key={t} value={t}>{t}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl size="small" sx={{ minWidth: 130 }}>
+              <InputLabel>4F Mode</InputLabel>
+              <Select
+                label="4F Mode"
+                value={filters.mode}
+                onChange={(e) => setFilters({ ...filters, mode: e.target.value })}
+              >
+                <MenuItem value="All">All</MenuItem>
+                {filterOptions.modes.map((m) => (
+                  <MenuItem key={m} value={m}>{m}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl size="small" sx={{ minWidth: 150 }}>
+              <InputLabel>Department</InputLabel>
+              <Select
+                label="Department"
+                value={filters.department}
+                onChange={(e) => setFilters({ ...filters, department: e.target.value })}
+              >
+                <MenuItem value="All">All</MenuItem>
+                {filterOptions.departments.map((d) => (
+                  <MenuItem key={d} value={d}>{d}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl size="small" sx={{ minWidth: 140 }}>
+              <InputLabel>Job Title</InputLabel>
+              <Select
+                label="Job Title"
+                value={filters.jobTitle}
+                onChange={(e) => setFilters({ ...filters, jobTitle: e.target.value })}
+              >
+                <MenuItem value="All">All</MenuItem>
+                {filterOptions.jobTitles.map((j) => (
+                  <MenuItem key={j} value={j}>{j}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Box sx={{ flexGrow: 1 }} />
+            <Tooltip title="Download Analysis">
+              <IconButton color="primary" onClick={() => window.open('/TRPI_Custom_Report.html', '_blank') }>
+                <DownloadIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
           {loading ? (
             <Box sx={{ height: 260, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <CircularProgress color="primary" size={38} />

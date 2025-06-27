@@ -461,8 +461,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         setSelectedStatement(sub.text);
         localStorage.setItem('responses', JSON.stringify(updatedResponses));
         
-      const honest = checkHonesty(allStatements, updatedResponses, statements, i)
-      setHonesty(!honest.includes(index))
+      //const honest = checkHonesty(allStatements, updatedResponses, statements, i)
+      //setHonesty(!honest.includes(index))
         return updatedResponses;
       });
 
@@ -999,7 +999,7 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
       )}
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3 }}>
               <Notification
-                open={!honesty}
+                open={false}
                 message={"Please be honest when answering!"}
                 type="warning"
                 onClose={() => {}}

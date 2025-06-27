@@ -62,13 +62,13 @@ const SlugResults: React.FC = () => {
   const [filterOptions, setFilterOptions] = useState({
     types: [] as string[],
     modes: [] as string[],
-    departements: [] as string[],
+    departments: [] as string[],
     jobTitles: [] as string[],
   });
   const [filters, setFilters] = useState({
     type: 'All',
     mode: 'All',
-    departement: 'All',
+    department: 'All',
     jobTitle: 'All',
   });
 
@@ -170,7 +170,7 @@ const SlugResults: React.FC = () => {
                 {bin.primary4FType} – {bin.type}
               </Typography>
               <Typography variant="subtitle2" sx={{ mb: 0.5, color: 'text.secondary' }}>
-                {bin.jobTitle} {bin.departement ? `| ${bin.departement}` : ''}
+                {bin.jobTitle} {(bin.departement || bin.department) ? `| ${bin.departement || bin.department}` : ''}
               </Typography>
               {desc.map((d, idx) => (
                 <Typography key={idx} variant="body2" paragraph sx={{ mb: 0 }}>
@@ -239,9 +239,11 @@ const SlugResults: React.FC = () => {
 
         const types = Array.from(new Set(fetched.map(b => b.type).filter(Boolean)));
         const modes = Array.from(new Set(fetched.map(b => b.primary4FType).filter(Boolean)));
-        const departements = Array.from(new Set(fetched.map(b => b.departement).filter(Boolean)));
-        const jobTitles = Array.from(new Set(fetched.map(b => b.jobTitle).filter(Boolean)));
-        setFilterOptions({ types, modes, departements, jobTitles });
+        const departments = Array.from(new Set(
+          fetched.map(b => (b.departement || b.department)).filter(Boolean)
+        )).sort();
+        const jobTitles = Array.from(new Set(fetched.map(b => b.jobTitle).filter(Boolean))).sort();
+        setFilterOptions({ types: types.sort(), modes: modes.sort(), departments, jobTitles });
 
         await buildSlides(fetched);
       } catch (err) {
@@ -262,7 +264,7 @@ const SlugResults: React.FC = () => {
     const filtered = bins.filter(b =>
       (filters.type === 'All' || b.type === filters.type) &&
       (filters.mode === 'All' || b.primary4FType === filters.mode) &&
-      (filters.departement === 'All' || b.departement === filters.departement) &&
+      (filters.department === 'All' || (b.departement || b.department) === filters.department) &&
       (filters.jobTitle === 'All' || b.jobTitle === filters.jobTitle)
     );
     buildSlides(filtered);
@@ -328,14 +330,14 @@ const SlugResults: React.FC = () => {
               </Select>
             </FormControl>
             <FormControl size="small" sx={{ minWidth: 150 }}>
-              <InputLabel>Departement</InputLabel>
+              <InputLabel>Department</InputLabel>
               <Select
-                label="Departement"
-                value={filters.departement}
-                onChange={(e) => setFilters({ ...filters, departement: e.target.value })}
+                label="Department"
+                value={filters.department}
+                onChange={(e) => setFilters({ ...filters, department: e.target.value })}
               >
                 <MenuItem value="All">All</MenuItem>
-                {filterOptions.departements.map((d) => (
+                {filterOptions.departments.map((d) => (
                   <MenuItem key={d} value={d}>{d}</MenuItem>
                 ))}
               </Select>

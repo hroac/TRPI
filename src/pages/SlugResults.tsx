@@ -101,7 +101,7 @@ const SlugResults: React.FC = () => {
       );
       if (!response.ok) throw new Error('Request failed');
       const resp = await response.json();
-      const pdf = await (await fetch(resp.pdfPath)).blob();;
+      const pdf = await (await fetch(resp.reportUrl)).blob();;
       const url = window.URL.createObjectURL(pdf);
       const a = document.createElement('a');
       a.href = url;
@@ -216,11 +216,9 @@ const SlugResults: React.FC = () => {
               <Typography variant="subtitle2" sx={{ mb: 0.5, color: 'text.secondary' }}>
                 {bin.jobTitle} {(bin.departement || bin.department) ? `| ${bin.departement || bin.department}` : ''}
               </Typography>
-              {desc.map((d, idx) => (
-                <Typography key={idx} variant="body2" paragraph sx={{ mb: 0 }}>
-                  <ReactMarkdown>{d}</ReactMarkdown>
+              <Typography key={0} variant="body2" paragraph sx={{ mb: 0 }}>
+                  <ReactMarkdown>{desc[0]}</ReactMarkdown>
                 </Typography>
-              ))}
             </Box>
           </Box>
         );
@@ -403,7 +401,7 @@ const SlugResults: React.FC = () => {
               </Select>
             </FormControl>
             <Box sx={{ flexGrow: 1 }} />
-            <Tooltip title="Download Analysis">
+            <Tooltip title={generating ? 'Report takes 3-5 mins!': "Download Analysis"}>
               <span>
                 <IconButton color="primary" onClick={handleDownload} disabled={generating}>
                   {generating ? <CircularProgress size={24} /> : <DownloadIcon />}

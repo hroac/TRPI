@@ -406,10 +406,7 @@ const SlugResults: React.FC = () => {
               )}
             </>
           )}
-        </Paper>
-      </Box>
-
-      <Tooltip title={generating ? 'Report takes 3-5 mins' : 'Download'}>
+                <Tooltip title={generating ? 'Report takes 3-5 mins' : 'Download'}>
         <Fab
           color="primary"
           onClick={handleDownload}
@@ -419,6 +416,10 @@ const SlugResults: React.FC = () => {
           {generating ? <CircularProgress size={24} color="inherit" /> : <DownloadIcon />}
         </Fab>
       </Tooltip>
+        </Paper>
+      </Box>
+
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={5000}

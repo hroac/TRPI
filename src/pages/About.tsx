@@ -697,8 +697,8 @@ overlappingItems.map((index: any) => {
       const num: number = parseFloat(raw);
       const value = getSubtext(stmt, num);
 
-      const overlap = !(Math.abs(value - valueOrig) < 0.5);
-      console.log(overlap, valueOrig, value)
+      const overlap = !(Math.abs(num - numOrig) < 0.5);
+      //console.log(overlap, valueOrig, value)
 
       return overlap && (
         <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>
@@ -733,7 +733,7 @@ overlappingItems.map((index: any) => {
       const num: number = parseFloat(raw);
       const value = getSubtext(stmt, num);
 
-      const oppose = !(Math.abs(value - valueOrig) > 0.1)
+      const oppose = !(Math.abs(num - numOrig) > 0.1)
       console.log(oppose, valueOrig, value)
       return oppose && (
         <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>

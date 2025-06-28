@@ -637,9 +637,9 @@ function getAnswerForStatement(
      // Your existing rendering logic for each item
       const traitStmts = stmnts.filter(s => s.trait === sourceStatement.trait);
       const traitIdx = traitStmts.findIndex(s => s.index === sourceStatement.index);
-      const raw = allResponses?.[sourceStatement.trait]?.[traitIdx];
-      const num: number = parseFloat(raw);
-      const value = getSubtext(sourceStatement, num);
+      const rawOrig = allResponses?.[sourceStatement.trait]?.[traitIdx];
+      const numOrig: number = parseFloat(rawOrig);
+      const valueOrig = getSubtext(sourceStatement, numOrig);
     // This is the key change:
     // We derive the items to show directly from the results of the honesty check.
     // 1. Create a unique set of all indices involved in the conflict.
@@ -651,10 +651,13 @@ function getAnswerForStatement(
 
     const opposedItems: any = [];
     const overlappingItems: any = [];
-
+    const selected = conflictingItemIndices.map(n => {return{index: n}});
+  
     conflictingItemIndices.forEach(index => {
       // Check the relationship against the source statement
       //console.log(allStatements[index])
+      //const honest = checkHonesty(statements, allResponses,  selected)
+   
       if (sourceStatement.opposing?.includes(index) || allStatements[index]?.opposing.includes(sourceStatement.index)) {
         opposedItems.push(index);
       } else if (sourceStatement.overlapping?.includes(index) || allStatements[index]?.overlapping.includes(sourceStatement.index)) {
@@ -671,13 +674,13 @@ function getAnswerForStatement(
           <Box mt={1}>
             <Typography sx={{ whiteSpace: 'pre-wrap' }}>
               <strong>Your Answer:</strong>
-              {raw === undefined
+              {rawOrig === undefined
                 ? <i>No answer found.</i>
-                : Number.isNaN(num) ? raw
-                : ` ${Math.round(num * 100)}%`} {value || ''}
+                : Number.isNaN(numOrig) ? rawOrig
+                : ` ${Math.round(numOrig * 100)}%`} {valueOrig || ''}
             </Typography>
-            {!Number.isNaN(num) && (
-              <LinearProgress variant="determinate" value={num * 100} />
+            {!Number.isNaN(numOrig) && (
+              <LinearProgress variant="determinate" value={numOrig * 100} />
             )}
           </Box>
         </Paper>
@@ -694,7 +697,10 @@ overlappingItems.map((index: any) => {
       const num: number = parseFloat(raw);
       const value = getSubtext(stmt, num);
 
-      return (
+      const overlap = !(Math.abs(value - valueOrig) < 0.5);
+      console.log(overlap, valueOrig, value)
+
+      return overlap && (
         <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>
           <Typography variant="h6">{stmt.text}</Typography>
           <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
@@ -727,7 +733,9 @@ overlappingItems.map((index: any) => {
       const num: number = parseFloat(raw);
       const value = getSubtext(stmt, num);
 
-      return (
+      const oppose = !(Math.abs(value - valueOrig) > 0.1)
+      console.log(oppose, valueOrig, value)
+      return oppose && (
         <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>
           <Typography variant="h6">{stmt.text}</Typography>
           <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>

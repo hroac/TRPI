@@ -122,6 +122,11 @@ const SlugResults: React.FC = () => {
 
   const handleDownload = async () => {
     if (generating) return;
+    if (meta.maxAnalysis && meta.analysisCount >= meta.maxAnalysis) {
+      setSnackbarMessage('Monthly analysis limit reached.');
+      setOpenSnackbar(true);
+      return;
+    }
     setGenerating(true);
     try {
       const payload = applyFilters(bins);
@@ -141,6 +146,11 @@ const SlugResults: React.FC = () => {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
+
+      if (company) {
+        const newCount = await MetaBin.incrementAnalysisCount(company);
+        setMeta((m: any) => ({ ...m, analysisCount: newCount, analysisMonth: new Date().toISOString().slice(0,7) }));
+      }
     } catch (err) {
       console.error('Download failed', err);
       setSnackbarMessage('Failed to generate report.');
@@ -160,11 +170,11 @@ const SlugResults: React.FC = () => {
       setLoading(true);
       try {
         const mapping = await MetaBin.getAll();
-        const metaMap = await MetaBin.getMeta();
         if (mapping[company]) {
           setCollectionId(mapping[company]);
-          setMeta(metaMap[company] || {});
-          if (metaMap[company] && metaMap[company].password) setOpenPasswordModal(true);
+          const orgMeta = await MetaBin.getOrgMeta(company);
+          setMeta(orgMeta);
+          if (orgMeta && orgMeta.password) setOpenPasswordModal(true);
         } else {
           setSnackbarMessage('No results found for this company.');
           setOpenSnackbar(true);

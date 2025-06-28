@@ -248,9 +248,9 @@ const longStages = [
       try {
         const all = await MetaBin.getAll();
         if (all[slug]) {
-          const meta = await MetaBin.getMeta();
+          const orgMeta = await MetaBin.getOrgMeta(slug);
           setMapping(all[slug]);
-          setMeta(meta[slug])
+          setMeta(orgMeta)
           console.log('set slug')
         } else {
           console.warn(`Slug "${slug}" not found; proceeding without modal.`);

@@ -1238,7 +1238,7 @@ export function checkHonesty(
     // — overlaps should be similar —
     for (const other of me.overlapping) {
       if (!(other in allMap)) continue;            // partner not answered yet
-      if (shouldSkip(me.trait, items[other].trait)) continue;
+      //if (shouldSkip(me.trait, items[other].trait)) continue;
 
       const diff = Math.abs(myV - allMap[other]);
       if (isChanged(allMap[other]) && isChanged(myV) && diff > similarityThreshold) {
@@ -1250,7 +1250,7 @@ export function checkHonesty(
     // — oppositions should be dissimilar —
     for (const other of me.opposing) {
       if (!(other in allMap)) continue;
-      if (shouldSkip(me.trait, items[other].trait)) continue;
+     // if (shouldSkip(me.trait, items[other].trait)) continue;
 
       const diff = Math.abs(myV - allMap[other]);
       if (isChanged(allMap[other]) && isChanged(myV) && diff < oppositionThreshold) {

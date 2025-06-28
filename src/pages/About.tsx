@@ -630,6 +630,8 @@ function getAnswerForStatement(
      const conflictingItemIndices = [...new Set(dishonest)].filter(
       index => index !== openLie
     );
+    let opposing: boolean[] = []
+    let overlapping: boolean[] = [];
 
      if (!sourceStatement || conflictingItemIndices.length === 0) {
       return <Typography sx={{p: 3}}>No specific conflicting statement was found.</Typography>;
@@ -684,7 +686,7 @@ function getAnswerForStatement(
             )}
           </Box>
         </Paper>
-        {overlappingItems.length ? (<Typography sx={{ml: 3}} variant='body2'>Overlapping</Typography>): <></>}
+        {overlappingItems.length && overlapping.every(Boolean) ? (<Typography sx={{ml: 3}} variant='body2'>Overlapping</Typography>): <></>}
         {
 overlappingItems.map((index: any) => {
       const stmt = stmnts.find(item => item.index === index);
@@ -697,10 +699,11 @@ overlappingItems.map((index: any) => {
       const num: number = parseFloat(raw);
       const value = getSubtext(stmt, num);
 
-      const overlap = !(Math.abs(num - numOrig) < 0.5);
+      const conflict = !(Math.abs(num - numOrig) < 0.5);
+      overlapping.push(conflict);
       //console.log(overlap, valueOrig, value)
 
-      return overlap && (
+      return conflict && (
         <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>
           <Typography variant="h6">{stmt.text}</Typography>
           <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>
@@ -720,7 +723,7 @@ overlappingItems.map((index: any) => {
       );
     })
         }
-        {opposedItems.length ? (<Typography sx={{ml: 3}} variant='body2'>Opposing</Typography>): <></>}
+        {opposedItems.length && opposing.every(Boolean) ? (<Typography sx={{ml: 3}} variant='body2'>Opposing</Typography>): <></>}
         {
           opposedItems.map((index: any) => {
       const stmt = stmnts.find(item => item.index === index);
@@ -733,9 +736,9 @@ overlappingItems.map((index: any) => {
       const num: number = parseFloat(raw);
       const value = getSubtext(stmt, num);
 
-      const oppose = !(Math.abs(num - numOrig) > 0.1)
-      console.log(oppose, valueOrig, value)
-      return oppose && (
+      const conflict = !(Math.abs(num - numOrig) > 0.1)
+      opposing.push(conflict);
+      return conflict && (
         <Paper sx={{ p: 3, mb: 3, ml: 3, mr: 3 }} key={index}>
           <Typography variant="h6">{stmt.text}</Typography>
           <Typography color="text.secondary">Trait: {stmt.trait.toUpperCase()}</Typography>

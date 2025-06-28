@@ -26,6 +26,59 @@ export default class MetaBin {
     return resp.data.record as Record<string, any>;
   }
 
+  /** Update the entire meta bin. */
+  static async updateMeta(meta: Record<string, any>): Promise<void> {
+    await axios.put(
+      `https://api.jsonbin.io/v3/b/${META_BIN_ID}`,
+      meta,
+      {
+        headers: {
+          'X-Master-Key': JSONBIN_KEY,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+
+  /**
+   * Return metadata for a specific organization, resetting the monthly
+   * analysis count if needed.
+   */
+  static async getOrgMeta(slug: string): Promise<any> {
+    const meta = await this.getMeta();
+    const nowMonth = new Date().toISOString().slice(0, 7);
+    const org = meta[slug] || {};
+    if (org.analysisMonth !== nowMonth) {
+      org.analysisMonth = nowMonth;
+      org.analysisCount = 0;
+      meta[slug] = org;
+      await this.updateMeta(meta);
+    }
+    return org;
+  }
+
+  /**
+   * Increment and persist the analysis count for the given organization.
+   * The counter resets automatically when the month changes.
+   * Returns the updated count.
+   */
+  static async incrementAnalysisCount(slug: string): Promise<number> {
+    const meta = await this.getMeta();
+    const nowMonth = new Date().toISOString().slice(0, 7);
+    const org = meta[slug] || {};
+
+    if (org.analysisMonth !== nowMonth) {
+      org.analysisMonth = nowMonth;
+      org.analysisCount = 1;
+    } else {
+      org.analysisCount = (org.analysisCount || 0) + 1;
+    }
+
+    meta[slug] = org;
+    await this.updateMeta(meta);
+    return org.analysisCount;
+  }
+
  static async getAll(): Promise<Record<string, string>> {
     const resp = await axios.get(
       `https://api.jsonbin.io/v3/c`,

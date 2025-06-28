@@ -260,7 +260,7 @@ const dishonest: number[] = useMemo(() => {
   stages.forEach((page, pageIdx) => {
     // Make sure you pass the correct selection (stmnts or statements, etc)
     out.push(
-      ...checkHonesty(allStatements, allResponses, stages.flat(), pageIdx)
+      ...checkHonesty(allStatements, allResponses, stages.flat())
     );
   });
   // Remove duplicates

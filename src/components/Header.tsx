@@ -19,6 +19,8 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { Link, useNavigate } from 'react-router-dom';
 import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 
@@ -34,9 +36,11 @@ interface HeaderProps {
   brand: string;
   logo: string;
   menuItems: MenuItemWithModal[];
+  onToggleTheme?: () => void;
+  isDarkMode?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
+const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems, onToggleTheme, isDarkMode }) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -167,6 +171,10 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems }) => {
               );
             })}
           </Box>
+
+          <IconButton color="inherit" onClick={onToggleTheme}>
+            {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
 
           {/* Mobile hamburger */}
           <IconButton

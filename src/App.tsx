@@ -17,7 +17,7 @@ import { Helmet } from 'react-helmet';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './utils/ScrollToTop';
-import pastelTheme from './styles/theme';
+import pastelTheme, { darkTheme } from './styles/theme';
 import { guid } from './utils/guid';
 import JsonBinApi from './utils/jsonBin';
 
@@ -78,8 +78,17 @@ export default function App() {
   const [binId, setBinId] = useState<string>(
     localStorage.getItem('binId') ?? ''
   );
+  const [themeMode, setThemeMode] = useState<'light' | 'dark'>(
+    (localStorage.getItem('preferredTheme') as 'light' | 'dark') || 'light'
+  );
   const [referrer, setReferrer] = useState<string>('');
   const userId = guid();
+
+  const toggleTheme = () => {
+    const newMode = themeMode === 'light' ? 'dark' : 'light';
+    setThemeMode(newMode);
+    localStorage.setItem('preferredTheme', newMode);
+  };
 
   /* ── side-effects ── */
   useEffect(() => {
@@ -164,14 +173,20 @@ export default function App() {
 
   /* ── render ── */
   return (
-    <ThemeProvider theme={pastelTheme}>
+    <ThemeProvider theme={themeMode === 'dark' ? darkTheme : pastelTheme}>
       <AppHelmet />
       <ChatProvider> {/* keep one chat modal mounted globally */}
         <HashRouter>
           <ScrollToTop />
 
           {/* Header with dynamic menu */}
-          <Header brand="Trait Indicator" logo="./logo192.png" menuItems={menuItems} />
+          <Header
+            brand="Trait Indicator"
+            logo="./logo192.png"
+            menuItems={menuItems}
+            onToggleTheme={toggleTheme}
+            isDarkMode={themeMode === 'dark'}
+          />
 
           {/* Main content wrapper */}
           <Box

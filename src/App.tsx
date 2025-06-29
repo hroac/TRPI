@@ -6,7 +6,10 @@ import {
   Container,
   Paper,
   ThemeProvider,
-  Tooltip
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import {
   HashRouter,
@@ -146,6 +149,11 @@ export default function App() {
   };
 
   /* ── build header menu ── */
+   const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.only('md'));
+  const isSm = useMediaQuery(theme.breakpoints.only('sm'));
+  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+  const isMobile = isMd || isSm || isXs;
   const menuItems: any[] = [];
 
   if (binId) {
@@ -180,7 +188,6 @@ export default function App() {
     { label: 'Take the test', path: '/test' },
     { label: 'About', path: '/about' },
     {label: 'ChatTRPI', path: '/oracle'},
-    { label: 'Appointments', path: '/scheduler'},
     { label: 'Tests' },
     { label: 'Short Format', path: '/test', parent: 'Tests' },
     { label: 'Long Format', path: '/assessment', parent: 'Tests' },
@@ -194,6 +201,8 @@ export default function App() {
     { label: 'Reviews', path: '/reviews', parent: 'Other' },
     { label: 'Contact', path: '/contact', parent: 'Other' },
     { label: 'History', path: '/history', parent: 'Other' },
+    { label: 'Appointments', path: '/scheduler', parent: 'Other'},
+
     { label: 'Live Chat', modalComponent: <ChatModal open={false} onClose={() => {}} />, parent: 'Other' },
 
     {
@@ -212,27 +221,11 @@ export default function App() {
     },
     { label: 'Login', nagivate: '/', component: (
       !email && (
-    <Tooltip title="Sign in with Google">
-  <Box
-    sx={{
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'white',
-      borderRadius: '50%',
-      width: 40,     // Increased for Google button comfort
-      height: 40,
-      boxShadow: 1,  // Subtle shadow for elevation (optional)
-      p: 1,          // Optional inner padding
-      top: 2,
-    }}
-  >
+
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <GoogleAuthButton size="small" onSuccess={handleSuccess} onError={console.error} />
+      <GoogleAuthButton size={isMobile ? "large": "small"} onSuccess={handleSuccess} onError={console.error} />
     </GoogleOAuthProvider>
-  </Box>
-  </Tooltip>
+
 
 )
     ) },

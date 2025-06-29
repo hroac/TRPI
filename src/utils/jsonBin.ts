@@ -174,6 +174,40 @@ class JsonBinApi {
     return results;
   }
 
+   // Retrieve a single page of bins from a collection. Returns the items and
+    // the next page cursor (or null if no more items).
+    static async getBinsPage(collectionId: string, startId: string | null, limit: number) {
+        const results: any[] = [];
+        let last = startId;
+
+        while (results.length < limit) {
+            const url = last
+                ? `https://api.jsonbin.io/v3/c/${collectionId}/bins/${last}`
+                : `https://api.jsonbin.io/v3/c/${collectionId}/bins`;
+
+            const response = await axios.get(url, {
+                headers: {
+                    'X-Master-Key': API_KEY,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = Array.isArray(response.data) ? response.data : [];
+            if (!data.length) break;
+
+            for (const item of data) {
+                results.push(item);
+                last = item.record;
+                if (results.length >= limit) break;
+            }
+
+            if (data.length < 10 || results.length >= limit) break;
+        }
+
+        const next = results.length < limit ? null : last;
+        return { items: results, next };
+    }
+
   static async createXLBin(data: any, name: string): Promise<string> {
     const form = new FormData();
     form.append(

@@ -151,7 +151,7 @@ export default function App() {
     { label: 'Take the test', path: '/test' },
     { label: 'About', path: '/about' },
     {label: 'ChatTRPI', path: '/oracle'},
-    { label: 'History', path: '/history' },
+   // { label: 'History', path: '/history' },
     { label: 'Live Chat', modalComponent: <ChatModal open={false} onClose={() => {}} /> },
     { label: 'Appointment', path: '/scheduler'},
     { label: 'Tests' },

@@ -23,9 +23,13 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleAuthButton from "../components/GoogleAuth";
 import JsonBinApi from "../utils/jsonBin";
 import {
+  allStatements,
   pearsonCorrelation,
   weightedEuclideanDistance,
 } from "../utils/mbtiMapping";
+import { compute3PLReliabilities } from "../utils/irt";
+
+
 
 interface Result {
   binId: string;
@@ -33,6 +37,7 @@ interface Result {
   type: string;
   scores: { [trait: string]: number };
   responses: Record<string, number[]>;
+  statements: any,
   date?: string;
 }
 
@@ -42,94 +47,26 @@ const COLLECTION_ID = "6666e443acd3cb34a8556706";
 const CACHE_KEY = "trpi-admin-cache";
 const ADMIN_EMAILS = ["rsk.rook@gmail.com"]; // whitelist
 
-/* ---------- statistics helpers ---------- */
-function calculateCronbachAlpha(items: number[][]): number {
-  const k = items.length;
-  if (k < 2) return NaN;
-  const n = items[0].length;
-  if (items.some((arr) => arr.length < 2)) return NaN;
 
-  // item variances
-  const variances = items.map((arr) => {
-    const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
-    return (
-      arr.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / (arr.length - 1)
-    );
-  });
 
-  // respondent totals
-  const totals: number[] = [];
-  for (let i = 0; i < n; i++) {
-    let sum = 0;
-    for (let j = 0; j < k; j++) sum += items[j][i];
-    totals.push(sum);
-  }
-  const meanTotal = totals.reduce((a, b) => a + b, 0) / totals.length;
-  const varianceTotal =
-    totals.reduce((sum, val) => sum + Math.pow(val - meanTotal, 2), 0) /
-    (totals.length - 1);
 
-  const sumVariances = variances.reduce((a, b) => a + b, 0);
-  return (k / (k - 1)) * (1 - sumVariances / varianceTotal);
+
+type Trait = "openness" | "conscientiousness" | "extraversion" | "agreeableness" | "neuroticism";
+type Bin = {
+  responses: Record<Trait, number[]>;
+  statements: { trait: Trait; index: string | number }[];
+};
+
+
+
+
+
+export interface IrtReliabilityResult {
+  trait: Trait;
+  reliability: number;
 }
 
-function cronbachAlpha(data: Result[]) {
-  if (!Array.isArray(data) || data.length === 0) return {};
 
-  const TRAITS = [
-    "openness",
-    "conscientiousness",
-    "extraversion",
-    "agreeableness",
-    "neuroticism",
-  ];
-  const result: Record<string, number> = {};
-
-  // per trait
-  TRAITS.forEach((trait) => {
-    const itemArrays = data
-      .map((r) => r.responses?.[trait])
-      .filter(
-        (arr) =>
-          Array.isArray(arr) &&
-          arr.length > 1 &&
-          !arr.some((v) => typeof v === "string" || v == null)
-      );
-    if (itemArrays.length < 2) {
-      result[trait] = NaN;
-      return;
-    }
-    const numItems = itemArrays[0].length;
-    const items = Array.from({ length: numItems }, (_, i) =>
-      itemArrays.map((arr) => parseFloat(arr[i].toString()))
-    );
-    result[trait] = calculateCronbachAlpha(items);
-  });
-
-  // overall
-  const respondents = data.filter((r) =>
-    TRAITS.every(
-      (trait) =>
-        Array.isArray(r.responses?.[trait]) &&
-        r.responses[trait].length > 1 &&
-        !r.responses[trait].some((v) => typeof v === "string" || v == null)
-    )
-  );
-  if (respondents.length < 2) {
-    result.general = NaN;
-    return result;
-  }
-  const itemsCombined: number[][] = [];
-  TRAITS.forEach((trait) => {
-    const numItems = respondents[0].responses[trait].length;
-    for (let i = 0; i < numItems; i++) {
-      itemsCombined.push(respondents.map((r) => r.responses[trait][i]));
-    }
-  });
-  result.general = calculateCronbachAlpha(itemsCombined);
-
-  return result;
-}
 
 function similarity(a: number[], b: number[]): number {
   const corr = pearsonCorrelation(a, b);
@@ -138,7 +75,7 @@ function similarity(a: number[], b: number[]): number {
   return (corr + normDist) / 2;
 }
 
-// Helper to get a user's Big Five vector, or null if incomplete
+
 function getBigFiveVector(b: any) {
   const arr = [
     b.scores.openness,
@@ -150,39 +87,123 @@ function getBigFiveVector(b: any) {
   return arr.every(x => typeof x === "number" && !isNaN(x)) ? arr : null;
 }
 
-
 function calculateDichotomyAverages(bins: any) {
-  const dichotomies : any = {
-    E: [], I: [],
-    S: [], N: [],
-    T: [], F: [],
-    J: [], P: [],
-  };
+  const DICHS = ["E", "I", "S", "N", "T", "F", "J", "P"];
+  const dichVectors: any = Object.fromEntries(DICHS.map(d => [d, []]));
 
   bins.forEach((b: any) => {
-    const arr = getBigFiveVector(b);
-    if (!arr) return;
-    if (dichotomies[b.type[0]]) dichotomies[b.type[0]].push(arr);
-    if (dichotomies[b.type[1]]) dichotomies[b.type[1]].push(arr);
-    if (dichotomies[b.type[2]]) dichotomies[b.type[2]].push(arr);
-    if (dichotomies[b.type[3]]) dichotomies[b.type[3]].push(arr);
+    const arr: any = getBigFiveVector(b);
+    if (!arr || typeof b.type !== "string" || b.type.length !== 4) return;
+    b.type.split("").forEach((ltr: any) => {
+      if (dichVectors[ltr]) dichVectors[ltr].push(arr);
+    });
   });
 
-  // Helper to get mean of arrays
   function meanVec(arrays: any) {
-    if (!arrays.length) return Array(5).fill(NaN);
+    if (!arrays.length) return Array(5).fill(null);
     const sums = Array(5).fill(0);
-    arrays.forEach((arr: any) => arr.forEach((v: any, i: any) => sums[i] += v));
-    return sums.map(sum => sum / arrays.length);
+    arrays.forEach((arr : any) => arr.forEach((v: any, i: any) => sums[i] += v));
+    return sums.map(sum => +(sum / arrays.length).toFixed(3));
   }
 
-  // Build output object: { E: [...], I: [...], ... } for each dichotomy
   const result: any = {};
-  Object.keys(dichotomies).forEach(key => {
-    result[key] = meanVec(dichotomies[key]);
+  DICHS.forEach(d => {
+    result[d] = meanVec(dichVectors[d]);
   });
   return result;
 }
+
+// labels for Big Five
+const TRAIT_LABELS = [
+  "Openness",
+  "Conscientiousness",
+  "Extraversion",
+  "Agreeableness",
+  "Neuroticism",
+];
+
+function DichotomyTable({ dichotomyAverages }: any) {
+  return (
+    <>
+      <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>
+        Dichotomy Big Five Averages
+      </Typography>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Dichotomy</TableCell>
+            {TRAIT_LABELS.map(trait => (
+              <TableCell align="right" key={trait}>{trait}</TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {Object.entries(dichotomyAverages).map(([dich, arr]) => (
+            <TableRow key={dich}>
+              <TableCell sx={{ fontWeight: "bold" }}>{dich}</TableCell>
+              {(arr as any).map((val: any, i: any) => (
+                <TableCell align="right" key={i}>
+                  {val == null ? "--" : val.toFixed(3)}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
+  );
+}
+
+function IrtReliabilityTable({ reliabilities }: { reliabilities: {trait: string, reliability: number}[] }) {
+  const TRAIT_LABELS = {
+    openness: "Openness",
+    conscientiousness: "Conscientiousness",
+    extraversion: "Extraversion",
+    agreeableness: "Agreeableness",
+    neuroticism: "Neuroticism",
+  };
+  const valid = reliabilities.filter(x => typeof x.reliability === "number" && !isNaN(x.reliability));
+  const general =
+    valid.length > 0
+      ? valid.reduce((a, b) => a + b.reliability, 0) / valid.length
+      : NaN;
+  return (
+    <>
+      <Typography variant="h6" sx={{ mt: 3 }}>
+        IRT Marginal Reliability
+      </Typography>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Trait</TableCell>
+            <TableCell align="right">Reliability</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {reliabilities.map((r) => (
+            <TableRow key={r.trait}>
+              <TableCell sx={{ textTransform: "capitalize" }}>
+                {TRAIT_LABELS[r.trait as keyof typeof TRAIT_LABELS] || r.trait}
+              </TableCell>
+              <TableCell align="right">
+                {Number.isFinite(r.reliability)
+     ? r.reliability.toFixed(3)
+     : '--'}
+              </TableCell>
+            </TableRow>
+          ))}
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold" }}>General</TableCell>
+            <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              {isNaN(general) ? "--" : general.toFixed(3)}
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </>
+  );
+}
+
 
 
 /* ---------- component ---------- */
@@ -203,8 +224,17 @@ export default function AdminOverview() {
   const [groupSimilarity, setGroupSimilarity] = useState<Record<string, number>>({});
   const [overallSimilarity, setOverallSimilarity] = useState<number>(0);
   const [generalSimilarity, setGeneralSimilarity] = useState<number>(0);
-  const [traitAlpha, setTraitAlpha] = useState<Record<string, number>>({});
-  const [alphaGeneral, setAlphaGeneral] = useState<number>(0);
+  const [irtReliabilities, setIrtReliabilities] = useState<{trait: string; reliability: number}[]>([]);
+
+// Inside your computeMetrics or after loading data:
+useEffect(() => {
+  if (!results.length) return;
+  (async () => {
+    const reliabilities = await compute3PLReliabilities(results.filter((r: any) => r.statements.every((s:any) => typeof s.index === 'number')) as any, allStatements);
+    console.log(reliabilities)
+    setIrtReliabilities(reliabilities);
+  })();
+}, [results]);
 
   /* ---------- auth helpers ---------- */
   const fetchUserInfo = async (accessToken: string) => {
@@ -235,7 +265,7 @@ export default function AdminOverview() {
       try {
         cached = await JsonBinApi.getBinById(cacheId);
       } catch {
-        cached = null;
+        cached = await JsonBinApi.getXLBin(cacheId);
       }
     }
 
@@ -269,17 +299,26 @@ export default function AdminOverview() {
           type: b.type || "",
           scores: b.bigFiveResponses || b.scores || {},
           responses: b.responses || {},
+          statements: b.statements.map((s: any) => {return {index: s.index, trait: s.trait, aspect: s.aspect}}),
           date: b.date,
         })
       );
       if (lastBinId) lastId = lastBinId;
 
       if (bins.length) {
-        const newCacheId = await JsonBinApi.createBin(
+       let newCacheId = '';
+       try {
+         const newCacheId = await JsonBinApi.createBin(
           { bins: allBins, lastBinId: lastId },
           "68348edd8960c979a5a159b2",
           CACHE_KEY
         );
+       } catch(e) {
+         const newCacheId = await JsonBinApi.createXLBin(
+          { bins: allBins, lastBinId: lastId },
+          CACHE_KEY
+        );
+       }
         localStorage.setItem(CACHE_KEY, newCacheId);
       }
     }
@@ -292,9 +331,12 @@ export default function AdminOverview() {
       return true;
     });
 
-    setResults(filtered);
+  
+
+    setResults(filtered.filter((r: any) => r.statements.length === 26 && r.statements.every((s:any) => typeof s.index === 'number')));
     computeMetrics(filtered);
     setLoading(false);
+    console.log(results)
   };
 
   /* ---------- stats ---------- */
@@ -381,9 +423,7 @@ const dichotomyAverages = calculateDichotomyAverages(results);
       groupSims["xx" + key] = averageSimilarity(arrs);
     });
 
-    const alphaObj = cronbachAlpha(bins);
-    setTraitAlpha(alphaObj as Record<string, number>);
-    setAlphaGeneral(alphaObj.general);
+    
     setSimilarityPerType(perType);
     setGroupSimilarity(groupSims);
     setOverallSimilarity(averageSimilarity(allScores))
@@ -478,37 +518,9 @@ const dichotomyAverages = calculateDichotomyAverages(results);
 
       {/* Metrics */}
       <Card sx={{ p: 2, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          Cronbach’s Alpha
-        </Typography>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Scale</TableCell>
-              <TableCell align="right">α</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {["openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism"].map(
-              (t) => (
-                <TableRow key={t}>
-                  <TableCell sx={{ textTransform: "capitalize" }}>{t}</TableCell>
-                  <TableCell align="right">
-                    {isNaN(traitAlpha[t] ?? NaN)
-                      ? "--"
-                      : (traitAlpha[t] ?? 0).toFixed(3)}
-                  </TableCell>
-                </TableRow>
-              )
-            )}
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>General</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                {isNaN(alphaGeneral) ? "--" : alphaGeneral.toFixed(3)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+       <IrtReliabilityTable reliabilities={irtReliabilities} />
+
+        <DichotomyTable dichotomyAverages={similarityPerDichotomy}/>
 
         <Typography variant="h6" sx={{ mt: 3 }}>
           Similarity Metrics
@@ -538,12 +550,12 @@ const dichotomyAverages = calculateDichotomyAverages(results);
  <Table size="small" sx={{ mt: 1 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Type</TableCell>
+              <TableCell>Group</TableCell>
               <TableCell align="right">Avg&nbsp;Similarity</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(similarityPerType).map(([t, v]) => (
+            {Object.entries(groupSimilarity).map(([t, v]) => (
               <TableRow key={t}>
                 <TableCell>{t}</TableCell>
                 <TableCell align="right">{v.toFixed(3)}</TableCell>
@@ -551,22 +563,7 @@ const dichotomyAverages = calculateDichotomyAverages(results);
             ))}
           </TableBody>
         </Table>
-        <Table size="small" sx={{ mt: 4 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Dichotomy</TableCell>
-              <TableCell align="right">Avg&nbsp;Similarity</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Object.entries(similarityPerDichotomy).map(([g, v]) => (
-              <TableRow key={g}>
-                <TableCell>{g}</TableCell>
-                <TableCell align="right">{v.toFixed(3)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        
       </Card>
     </Container>
   );

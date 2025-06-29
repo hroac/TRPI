@@ -2,9 +2,8 @@ import axios from "axios";
 import { guid } from "./guid";
 
 const API_KEY = "$2a$10$q3P7Zn7sUJLykm7PHc2d4.zvCgVdfmt8tVVK38jEdNC947RlZgoOG";
-const COLLECTION_ID_TRPI = "6666e443acd3cb34a8556706";
+const COLLECTION_ID_TRPI =    "6666e443acd3cb34a8556706";
 const COLLECTION_ID_BIGFIVE = "67ab305cad19ca34f8ff62b6";
-
 const api = axios.create({
   baseURL: "https://api.jsonbin.io/v3",
   headers: {
@@ -159,46 +158,80 @@ class JsonBinApi {
     }
     return results;
   }
+// ─────────────────────── helper ───────────────────────
 
-  static async fetchCollectionBins(
-    collectionId: string,
-    options: {
-      startDate?: string;
-      endDate?: string;
-      startAfter?: string;
-      batchSize?: number;
-    } = {},
-  ) {
-    const { startDate, endDate, startAfter, batchSize = 10 } = options;
-    const startTs = startDate ? new Date(startDate).getTime() : -Infinity;
-    const endTs = endDate ? new Date(endDate).getTime() : Infinity;
+/**
+ * Lightweight, rate-friendly collection scanner.
+ */
+static async fetchCollectionBins(
+  collectionId: string,
+  {
+    startDate,
+    endDate,
+    startAfter,
+    pageSize  = 5,   // ← SMALLER pages of refs
+    batchSize = 5,   // ← SMALLER concurrent bin fetches
+  }: {
+    startDate?: string;
+    endDate?: string;
+    startAfter?: string;
+    pageSize?: number;
+    batchSize?: number;
+  } = {},
+): Promise<{ bins: any[]; lastBinId?: string }> {
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
-    const bins: any[] = [];
-    let lastId: string | undefined = startAfter;
-    let done = false;
+  const lower = startDate ? new Date(startDate).getTime() : -Infinity;
+  const upper = endDate   ? new Date(endDate).getTime()   :  Infinity;
+  const PAGE  = Math.min(Math.max(pageSize, 1), 100);
 
-    while (!done) {
-      const refs = await this.listCollectionBins(collectionId, lastId);
-      if (!refs.length) break;
-      lastId = refs[refs.length - 1].record;
-      const ids = refs.map((r) => r.record);
-      const chunk = await this.getBinsByIds(ids, batchSize);
+  const bins: any[] = [];
+  const seen = new Set<string>();
+  let cursor: string | null = startAfter ?? null;
+  let stop = false;
+
+  while (!stop) {
+    /* 1 ▸ get a SMALL page of references */
+    const url = cursor
+      ? `/c/${collectionId}/bins/${cursor}?limit=${PAGE}`
+      : `/c/${collectionId}/bins?limit=${PAGE}`;
+
+    const { data } = await api.get(url);
+    const refs: { record: string }[] = Array.isArray(data) ? data : [];
+    if (!refs.length) break;
+
+    cursor = refs[refs.length - 1].record;
+
+    /* 2 ▸ dedup + slice into SMALL concurrent chunks */
+    const ids: string[] = [];
+    for (const r of refs) if (!seen.has(r.record)) { seen.add(r.record); ids.push(r.record); }
+
+    for (let i = 0; i < ids.length; i += batchSize) {
+      const slice = ids.slice(i, i + batchSize);
+      const chunk = (await Promise.all(
+        slice.map(id => this.getBinById(id))   // <= batchSize (2) at a time
+      )).map((rec, idx) => ({ binId: slice[idx], ...rec }));
+
+      /* 3 ▸ date-filter & store */
       for (const b of chunk) {
-        if (b.date) {
-          const t = new Date(b.date).getTime();
-          if (t < startTs) {
-            done = true;
-            continue;
-          }
-          if (t > endTs) continue;
-        }
+        if (!b?.date) continue;
+        const t = new Date(b.date).getTime();
+        if (t < lower) { stop = true; break; }
+        if (t > upper) continue;
         bins.push(b);
       }
-      if (done || refs.length < 10) break;
+
+      await sleep(100);  // polite pause to avoid 429
+      if (stop) break;
     }
 
-    return { bins, lastBinId: lastId };
+    if (refs.length < PAGE) break;  // end of collection
   }
+
+  return { bins, lastBinId: cursor ?? undefined };
+}
+
+
 
   static async createXLBin(data: any, name: string): Promise<string> {
     const form = new FormData();
@@ -221,6 +254,34 @@ class JsonBinApi {
     const response = await api.get(url);
     return response.data.record;
   }
+  
+
+      static async createBin(initialData: any, collectionId: string, name?: string) {
+        const response = await axios.post('https://api.jsonbin.io/v3/b', initialData, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY,
+                'X-Collection-Id': collectionId,
+                ...(name ? { 'X-Bin-Name': name } : {}),
+            },
+        });
+        return response.data?.metadata?.id || response.data?.id;
+    }
+
+    // Update an existing bin
+    static async updateBin(binId: string, data: any, collectionId: string, name?: string) {
+        const url = `https://api.jsonbin.io/v3/b/${binId}`;
+        const response = await axios.put(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY,
+                'X-Collection-Id': collectionId,
+                ...(name ? { 'X-Bin-Name': name } : {}),
+            },
+        });
+        return response.data?.metadata?.id || response.data?.id;
+    }
+
 }
 
 export default JsonBinApi;

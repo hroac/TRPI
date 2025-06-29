@@ -15,7 +15,7 @@ import HistoryMeta from '../utils/historyMeta';
 import { typesData } from '../utils/typesData';
 import splitDescription from '../utils/splitDescription';
 import { guid } from '../utils/guid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, ChartTooltip, Legend);
 
@@ -34,8 +34,10 @@ interface Bin {
 const ITEMS_PER_PAGE = 15;
 
 const History: React.FC = () => {
-  const userId = guid();
+  let userId = guid();
   const navigate = useNavigate();
+  const params = useParams();
+  if(params.userId) userId = params.userId;
 
   const [historyId, setHistoryId] = useState<string | null>(null);
   const [ids, setIds] = useState<string[]>([]);

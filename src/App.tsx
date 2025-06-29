@@ -36,6 +36,7 @@ import TrpiTalk from './components/TRPITalk';
 import Sources from './pages/Sources';
 import Reviews from './pages/Reviews';
 import SlugResults from './pages/SlugResults';
+import History from './pages/History';
 import TypeComparator from './components/TypeComparator';
 import Scheduler from './pages/Scheduler';
 import TermsOfService from './pages/Terms';
@@ -141,6 +142,7 @@ export default function App() {
     { label: 'Take the test', path: '/test' },
     { label: 'About', path: '/about' },
     {label: 'ChatTRPI', path: '/oracle'},
+    { label: 'History', path: '/history' },
     { label: 'Live Chat', modalComponent: <ChatModal open={false} onClose={() => {}} /> },
     { label: 'Appointment', path: '/scheduler'},
     { label: 'Tests' },
@@ -248,6 +250,7 @@ export default function App() {
               <Route path="/compare" element={<TypeComparator />} />
               <Route path="/scheduler" element={<Scheduler />} />
               <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/history" element={<History />} />
               <Route path="/:company/:departement/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/:company/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>

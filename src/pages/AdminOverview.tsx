@@ -138,6 +138,53 @@ function similarity(a: number[], b: number[]): number {
   return (corr + normDist) / 2;
 }
 
+// Helper to get a user's Big Five vector, or null if incomplete
+function getBigFiveVector(b: any) {
+  const arr = [
+    b.scores.openness,
+    b.scores.conscientiousness,
+    b.scores.extraversion,
+    b.scores.agreeableness,
+    b.scores.neuroticism,
+  ];
+  return arr.every(x => typeof x === "number" && !isNaN(x)) ? arr : null;
+}
+
+
+function calculateDichotomyAverages(bins: any) {
+  const dichotomies : any = {
+    E: [], I: [],
+    S: [], N: [],
+    T: [], F: [],
+    J: [], P: [],
+  };
+
+  bins.forEach((b: any) => {
+    const arr = getBigFiveVector(b);
+    if (!arr) return;
+    if (dichotomies[b.type[0]]) dichotomies[b.type[0]].push(arr);
+    if (dichotomies[b.type[1]]) dichotomies[b.type[1]].push(arr);
+    if (dichotomies[b.type[2]]) dichotomies[b.type[2]].push(arr);
+    if (dichotomies[b.type[3]]) dichotomies[b.type[3]].push(arr);
+  });
+
+  // Helper to get mean of arrays
+  function meanVec(arrays: any) {
+    if (!arrays.length) return Array(5).fill(NaN);
+    const sums = Array(5).fill(0);
+    arrays.forEach((arr: any) => arr.forEach((v: any, i: any) => sums[i] += v));
+    return sums.map(sum => sum / arrays.length);
+  }
+
+  // Build output object: { E: [...], I: [...], ... } for each dichotomy
+  const result: any = {};
+  Object.keys(dichotomies).forEach(key => {
+    result[key] = meanVec(dichotomies[key]);
+  });
+  return result;
+}
+
+
 /* ---------- component ---------- */
 export default function AdminOverview() {
   /* auth */
@@ -152,6 +199,7 @@ export default function AdminOverview() {
 
   /* metrics */
   const [similarityPerType, setSimilarityPerType] = useState<Record<string, number>>({});
+  const [similarityPerDichotomy, setSimilarityPerDichotomy] = useState<Record<string, number>>({});
   const [groupSimilarity, setGroupSimilarity] = useState<Record<string, number>>({});
   const [overallSimilarity, setOverallSimilarity] = useState<number>(0);
   const [generalSimilarity, setGeneralSimilarity] = useState<number>(0);
@@ -305,6 +353,10 @@ export default function AdminOverview() {
 );
 const weightedAvg = grandAverage.sum / grandAverage.count
 
+const dichotomyAverages = calculateDichotomyAverages(results);
+// dichotomyAverages.E → average Big Five for all E types, etc.
+
+
     const perType: Record<string, number> = {};
     Object.keys(typeGroups).forEach((t) => {
       const arrs = typeGroups[t].map((b) => [
@@ -336,6 +388,7 @@ const weightedAvg = grandAverage.sum / grandAverage.count
     setGroupSimilarity(groupSims);
     setOverallSimilarity(averageSimilarity(allScores))
     setGeneralSimilarity(weightedAvg);
+    setSimilarityPerDichotomy(dichotomyAverages)
   };
 
   /* ---------- export ---------- */
@@ -482,16 +535,31 @@ const weightedAvg = grandAverage.sum / grandAverage.count
             ))}
           </TableBody>
         </Table>
-
-        <Table size="small" sx={{ mt: 4 }}>
+ <Table size="small" sx={{ mt: 1 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Group</TableCell>
+              <TableCell>Type</TableCell>
               <TableCell align="right">Avg&nbsp;Similarity</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(groupSimilarity).map(([g, v]) => (
+            {Object.entries(similarityPerType).map(([t, v]) => (
+              <TableRow key={t}>
+                <TableCell>{t}</TableCell>
+                <TableCell align="right">{v.toFixed(3)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <Table size="small" sx={{ mt: 4 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Dichotomy</TableCell>
+              <TableCell align="right">Avg&nbsp;Similarity</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.entries(similarityPerDichotomy).map(([g, v]) => (
               <TableRow key={g}>
                 <TableCell>{g}</TableCell>
                 <TableCell align="right">{v.toFixed(3)}</TableCell>

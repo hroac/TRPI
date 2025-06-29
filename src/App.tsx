@@ -210,11 +210,27 @@ export default function App() {
       ),
     },
     { label: 'Login', nagivate: '/', component: (
-      !email && <Box sx={{ position: 'relative !important', top: 10}}>
-      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <GoogleAuthButton size={'small'} onSuccess={handleSuccess} onError={console.error} />
-      </GoogleOAuthProvider>
-      </Box>
+      !email && (
+  <Box
+    sx={{
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'white',
+      borderRadius: '50%',
+      width: 40,     // Increased for Google button comfort
+      height: 40,
+      boxShadow: 1,  // Subtle shadow for elevation (optional)
+      p: 1,          // Optional inner padding
+      top: 2,
+    }}
+  >
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <GoogleAuthButton size="small" onSuccess={handleSuccess} onError={console.error} />
+    </GoogleOAuthProvider>
+  </Box>
+)
     ) },
 
   );

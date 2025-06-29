@@ -5,7 +5,8 @@ import {
   Card,
   Container,
   Paper,
-  ThemeProvider
+  ThemeProvider,
+  Tooltip
 } from '@mui/material';
 import {
   HashRouter,
@@ -211,6 +212,7 @@ export default function App() {
     },
     { label: 'Login', nagivate: '/', component: (
       !email && (
+    <Tooltip title="Sign in with Google">
   <Box
     sx={{
       position: 'relative',
@@ -230,6 +232,8 @@ export default function App() {
       <GoogleAuthButton size="small" onSuccess={handleSuccess} onError={console.error} />
     </GoogleOAuthProvider>
   </Box>
+  </Tooltip>
+
 )
     ) },
 

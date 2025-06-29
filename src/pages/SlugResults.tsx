@@ -198,7 +198,7 @@ const SlugResults: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const binRefs = await JsonBinApi.getBinsInCollectionById(collectionId);
+        const binRefs = await JsonBinApi.listCollectionBins(collectionId);
         const fetched: Bin[] = [];
         for (const item of binRefs) {
           const bin = await JsonBinApi.getBinById(item.record);

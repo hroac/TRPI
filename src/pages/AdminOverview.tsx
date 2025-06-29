@@ -119,12 +119,15 @@ export default function AdminOverview() {
 
     // fetch new bins only if requested range exceeds cached range
     if (!allBins.length || (endDate && new Date(endDate).getTime() > latest)) {
-      const refs = await JsonBinApi.getBinsInCollectionById(
+      const { bins, lastBinId } = await JsonBinApi.fetchCollectionBins(
         COLLECTION_ID,
-        lastId,
+        {
+          startAfter: lastId,
+          startDate: startDate || undefined,
+          endDate: endDate || undefined,
+          batchSize: 20,
+        },
       );
-      const ids = refs.map((r) => r.record);
-      const bins = await JsonBinApi.getBinsByIds(ids, 20);
       bins.forEach((b) => {
         allBins.push({
           binId: b.binId,
@@ -134,10 +137,10 @@ export default function AdminOverview() {
           responses: b.responses || [],
           date: b.date,
         });
-        lastId = b.binId;
       });
+      if (lastBinId) lastId = lastBinId;
 
-      if (ids.length) {
+      if (bins.length) {
         const newCacheId = await JsonBinApi.createXLBin(
           { bins: allBins, lastBinId: lastId },
           "trpi-admin-cache",

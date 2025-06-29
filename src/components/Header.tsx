@@ -172,10 +172,6 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems, onToggleTheme, 
             })}
           </Box>
 
-          <IconButton color="inherit" onClick={onToggleTheme}>
-            {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-
           {/* Mobile hamburger */}
           <IconButton
             color="inherit"

@@ -151,7 +151,6 @@ export default function App() {
     { label: 'Take the test', path: '/test' },
     { label: 'About', path: '/about' },
     {label: 'ChatTRPI', path: '/oracle'},
-    { label: 'Live Chat', modalComponent: <ChatModal open={false} onClose={() => {}} /> },
     { label: 'Appointments', path: '/scheduler'},
     { label: 'Tests' },
     { label: 'Short Format', path: '/test', parent: 'Tests' },
@@ -166,6 +165,8 @@ export default function App() {
     { label: 'Reviews', path: '/reviews', parent: 'Other' },
     { label: 'Contact', path: '/contact', parent: 'Other' },
     { label: 'History', path: '/history', parent: 'Other' },
+    { label: 'Live Chat', modalComponent: <ChatModal open={false} onClose={() => {}} />, parent: 'Other' },
+
     {
       label: 'Donate',
       modalComponent: (
@@ -260,6 +261,7 @@ export default function App() {
               <Route path="/scheduler" element={<Scheduler />} />
               <Route path="/terms" element={<TermsOfService />} />
               <Route path="/history" element={<History />} />
+              <Route path="/history/:userId" element={<History />} />
               <Route path="/:company/:departement/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/:company/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>
               <Route path="/assessment" element={<LongBigFiveQuestionnaire onComplete={handleComplete} />}/>

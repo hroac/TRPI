@@ -1,5 +1,5 @@
 export function guid() {
-    let guid = localStorage.getItem('guid') || '';
+    let guid = sessionStorage.getItem('guid') || localStorage.getItem('guid') || '';
     if (guid) {
       //console.log('Using existing GUID:', guid);
       return guid;
@@ -21,6 +21,7 @@ export function guid() {
     ).join('').toLowerCase();
   
     localStorage.setItem('guid', guid);
+    sessionStorage.setItem('guid', guid);
     return guid;
   }
-  
+ 

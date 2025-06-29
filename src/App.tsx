@@ -45,6 +45,7 @@ import PremiumModal from './components/PremiumModal';
 import ChatTRPI from './components/ChatTRPI';
 import Certification from './components/Certification';
 import AdminOverview from './pages/AdminOverview';
+import Login from './pages/Login';
 import { trackEvent, AnalyticsEvents } from './utils/analytics';
 
 /* ───── Live-chat modal (NEW) ───── */
@@ -151,6 +152,7 @@ export default function App() {
     { label: 'Take the test', path: '/test' },
     { label: 'About', path: '/about' },
     {label: 'ChatTRPI', path: '/oracle'},
+    { label: 'Login', path: '/login' },
     { label: 'Appointments', path: '/scheduler'},
     { label: 'Tests' },
     { label: 'Short Format', path: '/test', parent: 'Tests' },
@@ -256,6 +258,7 @@ export default function App() {
               <Route path="/talk" element={<TrpiTalk onComplete={handleComplete} />} />
               <Route path="/sources" element={<Sources />} />
               <Route path="/reviews" element={<Reviews />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/compare/:r1/:r2" element={<TypeComparator />} />
               <Route path="/compare" element={<TypeComparator />} />
               <Route path="/scheduler" element={<Scheduler />} />

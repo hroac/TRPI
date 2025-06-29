@@ -20,6 +20,7 @@ import ScrollToTop from './utils/ScrollToTop';
 import pastelTheme, { darkTheme } from './styles/theme';
 import { guid } from './utils/guid';
 import JsonBinApi from './utils/jsonBin';
+import HistoryMeta from './utils/historyMeta';
 
 /* ───── Pages & Components ───── */
 import Homepage from './components/HomePage';
@@ -120,8 +121,15 @@ export default function App() {
       responses: responses.responses ?? [],
       list: responses.list ?? {},
       statements: responses.statements ?? [],
-      collectionId: responses.collectionId 
+      collectionId: responses.collectionId
     });
+
+    // Also update the user's history bin
+    try {
+      await HistoryMeta.addResult(userId, newBinId);
+    } catch (e) {
+      console.warn('Failed to update history bin', e);
+    }
 
     setBinId(newBinId);
     localStorage.setItem('binId', newBinId);

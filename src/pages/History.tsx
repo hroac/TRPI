@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, ChartTooltip, Legend);
 
 interface Bin {
-  record: string;
+  binId: string;
   bigFiveResponses: any;
   profile: { bgColor: string };
   name: string;
@@ -37,63 +37,47 @@ const History: React.FC = () => {
   const userId = guid();
   const navigate = useNavigate();
 
-  const [collectionId, setCollectionId] = useState<string | null>(null);
+  const [historyId, setHistoryId] = useState<string | null>(null);
+  const [ids, setIds] = useState<string[]>([]);
   const [bins, setBins] = useState<Bin[]>([]);
   const [page, setPage] = useState(1);
-  const [cursorStack, setCursorStack] = useState<string[]>(['']);
-  const [nextCursor, setNextCursor] = useState<string | null>(null);
-  const [hasNext, setHasNext] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const totalPages = Math.max(1, Math.ceil(ids.length / ITEMS_PER_PAGE));
 
   useEffect(() => {
     (async () => {
-      const meta = await HistoryMeta.getMeta();
-      const coll = meta[userId];
-      if (coll) {
-        setCollectionId(coll);
-      }
+      const id = await HistoryMeta.getOrCreateHistoryBin(userId);
+      setHistoryId(id);
+      const list = await HistoryMeta.getHistoryIds(userId);
+      setIds(list);
       setLoading(false);
     })();
   }, [userId]);
 
-  const loadPage = async (cursor: string | null, push: boolean) => {
-    if (!collectionId) return;
+  const loadPage = async (pageNum: number) => {
+    if (!historyId) return;
     setLoading(true);
     try {
-      const { items, next } = await JsonBinApi.getBinsPage(collectionId, cursor, ITEMS_PER_PAGE);
-      const fetched: Bin[] = [];
-      for (const ref of items) {
-        const data = await JsonBinApi.getBinById(ref.record);
-        fetched.push({ ...(data as any), record: ref.record } as Bin);
-      }
-      setBins(fetched);
-      setNextCursor(next);
-      setHasNext(!!next);
-      if (push) {
-        setCursorStack(prev => [...prev, cursor || '']);
-        setPage(prev => prev + 1);
-      }
+      const start = (pageNum - 1) * ITEMS_PER_PAGE;
+      const slice = ids.slice(start, start + ITEMS_PER_PAGE);
+      const fetched = await JsonBinApi.getBinsByIds(slice);
+      setBins(fetched as Bin[]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (collectionId) loadPage(null, true);
-  }, [collectionId]);
+    if (ids.length) loadPage(page);
+  }, [ids, page, historyId]);
 
   const handlePrev = () => {
-    if (cursorStack.length <= 1) return;
-    const newStack = cursorStack.slice(0, -1);
-    const prevCursor = newStack[newStack.length - 1];
-    setCursorStack(newStack);
-    setPage(newStack.length);
-    loadPage(prevCursor || null, false);
+    setPage((p) => Math.max(1, p - 1));
   };
 
   const handleNext = () => {
-    if (!hasNext || !nextCursor) return;
-    loadPage(nextCursor, true);
+    setPage((p) => (p < totalPages ? p + 1 : p));
   };
 
   return (
@@ -164,7 +148,7 @@ const History: React.FC = () => {
 
                 return (
                   <Tooltip
-                    key={bin.record}
+                    key={bin.binId}
                     title={
                       <Box sx={{ p: 1 }}>
                         <Typography fontWeight="bold">{bin.name}</Typography>
@@ -177,7 +161,7 @@ const History: React.FC = () => {
                     arrow
                   >
                     <Box
-                      onClick={() => navigate(`/result/${bin.record}`)}
+                      onClick={() => navigate(`/result/${bin.binId}`)}
                       sx={{
                         width: 140,
                         height: 140,
@@ -213,11 +197,11 @@ const History: React.FC = () => {
               })}
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center', my: 2, gap: 2 }}>
-              <IconButton onClick={handlePrev} disabled={cursorStack.length <= 1}>
+              <IconButton onClick={handlePrev} disabled={page === 1}>
                 Prev
               </IconButton>
               <Typography sx={{ display: 'flex', alignItems: 'center' }}>{page}</Typography>
-              <IconButton onClick={handleNext} disabled={!hasNext}>
+              <IconButton onClick={handleNext} disabled={page >= totalPages}>
                 Next
               </IconButton>
             </Box>

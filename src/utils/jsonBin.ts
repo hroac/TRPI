@@ -162,19 +162,111 @@ class JsonBinApi {
     }
   }
 
-  static async getBinsByIds(ids: string[], batchSize = 10) {
-    const results: any[] = [];
-    for (let i = 0; i < ids.length; i += batchSize) {
-      const chunk = ids.slice(i, i + batchSize);
-      const data = await Promise.all(chunk.map((id) => this.getBinById(id)));
-      data.forEach((record, idx) => {
-        results.push({ binId: chunk[idx], ...record });
-      });
+    // Create a new collection and return its ID
+    static async createCollection(name: string) {
+        const url = 'https://api.jsonbin.io/v3/c';
+        const response = await axios.post(url, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY,
+                'X-Collection-Name': name,
+            },
+        });
+        return response.data?.metadata?.id || response.data?.id;
+    }
+
+    // Create a generic bin within a specific collection
+    static async createBin(initialData: any, collectionId: string, name?: string) {
+        const response = await axios.post('https://api.jsonbin.io/v3/b', initialData, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY,
+                'X-Collection-Id': collectionId,
+                ...(name ? { 'X-Bin-Name': name } : {}),
+            },
+        });
+        return response.data?.metadata?.id || response.data?.id;
+    }
+
+    // Update an existing bin
+    static async updateBin(binId: string, data: any, collectionId: string, name?: string) {
+        const url = `https://api.jsonbin.io/v3/b/${binId}`;
+        const response = await axios.put(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY,
+                'X-Collection-Id': collectionId,
+                ...(name ? { 'X-Bin-Name': name } : {}),
+            },
+        });
+        return response.data?.metadata?.id || response.data?.id;
+    }
+
+    // Method to retrieve all bins in a specific collection
+    static async getBinsInCollection() {
+        const url = `https://api.jsonbin.io/v3/c/${COLLECTION_ID_TRPI}/bins`;
+
+        try {
+            const response = await axios.get(url, {
+                headers: {
+                    'X-Master-Key': API_KEY,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            //console.log('Retrieved bins from collection:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error retrieving bins from collection:', error);
+            throw error;
+        }
     }
     return results;
   }
 
    // Retrieve a single page of bins from a collection. Returns the items and
+    // the next page cursor (or null if no more items).
+    static async getBinsPage(collectionId: string, startId: string | null, limit: number) {
+        const results: any[] = [];
+        let last = startId;
+
+        while (results.length < limit) {
+            const url = last
+                ? `https://api.jsonbin.io/v3/c/${collectionId}/bins/${last}`
+                : `https://api.jsonbin.io/v3/c/${collectionId}/bins`;
+
+            try {
+                const response = await axios.get(url, {
+                    headers: {
+                        'X-Master-Key': API_KEY,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const data = Array.isArray(response.data) ? response.data : [];
+                if (!data.length) break;
+
+                let newLast: string | null = null;
+                for (const item of data) {
+                    if (!seen.has(item.record)) {
+                        seen.add(item.record);
+                        results.push(item);
+                        newLast = item.record;
+                    }
+                }
+
+                if (!newLast || data.length < 10) break;
+                lastBinId = newLast;
+            } catch (error) {
+                console.error('Error retrieving bins from collection:', error);
+                break;
+            }
+        }
+
+        return results;
+    }
+
+    // Retrieve a single page of bins from a collection. Returns the items and
     // the next page cursor (or null if no more items).
     static async getBinsPage(collectionId: string, startId: string | null, limit: number) {
         const results: any[] = [];
@@ -208,30 +300,46 @@ class JsonBinApi {
         return { items: results, next };
     }
 
-  static async createXLBin(data: any, name: string): Promise<string> {
-    const form = new FormData();
-    form.append(
-      "xlbin",
-      new Blob([JSON.stringify(data)], { type: "application/json" }),
-      "data.json",
-    );
-    const response = await axios.post("https://api.jsonbin.io/v3/xl/b", form, {
-      headers: {
-        "X-Master-Key": API_KEY,
-        "X-Bin-Name": name,
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return response.data.metadata.id;
-  }
+    // Method to retrieve a specific bin by bin ID
+    static async getBinById(binId: string) {
+        const url = `https://api.jsonbin.io/v3/b/${binId}`;
 
-  static async getXLBin(binId: string): Promise<any> {
-    const url = `https://api.jsonbin.io/v3/xl/b/${binId}`;
-    const response = await axios.get(url, {
-      headers: { "X-Master-Key": API_KEY },
-    });
-    return response.data.record;
-  }
+        try {
+            const response = await axios.get(url, {
+                headers: {
+                    'X-Master-Key': API_KEY,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = Array.isArray(response.data) ? response.data : [];
+            if (!data.length) break;
+
+            for (const item of data) {
+                results.push(item);
+                last = item.record;
+                if (results.length >= limit) break;
+            }
+
+            if (data.length < 10 || results.length >= limit) break;
+        }
+
+        const next = results.length < limit ? null : last;
+        return { items: results, next };
+    }
+
+    // Fetch multiple bins concurrently in small batches
+    static async getBinsByIds(ids: string[], batchSize = 10) {
+        const results: any[] = [];
+        for (let i = 0; i < ids.length; i += batchSize) {
+            const chunk = ids.slice(i, i + batchSize);
+            const data = await Promise.all(chunk.map(id => this.getBinById(id)));
+            data.forEach((record, idx) => {
+                results.push({ binId: chunk[idx], ...record });
+            });
+        }
+        return results;
+    }
 }
 
 export default JsonBinApi;

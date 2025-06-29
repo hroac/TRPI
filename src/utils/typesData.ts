@@ -6,7 +6,7 @@ export const typesData: any[] = [
         "Ni Fe"
       ],
       "mode": "Fight",
-      "bgColor": "#ff0000",
+      "bgColor": "#f14d43",
       "copper": "ISFJ",
       "silver": "INTJ",
       "gold": "INFJ",
@@ -36,7 +36,7 @@ export const typesData: any[] = [
         "Si Te"
       ],
       "mode": "Fight",
-      "bgColor": "#ff0000",
+      "bgColor": "#f14d43",
       "copper": "INFJ",
       "silver": "ISTJ",
       "gold": "ISFJ",
@@ -67,7 +67,7 @@ export const typesData: any[] = [
         "Te Si"
       ],
       "mode": "Fight",
-      "bgColor": "#ff0000",
+      "bgColor": "#f14d43",
       "copper": "ESFJ",
       "silver": "ENTJ",
       "gold": "ESTJ",
@@ -97,7 +97,7 @@ export const typesData: any[] = [
         "Te Ni"
       ],
       "mode": "Fight",
-      "bgColor": "#ff0000",
+      "bgColor": "#f14d43",
       "copper": "ENFJ",
       "silver": "ESTJ",
       "gold": "ENTJ",
@@ -128,7 +128,7 @@ export const typesData: any[] = [
         "Se Ti"
       ],
       "mode": "Fawn",
-      "bgColor": "#a855f7",
+      "bgColor": "#775d99",
       "copper": "ENTP",
       "silver": "ESFP",
       "gold": "ESTP",
@@ -159,7 +159,7 @@ export const typesData: any[] = [
         "Ne Ti"
       ],
       "mode": "Fawn",
-      "bgColor": "#a855f7",
+      "bgColor": "#775d99",
       "copper": "ESTP",
       "silver": "ENFP",
       "gold": "ENTP",
@@ -189,7 +189,7 @@ export const typesData: any[] = [
         "Fi Ne"
       ],
       "mode": "Fawn",
-      "bgColor": "#a855f7",
+      "bgColor": "#775d99",
       "copper": "INTP",
       "silver": "ISFP",
       "gold": "INFP",
@@ -219,7 +219,7 @@ export const typesData: any[] = [
         "Fi Se"
       ],
       "mode": "Fawn",
-      "bgColor": "#a855f7",
+      "bgColor": "#775d99",
       "copper": "ISTP",
       "silver": "INFP",
       "gold": "ISFP",
@@ -249,7 +249,7 @@ export const typesData: any[] = [
         "Ne Fi"
       ],
       "mode": "Freeze",
-      "bgColor": "#3b82f6",
+      "bgColor": "#3a91ba",
       "copper": "ESFP",
       "silver": "ENTP",
       "gold": "ENFP",
@@ -279,7 +279,7 @@ export const typesData: any[] = [
         "Se Ti"
       ],
       "mode": "Freeze",
-      "bgColor": "#3b82f6",
+      "bgColor": "#3a91ba",
       "copper": "ENFP",
       "silver": "ESTP",
       "gold": "ESFP",
@@ -310,7 +310,7 @@ export const typesData: any[] = [
         "Ti Se"
       ],
       "mode": "Freeze",
-      "bgColor": "#3b82f6",
+      "bgColor": "#3a91ba",
       "copper": "ISFP",
       "silver": "INTP",
       "gold": "ISTP",
@@ -341,7 +341,7 @@ export const typesData: any[] = [
         "Ti Ne"
       ],
       "mode": "Freeze",
-      "bgColor": "#3b82f6",
+      "bgColor": "#3a91ba",
       "copper": "INFP",
       "silver": "ISTP",
       "gold": "INTP",
@@ -372,7 +372,7 @@ export const typesData: any[] = [
         "Si Te"
       ],
       "mode": "Flight",
-      "bgColor": "#22c55e",
+      "bgColor": "#5ca761",
       "copper": "INTJ",
       "silver": "ISFJ",
       "gold": "ISTJ",
@@ -402,7 +402,7 @@ export const typesData: any[] = [
         "Ni Te"
       ],
       "mode": "Flight",
-      "bgColor": "#22c55e",
+      "bgColor": "#5ca761",
       "copper": "ISTJ",
       "silver": "INFJ",
       "gold": "INTJ",
@@ -432,7 +432,7 @@ export const typesData: any[] = [
         "Fe Ni"
       ],
       "mode": "Flight",
-      "bgColor": "#22c55e",
+      "bgColor": "#5ca761",
       "copper": "ENTJ",
       "silver": "ESFJ",
       "gold": "ENFJ",
@@ -462,7 +462,7 @@ export const typesData: any[] = [
         "Fe Si"
       ],
       "mode": "Flight",
-      "bgColor": "#22c55e",
+      "bgColor": "#5ca761",
       "copper": "ESTJ",
       "silver": "ENFJ",
       "gold": "ESFJ",

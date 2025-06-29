@@ -92,10 +92,10 @@ class JsonBinApi {
     }
 
     // Method to retrieve all bins in a provided collection
-    static async getBinsInCollectionById(collectionId: string) {
+    static async getBinsInCollectionById(collectionId: string, startAfter?: string) {
         const results: any[] = [];
         const seen = new Set<string>();
-        let lastBinId: string | null = null;
+        let lastBinId: string | null = startAfter ?? null;
 
         while (true) {
             const url: any = lastBinId
@@ -186,6 +186,27 @@ class JsonBinApi {
             console.error('Error retrieving bin by ID:', error);
             throw error;
         }
+    }
+
+    static async createXLBin(data: any, name: string): Promise<string> {
+        const form = new FormData();
+        form.append('xlbin', new Blob([JSON.stringify(data)], { type: 'application/json' }), 'data.json');
+        const response = await axios.post('https://api.jsonbin.io/v3/xl/b', form, {
+            headers: {
+                'X-Master-Key': API_KEY,
+                'X-Bin-Name': name,
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data.metadata.id;
+    }
+
+    static async getXLBin(binId: string): Promise<any> {
+        const url = `https://api.jsonbin.io/v3/xl/b/${binId}`;
+        const response = await axios.get(url, {
+            headers: { 'X-Master-Key': API_KEY }
+        });
+        return response.data.record;
     }
 }
 

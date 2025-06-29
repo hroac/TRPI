@@ -10,9 +10,11 @@ const GOOGLE_SVG = 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%
 export default function GoogleAuthButton({
   onSuccess,
   onError,
+  size = 'large',
 }: {
   onSuccess: (tokenResponse: { access_token: string }) => void;
   onError?: (error: unknown) => void;
+  size?: 'small'|'large';
 }) {
   const login = useGoogleLogin({
     flow: 'implicit',
@@ -21,6 +23,13 @@ export default function GoogleAuthButton({
     onError,
   });
 
+  if(size === 'small') {
+    return (
+       <SvgIcon onClick={() => login()} component="svg" viewBox="0 0 24 24">
+    <image href="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="24" height="24"/>
+  </SvgIcon>
+    )
+  }
   return (
     <Button
       onClick={() => login()}
@@ -46,7 +55,7 @@ export default function GoogleAuthButton({
         },
       }}
     >
-      Sign in with Google
+      {'Sign in with Google'}
     </Button>
   );
 }

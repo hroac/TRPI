@@ -30,6 +30,8 @@ interface MenuItemWithModal {
   parent?: string;
   /** Now a ReactElement that we’ll clone */
   modalComponent?: React.ReactElement;
+  component?: React.ReactElement;
+  navigate: string;
 }
 
 interface HeaderProps {
@@ -129,6 +131,12 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems, onToggleTheme, 
           <Box sx={{ display: { xs: 'none', md: 'none', lg: 'flex' }, gap: 2 }}>
             {parentItems.map(item => {
               const children = childItems.filter(c => c.parent === item.label);
+              if(item.component) {
+                return item.component;
+              }
+              if(item.component === false) {
+                return;
+              }
               if (children.length > 0) {
                 return (
                   <Box key={item.label}>
@@ -190,6 +198,16 @@ const Header: React.FC<HeaderProps> = ({ brand, logo, menuItems, onToggleTheme, 
           <List>
             {parentItems.map(item => {
               const children = childItems.filter(c => c.parent === item.label);
+                   if(item.component) {
+                return (
+                  <Box display={'flex'} justifyContent={'center'}>
+                    {item.component}
+                  </Box>
+                );
+              }
+              if(item.component === false) {
+                return;
+              }
               if (children.length > 0) {
                 return (
                   <React.Fragment key={item.label}>

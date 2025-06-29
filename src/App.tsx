@@ -10,7 +10,8 @@ import {
 import {
   HashRouter,
   Routes,
-  Route
+  Route,
+  useNavigate
 } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -45,7 +46,6 @@ import PremiumModal from './components/PremiumModal';
 import ChatTRPI from './components/ChatTRPI';
 import Certification from './components/Certification';
 import AdminOverview from './pages/AdminOverview';
-import Login from './pages/Login';
 import { trackEvent, AnalyticsEvents } from './utils/analytics';
 
 /* ───── Live-chat modal (NEW) ───── */
@@ -53,6 +53,8 @@ import ChatContent from './components/LiveChat';   // logic-heavy chat body
 import ChatModal, { ChatProvider } from './components/LiveChatModal';
 import NotFoundPage from './pages/NotFound';
 import Connor from './components/Connor';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import GoogleAuthButton from './components/GoogleAuth';
 
 /* ───── Helmet meta ───── */
 const AppHelmet: React.FC = () => (
@@ -87,6 +89,7 @@ export default function App() {
   );
   const [referrer, setReferrer] = useState<string>('');
   const userId = guid();
+  const email = sessionStorage.getItem("email");
 
   const toggleTheme = () => {
     const newMode = themeMode === 'light' ? 'dark' : 'light';
@@ -148,11 +151,34 @@ export default function App() {
     menuItems.push({ label: 'Results', path: `/result/${binId}` });
   }
 
+    
+  
+   const handleSuccess = async (tokenResponse: { access_token: string }) => {
+    try {
+      const resp = await fetch("https://openidconnect.googleapis.com/v1/userinfo", {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.access_token}`,
+        },
+      });
+      if (!resp.ok) throw new Error("Failed to fetch user info");
+      const userInfo = await resp.json();
+      // Store the Google User ID (sub) as your unique, unchanging identifier
+      sessionStorage.setItem("guid", userInfo.sub);
+      // Optionally, also store email for display/communication
+      sessionStorage.setItem("email", userInfo.email || "");
+      window.location.href = '/';
+    } catch (error) {
+      console.error("Google login error:", error);
+      // Optionally handle error UI here
+    }
+  };
+  const GOOGLE_CLIENT_ID = '356497060674-ndjka8l1iod2obja36djpah0fckmaot9.apps.googleusercontent.com';
+
+
   menuItems.push(
     { label: 'Take the test', path: '/test' },
     { label: 'About', path: '/about' },
     {label: 'ChatTRPI', path: '/oracle'},
-    { label: 'Login', path: '/login' },
     { label: 'Appointments', path: '/scheduler'},
     { label: 'Tests' },
     { label: 'Short Format', path: '/test', parent: 'Tests' },
@@ -182,7 +208,15 @@ export default function App() {
           handlePaymentSuccess={() => {}}
         />
       ),
-    }
+    },
+    { label: 'Login', nagivate: '/', component: (
+      !email && <Box sx={{ position: 'relative !important', top: 10}}>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <GoogleAuthButton size={'small'} onSuccess={handleSuccess} onError={console.error} />
+      </GoogleOAuthProvider>
+      </Box>
+    ) },
+
   );
 
   /* ── render ── */
@@ -258,7 +292,6 @@ export default function App() {
               <Route path="/talk" element={<TrpiTalk onComplete={handleComplete} />} />
               <Route path="/sources" element={<Sources />} />
               <Route path="/reviews" element={<Reviews />} />
-              <Route path="/login" element={<Login />} />
               <Route path="/compare/:r1/:r2" element={<TypeComparator />} />
               <Route path="/compare" element={<TypeComparator />} />
               <Route path="/scheduler" element={<Scheduler />} />

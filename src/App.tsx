@@ -151,9 +151,8 @@ export default function App() {
     { label: 'Take the test', path: '/test' },
     { label: 'About', path: '/about' },
     {label: 'ChatTRPI', path: '/oracle'},
-   // { label: 'History', path: '/history' },
     { label: 'Live Chat', modalComponent: <ChatModal open={false} onClose={() => {}} /> },
-    { label: 'Appointment', path: '/scheduler'},
+    { label: 'Appointments', path: '/scheduler'},
     { label: 'Tests' },
     { label: 'Short Format', path: '/test', parent: 'Tests' },
     { label: 'Long Format', path: '/assessment', parent: 'Tests' },
@@ -166,6 +165,7 @@ export default function App() {
     { label: 'Sources', path: '/sources', parent: 'Other' },
     { label: 'Reviews', path: '/reviews', parent: 'Other' },
     { label: 'Contact', path: '/contact', parent: 'Other' },
+    { label: 'History', path: '/history', parent: 'Other' },
     {
       label: 'Donate',
       modalComponent: (

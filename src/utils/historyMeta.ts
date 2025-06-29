@@ -24,7 +24,7 @@ export default class HistoryMeta {
     const meta = await this.getMeta();
     if (meta[userId]) return meta[userId];
 
-    const binId = await JsonBinApi.createBin([], HISTORY_COLLECTION, `history-${userId}`);
+    const binId = await JsonBinApi.createBin([""], HISTORY_COLLECTION, `history-${userId}`);
     meta[userId] = binId;
     await this.updateMeta(meta);
     return binId;

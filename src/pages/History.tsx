@@ -50,7 +50,7 @@ const History: React.FC = () => {
       const id = await HistoryMeta.getOrCreateHistoryBin(userId);
       setHistoryId(id);
       const list = await HistoryMeta.getHistoryIds(userId);
-      setIds(list);
+      setIds(list.filter(Boolean));
       setLoading(false);
     })();
   }, [userId]);
@@ -86,9 +86,6 @@ const History: React.FC = () => {
         elevation={4}
         sx={{ mt: '75px', p: { xs: 2, sm: 3 }, width: '100%', maxWidth: 1200, borderRadius: 4, boxShadow: 8 }}
       >
-        <Typography variant="h5" sx={{ mb: 2, textAlign: 'center', fontWeight: 'bold', color: 'primary.main' }}>
-          History
-        </Typography>
         {loading ? (
           <Box sx={{ height: 260, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <CircularProgress color="primary" size={38} />
@@ -149,6 +146,13 @@ const History: React.FC = () => {
                 return (
                   <Tooltip
                     key={bin.binId}
+                    componentsProps={{
+    tooltip: {
+      sx: {
+        background: "white",
+         border: `3px solid ${profile.bgColor}`,
+      }
+    }}}
                     title={
                       <Box sx={{ p: 1 }}>
                         <Typography fontWeight="bold">{bin.name}</Typography>
@@ -196,7 +200,9 @@ const History: React.FC = () => {
                 );
               })}
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', my: 2, gap: 2 }}>
+            {
+              totalPages > 1 && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', my: 2, gap: 2 }}>
               <IconButton onClick={handlePrev} disabled={page === 1}>
                 Prev
               </IconButton>
@@ -205,6 +211,8 @@ const History: React.FC = () => {
                 Next
               </IconButton>
             </Box>
+              )
+            }
           </>
         ) : (
           <Typography align="center">No history found.</Typography>

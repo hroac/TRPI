@@ -42,6 +42,7 @@ import TermsOfService from './pages/Terms';
 import PremiumModal from './components/PremiumModal';
 import ChatTRPI from './components/ChatTRPI';
 import Certification from './components/Certification';
+import AdminOverview from './pages/AdminOverview';
 import { trackEvent, AnalyticsEvents } from './utils/analytics';
 
 /* ───── Live-chat modal (NEW) ───── */
@@ -258,6 +259,7 @@ export default function App() {
               <Route path="/certification/:binId" element={<Certification userId={guid()} />} />
               <Route path="/certifications/:binId" element={<Connor userId={guid()} />} />
               <Route path="/oracle" element={<ChatTRPI apiPath="https://chattrpi-production.up.railway.app/api/trpi-chat" userId={guid()} />}/>
+              <Route path="/admin" element={<AdminOverview />} />
               <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
 

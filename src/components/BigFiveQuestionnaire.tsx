@@ -672,8 +672,7 @@ const checkValidity = (responses: Responses): boolean => {
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
     setAccuracy(accuracy)
     setList(mbtiType.scores)
-    const users = await (await fetch('./bins-minimized.json')).json()
-    const dishonest = honesty && checkValidity(responses) && isWithinBounds({userId: guid(), responses}, users )
+    const dishonest = honesty && checkValidity(responses) && isWithinBounds({userId: guid(), responses}, await (await fetch('./bins-minimized.json')).json())
    
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')

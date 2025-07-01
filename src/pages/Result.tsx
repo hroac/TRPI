@@ -339,7 +339,7 @@ const radarData = {
   ];
 
   return (
-    <Paper elevation={3} sx={{ p: 2, m: '20px auto', mt: '75px', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600 }}>
+    <Paper elevation={3} sx={{ p: 2, m: '20px auto', mt: '75px', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600, border: `${bin.honesty ? '' : '6px solid #fa695e90'}` }}>
       <ResultHelmet
         type={type}
         primary4FType={primary4FType}

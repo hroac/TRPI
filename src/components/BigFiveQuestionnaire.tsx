@@ -610,6 +610,43 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     navigate(`/result/${binId}`);
   }
 
+  type Trait = "openness" | "conscientiousness" | "extraversion" | "agreeableness" | "neuroticism";
+type Responses = Record<Trait, number[]>;
+
+// Returns true if the pattern is suspiciously idealized/fake-good
+const checkValidity = (responses: Responses): boolean => {
+  // Traits to check for "faking good"
+  const mainTraits: Trait[] = ["openness", "conscientiousness", "extraversion", "agreeableness"];
+  
+  // Calculate mean for each main trait
+  const traitMeans = mainTraits.map(trait => {
+    const vals = responses[trait]?.filter(v => typeof v === "number") || [];
+    return vals.length
+      ? vals.reduce((sum, v) => sum + v, 0) / vals.length
+      : 0;
+  });
+
+  // Count how many main traits are very high (mean > 0.85)
+  const highTraitCount = traitMeans.filter(mean => mean > 0.85).length;
+
+  // Check if all values in all main traits are above 0.9 (extreme faking)
+  const allHigh = mainTraits.every(trait =>
+    (responses[trait] || []).every(v => v > 0.9)
+  );
+
+  // Neuroticism should be unusually low if faking good
+  const neuroVals = responses.neuroticism?.filter(v => typeof v === "number") || [];
+  const neuroticismLow = neuroVals.length > 0 && neuroVals.every(v => v < 0.2);
+
+  // Flag: 4+ high traits + low neuroticism OR all values are extremely high
+  if ((highTraitCount >= 4 && neuroticismLow) || allHigh) {
+    return true; // suspicious
+  }
+
+  return false; // pattern plausible
+}
+
+
   const handleSubmit = async () => {
     trackEvent(AnalyticsEvents.TestCompleted, { event_category: 'Test' });
     setSubmitted(true)
@@ -633,16 +670,12 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
     setAccuracy(accuracy)
     setList(mbtiType.scores)
-    const newJson = {
-      type: mbtiType.type,
-      primary4FType: primary4F,
-      bigFiveResponses: weightedScores,
-    }
+    const dishonest = honesty && checkValidity(responses)
    
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty, diagnostics});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty: dishonest, diagnostics});
     navigate(`/result/${binId}`);
   };
 

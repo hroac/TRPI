@@ -280,23 +280,6 @@ const dishonest: number[] = useMemo(() => {
     expert: generateExpertReport,
   } as const;
 
-function getAnswerForStatement(
-  items: any,           // allStatements
-  responses: any,       // allResponses
-  selection: any,       // stmnts or stages.flat()
-  stmtIndex: any        // the .index of the statement you want the answer for
-) {
-  // Build the trait-cursor and answer map as in checkHonesty
-  const pageMap: any = {};
-  const traitCursor : any= {};
-  for (const sel of selection) {
-    const trait = items[sel.index].trait;
-    const pos = traitCursor[trait] ?? 0;
-    pageMap[sel.index] = (responses[trait] ?? [])[pos];
-    traitCursor[trait] = pos + 1;
-  }
-  return pageMap[stmtIndex];
-}
 
 
 

@@ -460,19 +460,21 @@ export const matchMBTI = (profile: Record<any, any>, exclude?: Array<string>) =>
   });
 
   // Step 2: Sort by Score and Find the Best Match
-  const sortedScores = combinedScores.sort((a, b) => b.score - a.score).filter((profile, index, self) => {
+  const sortedScores = combinedScores.sort((a, b) => b.score - a.score).filter((prfl, index, self) => {
     const current = self[index]
     const next = self[self.length === index + 1 ? index : index + 1]
-    if(!exclude || ((!index && (current.score - next.score) > 20) || !exclude.includes(profile.type))) {
-      return profile
+    if(!exclude || ((!index && (current.score - next.score) > 20) || !exclude.includes(prfl.type))) {
+      return prfl
     }
   });
   const bestMatch = sortedScores[0];
 
   // Step 3: Return the Results
   return {
-    type: bestMatch.type, // Best matching MBTI type
-    scores: sortedScores.reduce((acc, item) => {
+    type: bestMatch ? bestMatch.type : combinedScores.sort((a, b) => b.score - a.score)[0].type,// Best matching MBTI type
+    scores: bestMatch ? sortedScores.reduce((acc, item) => {
+      return {...acc, [item.type]: item}
+    }, {}) : combinedScores.sort((a, b) => b.score - a.score).reduce((acc, item) => {
       return {...acc, [item.type]: item}
     }, {}), // All candidates with scores
   };

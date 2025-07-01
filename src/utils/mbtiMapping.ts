@@ -4113,138 +4113,74 @@ export const allStatements =[
     "index": 21
   },
   {
-    "text": "I consistently exert effort to attain my objectives.",
-    "trait": "conscientiousness",
-    "weight": 1.2,
-    "aspect": "Industriousness",
-    "subtext": {
-      "0-10": {
-        "text": "I rarely work hard to reach my goals.",
-        "exclude": [
-          "ENTP",
-          "ESTP",
-          "INTJ",
-          "ISTJ",
-          "ENTJ",
-          "ESTJ",
-          "ISFJ",
-          "INFJ",
-          "ESFJ",
-          "ENFJ",
-          "ESFP",
-          "ENFP"
-        ]
-      },
-      "10-20": {
-        "text": "I occasionally put some effort into my goals.",
-        "exclude": [
-          "ENTP",
-          "ESTP",
-          "INTJ",
-          "ISTJ",
-          "ENTJ",
-          "ESTJ",
-          "ISFJ",
-          "INFJ",
-          "ESFJ",
-          "ENFJ",
-          "ESFP",
-          "ENFP"
-        ]
-      },
-      "20-30": {
-        "text": "I sometimes work hard on my goals.",
-        "exclude": [
-          "ENTP",
-          "ESTP",
-          "INTJ",
-          "ISTJ",
-          "ENTJ",
-          "ESTJ",
-          "ISFJ",
-          "INFJ",
-          "ESFJ",
-          "ENFJ",
-          "ESFP",
-          "ENFP"
-        ]
-      },
-      "30-40": {
-        "text": "I moderately strive toward my objectives.",
-        "exclude": [
-          "INTJ",
-          "ENTJ",
-          "ESTJ",
-          "ESFJ",
-          "ENFJ"
-        ]
-      },
-      "40-50": {
-        "text": "I fairly often devote effort to achieve my goals.",
-        "exclude": [
-          "ENTJ"
-        ]
-      },
-      "50-60": {
-        "text": "I frequently put in considerable effort to reach my aims.",
-        "exclude": []
-      },
-      "60-70": {
-        "text": "I regularly work with diligence to achieve my objectives.",
-        "exclude": [
-          "INTP"
-        ]
-      },
-      "70-80": {
-        "text": "I highly prioritize exerting effort to reach my goals.",
-        "exclude": [
-          "INTP",
-          "ISTP",
-          "ISFP",
-          "INFP"
-        ]
-      },
-      "80-90": {
-        "text": "I am very dedicated to working hard for my objectives.",
-        "exclude": [
-          "ENTP",
-          "INTP",
-          "ISTP",
-          "ISFJ",
-          "ESFP",
-          "ENFP",
-          "ISFP",
-          "INFP"
-        ]
-      },
-      "90-100": {
-        "text": "I consistently go above and beyond to achieve my goals.",
-        "exclude": [
-          "ENTP",
-          "ESTP",
-          "INTP",
-          "ISTP",
-          "ISTJ",
-          "ISFJ",
-          "INFJ",
-          "ESFP",
-          "ENFP",
-          "ISFP",
-          "INFP"
-        ]
-      }
+  "text": "I put in effort to attain my objectives.",
+  "trait": "conscientiousness",
+  "weight": 1.2,
+  "aspect": "Industriousness",
+  "subtext": {
+    "0-10": {
+      "text": "I rarely work hard to reach my goals.",
+      "exclude": [
+        "ENTP","ESTP","INTJ","ISTJ","ENTJ","ESTJ","ISFJ","INFJ","ESFJ","ENFJ","ESFP","ENFP"
+      ]
     },
-    "overlapping": [
-      6,
-      12,
-      13,
-      34
-    ],
-    "opposing": [
-      123
-    ],
-    "index": 22
+    "10-20": {
+      "text": "I occasionally put some effort into my goals.",
+      "exclude": [
+        "ENTP","ESTP","INTJ","ISTJ","ENTJ","ESTJ","ISFJ","INFJ","ESFJ","ENFJ","ESFP","ENFP"
+      ]
+    },
+    "20-30": {
+      "text": "I sometimes work hard on my goals.",
+      "exclude": [
+        "ENTP","ESTP","INTJ","ISTJ","ENTJ","ESTJ","ISFJ","INFJ","ESFJ","ENFJ","ESFP","ENFP"
+      ]
+    },
+    "30-40": {
+      "text": "I moderately strive toward my objectives.",
+      "exclude": [
+        "INTJ","ENTJ","ESTJ","ESFJ","ENFJ"
+      ]
+    },
+    "40-50": {
+      "text": "I fairly often devote effort to achieve my goals.",
+      "exclude": [
+        "ENTJ"
+      ]
+    },
+    "50-60": {
+      "text": "I frequently put in considerable effort to reach my aims.",
+      "exclude": []
+    },
+    "60-70": {
+      "text": "I regularly work with diligence to achieve my objectives.",
+      "exclude": [
+        "INTP"
+      ]
+    },
+    "70-80": {
+      "text": "I highly prioritize exerting effort to reach my goals.",
+      "exclude": [
+        "INTP","ISTP","ISFP","INFP"
+      ]
+    },
+    "80-90": {
+      "text": "I am very dedicated to working hard for my objectives.",
+      "exclude": [
+        "ENTP","INTP","ISTP","ISFJ","ESFP","ENFP","ISFP","INFP"
+      ]
+    },
+    "90-100": {
+      "text": "I consistently go above and beyond to achieve my goals.",
+      "exclude": [
+        "ENTP","ESTP","INTP","ISTP","ISTJ","ISFJ","INFJ","ESFP","ENFP","ISFP","INFP"
+      ]
+    }
   },
+  "overlapping": [6, 12, 13, 34],
+  "opposing": [123],
+  "index": 22
+}
   {
     "text": "I perceive myself as capable and competent.",
     "trait": "conscientiousness",
@@ -14576,7 +14512,7 @@ export const allStatements =[
         ]
       },
       "30-40": {
-        "text": "I moderately ruminate on negative ideas.",
+        "text": "I moderately dwell on negative ideas.",
         "exclude": [
           "INFP",
           "ISFP",
@@ -14784,7 +14720,7 @@ export const allStatements =[
     "index": 103
   },
   {
-    "text": "I often feel tense without a clear reason.",
+    "text": "I feel tense without a clear reason.",
     "trait": "neuroticism",
     "weight": 1,
     "aspect": "Withdrawal",
@@ -15031,7 +14967,7 @@ export const allStatements =[
     "index": 105
   },
   {
-    "text": "I ruminate on past mistakes, replaying them in my mind.",
+    "text": "I reflect on past mistakes, replaying them in my mind.",
     "trait": "neuroticism",
     "weight": 1.1,
     "aspect": "Withdrawal",
@@ -15089,7 +15025,7 @@ export const allStatements =[
         "exclude": []
       },
       "50-60": {
-        "text": "I frequently ruminate about past errors.",
+        "text": "I frequently reflect about past errors.",
         "exclude": []
       },
       "60-70": {
@@ -15106,7 +15042,7 @@ export const allStatements =[
         ]
       },
       "70-80": {
-        "text": "I highly ruminate on past missteps for a long time.",
+        "text": "I highly reflect on past missteps for a long time.",
         "exclude": [
           "ESTJ",
           "ENTJ",
@@ -16195,150 +16131,129 @@ export const allStatements =[
     ],
     "index": 114
   },
-  {
-    "text": "I am prone to experiencing irritation quickly.",
-    "trait": "neuroticism",
-    "weight": 1.2,
-    "aspect": "Volatility",
-    "subtext": {
-      "0-10": {
-        "text": "I rarely get irritated.",
-        "exclude": [
-          "ESTP",
-          "INTJ",
-          "ISTJ",
-          "ESTJ",
-          "ISFJ",
-          "INFJ",
-          "ENFJ",
-          "ENFP",
-          "ISFP",
-          "INFP"
-        ]
-      },
-      "10-20": {
-        "text": "I occasionally feel a slight irritation.",
-        "exclude": [
-          "ESTP",
-          "INTJ",
-          "ISTJ",
-          "ESTJ",
-          "ISFJ",
-          "INFJ",
-          "ENFJ",
-          "ENFP",
-          "ISFP",
-          "INFP"
-        ]
-      },
-      "20-30": {
-        "text": "I sometimes get annoyed by minor things.",
-        "exclude": [
-          "ESTP",
-          "INTJ",
-          "ISTJ",
-          "ESTJ",
-          "ISFJ",
-          "INFJ",
-          "ENFJ",
-          "ENFP",
-          "ISFP",
-          "INFP"
-        ]
-      },
-      "30-40": {
-        "text": "I moderately experience irritation over small issues.",
-        "exclude": [
-          "ISFJ",
-          "INFJ",
-          "ENFP",
-          "ISFP",
-          "INFP"
-        ]
-      },
-      "40-50": {
-        "text": "I fairly often get irritated easily.",
-        "exclude": [
-          "INTP",
-          "ENTJ",
-          "INFP"
-        ]
-      },
-      "50-60": {
-        "text": "I frequently become irritated by trivial matters.",
-        "exclude": [
-          "ENTP",
-          "INTP",
-          "ENTJ"
-        ]
-      },
-      "60-70": {
-        "text": "I regularly experience rapid irritation.",
-        "exclude": [
-          "ENTP",
-          "INTP",
-          "ENTJ"
-        ]
-      },
-      "70-80": {
-        "text": "I am highly prone to quick irritation.",
-        "exclude": [
-          "ENTP",
-          "INTP",
-          "ISTP",
-          "ENTJ",
-          "ESFJ",
-          "ESFP"
-        ]
-      },
-      "80-90": {
-        "text": "I am very easily irritated by small things.",
-        "exclude": [
-          "ENTP",
-          "ESTP",
-          "INTP",
-          "ISTP",
-          "INTJ",
-          "ISTJ",
-          "ENTJ",
-          "ESTJ",
-          "ESFJ",
-          "ENFJ",
-          "ESFP"
-        ]
-      },
-      "90-100": {
-        "text": "I always get irritated very quickly and intensely.",
-        "exclude": [
-          "ENTP",
-          "ESTP",
-          "INTP",
-          "ISTP",
-          "INTJ",
-          "ISTJ",
-          "ENTJ",
-          "ESTJ",
-          "ESFJ",
-          "ENFJ",
-          "ESFP"
-        ]
-      }
+{
+  "text": "I am easily irritated.",
+  "trait": "neuroticism",
+  "weight": 1.2,
+  "aspect": "Volatility",
+  "subtext": {
+    "0-10": {
+      "text": "I rarely get irritated.",
+      "exclude": [
+        "ESTP",
+        "INTJ",
+        "ISTJ",
+        "ESTJ",
+        "ISFJ",
+        "INFJ",
+        "ENFJ",
+        "ENFP",
+        "ISFP",
+        "INFP"
+      ]
     },
-    "overlapping": [
-      107,
-      108,
-      109,
-      110,
-      111,
-      112,
-      114,
-      118
-    ],
-    "opposing": [
-      68
-    ],
-    "index": 115
+    "10-20": {
+      "text": "I occasionally feel a slight irritation.",
+      "exclude": [
+        "ESTP",
+        "INTJ",
+        "ISTJ",
+        "ESTJ",
+        "ISFJ",
+        "INFJ",
+        "ENFJ",
+        "ENFP",
+        "ISFP",
+        "INFP"
+      ]
+    },
+    "20-30": {
+      "text": "I sometimes get annoyed by minor things.",
+      "exclude": [
+        "ESTP",
+        "INTJ",
+        "ISTJ",
+        "ESTJ",
+        "ISFJ",
+        "INFJ",
+        "ENFJ",
+        "ENFP",
+        "ISFP",
+        "INFP"
+      ]
+    },
+    "30-40": {
+      "text": "I moderately experience irritation over small issues.",
+      "exclude": [
+        "ISFJ",
+        "INFJ",
+        "ENFP",
+        "ISFP",
+        "INFP"
+      ]
+    },
+    "40-50": {
+      "text": "I fairly often get irritated easily.",
+      "exclude": [
+        "INTP",
+        "ENTJ",
+        "INFP"
+      ]
+    },
+    "50-60": {
+      "text": "I frequently become irritated by trivial matters.",
+      "exclude": [
+        "ENTP",
+        "INTP",
+        "ENTJ"
+      ]
+    },
+    "60-70": {
+      "text": "I regularly experience rapid irritation.",
+      "exclude": [
+        "ENTP",
+        "INTP",
+        "ENTJ"
+      ]
+    },
+    "70-80": {
+      "text": "I am highly prone to quick irritation.",
+      "exclude": [
+        "ENTP",
+        "INTP",
+        "ISTP",
+        "ENTJ",
+        "ESFJ",
+        "ESFP"
+      ]
+    },
+    "80-90": {
+      "text": "I am very easily irritated by small things.",
+      "exclude": [
+        "INFP",
+        "ISFP",
+        "ENFP",
+        "ESFP"
+      ]
+    },
+    "90-100": {
+      "text": "I always become irritated almost immediately when frustrated.",
+      "exclude": [
+        "ESTJ",
+        "ENTJ",
+        "ESTP",
+        "ENTP",
+        "INTJ",
+        "ISTJ",
+        "ISTP",
+        "INTP"
+      ]
+    }
   },
+  "overlapping": [108, 109, 110, 111, 112, 115, 118],
+  "opposing": [68],
+  "index": 115
+},
   {
     "text": "I act on my impulses.",
     "trait": "neuroticism",
@@ -17464,7 +17379,7 @@ export const allStatements =[
     "index": 123
   },
   {
-    "text": "I consistently struggle with feelings of insecurity.",
+    "text": "I struggle with feelings of insecurity.",
     "trait": "neuroticism",
     "weight": 0.9,
     "aspect": "Withdrawal",
@@ -18029,7 +17944,7 @@ export const allStatements =[
     "index": 127
   },
   {
-    "text": "I ruminate on past errors and their potential consequences.",
+    "text": "I reflect on past errors and their potential consequences.",
     "trait": "neuroticism",
     "weight": 0.95,
     "aspect": "Withdrawal",
@@ -18090,7 +18005,7 @@ export const allStatements =[
         ]
       },
       "40-50": {
-        "text": "I fairly often ruminate on past mistakes.",
+        "text": "I fairly often reflect on past mistakes.",
         "exclude": [
           "INTP",
           "ENTJ",
@@ -18141,7 +18056,7 @@ export const allStatements =[
         ]
       },
       "90-100": {
-        "text": "I almost always ruminate intensely on past mistakes and potential outcomes.",
+        "text": "I almost always reflect intensely on past mistakes and potential outcomes.",
         "exclude": [
           "ENTP",
           "ESTP",

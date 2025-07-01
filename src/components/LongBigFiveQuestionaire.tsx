@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Grid,
   IconButton,
@@ -55,6 +55,7 @@ import MetaBin from '../utils/metabin';
 import JsonBinApi from '../utils/jsonBin';
 import BackgroundInfoModal from './BackgroundInfoModal';
 import Notification from './Notification';
+import { AnalyticsEvents, trackEvent } from '../utils/analytics';
 
 /** ------------------------------------------------------------------
  *  Utility helpers
@@ -167,6 +168,7 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
   const [mapping, setMapping]     = useState<string | null>(null);
   const [loading, setLoading]     = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const started = useRef(false)
   const initialResponses = () => {
    // console.log(longStatements)
 
@@ -179,6 +181,11 @@ const LongBigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void 
     return acc;
   }, {} as { [trait: string]: number[]})
 };
+
+  useEffect(() => {
+
+   if(!started.current) trackEvent(AnalyticsEvents.TestStarted, { event_category: 'Test' }); started.current = true;
+  }, []);
  const initialStatements = () => {
     const statements = localStorage.getItem('longStatements')
     const parsed = statements && JSON.parse(statements)

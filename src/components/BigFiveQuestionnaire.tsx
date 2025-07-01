@@ -177,8 +177,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
 
   useEffect(() => {
 
-    if(!started) trackEvent(AnalyticsEvents.TestStarted, { event_category: 'Test' });
-  }, [started]);
+   if(!started.current) trackEvent(AnalyticsEvents.TestStarted, { event_category: 'Test' }); started.current = true;
+  }, []);
   const initialStatements = () => {
     const statements = localStorage.getItem('statements')
     const parsed = statements && JSON.parse(statements)

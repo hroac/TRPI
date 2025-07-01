@@ -27,7 +27,7 @@ import {
   pearsonCorrelation,
   weightedEuclideanDistance,
 } from "../utils/mbtiMapping";
-import { compute2PLReliabilities } from "../utils/irt";
+import { compute2PL } from "../utils/irt";
 
 
 
@@ -231,7 +231,7 @@ export default function AdminOverview() {
 useEffect(() => {
   if (!results.length) return;
   (async () => {
-    const reliabilities = await compute2PLReliabilities(results, allStatements);
+    const reliabilities = await compute2PL(results, allStatements);
     console.log(reliabilities)
     setIrtReliabilities(reliabilities);
   })();

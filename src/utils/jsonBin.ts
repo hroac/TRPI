@@ -207,6 +207,7 @@ const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
     for (const r of refs) if (!seen.has(r.record)) { seen.add(r.record); ids.push(r.record); }
 
     for (let i = 0; i < ids.length; i += batchSize) {
+      try{
       const slice = ids.slice(i, i + batchSize);
       const chunk = (await Promise.all(
         slice.map(id => this.getBinById(id))   // <= batchSize (2) at a time
@@ -223,6 +224,9 @@ const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
       await sleep(100);  // polite pause to avoid 429
       if (stop) break;
+      } catch(err: any) {
+        console.log(err)
+      }
     }
 
     if (refs.length < PAGE) break;  // end of collection

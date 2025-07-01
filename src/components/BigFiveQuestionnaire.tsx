@@ -465,8 +465,8 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         setSelectedStatement(sub.text);
         localStorage.setItem('responses', JSON.stringify(updatedResponses));
         
-      //const honest = checkHonesty(allStatements, updatedResponses, statements, i)
-      //setHonesty(!honest.includes(index))
+      const honest = checkHonesty(allStatements, updatedResponses, statements, i)
+      setHonesty(!honest.includes(index))
         return updatedResponses;
       });
 
@@ -597,6 +597,8 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     const profile = typesData.find(t => t.type === mbtiType.type);
     const primary4F = profile?.mode || ""
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
+    const honest = honesty && checkValidity(responses) && isWithinBounds({userId: guid(), responses}, await (await fetch('./bins-minimized.json')).json())
+  
     setAccuracy(accuracy)
     setList(mbtiType.scores)
     const newJson = {
@@ -606,9 +608,10 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     }
    
     localStorage.removeItem('responses')
+    localStorage.removeItem('statements')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement, prev: lastBinId});
+    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement, prev: lastBinId, honesty: honest});
     navigate(`/result/${binId}`);
   }
 
@@ -672,12 +675,13 @@ const checkValidity = (responses: Responses): boolean => {
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
     setAccuracy(accuracy)
     setList(mbtiType.scores)
-    const dishonest = honesty && checkValidity(responses) && isWithinBounds({userId: guid(), responses}, await (await fetch('./bins-minimized.json')).json())
+    const honest = honesty && checkValidity(responses) && isWithinBounds({userId: guid(), responses}, await (await fetch('./bins-minimized.json')).json())
    
     localStorage.removeItem('responses')
+    localStorage.removeItem('statements')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty: dishonest, diagnostics});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty: honest, diagnostics});
     navigate(`/result/${binId}`);
   };
 

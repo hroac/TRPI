@@ -27,7 +27,7 @@ import {
   pearsonCorrelation,
   weightedEuclideanDistance,
 } from "../utils/mbtiMapping";
-import { compute3PLReliabilities } from "../utils/irt";
+import { compute2PLReliabilities } from "../utils/irt";
 
 
 
@@ -35,6 +35,7 @@ interface Result {
   binId: string;
   userId: string;
   type: string;
+  honest: boolean;
   scores: { [trait: string]: number };
   responses: Record<string, number[]>;
   statements: any,
@@ -230,7 +231,7 @@ export default function AdminOverview() {
 useEffect(() => {
   if (!results.length) return;
   (async () => {
-    const reliabilities = await compute3PLReliabilities(results.filter((r: any) => r.statements.every((s:any) => typeof s.index === 'number')) as any, allStatements);
+    const reliabilities = await compute2PLReliabilities(results, allStatements);
     console.log(reliabilities)
     setIrtReliabilities(reliabilities);
   })();
@@ -255,89 +256,140 @@ useEffect(() => {
     setToken("");
   };
 
-  /* ---------- data fetching ---------- */
-  const loadData = async () => {
-    setLoading(true);
-    let cacheId = localStorage.getItem(CACHE_KEY) || "";
-    let cached: { bins: Result[]; lastBinId?: string } | null = null;
+const loadData = async () => {
+  setLoading(true);
 
-    if (cacheId) {
-      try {
-        cached = await JsonBinApi.getBinById(cacheId);
-      } catch {
-        cached = await JsonBinApi.getXLBin(cacheId);
-      }
+  // Fetch cache as usual
+  let cacheId = localStorage.getItem(CACHE_KEY) || "";
+  let cached: { bins: Result[]; lastBinId?: string; start?: string; end?: string } | null = null;
+  if (cacheId) {
+    try {
+      cached = await JsonBinApi.getBinById(cacheId);
+    } catch {
+      cached = await JsonBinApi.getXLBin(cacheId);
+    }
+  }
+
+  let allBins: Result[] = cached?.bins || [];
+
+  // Find date range in cache
+  let cacheStart = allBins.length ? allBins.reduce((min, b) => min && b.date && new Date(b.date) < new Date(min) ? b.date : min, allBins[0].date) : undefined;
+  let cacheEnd = allBins.length ? allBins.reduce((max, b) => max && b.date && new Date(b.date) > new Date(max) ? b.date : max, allBins[0].date) : undefined;
+
+  // Utility: convert date string to yyyy-mm-dd (cache, startDate, endDate all compared in this format)
+  const norm = (d?: string) => new Date(d || '').toISOString().slice(0,10);
+
+  // See if cache covers the requested range
+  const rangeCovered =
+    norm(cacheStart) && norm(cacheEnd) &&
+    (!startDate || norm(cacheStart)! <= norm(startDate)) &&
+    (!endDate || norm(cacheEnd)! >= norm(endDate));
+
+  // If cache is missing *any* part of the requested range, fetch missing
+  if (!rangeCovered) {
+    // Determine earliest and latest dates to fetch
+    let fetchStart = startDate;
+    let fetchEnd = endDate;
+
+    // Only fetch what's missing: if cache is available, trim requested range to what's outside the cache
+    if (norm(cacheStart)) {
+      if (startDate && norm(startDate)! >= norm(cacheStart)!) fetchStart = ''; // already cached
+      if (endDate && norm(endDate)! <= norm(cacheEnd)!) fetchEnd = ''; // already cached
     }
 
-    let allBins: Result[] = cached?.bins || [];
+    // Always provide startAfter if fetching after cached bins (to avoid overlap)
     let lastId: string | undefined = cached?.lastBinId;
+    let fetchedBins: Result[] = [];
 
-    const latest = allBins.reduce<number>((m, b) => {
-      if (b.date) m = Math.max(m, new Date(b.date).getTime());
-      return m;
-    }, 0);
-
-    const shouldFetchNew =
-      !allBins.length ||
-      (endDate && new Date(endDate).getTime() > latest) ||
-      !cached;
-
-    if (shouldFetchNew) {
+    // Fetch missing bins if needed
+    if (fetchStart || fetchEnd) {
       const { bins, lastBinId } = await JsonBinApi.fetchCollectionBins(
         COLLECTION_ID,
         {
           startAfter: lastId,
-          startDate: startDate || undefined,
-          endDate: endDate || undefined,
-          batchSize: 5,
+          startDate: fetchStart,
+          endDate: fetchEnd,
+          batchSize: 5, // or your batch size
         }
       );
-      bins.forEach((b) =>
-        allBins.push({
+
+      // Add any new bins
+      bins.filter(b => b.statements).forEach((b) => {
+        fetchedBins.push({
           binId: b.binId,
           userId: b.userId || "",
           type: b.type || "",
+          honest: b.honest ?? true,
           scores: b.bigFiveResponses || b.scores || {},
           responses: b.responses || {},
-          statements: b.statements.map((s: any) => {return {index: s.index, trait: s.trait, aspect: s.aspect}}),
+          statements: b.statements.map((s: any) => ({
+            index: s.index,
+            trait: s.trait,
+            aspect: s.aspect
+          })),
           date: b.date,
-        })
-      );
-      if (lastBinId) lastId = lastBinId;
+        });
+      });
 
-      if (bins.length) {
-       let newCacheId = '';
-       try {
-         const newCacheId = await JsonBinApi.createBin(
-          { bins: allBins, lastBinId: lastId },
+      // Merge and deduplicate
+      allBins = [...allBins, ...fetchedBins].filter(
+        (item, i, arr) =>
+          arr.findIndex(other => other.binId === item.binId) === i
+      );
+
+      // Update cache
+      let newCacheId = '';
+      try {
+        newCacheId = await JsonBinApi.createBin(
+          { bins: allBins, lastBinId, start: fetchStart || cacheStart, end: fetchEnd || cacheEnd },
           "68348edd8960c979a5a159b2",
           CACHE_KEY
         );
-       } catch(e) {
-         const newCacheId = await JsonBinApi.createXLBin(
-          { bins: allBins, lastBinId: lastId },
+      } catch {
+        newCacheId = await JsonBinApi.createXLBin(
+          { bins: allBins, lastBinId, start: fetchStart || cacheStart, end: fetchEnd || cacheEnd },
           CACHE_KEY
         );
-       }
-        localStorage.setItem(CACHE_KEY, newCacheId);
       }
+      localStorage.setItem(CACHE_KEY, newCacheId);
     }
+  }
 
-    const filtered = allBins.filter((b) => {
-      if (!b.date) return true;
-      const d = new Date(b.date).toISOString().slice(0, 10);
-      if (startDate && d < startDate) return false;
-      if (endDate && d > endDate) return false;
+  // Filter to requested date range
+  const filtered = allBins.filter((b) => {
+    if (!b.date) return true;
+    const d = norm(b.date);
+    if (startDate && d! < norm(startDate)!) return false;
+    if (endDate && d! > norm(endDate)!) return false;
+    return true;
+  });
+
+  // Deduplicate by user/type (you could also use binId if needed)
+  const unique = (data: any[]) => {
+    const seen = new Set();
+    return data.filter((item: any) => {
+      const key = `${item.userId}|${item.type}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
       return true;
     });
-
-  
-
-    setResults(filtered.filter((r: any) => r.statements.length === 26 && r.statements.every((s:any) => typeof s.index === 'number')));
-    computeMetrics(filtered);
-    setLoading(false);
-    console.log(results)
   };
+
+  // Filter for valid responses
+  const valid = unique(
+    filtered.filter(
+      (r: any) =>
+        r.statements.length === 26 &&
+        r.statements.every((s: any) => typeof s.index === "number")
+    )
+  );
+
+  setResults(valid);
+  computeMetrics(valid);
+  setLoading(false);
+  console.log(valid);
+};
+
 
   /* ---------- stats ---------- */
   const averageSimilarity = (arrays: number[][]): number => {

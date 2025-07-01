@@ -196,14 +196,14 @@ export default function App() {
     { label: 'Big Five Input', path: '/input', parent: 'Tools' },
     { label: 'Type Comparator', path: '/compare', parent: 'Tools' },
     { label: 'Certification', path: '/certification', parent: 'Tools' },
-    { label: 'Other' },
-    { label: 'Sources', path: '/sources', parent: 'Other' },
-    { label: 'Reviews', path: '/reviews', parent: 'Other' },
-    { label: 'Contact', path: '/contact', parent: 'Other' },
-    { label: 'History', path: '/history', parent: 'Other' },
-    { label: 'Appointments', path: '/scheduler', parent: 'Other'},
+    { label: 'Resources' },
+    { label: 'Sources', path: '/sources', parent: 'Resources' },
+    { label: 'Reviews', path: '/reviews', parent: 'Resources' },
+    { label: 'Contact', path: '/contact', parent: 'Resources' },
+    { label: 'History', path: '/history', parent: 'Resources' },
+    { label: 'Appointments', path: '/scheduler', parent: 'Resources'},
 
-    { label: 'Live Chat', modalComponent: <ChatModal open={false} onClose={() => {}} />, parent: 'Other' },
+    { label: 'Live Chat', modalComponent: <ChatModal open={false} onClose={() => {}} />, parent: 'Resources' },
 
     {
       label: 'Donate',

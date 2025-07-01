@@ -173,10 +173,12 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
   const [meta, setMeta] = useState<any>({});
   const [loading, setLoading]     = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const started = useRef(false)
 
   useEffect(() => {
-    trackEvent(AnalyticsEvents.TestStarted, { event_category: 'Test' });
-  }, []);
+
+    if(!started) trackEvent(AnalyticsEvents.TestStarted, { event_category: 'Test' });
+  }, [started]);
   const initialStatements = () => {
     const statements = localStorage.getItem('statements')
     const parsed = statements && JSON.parse(statements)

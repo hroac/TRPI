@@ -147,7 +147,7 @@ class JsonBinApi {
     }
   }
 
-  static async getBinsByIds(ids: string[], batchSize = 10) {
+  static async getBinsByIds(ids: string[], batchSize = 5) {
     const results: any[] = [];
     for (let i = 0; i < ids.length; i += batchSize) {
       const chunk = ids.slice(i, i + batchSize);

@@ -21,6 +21,7 @@ src/utils/pearson.js
 src/utils/4f.js
 src/utils/*.js
 src/utils/*.json
+!src/utils/bins-minimized.json
 src/utils/*.pdf
 src/utils/*.py
 src/utils/radar.html

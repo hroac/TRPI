@@ -27,6 +27,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   checkHonesty,
   determinePrimary4FType,
+  isWithinBounds,
   matchMBTI,
   matchMBTIType,
   MBTIProfiles,
@@ -56,6 +57,7 @@ import JsonBinApi from '../utils/jsonBin';
 import { trackEvent, AnalyticsEvents } from '../utils/analytics';
 import BackgroundInfoModal from './BackgroundInfoModal';
 import Notification from './Notification';
+
 
 
 /** ------------------------------------------------------------------
@@ -636,14 +638,14 @@ const checkValidity = (responses: Responses): boolean => {
 
   // Neuroticism should be unusually low if faking good
   const neuroVals = responses.neuroticism?.filter(v => typeof v === "number") || [];
-  const neuroticismLow = neuroVals.length > 0 && neuroVals.every(v => v < 0.2);
+  const neuroticismLow = neuroVals.length > 0 && neuroVals.every(v => v < 0.3);
 
   // Flag: 4+ high traits + low neuroticism OR all values are extremely high
   if ((highTraitCount >= 4 && neuroticismLow) || allHigh) {
-    return true; // suspicious
+    return false; // suspicious
   }
 
-  return false; // pattern plausible
+  return true; // pattern plausible
 }
 
 
@@ -670,7 +672,8 @@ const checkValidity = (responses: Responses): boolean => {
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
     setAccuracy(accuracy)
     setList(mbtiType.scores)
-    const dishonest = honesty && checkValidity(responses)
+    const users = await (await fetch('./bins-minimized.json')).json()
+    const dishonest = honesty && checkValidity(responses) && isWithinBounds({userId: guid(), responses}, users )
    
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')

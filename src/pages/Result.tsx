@@ -33,7 +33,7 @@ import { useParams } from 'react-router-dom';
 import { guid } from '../utils/guid';
 import RatingComponent from '../components/RatingComponent';
 import { Helmet } from 'react-helmet';
-import { Share as ShareIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Share as ShareIcon, Close as CloseIcon, WarningAmberOutlined } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import RedditIcon from '@mui/icons-material/Reddit';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -339,7 +339,7 @@ const radarData = {
   ];
 
   return (
-    <Paper elevation={3} sx={{ p: 2, m: '20px auto', mt: '75px', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600, border: `${bin.honesty ? '' : '6px solid #fa695e90'}` }}>
+    <Paper elevation={3} sx={{ p: 2, m: '20px auto', mt: '75px', width: isMobile ? '95%' : 600, maxWidth: isMobile ? '95%' : 600, border: `${bin.honest ? '' : '6px solid #fa695e90'}` }}>
       <ResultHelmet
         type={type}
         primary4FType={primary4FType}
@@ -358,15 +358,22 @@ const radarData = {
         </Grid>
         <Grid item xs>
           <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ wordBreak: 'break-word' }}>
-            TRPI - {primary4FType} - {type}-{typeSuffix} {accuracy ? `${accuracy.toFixed(1)}%` : ''}
+            TRPI - {primary4FType} - {type}-{typeSuffix} {accuracy ? `${accuracy.toFixed(1)}%` : ''} 
           </Typography>
         </Grid>
         <Grid item>
-          <RatingComponent
+          {bin.honest ? '': (
+              <Tooltip title="This profile was flagged due to inconsistencies">
+                <WarningAmberOutlined sx={{position: 'relative', bottom: '2px'}}/>
+              </Tooltip>
+            )}
+            {
+              bin.honest &&   <RatingComponent
             bin={bin}
             userId={guid()}
             onRatingSaved={(updatedBin: any) => JsonBinApi.updateResultsInJsonBin(updatedBin)}
           />
+            }
         </Grid>
       </Grid>
 

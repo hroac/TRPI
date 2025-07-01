@@ -1,3 +1,15 @@
+import {
+  mean, inv, subtract, multiply, sqrt, transpose,
+  abs, max, pow, floor, random, round
+} from 'mathjs';
+
+type Trait = "openness" | "conscientiousness" | "extraversion" | "agreeableness" | "neuroticism";
+export type Responses = Record<Trait, number[]>;
+
+export interface User {
+  responses: Responses;
+  userId: string;
+}
 
 interface BigFiveValues {
   openness: number;
@@ -16,6 +28,97 @@ interface Bin {
   date: string;
   userId: string;
 }
+
+/**
+ * Compute trait averages for a user
+ */
+function traitAverages(responses: Responses): number[] {
+  return ["openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism"].map(trait => {
+    const arr = responses[trait as Trait] || [];
+    return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+  });
+}
+
+/**
+ * Compute covariance matrix (unbiased, sample covariance)
+ */
+function covarianceMatrix(X: number[][]): number[][] {
+  const n = X.length;
+  const d = X[0].length;
+  // Calculate means for each column
+  const means = Array(d).fill(0);
+  for (let j = 0; j < d; j++) {
+    for (let i = 0; i < n; i++) means[j] += X[i][j];
+    means[j] /= n;
+  }
+
+  // Build the covariance matrix
+  const cov: number[][] = Array.from({ length: d }, () => Array(d).fill(0));
+  for (let i = 0; i < d; i++) {
+    for (let j = 0; j < d; j++) {
+      let sum = 0;
+      for (let k = 0; k < n; k++) {
+        sum += (X[k][i] - means[i]) * (X[k][j] - means[j]);
+      }
+      cov[i][j] = sum / (n - 1);
+    }
+  }
+  return cov;
+}
+
+/**
+ * Mahalanobis distance calculation (fully type-safe)
+ */
+function mahalanobis(x: number[], meanVec: number[], covInv: number[][]): number {
+  // delta: [d]
+  const delta = subtract(x, meanVec) as number[];
+  // left: [1 x d] * [d x d] = [1 x d]
+  const left = multiply([delta], covInv) as number[][];
+  // right: [d x 1]
+  const right = transpose([delta]) as number[][];
+  // prod: [1 x d] * [d x 1] = [1 x 1] => scalar
+  const prod = multiply(left, right) as number[][];
+  const val = Array.isArray(prod) ? prod[0][0] : prod as number;
+  return Math.sqrt(Math.abs(val));
+}
+
+/**
+ * Compute mean vector and covariance inverse from data
+ */
+function getStats(users: User[]): { meanVec: number[]; covInv: number[][]; allDists: number[] } {
+  const allProfiles = users.map(u => traitAverages(u.responses));
+  const meanResult = mean(allProfiles, 0);
+  const meanVec = Array.isArray(meanResult)
+  ? meanResult.map(Number)
+  : [Number(meanResult)]; const cov = covarianceMatrix(allProfiles);
+  const covInv = inv(cov) as number[][];
+  // Mahalanobis distances for all real users
+  const allDists = allProfiles.map(x => mahalanobis(x, meanVec, covInv));
+  return { meanVec, covInv, allDists };
+}
+
+/**
+ * Main function: isStatisticalOutlier
+ * Flags newUser as an outlier if their profile's Mahalanobis distance
+ * exceeds the given percentile of all user distances.
+ */
+export function isWithinBounds(
+  newUser: User,
+  allUsers: User[],
+  percentile: number = 0.99 // 99th percentile default
+): boolean {
+  if (allUsers.length < 10) return false; // Not enough data
+  const { meanVec, covInv, allDists } = getStats(allUsers);
+  const userProfile = traitAverages(newUser.responses);
+  const userDist = mahalanobis(userProfile, meanVec, covInv);
+
+  // Find the cutoff distance
+  const sorted = allDists.slice().sort((a, b) => a - b);
+  const cutoff = sorted[floor(percentile * sorted.length)];
+  console.log(sorted, userDist, cutoff)
+  return userDist < cutoff;
+}
+
 
 export const MBTIProfiles = [
   {
@@ -14621,7 +14724,7 @@ export const allStatements =[
         ]
       },
       "80-90": {
-        "text": "I am very prone to prolonged negative rumination.",
+        "text": "I am very prone to prolonged negative reflection.",
         "exclude": [
           "ESTJ",
           "ENTJ",

@@ -645,6 +645,7 @@ const dishonest: number[] = useMemo(() => {
    
       if (sourceStatement.opposing?.includes(index) || allStatements[index]?.opposing.includes(sourceStatement.index)) {
         opposedItems.push(index);
+
       } else if (sourceStatement.overlapping?.includes(index) || allStatements[index]?.overlapping.includes(sourceStatement.index)) {
         overlappingItems.push(index);
       }
@@ -669,7 +670,7 @@ const dishonest: number[] = useMemo(() => {
             )}
           </Box>
         </Paper>
-        {overlappingItems.length && overlapping.every(Boolean) ? (<Typography sx={{ml: 3}} variant='body2'>Overlapping</Typography>): <></>}
+        {overlappingItems.length && overlappingItems.every(Boolean) ? (<Typography sx={{ml: 3}} variant='body2'>Overlapping</Typography>): <></>}
         {
 overlappingItems.map((index: any) => {
       const stmt = stmnts.find(item => item.index === index);
@@ -706,7 +707,7 @@ overlappingItems.map((index: any) => {
       );
     })
         }
-        {opposedItems.length && opposing.every(Boolean) ? (<Typography sx={{ml: 3}} variant='body2'>Opposing</Typography>): <></>}
+        {opposedItems.length && opposedItems.every(Boolean) ? (<Typography sx={{ml: 3}} variant='body2'>Opposing</Typography>): <></>}
         {
           opposedItems.map((index: any) => {
       const stmt = stmnts.find(item => item.index === index);

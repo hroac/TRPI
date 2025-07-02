@@ -12072,7 +12072,6 @@ export const allStatements =[
       96
     ],
     "opposing": [
-      119
     ],
     "index": 81
   },
@@ -16992,7 +16991,6 @@ export const allStatements =[
     "opposing": [
       9,
       26,
-      81,
       82
     ],
     "index": 119

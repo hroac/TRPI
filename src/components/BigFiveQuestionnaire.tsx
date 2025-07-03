@@ -466,7 +466,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         localStorage.setItem('responses', JSON.stringify(updatedResponses));
         
       const honest = checkHonesty(allStatements, updatedResponses, statements, i)
-      setHonesty(!honest.includes(index))
+      setHonesty(honest.includes(index))
         return updatedResponses;
       });
 
@@ -632,7 +632,7 @@ const checkValidity = (responses: Responses): boolean => {
   });
 
   // Count how many main traits are very high (mean > 0.85)
-  const highTraitCount = traitMeans.filter(mean => mean > 0.85).length;
+  const highTraitCount = traitMeans.filter(mean => mean > 0.80).length;
 
   // Check if all values in all main traits are above 0.9 (extreme faking)
   const allHigh = mainTraits.every(trait =>

@@ -362,13 +362,13 @@ const radarData = {
           </Typography>
         </Grid>
         <Grid item>
-          {bin.honest ? '': (
+          {!Object.keys(bin).includes('honest') || bin.honest ? '': (
               <Tooltip title="This profile was flagged due to inconsistencies">
                 <WarningAmberOutlined sx={{position: 'relative', bottom: '2px'}}/>
               </Tooltip>
             )}
             {
-              bin.honest &&   <RatingComponent
+             !Object.keys(bin).includes('honest') ||  bin.honest &&   <RatingComponent
             bin={bin}
             userId={guid()}
             onRatingSaved={(updatedBin: any) => JsonBinApi.updateResultsInJsonBin(updatedBin)}

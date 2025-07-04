@@ -33,6 +33,7 @@ import {
   pearsonProfile,
 longStatements,
 checkHonesty,
+isWithinBounds,
 } from '../utils/mbtiMapping';
 import Matrix from './Matrix';
 import {
@@ -56,6 +57,7 @@ import JsonBinApi from '../utils/jsonBin';
 import BackgroundInfoModal from './BackgroundInfoModal';
 import Notification from './Notification';
 import { AnalyticsEvents, trackEvent } from '../utils/analytics';
+import { isAnyInflated } from '../utils/model';
 
 /** ------------------------------------------------------------------
  *  Utility helpers
@@ -529,6 +531,7 @@ const flushCurrentStage = () => {
     const profile = typesData.find(t => t.type === mbtiType.type);
     const primary4F = profile?.mode || ''
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
+   
     setAccuracy(accuracy)
     setList(mbtiType.scores)
     const newJson = {
@@ -539,9 +542,14 @@ const flushCurrentStage = () => {
     localStorage.removeItem('responses')
     localStorage.removeItem('stage')
     localStorage.removeItem('lastStage');
-    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement, prev: lastBinId});
+    const binId = await onComplete({ ...personal, primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements, accuracy, list: mbtiType.scores,  collectionId: mapping, company: slug, departement, prev: lastBinId, honesty});
     navigate(`/result/${binId}`);
   }
+
+
+
+
+
 
 
   const handleSubmit = async () => {
@@ -560,6 +568,7 @@ const flushCurrentStage = () => {
     const profile = typesData.find(t => t.type === mbtiType.type);
     const primary4F = profile?.mode || ''
     const accuracy = (mbtiType.scores as any)[mbtiType.type].score
+   
     setAccuracy(accuracy)
     setList(mbtiType.scores)
     const newJson = {
@@ -571,7 +580,7 @@ const flushCurrentStage = () => {
     localStorage.removeItem('longResponses')
     localStorage.removeItem('longStage')
     localStorage.removeItem('longLastStage');
-    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements: longStatements, accuracy, list: mbtiType.scores, prev: lastBinId, honesty, diagnostics});
+    const binId = await onComplete({ primary4F, mbtiType: mbtiType.type, selectedMbtiType, profile: weightedScores, description: '', responses: responses, statements: longStatements, accuracy, list: mbtiType.scores, prev: lastBinId, diagnostics,honesty});
     navigate(`/result/${binId}`); // Ensure your result route can handle potentially different data
   };
 

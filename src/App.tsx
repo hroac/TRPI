@@ -1,5 +1,5 @@
 // App.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Box,
   Card,
@@ -59,6 +59,8 @@ import NotFoundPage from './pages/NotFound';
 import Connor from './components/Connor';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import GoogleAuthButton from './components/GoogleAuth';
+import { isAnyInflated, trainResidualModels } from './utils/model';
+import { isWithinBounds } from './utils/mbtiMapping';
 
 /* ───── Helmet meta ───── */
 const AppHelmet: React.FC = () => (
@@ -84,6 +86,7 @@ const AppHelmet: React.FC = () => (
 /* ══════════════════════════════════════════════ */
 
 export default function App() {
+  const loaded = useRef(false)
   /* ── state ── */
   const [binId, setBinId] = useState<string>(
     localStorage.getItem('binId') ?? ''
@@ -92,6 +95,8 @@ export default function App() {
     (localStorage.getItem('preferredTheme') as 'light' | 'dark') || 'light'
   );
   const [referrer, setReferrer] = useState<string>('');
+  const [users, setUsers] = useState<any>({});
+  const [model, setModel] = useState<any>({});
   const userId = guid();
   const email = sessionStorage.getItem("email");
 
@@ -100,19 +105,74 @@ export default function App() {
     setThemeMode(newMode);
     localStorage.setItem('preferredTheme', newMode);
   };
+/* 
+  useEffect(() => {
+    const model = async ( ) => {
+      const users = await (await fetch('./bins-minimized.json')).json()
+      const model = trainResidualModels(users);
+    
+      setUsers(users)
+      setModel(model)
+    }
 
+    if(loaded.current && Object.keys(users).length) return;
+    model()
+    loaded.current = true;
+  }, [loaded]) */
   /* ── side-effects ── */
   useEffect(() => {
     setReferrer(document.referrer || 'Direct Visit');
   }, []);
+    type Trait = "openness" | "conscientiousness" | "extraversion" | "agreeableness" | "neuroticism";
+type Responses = Record<Trait, number[]>;
+  // Returns true if the pattern is suspiciously idealized/fake-good
+  const checkValidity = (responses: Responses): boolean => {
+    // Traits to check for "faking good"
+    const mainTraits: Trait[] = ["openness", "conscientiousness", "extraversion", "agreeableness"];
+    
+    // Calculate mean for each main trait
+    const traitMeans = mainTraits.map(trait => {
+      const vals = responses[trait]?.filter((v: any) => typeof v === "number") || [];
+      return vals.length
+        ? vals.reduce((sum: any, v: any) => sum + v, 0) / vals.length
+        : 0;
+    });
+  
+    // Count how many main traits are very high (mean > 0.85)
+    const highTraitCount = traitMeans.filter(mean => mean > 0.80).length;
+  
+    // Check if all values in all main traits are above 0.9 (extreme faking)
+    const allHigh = mainTraits.every(trait =>
+      (responses[trait] || []).every((v: any) => v > 0.9)
+    );
+  
+    // Neuroticism should be unusually low if faking good
+    const neuroVals = responses.neuroticism?.filter(isFinite);
+    const neuroticismLow = neuroVals.length > 0 && neuroVals.every((v: any) => v < 0.3);
+  
+    // Flag: 4+ high traits + low neuroticism OR all values are extremely high
+    if ((highTraitCount >= 4 && neuroticismLow) || allHigh) {
+      return false; // suspicious
+    }
+  
+    return true; // pattern plausible
+  }
 
   /* ── results save handler ── */
   const handleComplete = async (responses: any) => {
+    const users = await (await fetch('./bins-minimized.json')).json()
+      const model = trainResidualModels(users);
     localStorage.setItem(guid(), JSON.stringify(responses));
+    const zmodel =isAnyInflated({id: guid(), responses: responses.responses}, model)
+    const validity = checkValidity(responses.responses);
+    const mahalanobis = isWithinBounds({userId: guid(), responses: responses.responses}, users)
+     const honest =  Object.values(zmodel).every(t => !t)  &&  responses.honesty && validity && mahalanobis
 
     const newBinId = await JsonBinApi.saveResultsToJsonBin({
       referrer,
-      honest: responses.honesty,
+      honest: honest,
+      withinBounds: mahalanobis,
+      validity,
       prev: responses.prev,
        name: responses.name,
        email: responses.email,
@@ -123,6 +183,7 @@ export default function App() {
       type: responses.mbtiType,
       primary4FType: responses.primary4F,
       bigFiveResponses: responses.profile,
+      zmodel,
       accuracy: responses.accuracy ?? 0,
       description: responses.description ?? '',
       diagnostics: responses.diagnostics,

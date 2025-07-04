@@ -3,6 +3,10 @@ import {
   abs, max, pow, floor, random, round
 } from 'mathjs';
 
+import { Matrix, inverse} from 'ml-matrix';
+
+/* ----------  Domain types  --------------------------------------- */
+
 type Trait = "openness" | "conscientiousness" | "extraversion" | "agreeableness" | "neuroticism";
 export type Responses = Record<Trait, number[]>;
 
@@ -29,6 +33,14 @@ interface Bin {
   userId: string;
 }
 
+export interface OpennessModel {
+  beta: number[];   // [β₁, β₂, β₃, β₄, β₀]
+  rmse: number;     // Root-mean-square error of training residuals
+}
+
+const MIN_SAMPLE_SIZE   = 30;   // Robustness guard
+const FLAG_THRESHOLD_Z  = 2.0;  // |z| > 2 ⇒ likely inflation
+
 /**
  * Compute trait averages for a user
  */
@@ -39,6 +51,68 @@ function traitAverages(responses: Responses): number[] {
   });
 }
 
+export function trainOpennessModel(users: User[]): OpennessModel {
+  if (users.length < MIN_SAMPLE_SIZE) {
+    throw new Error(`Need ≥${MIN_SAMPLE_SIZE} users to train; got ${users.length}.`);
+  }
+
+  // Assemble design matrix X and target vector y
+  // X rows: [C, E, A, N, 1]  (constant intercept column)
+  const X = new Matrix(users.map(u => {
+    const t = traitAverages(u.responses); // [O, C, E, A, N]
+    return [t[1], t[2], t[3], t[4], 1];
+  }));
+  const y = Matrix.columnVector(users.map(u => traitAverages(u.responses)[0])); // Openness column
+
+  // β = (XᵀX)⁻¹ Xᵀ y   (ordinary least squares)
+  const Xt   = X.transpose();
+  const beta = inverse(Xt.mmul(X)).mmul(Xt).mmul(y); // 5×1 matrix
+
+  // Residuals & RMSE for later standardisation
+  const yHat = X.mmul(beta);          // Predictions
+  const residuals = y.clone().sub(yHat);
+  const mse = residuals
+    .transpose()
+    .mmul(residuals)
+    .get(0, 0) / (users.length - X.columns); // unbiased
+  const rmse = Math.sqrt(mse);
+
+  return {
+    beta : beta.to1DArray(), // flatten to number[]
+    rmse,
+  };
+}
+
+/* ----------  Scoring  -------------------------------------------- */
+
+export function opennessInflationZ(
+  newUser: User,
+  model: OpennessModel,
+): number {
+  const traits = traitAverages(newUser.responses); // [O, C, E, A, N]
+
+  // Predicted Openness: β₀ + β₁·C + … + β₄·N
+  const [β1, β2, β3, β4, β0] = model.beta;
+  const predicted =
+    β1 * traits[1] +
+    β2 * traits[2] +
+    β3 * traits[3] +
+    β4 * traits[4] +
+    β0;
+
+  const residual = traits[0] - predicted; // actual − predicted
+  return model.rmse === 0 ? 0 : residual / model.rmse;
+}
+
+/* ----------  Helper: direct flag check --------------------------- */
+
+export function isOpennessInflated(
+  newUser: User,
+  model: OpennessModel,
+  thresholdZ: number = FLAG_THRESHOLD_Z,
+): boolean {
+  return opennessInflationZ(newUser, model) > thresholdZ;
+}
 /**
  * Compute covariance matrix (unbiased, sample covariance)
  */

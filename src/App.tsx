@@ -105,7 +105,7 @@ export default function App() {
     setThemeMode(newMode);
     localStorage.setItem('preferredTheme', newMode);
   };
-/* 
+
   useEffect(() => {
     const model = async ( ) => {
       const users = await (await fetch('./bins-minimized.json')).json()
@@ -118,7 +118,7 @@ export default function App() {
     if(loaded.current && Object.keys(users).length) return;
     model()
     loaded.current = true;
-  }, [loaded]) */
+  }, [loaded])
   /* ── side-effects ── */
   useEffect(() => {
     setReferrer(document.referrer || 'Direct Visit');
@@ -160,14 +160,13 @@ type Responses = Record<Trait, number[]>;
 
   /* ── results save handler ── */
   const handleComplete = async (responses: any) => {
-    const users = await (await fetch('./bins-minimized.json')).json()
-      const model = trainResidualModels(users);
     localStorage.setItem(guid(), JSON.stringify(responses));
-    const zmodel =isAnyInflated({id: guid(), responses: responses.responses}, model)
+    const zmodel =isAnyInflated({id: guid(), responses: responses.responses}, model, 1)
     const validity = checkValidity(responses.responses);
     const mahalanobis = isWithinBounds({userId: guid(), responses: responses.responses}, users)
-     const honest =  Object.values(zmodel).every(t => !t)  &&  responses.honesty && validity && mahalanobis
+     const honest =  zmodel.every(t => !Object.values(t)[0])  &&  responses.honesty && validity && mahalanobis
 
+     console.log('honesty: ', zmodel, validity, mahalanobis, responses.honesty, honest)
     const newBinId = await JsonBinApi.saveResultsToJsonBin({
       referrer,
       honest: honest,
@@ -195,7 +194,7 @@ type Responses = Record<Trait, number[]>;
 
     // Also update the user's history bin
     try {
-      await HistoryMeta.addResult(userId, newBinId);
+      HistoryMeta.addResult(userId, newBinId);
     } catch (e) {
       console.warn('Failed to update history bin', e);
     }

@@ -15,6 +15,7 @@ export type Trait =
 export interface Bin {
   responses: Record<Trait, number[]>; // 0 or 1 per item
   statements: { trait: Trait; index: string | number }[]; // metadata
+  userId: string;
 }
 
 interface ItemPar3PL { a: number; b: number; c: number }

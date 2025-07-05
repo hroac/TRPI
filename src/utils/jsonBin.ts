@@ -79,8 +79,8 @@ class JsonBinApi {
   }
 
   // Method to retrieve all bins in a specific collection
-  static async getBinsInCollection() {
-    const url = `/c/${COLLECTION_ID_TRPI}/bins`;
+  static async getBinsInCollection(collectionId: string = COLLECTION_ID_TRPI) {
+    const url = `/c/${collectionId}/bins`;
 
     try {
       const response = await api.get(url);
@@ -139,6 +139,7 @@ class JsonBinApi {
         headers: { "Access-Control-Allow-Origin": "*" },
       });
 
+      response.data.record.binId = binId;
       // console.log('Retrieved bin data:', response.data);
       return response.data.record; // Return the specific bin data
     } catch (error) {

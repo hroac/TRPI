@@ -20,6 +20,7 @@ export default class MetaBin {
       {
         headers: {
           'X-Master-Key': JSONBIN_KEY,
+          "Access-Control-Allow-Origin": "*" 
         },
       }
     );
@@ -35,6 +36,7 @@ export default class MetaBin {
         headers: {
           'X-Master-Key': JSONBIN_KEY,
           'Content-Type': 'application/json',
+          "Access-Control-Allow-Origin": "*" 
         },
       }
     );
@@ -82,7 +84,7 @@ export default class MetaBin {
  static async getAll(): Promise<Record<string, string>> {
     const resp = await axios.get(
       `https://api.jsonbin.io/v3/c`,
-      { headers: { 'X-Master-Key': JSONBIN_KEY } }
+      { headers: { 'X-Master-Key': JSONBIN_KEY, "Access-Control-Allow-Origin": "*"  } }
     );
     // resp.data is array of RawRecord
     const arr: RawRecord[] = resp.data;

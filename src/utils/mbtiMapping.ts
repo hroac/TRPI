@@ -1401,12 +1401,12 @@ export function checkHonesty(
     textA: string,
     textB: string,
   ) => {
-    console.log(
+   /*  console.log(
       `[${tag}] idx${a} ↔ idx${b}  diff=${diff.toFixed(3)}  `
       + `${allMap[a]} vs ${allMap[b]}`
       + '\n' + textA,
       + '\n' + textB 
-    );
+    ); */
   };
 
   /* ────── run through *changed* sliders only ────── */
@@ -4927,7 +4927,7 @@ export const allStatements =[
         ]
       },
       "90-100": {
-        "text": "I always maximize my efficiency in time management.",
+        "text": "I maximize my efficiency in time management.",
         "exclude": [
           "ENTP",
           "ESTP",
@@ -5582,7 +5582,7 @@ export const allStatements =[
         ]
       },
       "90-100": {
-        "text": "I always strictly adhere to a well-planned routine.",
+        "text": "I strictly adhere to a well-planned routine.",
         "exclude": [
           "ENTP",
           "ESTP",
@@ -8940,7 +8940,7 @@ export const allStatements =[
     "index": 56
   },
   {
-    "text": "I actively seek out and enjoy social events and parties.",
+    "text": "I seek out and enjoy social events and parties.",
     "trait": "extraversion",
     "weight": 1,
     "aspect": "Enthusiasm",
@@ -9074,7 +9074,7 @@ export const allStatements =[
     "index": 57
   },
   {
-    "text": "I frequently assume leadership roles in group settings.",
+    "text": "I assume leadership roles in group settings.",
     "trait": "extraversion",
     "weight": 1.1,
     "aspect": "Assertiveness",

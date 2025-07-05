@@ -267,6 +267,7 @@ const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
                 'Content-Type': 'application/json',
                 'X-Master-Key': API_KEY,
                 'X-Collection-Id': collectionId,
+                "Access-Control-Allow-Origin": "*" ,
                 ...(name ? { 'X-Bin-Name': name } : {}),
             },
         });
@@ -281,6 +282,7 @@ const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
                 'Content-Type': 'application/json',
                 'X-Master-Key': API_KEY,
                 'X-Collection-Id': collectionId,
+                "Access-Control-Allow-Origin": "*" ,
                 ...(name ? { 'X-Bin-Name': name } : {}),
             },
         });

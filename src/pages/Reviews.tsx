@@ -39,6 +39,7 @@ const Reviews: React.FC = () => {
         headers: {
           "X-Master-Key": API_KEY,
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*" 
         },
       });
       const fetchedReviews = response.data.map((bin: any) => bin.record);
@@ -79,6 +80,7 @@ const Reviews: React.FC = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*" ,
             "X-Master-Key": API_KEY,
             "X-Collection-Id": COLLECTION_ID,
             'X-Bin-Name': newReview.name,

@@ -38,6 +38,7 @@ interface Result {
   type: string;
   honest: boolean;
   scores: { [trait: string]: number };
+  bigFiveResponses?: { [trait: string]: number };
   responses: Record<string, number[]>;
   statements: any,
   date?: string;
@@ -80,11 +81,11 @@ function similarity(a: number[], b: number[]): number {
 
 function getBigFiveVector(b: any) {
   const arr = [
-    b.scores.openness,
-    b.scores.conscientiousness,
-    b.scores.extraversion,
-    b.scores.agreeableness,
-    b.scores.neuroticism,
+    (b["scores"] || b['bigFiveResponses']).openness,
+    (b["scores"] || b['bigFiveResponses']).conscientiousness,
+    (b["scores"] || b['bigFiveResponses']).extraversion,
+    (b["scores"] || b['bigFiveResponses']).agreeableness,
+    (b["scores"] || b['bigFiveResponses']).neuroticism,
   ];
   return arr.every(x => typeof x === "number" && !isNaN(x)) ? arr : null;
 }
@@ -313,11 +314,25 @@ useEffect(() => {
     setToken("");
   };
 
+  // Utility: convert date string to yyyy-mm-dd (cache, startDate, endDate all compared in this format)
+  const norm = (d?: string) => new Date(d || '').toISOString().slice(0,10);
+
+
 const loadData = async () => {
-  setLoading(true);
+   let start = results.length ? results.reduce((min: any, b: any) => min && b.date && new Date(b.date) < new Date(min) ? b.date : min, results[0].date) : undefined;
+    let end = results.length ? results.reduce((max: any, b: any) => max && b.date && new Date(b.date) > new Date(max) ? b.date : max, results[0].date) : undefined;
+    const resultsCovered =
+    start && norm(start) && end && norm(end) &&
+    (!startDate || norm(start)! <= norm(startDate)) &&
+    (!endDate || norm(end)! >= norm(endDate));
+    if(resultsCovered) {
+      computeMetrics(results); return;
+    }
+    setLoading(true);
+
 
   // Fetch cache as usual
-  let cacheId = localStorage.getItem(CACHE_KEY) || "";
+  let cacheId = localStorage.getItem(`${startDate}_${endDate}_${CACHE_KEY}`) || "";
   let cached: { bins: Result[]; lastBinId?: string; start?: string; end?: string } | null = null;
   if (cacheId) {
     try {
@@ -327,18 +342,23 @@ const loadData = async () => {
     }
   }
 
+  if(!cached) {
+    const bins = await ((await fetch('./bins-minimized.json')).json())
+    let start = bins.length ? bins.reduce((min: any, b: any) => min && b.date && new Date(b.date) < new Date(min) ? b.date : min, bins[0].date) : undefined;
+    let end = bins.length ? bins.reduce((max: any, b: any) => max && b.date && new Date(b.date) > new Date(max) ? b.date : max, bins[0].date) : undefined;
+
+    cached = {bins, start, end, lastBinId: ''}
+  }
   let allBins: Result[] = cached?.bins || [];
 
   // Find date range in cache
-  let cacheStart = allBins.length ? allBins.reduce((min, b) => min && b.date && new Date(b.date) < new Date(min) ? b.date : min, allBins[0].date) : undefined;
-  let cacheEnd = allBins.length ? allBins.reduce((max, b) => max && b.date && new Date(b.date) > new Date(max) ? b.date : max, allBins[0].date) : undefined;
+  let cacheStart = allBins.length ? allBins.reduce((min: any, b: any) => min && b.date && new Date(b.date) < new Date(min) ? b.date : min, allBins[0].date) : undefined;
+  let cacheEnd = allBins.length ? allBins.reduce((max: any, b: any) => max && b.date && new Date(b.date) > new Date(max) ? b.date : max, allBins[0].date) : undefined;
 
-  // Utility: convert date string to yyyy-mm-dd (cache, startDate, endDate all compared in this format)
-  const norm = (d?: string) => new Date(d || '').toISOString().slice(0,10);
-
+  
   // See if cache covers the requested range
   const rangeCovered =
-    norm(cacheStart) && norm(cacheEnd) &&
+    cacheStart && norm(cacheStart) && cacheEnd && norm(cacheEnd) &&
     (!startDate || norm(cacheStart)! <= norm(startDate)) &&
     (!endDate || norm(cacheEnd)! >= norm(endDate));
 
@@ -350,16 +370,17 @@ const loadData = async () => {
 
     // Only fetch what's missing: if cache is available, trim requested range to what's outside the cache
     if (norm(cacheStart)) {
-      if (startDate && norm(startDate)! >= norm(cacheStart)!) fetchStart = ''; // already cached
-      if (endDate && norm(endDate)! <= norm(cacheEnd)!) fetchEnd = ''; // already cached
+     // if (startDate && norm(startDate)! >= norm(cacheStart)!) fetchStart = ''; // already cached
+      //if (endDate && norm(endDate)! <= norm(cacheEnd)!) fetchEnd = ''; // already cached
     }
 
     // Always provide startAfter if fetching after cached bins (to avoid overlap)
     let lastId: string | undefined = cached?.lastBinId;
     let fetchedBins: Result[] = [];
 
+    console.log(fetchStart, cacheStart, fetchEnd, fetchStart, (fetchStart && fetchStart !== cacheStart) || (fetchEnd && fetchEnd !== cacheEnd))
     // Fetch missing bins if needed
-    if (fetchStart || fetchEnd) {
+    if ((fetchStart && fetchStart !== cacheStart) || (fetchEnd && fetchEnd !== cacheEnd)) {
       const { bins, lastBinId } = await JsonBinApi.fetchCollectionBins(
         COLLECTION_ID,
         {
@@ -377,7 +398,7 @@ const loadData = async () => {
           userId: b.userId || "",
           type: b.type || "",
           honest: b.honest ?? true,
-          scores: b.bigFiveResponses || b.scores || {},
+          scores: b.bigFiveResponses || (b["scores"] || b['bigFiveResponses']) || {},
           responses: b.responses || {},
           statements: b.statements.map((s: any) => ({
             index: s.index,
@@ -395,20 +416,26 @@ const loadData = async () => {
       );
 
       // Update cache
-      let newCacheId = '';
+      let newCacheId = cacheId;
       try {
-        newCacheId = await JsonBinApi.createBin(
+        if(cacheId) {
+          newCacheId = cacheId;
+          await JsonBinApi.updateBin(cacheId, { bins: allBins, lastBinId, start: fetchStart || cacheStart, end: fetchEnd || cacheEnd }, COLLECTION_ID,   `${startDate}_${endDate}_${CACHE_KEY}`)
+        } else {
+          newCacheId = await JsonBinApi.createBin(
           { bins: allBins, lastBinId, start: fetchStart || cacheStart, end: fetchEnd || cacheEnd },
           "68348edd8960c979a5a159b2",
-          CACHE_KEY
+          `${startDate}_${endDate}_${CACHE_KEY}`
         );
+        }
+        newCacheId = ''
       } catch {
         newCacheId = await JsonBinApi.createXLBin(
           { bins: allBins, lastBinId, start: fetchStart || cacheStart, end: fetchEnd || cacheEnd },
-          CACHE_KEY
+          `${startDate}_${endDate}_${CACHE_KEY}`
         );
       }
-      localStorage.setItem(CACHE_KEY, newCacheId);
+      localStorage.setItem(`${startDate}_${endDate}_${CACHE_KEY}`, newCacheId);
     }
   }
 
@@ -437,7 +464,7 @@ const loadData = async () => {
     filtered.filter(
       (r: any) =>
         r.statements.length === 26 &&
-        r.statements.every((s: any) => typeof s.index === "number")
+        r.statements.every((s: any) => typeof !s.index || s.index === "number")
     )
   );
 
@@ -477,11 +504,11 @@ const loadData = async () => {
       typeGroups[b.type].push(b);
 
       const arr = [
-        b.scores.openness,
-        b.scores.conscientiousness,
-        b.scores.extraversion,
-        b.scores.agreeableness,
-        b.scores.neuroticism,
+        (b["scores"] || b['bigFiveResponses']).openness,
+        (b["scores"] || b['bigFiveResponses']).conscientiousness,
+        (b["scores"] || b['bigFiveResponses']).extraversion,
+        (b["scores"] || b['bigFiveResponses']).agreeableness,
+        (b["scores"] || b['bigFiveResponses']).neuroticism,
       ];
       allScores.push(arr);
 
@@ -490,11 +517,11 @@ const loadData = async () => {
     });
     const grandAverage = Object.entries(typeGroups).reduce(
   (acc, [t, arr]) => {
-    const sim = averageSimilarity(arr.map(b => [ b.scores.openness,
-  b.scores.conscientiousness,
-  b.scores.extraversion,
-  b.scores.agreeableness,
-  b.scores.neuroticism,]));
+    const sim = averageSimilarity(arr.map(b => [ (b["scores"] || b['bigFiveResponses']).openness,
+  (b["scores"] || b['bigFiveResponses']).conscientiousness,
+  (b["scores"] || b['bigFiveResponses']).extraversion,
+  (b["scores"] || b['bigFiveResponses']).agreeableness,
+  (b["scores"] || b['bigFiveResponses']).neuroticism,]));
     return {
       sum: acc.sum + sim * arr.length,
       count: acc.count + arr.length,
@@ -511,11 +538,11 @@ const dichotomyAverages = calculateDichotomyAverages(results);
     const perType: Record<string, number> = {};
     Object.keys(typeGroups).forEach((t) => {
       const arrs = typeGroups[t].map((b) => [
-        b.scores.openness,
-        b.scores.conscientiousness,
-        b.scores.extraversion,
-        b.scores.agreeableness,
-        b.scores.neuroticism,
+        (b["scores"] || b['bigFiveResponses']).openness,
+        (b["scores"] || b['bigFiveResponses']).conscientiousness,
+        (b["scores"] || b['bigFiveResponses']).extraversion,
+        (b["scores"] || b['bigFiveResponses']).agreeableness,
+        (b["scores"] || b['bigFiveResponses']).neuroticism,
       ]);
       perType[t] = averageSimilarity(arrs);
     });
@@ -523,11 +550,11 @@ const dichotomyAverages = calculateDichotomyAverages(results);
     const groupSims: Record<string, number> = {};
     Object.entries(groupings).forEach(([key, grp]) => {
       const arrs = grp.map((b) => [
-        b.scores.openness,
-        b.scores.conscientiousness,
-        b.scores.extraversion,
-        b.scores.agreeableness,
-        b.scores.neuroticism,
+        (b["scores"] || b['bigFiveResponses']).openness,
+        (b["scores"] || b['bigFiveResponses']).conscientiousness,
+        (b["scores"] || b['bigFiveResponses']).extraversion,
+        (b["scores"] || b['bigFiveResponses']).agreeableness,
+        (b["scores"] || b['bigFiveResponses']).neuroticism,
       ]);
       groupSims["xx" + key] = averageSimilarity(arrs);
     });

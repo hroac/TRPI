@@ -8,14 +8,14 @@ const HISTORY_COLLECTION = '67af3f35ad19ca34f8038ae8';
 export default class HistoryMeta {
   static async getMeta(): Promise<Record<string, string>> {
     const resp = await axios.get(`https://api.jsonbin.io/v3/b/${META_BIN_ID}`, {
-      headers: { 'X-Master-Key': JSONBIN_KEY },
+      headers: { 'X-Master-Key': JSONBIN_KEY, 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*"  },
     });
     return resp.data.record || {};
   }
 
   static async updateMeta(meta: Record<string, string>): Promise<void> {
     await axios.put(`https://api.jsonbin.io/v3/b/${META_BIN_ID}`, meta, {
-      headers: { 'X-Master-Key': JSONBIN_KEY, 'Content-Type': 'application/json' },
+      headers: { 'X-Master-Key': JSONBIN_KEY, 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*"  },
     });
   }
 

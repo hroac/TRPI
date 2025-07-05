@@ -87,6 +87,7 @@ export interface MetaBin { currentBinId: string; tags: Tag[]; }
 const baseHeaders: HeadersInit = {
   'Content-Type': 'application/json',
   'X-Master-Key': MASTER_KEY,
+  "Access-Control-Allow-Origin": "*",
   'X-Bin-Meta': 'false',
   ...(COLLECTION && { 'X-Collection-Id': COLLECTION }),
   'X-Bin-Name': new Date()

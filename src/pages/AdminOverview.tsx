@@ -28,6 +28,7 @@ import {
   weightedEuclideanDistance,
 } from "../utils/mbtiMapping";
 import { compute2PL } from "../utils/irt";
+import { computeGStudy } from "../utils/gstudy";
 
 
 
@@ -205,6 +206,55 @@ function IrtReliabilityTable({ reliabilities }: { reliabilities: {trait: string,
   );
 }
 
+function GStudyTable({ reliabilities }: { reliabilities: {trait: string; gCoefficient: number}[] }) {
+  const TRAIT_LABELS = {
+    openness: "Openness",
+    conscientiousness: "Conscientiousness",
+    extraversion: "Extraversion",
+    agreeableness: "Agreeableness",
+    neuroticism: "Neuroticism",
+  } as const;
+  const valid = reliabilities.filter(x => Number.isFinite(x.gCoefficient));
+  const general =
+    valid.length > 0
+      ? valid.reduce((a,b) => a + b.gCoefficient, 0) / valid.length
+      : NaN;
+
+  return (
+    <>
+      <Typography variant="h6" sx={{ mt: 3 }}>
+        G-Study Reliability
+      </Typography>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Trait</TableCell>
+            <TableCell align="right">G</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {reliabilities.map(r => (
+            <TableRow key={r.trait}>
+              <TableCell sx={{ textTransform: 'capitalize' }}>
+                {TRAIT_LABELS[r.trait as keyof typeof TRAIT_LABELS] || r.trait}
+              </TableCell>
+              <TableCell align="right">
+                {Number.isFinite(r.gCoefficient) ? r.gCoefficient.toFixed(3) : '--'}
+              </TableCell>
+            </TableRow>
+          ))}
+          <TableRow>
+            <TableCell sx={{ fontWeight: 'bold' }}>General</TableCell>
+            <TableCell align="right" sx={{ fontWeight: 'bold' }}>
+              {Number.isFinite(general) ? general.toFixed(3) : '--'}
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </>
+  );
+}
+
 
 
 /* ---------- component ---------- */
@@ -226,6 +276,7 @@ export default function AdminOverview() {
   const [overallSimilarity, setOverallSimilarity] = useState<number>(0);
   const [generalSimilarity, setGeneralSimilarity] = useState<number>(0);
   const [irtReliabilities, setIrtReliabilities] = useState<{trait: string; reliability: number}[]>([]);
+  const [gStudyReliabilities, setGStudyReliabilities] = useState<{trait: string; gCoefficient: number}[]>([]);
 
 // Inside your computeMetrics or after loading data:
 useEffect(() => {
@@ -235,6 +286,12 @@ useEffect(() => {
     console.log(reliabilities)
     setIrtReliabilities(reliabilities);
   })();
+}, [results]);
+
+useEffect(() => {
+  if (!results.length) return;
+  const gRes = computeGStudy(results);
+  setGStudyReliabilities(gRes);
 }, [results]);
 
   /* ---------- auth helpers ---------- */
@@ -571,6 +628,7 @@ const dichotomyAverages = calculateDichotomyAverages(results);
       {/* Metrics */}
       <Card sx={{ p: 2, mb: 3 }}>
        <IrtReliabilityTable reliabilities={irtReliabilities} />
+       <GStudyTable reliabilities={gStudyReliabilities} />
 
         <DichotomyTable dichotomyAverages={similarityPerDichotomy}/>
 

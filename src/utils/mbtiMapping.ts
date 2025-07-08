@@ -179,7 +179,7 @@ function getStats(users: User[]): { meanVec: number[]; covInv: number[][]; allDi
 export function isWithinBounds(
   newUser: User,
   allUsers: User[],
-  percentile: number = 0.9 // 99th percentile default
+  percentile: number = 0.8 // 99th percentile default
 ): boolean {
   if (allUsers.length < 10) return false; // Not enough data
   const { meanVec, covInv, allDists } = getStats(allUsers);
@@ -8797,7 +8797,6 @@ export const allStatements =[
     ],
     "opposing": [
       100,
-      121,
       124,
       127
     ],
@@ -17345,7 +17344,6 @@ export const allStatements =[
     "opposing": [
       23,
       39,
-      55
     ],
     "index": 121
   },

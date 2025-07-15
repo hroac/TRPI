@@ -454,8 +454,7 @@ const flushCurrentStage = () => {
         const sub = getSubtext(trait, index, value as number);
         setSelectedStatement(sub);
         localStorage.setItem('longResponses', JSON.stringify(updatedResponses));
-        const dishonest = checkHonesty(allStatements, updatedResponses, statements, i)
-        setHonesty(dishonest.length === 0 || !dishonest.includes(index))
+        // Honesty will be evaluated on submit
              
         return updatedResponses;
       });
@@ -518,7 +517,9 @@ const flushCurrentStage = () => {
     jobDescription?: string;
   }) => {
       setSubmitted(true)
-    const weightedScores = Object.keys(responses).reduce((acc, trait) => {
+    const dishonest = checkHonesty(allStatements, responses, statements)
+    setHonesty(dishonest.length === 0)
+    const weightedScores = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait].map((score: any, i: any) =>
         score * (getStatement(trait, i).weight || 1)
        );
@@ -553,9 +554,11 @@ const flushCurrentStage = () => {
 
 
 
-  const handleSubmit = async () => {
-    setSubmitted(true)
-    const weightedScores = Object.keys(responses).reduce((acc, trait) => {
+  const handleSubmit = async () => {
+    setSubmitted(true)
+    const dishonest = checkHonesty(allStatements, responses, statements)
+    setHonesty(dishonest.length === 0)
+    const weightedScores = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait].map((score: any, i: any) =>
         score * (getStatement(trait, i).weight || 1)
        );

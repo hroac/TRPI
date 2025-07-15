@@ -466,8 +466,7 @@ const BigFiveQuestionnaire: React.FC<{ onComplete: (responses: any) => void }> =
         setSelectedStatement(sub.text);
         localStorage.setItem('responses', JSON.stringify(updatedResponses));
       
-      const dishonest = checkHonesty(allStatements, updatedResponses, statements, i)
-      setHonesty(dishonest.length === 0 || !dishonest.includes(index))
+      // Honesty will be evaluated on submit
         return updatedResponses;
       });
 
@@ -580,6 +579,8 @@ function buildStatementObject(weightedScores: { [trait: string]: number }, state
     jobDescription?: string;
   }) => {
       setSubmitted(true)
+    const dishonest = checkHonesty(allStatements, responses, statements)
+    setHonesty(dishonest.length === 0)
     const weightedScores = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait].map((score: any, i: any) => 
         score * (getStatement(trait, i).weight || 1)
@@ -655,6 +656,8 @@ const checkValidity = (responses: Responses): boolean => {
   const handleSubmit = async () => {
     trackEvent(AnalyticsEvents.TestCompleted, { event_category: 'Test' });
     setSubmitted(true)
+    const dishonest = checkHonesty(allStatements, responses, statements)
+    setHonesty(dishonest.length === 0)
     const weightedScores = Object.keys(responses).reduce((acc, trait) => {
       const traitScores = responses[trait].map((score: any, i: any) => 
         score * (getStatement(trait, i).weight || 1)

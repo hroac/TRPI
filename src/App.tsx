@@ -127,36 +127,55 @@ export default function App() {
 type Responses = Record<Trait, number[]>;
   // Returns true if the pattern is suspiciously idealized/fake-good
   const checkValidity = (responses: Responses): boolean => {
-    // Traits to check for "faking good"
-    const mainTraits: Trait[] = ["openness", "conscientiousness", "extraversion", "agreeableness"];
-    
-    // Calculate mean for each main trait
-    const traitMeans = mainTraits.map(trait => {
-      const vals = responses[trait]?.filter((v: any) => typeof v === "number") || [];
-      return vals.length
-        ? vals.reduce((sum: any, v: any) => sum + v, 0) / vals.length
-        : 0;
-    });
+  // Traits to check for "faking good"
+  const mainTraits: Trait[] = ["openness", "conscientiousness", "extraversion", "agreeableness"];
   
-    // Count how many main traits are very high (mean > 0.85)
-    const highTraitCount = traitMeans.filter(mean => mean > 0.80).length;
-  
-    // Check if all values in all main traits are above 0.9 (extreme faking)
-    const allHigh = mainTraits.every(trait =>
-      (responses[trait] || []).every((v: any) => v > 0.9)
-    );
-  
-    // Neuroticism should be unusually low if faking good
-    const neuroVals = responses.neuroticism?.filter(isFinite);
-    const neuroticismLow = neuroVals.length > 0 && neuroVals.every((v: any) => v < 0.3);
-  
-    // Flag: 4+ high traits + low neuroticism OR all values are extremely high
-    if ((highTraitCount >= 4 && neuroticismLow) || allHigh) {
-      return false; // suspicious
-    }
-  
-    return true; // pattern plausible
+  // Helper: check if majority (over 50%) of an array are above/below threshold
+  function majorityIsHighOrLow(vals: number[], highThresh = 0.85, lowThresh = 0.15): boolean {
+    if (!vals.length) return false;
+    const highCount = vals.filter(v => v > highThresh).length;
+    const lowCount = vals.filter(v => v < lowThresh).length;
+    const half = Math.ceil(vals.length / 2);
+    return highCount >= half || lowCount >= half;
   }
+
+  // Calculate mean for each main trait
+  const traitMeans = mainTraits.map(trait => {
+    const vals = (responses[trait] ?? []).filter((v: any) => typeof v === "number");
+    return vals.length
+      ? vals.reduce((sum: number, v: number) => sum + v, 0) / vals.length
+      : 0;
+  });
+
+  // Count how many main traits are very high (mean > 0.80)
+  const highTraitCount = traitMeans.filter(mean => mean > 0.80).length;
+
+  // Check if all values in all main traits are above 0.9 (extreme faking)
+  const allHigh = mainTraits.every(trait =>
+    (responses[trait] || []).every((v: any) => v > 0.9)
+  );
+
+  // Neuroticism should be unusually low if faking good
+  const neuroVals = (responses.neuroticism ?? []).filter((v: any) => typeof v === "number" && isFinite(v));
+  const neuroticismLow = neuroVals.length > 0 && neuroVals.every(v => v < 0.3);
+
+  // New logic: Check for any trait where majority of values are very high or very low
+  const suspiciousMajority = mainTraits.some(trait => {
+    const vals = (responses[trait] ?? []).filter((v: any) => typeof v === "number");
+    return majorityIsHighOrLow(vals);
+  });
+
+  // Flag if: 4+ high traits & low neuroticism, OR all values extreme, OR suspicious majority
+  if (
+    suspiciousMajority || (highTraitCount >= 4 && neuroticismLow) ||
+    allHigh
+  ) {
+    return false; // suspicious
+  }
+
+  return true; // pattern plausible
+};
+
 
   /* ── results save handler ── */
   const handleComplete = async (responses: any) => {

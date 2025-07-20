@@ -56,82 +56,174 @@ const tokenParts = [
 ];
 
 
- const info = `
-────────────────────  COMBINED RULEBOOK  ────────────────────
-(Authoritative facts drawn from *From Traits to Types* and the core TRPI model.  
-Every exam question must rely **only** on these statements.)
+ const info = `────────────────────  COMBINED RULEBOOK  ────────────────────
+(Authoritative facts from *From Traits to Types*, the core TRPI model,
+and the empirical meta-states papers. Every exam question must rely
+**only** on these statements.)
 
-1. FUNCTION-PAIRINGS
-   • A cognitive pair = 1 perceiving (S or N) + 1 judging (T or F).  
-   • The two functions must carry opposite attitudes (I vs E).  
-   • One-sided dominance only: **EIII** or **IEEE**.  
-   • Same-attitude pairs or alternating IEIE stacks are invalid. 
-   • A pairing can either be open minded (eg SiTe) or close minded (eg TeSi). 
+---
 
-2. STRUCTURAL LAYERS (Freud × Jung)  
-   • **Id**  = Se / Ne (present, impulse, short-context)  
-   • **Super-Id** = Si / Ni (memory / foresight, long-context)  
-   • **Ego**  = Ti / Fi (internal logic & value)  
-   • **Superego** = Te / Fe (external rules & harmony)
+### 1. FUNCTION-PAIRINGS
+- A cognitive pair = 1 perceiving (S or N) + 1 judging (T or F).
+- The two functions must carry opposite attitudes (I vs E).
+- Only one-sided dominance is valid: **EIII** or **IEEE**.
+- Same-attitude pairs (e.g., II, EE) or alternating IEIE stacks are invalid.
+- Pairings can be open-minded (lead with Perceiving, e.g., SiTe) or closed-minded (lead with Judging, e.g., TeSi).
+- **Every pairing must be localized to a single cerebral hemisphere.**
 
-3. 4F TRAIT MAPPING  
-   • **Fight**  = Se/Ne + Ti  (action)  
-   • **Flight** = Se/Ne + Fi  (avoidance)  
-   • **Freeze** = Si/Ni + Te  (control)  
-   • **Fawn**   = Si/Ni + Fe  (appeasement)
+---
 
-4. SUFFIX LOGIC  
-   • Judger (J): –ST/–NT ⇒ Fight | –SF/–NF ⇒ Flight  
-   • Perceiver (P): –ST/–NT ⇒ Freeze | –SF/–NF ⇒ Fawn  
-   • A suffix records the opposing Ego (J) or Superego (P).
-   • The opposing Ego/Superego can either be open minded (leading with a perceiving function eg NeTi) or close minded (leading with a judging function eg TiNe).
-   • A 4F mode has two suffixes attached to it, eg for perceivers who experience Freeze it can be -ST or -NT, for a judger experiencing Fight it can be -ST or -NT, for a perceiver experiencing Fawn it can be -SF or -NF, for a judger experiencing Flight it can be -SF or -NF.
-   • The dominant response is dependant on context, however you are likely to prefer your base response (eg for ENTP-NT its Fight then Freeze)
-5. SHORT- vs LONG-CONTEXT PROCESSING  
-   • Lead Se, Ne, Te, Fe ⇒ **short-context** (real-time, fluid).  
-   • Lead Si, Ni, Ti, Fi ⇒ **long-context** (reflective, crystal).   
-   • Switching context length inverts the attitude of the dominant function and reorganises the stack (EIII ⇄ IEEE).
+### 2. STRUCTURAL LAYERS (Freud × Jung)
+- **Id**    = Se / Ne (present, impulse, short-context)
+- **Super-Id** = Si / Ni (memory / foresight, long-context)
+- **Ego**   = Ti / Fi (internal logic & value)
+- **Superego** = Te / Fe (external rules & harmony)
 
-6. META-TRAIT AXES 
-   | Axis | Big-Five Poles | Function Polarity |  
-   | Thinking  | Extraversion  ↔  Conscientiousness  | Te ↔ Ti | 
-   | Feeling | Agreeableness  ↔ Neuroticism  | Fe ↔ Fi | 
+---
 
-7. Function definition & interaction
-    rely on Jungs original definitions of the functions
-    observation = objective
-    impression = subjective
-  • Se + Fi/Ti creates an impression (Si)
-  • Si + Fe/Te creates an observation (Se)
-  • Ne + Fi/Ti creates an impression (Si)
-  • Ni + Fe/Te creates an observation (Se)
+### 3. 4F TRAIT MAPPING
+- **Fight**  = Se/Ne + Ti  (action, assertiveness, extraversion)
+- **Flight** = Se/Ne + Fi  (avoidance, withdrawal, neuroticism)
+- **Freeze** = Si/Ni + Te  (control, restraint, conscientiousness)
+- **Fawn**   = Si/Ni + Fe  (appeasement, agreeableness, social harmony)
+- Each mode is the behavioral extreme of its corresponding Big Five trait.
 
-8. COGNITIVE CLUSTERS   
-   • **SF/NT**  ENTP INTJ ISFJ ESFP  
-   • **FS/TN**  INTP ENTJ ESFJ ISFP 
-   • **ST/NF**  ESTP ISTJ INFJ ENFP   
-   • **TS/FN**  ISTP ESTJ ENFJ INFP
+---
 
-9. GROWTH / INDIVIDUATION SEQUENCE  
-   Fight→Fawn→Freeze→Flight | Freeze→Flight→Fight→Fawn  
-   Fawn→Fight→Flight→Freeze | Flight→Freeze→Fawn→Fight
+### 4. SUFFIX LOGIC
+- Judger (J): –ST/–NT ⇒ Fight | –SF/–NF ⇒ Flight
+- Perceiver (P): –ST/–NT ⇒ Freeze | –SF/–NF ⇒ Fawn
+- Suffix records the *opposing* Ego (for J) or Superego (for P).
+- A 4F mode has two possible suffixes (e.g., a Perceiver in Freeze can be -ST or -NT).
+- Dominant response is context-dependent but people prefer their base mode (e.g., ENTP-NT: Fight, then Freeze).
 
-10. 64-STATE META-GRID (type × suffix)  
-   ENTP SiTe SiFe NiTe NiFe  INTJ SeTi SeFi NeTi NeFi  
-   ISFJ SeTi SeFi NeTi NeFi  ESFP SiTe SiFe NiTe NiFe  
-   INTP TeSi FeSi TeNi FeNi  ENTJ TiSe FiSe TiNe FiNe  
-   ESFJ TiSe FiSe TiNe FiNe  ISFP TeSi FeSi TeNi FeNi  
-   ESTP SiTe SiFe NiTe NiFe  ISTJ SeTi SeFi NeTi NeFi  
-   INFJ SeTi SeFi NeTi NeFi  ENFP SiTe SiFe NiTe NiFe  
-   ISTP TeSi FeSi TeNi FeNi  ESTJ TiSe FiSe TiNe FiNe  
-   ENFJ TiSe FiSe TiNe FiNe  INFP TeSi FeSi TeNi FeNi
+---
 
-11. EMPIRICAL BENCHMARK (2 916 profiles)  
-   • Mean Pearson r = **0.83** (range 0.59 – 0.91) between TRPI type profiles and Big-Five vectors.  
-   • r values between 4F modes and type averages were **not** reported.
+### 5. SHORT- vs LONG-CONTEXT PROCESSING
+- Lead Se, Ne, Te, Fe ⇒ **short-context** (real-time, fluid, TPN-driven)
+- Lead Si, Ni, Ti, Fi ⇒ **long-context** (reflective, crystal, DMN-driven)
+- Switching context inverts the attitude of the dominant function and reorganizes the stack (EIII ⇄ IEEE).
 
-(Questions that contradict or omit these points are invalid.)
-(“For educational purposes only—no diagnostic or therapeutic advice)
+---
+
+### 6. META-TRAIT AXES (validated empirically)
+| Axis       | Big-Five Poles            | Function Polarity |  
+|------------|---------------------------|-------------------|
+| Thinking   | Extraversion  ↔  Conscientiousness  | Te ↔ Ti |
+| Feeling    | Agreeableness ↔ Neuroticism         | Fe ↔ Fi |
+
+- These axes (from factor analysis) validate TRPI’s meta-trait logic.
+
+---
+
+### 7. FUNCTION DEFINITION & INTERACTION
+- *Rely only on Jung’s original definitions:*
+  - Observation = objective
+  - Impression = subjective
+- Se + Fi/Ti creates an impression (Si)
+- Si + Fe/Te creates an observation (Se)
+- Ne + Fi/Ti creates an impression (Si)
+- Ni + Fe/Te creates an observation (Se)
+
+---
+
+### 8. COGNITIVE CLUSTERS (Empirically validated groupings)
+- **SF/NT** ENTP INTJ ISFJ ESFP 
+- **FS/TN** INTP ENTJ ESFJ ISFP 
+- **ST/NF** ESTP ISTJ INFJ ENFP 
+- **TS/FN** ISTP ESTJ ENFJ INFP
+
+---
+
+### 9. GROWTH / INDIVIDUATION SEQUENCE
+- Four valid developmental/growth cycles:
+  - Fight→Fawn→Freeze→Flight | Freeze→Flight→Fight→Fawn
+  - Fawn→Fight→Flight→Freeze | Flight→Freeze→Fawn→Fight
+
+---
+
+### 10. 64-STATE META-GRID (Type × Suffix, MRI validated)
+- Each TRPI type is a unique combination of Ego and Superego pairings, each defined by above rules.
+- Crosses 8 valid Ego pairings with 8 valid Superego pairings = **64 distinct lateralized meta-states**, each linked to a unique PFC activation pattern.
+- Meta-states can be denoted [Ego]–[Superego], e.g. SeFi–SiTe, NeTi–SiFe, etc.
+
+---
+
+### 11. EMPIRICAL BENCHMARKS
+- **TRPI–Big Five mean alignment**: Intra-type similarity r = 0.84 (TRPI) and r = 0.91 (external N=1M); profile-prototype accuracy ≈ 0.69 (p ≪ 0.001, Cohen’s h > 1.5).
+- **Meta-state label accuracy**: MRI cross-validation 0.69 (p < 1e-200, Cohen’s d = 1.91).
+- **Within-group anatomical similarity**: r = 0.67.
+- **Group-level brain/trait concordance**: r = 0.92.
+- **4F cluster mapping (trait–mode agreement)**: S ≈ 0.85–0.97 for cluster–prototype match.
+- **Principal component/factor analysis**: Confirms Thinking/Feeling axes, with Openness loading on both.
+
+---
+
+### 12. PFC BRAIN REGION–FUNCTION MAP (Neuroimaging validated)
+- **Right dlPFC (NeTi):** Abstract, divergent reasoning, scenario generation, working memory (long-context, improvisational).
+- **Left dlPFC (SeTi):** Concrete, analytic action, detail and rapid real-time planning (short-context).
+- **Right dmPFC (NiFe):** Social pattern recognition, empathy, group intuition, complex perspective-taking.
+- **Left dmPFC (SiFe):** Tradition/social role memory, empathy by convention, social harmony through precedent.
+- **Right vmPFC (NeFi):** Imaginative valuation, emotional meaning-making, authentic self-expression for imagined outcomes.
+- **Left vmPFC (SeFi):** Immediate, sensory-driven emotional response, gut reactions, direct lived affect.
+- **Right vlPFC (NiTe):** Logical control from internal model/foresight, planning under uncertainty.
+- **Left vlPFC (SiTe):** Rule-based, procedural logic, routine, reliable execution.
+
+---
+
+### 13. CONTEXT NETWORKS & SUBCORTICAL MODULATION (Meta-States)
+- **Default Mode Network (DMN):** Internally focused, long-context (Ni, Si, Fe), narrative, memory, introspection.
+- **Task-Positive Network (TPN):** Externally focused, short-context (Se, Ne, Ti), action, attention, execution.
+- **Thalamus:** Sensory relay, gating, context-switching; lateralization underpins S/N.
+- **Hypothalamus:** Modulates motivational/survival responses (4F).
+- **Hippocampus:** Left: explicit/sequential memory (Si/Se); Right: associative/narrative (Ni/Ne). Context binding for PFC.
+
+---
+
+### 14. CONTEXT-LENGTH MODULATION & DYNAMIC ADAPTATION
+- Dynamic modulation of context length is central to psychological adaptation and resilience.
+- Shifts are not arbitrary but follow lawful, compensatory transitions (cf. Jung, CW6 §§669, 707, 908):
+  - Se < Ti/Fi = Si
+  - Si < Te/Fe = Se
+  - Ni < Te/Fe = Se
+  - Ne < Ti/Fi = Si
+
+---
+
+### 15. META-STATE FORMAL RULES (from Jung & MRI evidence)
+1. **Composition**: Meta-state = [Ego]–[Superego] or [Superego]–[Ego].
+2. **Attitude balance**: Each pairing = 1 E + 1 I function (never double-E or double-I).
+3. **Perceiving–Judging mix**: Each pair = 1 S/N + 1 T/F.
+4. **Hemispheric locality**: All pairing functions are in the same hemisphere.
+- Crossing 8 Ego × 8 Superego yields the validated 64-state grid.
+
+---
+
+### 16. CLUSTERING & LATENT STRUCTURE (Unsupervised empirical findings)
+- Hierarchical clustering (trait or brain) without type labels recovers four robust clusters matching 4F modes; two-cluster solution perfectly replicates E/I.
+- Mean cluster–prototype similarity S = 0.86 (trait), r = 0.8–0.97 (brain).
+- Empirical clusters map strongly to individual types and fine-grained 4F structure (see tables in *From Traits to Types*).
+
+---
+
+### 17. LIMITATIONS & GENERALIZABILITY
+- Results currently based on cross-sectional MRI and self-report, adults aged 22–35, matrix-sampled data.
+- Generalizability to clinical/developmental/cultural contexts, and real-time state tracking, requires further longitudinal, functional imaging, and multi-modal replication.
+- TRPI’s empirical structure holds in both targeted and large-scale (N > 1M) datasets, but improvements in item pool and data triangulation are ongoing.
+
+---
+
+### 18. RULEBOOK AUTHORITY AND JUNGIAN FOUNDATION
+- Every formal rule above is grounded in Jung’s original texts (*Psychological Types*, 1921), empirical Big Five research, and MRI validation.
+- “The auxiliary must differ in both kind and attitude…” (CW6 §669)
+- “No individual is simply introverted or extraverted, but he is so in one of his functions.” (CW6 §707)
+- “The unconscious compensates by reversing that attitude.” (CW6 §908)
+- All mapping, clustering, and validation methods (Pearson + Euclidean) are empirically justified.
+
+---
+
+#### (Questions that contradict or omit these points are invalid.)
+#### (“For educational purposes only—no diagnostic or therapeutic advice.”)
 `;
 
   const TRPI = `\n ${info}`

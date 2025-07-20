@@ -437,7 +437,7 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
 
 CONTENT DOMAINS  
 1. Function-Pairings (1 S/N + 1 T/F, opposite attitudes, EIII / IEEE only)  
-2. Freud layers (Id, Super-Id, Ego, Superego)  
+2. Freudian layers (Id, Super-Id, Ego, Superego)  
 3. 4F trauma mapping (Fight, Flight, Freeze, Fawn)  
 4. Suffix logic (–ST, –SF, –NT, –NF; J vs P rules)  
 5. Context-length rule & Eight-Gear Information Pipeline  
@@ -448,11 +448,15 @@ CONTENT DOMAINS
 10. Empirical benchmarks (Pearson, mean r = 0.83)  
 11. EIII / IEEE stacks vs alternating MBTI stacks  
 12. Big-Five ↔ function correlations
+13. PFC BRAIN REGION–FUNCTION MAP
+14. CONTEXT NETWORKS & SUBCORTICAL MODULATION
+15. CONTEXT-LENGTH MODULATION & DYNAMIC ADAPTATION
 
 DIFFICULTY DISTRIBUTION  
-• 15 foundational questions → Domains 1–4  
-• 15 intermediate questions → Domains 5–8  
+• 10 foundational questions → Domains 1–4  
+• 10 intermediate questions → Domains 5–8  
 • 20 advanced questions → Domains 9–12
+• 10 expert questions → Domains 12-15 
 
 ${examples}
 ${output}
@@ -503,7 +507,7 @@ ${output}
 
   async function generateNeuroQuestions(): Promise<Question[]> {
     const TRPI = `\n ${info} ${output} \n ${examples}\n `;
-    const prompt = `Generate 20 short/long context focused TRPI questions. Return the JSON array.`;
+    const prompt = `Generate 20 neuroscience focused TRPI questions. Return the JSON array.`;
     return generateFromPrompt(TRPI, prompt);
   }
 

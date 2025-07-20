@@ -21653,13 +21653,13 @@ export const allStatements =[
     "index": 154
   },
   {
-    "text": "I contemplate abstract concepts and explore profound questions.",
+    "text": "I contemplate explore profound questions.",
     "trait": "openness",
     "weight": 0.9,
     "aspect": "Intellectual Openness",
     "subtext": {
       "0-10": {
-        "text": "I rarely think about abstract concepts.",
+        "text": "I rarely think about profound questions.",
         "exclude": [
           "ENTP",
           "ESTP",
@@ -21676,7 +21676,7 @@ export const allStatements =[
         ]
       },
       "10-20": {
-        "text": "I occasionally consider simple abstract ideas.",
+        "text": "I occasionally consider profound questions.",
         "exclude": [
           "ENTP",
           "ESTP",
@@ -21693,7 +21693,7 @@ export const allStatements =[
         ]
       },
       "20-30": {
-        "text": "I sometimes ponder abstract questions.",
+        "text": "I sometimes ponder profound questions.",
         "exclude": [
           "ENTP",
           "ESTP",
@@ -21723,11 +21723,11 @@ export const allStatements =[
         ]
       },
       "40-50": {
-        "text": "I fairly often reflect on abstract concepts.",
+        "text": "I fairly often reflect on profound questions.",
         "exclude": []
       },
       "50-60": {
-        "text": "I frequently engage in deep, abstract thought.",
+        "text": "I frequently engage in deep, profound thoughts.",
         "exclude": []
       },
       "60-70": {
@@ -21738,7 +21738,7 @@ export const allStatements =[
         ]
       },
       "70-80": {
-        "text": "I consistently think deeply about abstract matters.",
+        "text": "I consistently think deeply about profound questions.",
         "exclude": [
           "ISTP",
           "ISTJ",
@@ -21747,7 +21747,7 @@ export const allStatements =[
         ]
       },
       "80-90": {
-        "text": "I almost always ponder profound and abstract ideas.",
+        "text": "I almost always ponder profound and abstract questions.",
         "exclude": [
           "ISTP",
           "ISTJ",
@@ -21758,7 +21758,7 @@ export const allStatements =[
         ]
       },
       "90-100": {
-        "text": "I perpetually explore the deepest and most abstract concepts.",
+        "text": "I perpetually explore the deepest and most profound questions.",
         "exclude": [
           "INTP",
           "ISTP",

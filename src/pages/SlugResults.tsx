@@ -40,6 +40,7 @@ import JsonBinApi from '../utils/jsonBin';
 import MetaBin from '../utils/metabin';
 import { typesData } from '../utils/typesData';
 import splitDescription from '../utils/splitDescription';
+import Markdown from 'react-markdown';
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, ChartTooltip, Legend);
 
@@ -414,7 +415,7 @@ const SlugResults: React.FC = () => {
                           <Typography variant="body2">{bin.jobTitle}</Typography>
                           <Typography variant="body2">{bin.department}</Typography>
                           <Typography variant="body2">{`${bin.primary4FType} – ${bin.type}`}</Typography>
-                          <Typography variant="body2">{desc}...</Typography>
+                          <Typography variant="body2"><Markdown>{desc}</Markdown>...</Typography>
                         </Box>
                       }
                       arrow

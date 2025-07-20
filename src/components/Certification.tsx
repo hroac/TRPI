@@ -282,7 +282,7 @@ After inverting attitudes from EIII, what attitude does the dominant function as
 
   `
   const output = `QUESTION REQUIREMENTS  
-• Output a **JSON array of 50 objects** only.  
+• Output a **JSON array of objects** only.  
 • Each object keys:  
   "questionText"   string  
   "options"        array of **exactly** 4 strings, each prefixed "A) "… "D) "  

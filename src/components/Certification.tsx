@@ -433,19 +433,19 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
   }, [binId]);
 
   async function generateQuestions(): Promise<Question[]> {
-  const prompt = `Generate 50 rigorous multiple-choice questions that test deep knowledge of the Trait Response Personality Indicator (TRPI) and the Big Five correlations.
+  const prompt = `Generate 50 rigorous multiple-choice questions that test deep knowledge of the Trait Response Personality Indicator (TRPI), make use of the example questions.
 
 CONTENT DOMAINS  
 1. Function-Pairings (1 S/N + 1 T/F, opposite attitudes, EIII / IEEE only)  
 2. Freudian layers (Id, Super-Id, Ego, Superego)  
 3. 4F trauma mapping (Fight, Flight, Freeze, Fawn)  
 4. Suffix logic (–ST, –SF, –NT, –NF; J vs P rules)  
-5. Context-length rule & Eight-Gear Information Pipeline  
+5. Context-length rule  
 6. Meta-traits axis (Thinking = C-E, Feeling = A-N)  
 7. Cognitive clusters (SF/NT, FS/TN, ST/NF, TS/FN)  
 8. Individuation / growth sequence (Fight→Fawn→Freeze→Flight, etc.)  
 9. 64-state meta-grid & type-cluster relations  
-10. Empirical benchmarks (Pearson, mean r = 0.83)  
+10. RULEBOOK AUTHORITY AND JUNGIAN FOUNDATION
 11. EIII / IEEE stacks vs alternating MBTI stacks  
 12. Big-Five ↔ function correlations
 13. PFC BRAIN REGION–FUNCTION MAP

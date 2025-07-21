@@ -16,14 +16,23 @@ const sources = [
     `,
   },
   {
-    src: '/pdfs/From Traits to Types.pdf',
-    link: 'https://osf.io/mcqf4',
-    title: 'From Traits to Types: Validating Jungian Concepts Through the Big Five',
-    description: `
-      TRPI analyses demonstrate that temporal-context preferences serve as a functional bridge between Big Five traits and Jungian types, yielding a unified, multidimensional personality architecture. The hybrid clustering approach identified four distinct adaptive modes, each strongly associated with type, substantiating the empirical validity of the TRPI framework.
-    `,
+    "src": "/pdfs/From Traits to Types.pdf",
+    "link": "https://osf.io/zrq4v",
+    "title": "From Traits to Types: Validating Jungian Concepts Through the Big Five",
+    "description": "Analysis of TRPI-assigned type profiles (N = 722) demonstrates that aggregated Big Five means align with hypothesized function pairings. Ten-fold cross-validation reached 0.694 accuracy (p = 2.0 × 10⁻⁴, Cohen’s h = 1.51), and intra-type similarity was r = 0.844. Groupings (xxTP, xxTJ, xxFJ, xxFP) showed strong trait–prototype correlations (all r ≈ 0.8). A semi-unsupervised clustering procedure mapped one-to-one onto TRPI’s 4F modes (mean similarity S = 0.858). Large-scale validation (N = 1,013,558) achieved 0.824 accuracy. These findings provide quantitative evidence that Jungian type theory nests coherently within Big Five trait space, positioning TRPI as a replicable bridge between typological and dimensional models."
   },
-
+  {
+    "src": "/pdfs/Meta-States.pdf",
+    "link": "https://osf.io/r2eux",
+    "title": "Hypothesizing the 64 Meta–State System: A Generative Grammar",
+    "description": "Introduces the 64 Meta-State System for TRPI, in which each meta-state is a unique pairing of Ego and Superego function clusters (e.g., SeFi–SiTe), following three compositional rules: (i) one introverted + one extraverted function; (ii) one perceiving + one judging function of opposite attitudes; (iii) pairings are localized to a single cerebral hemisphere. Crossing eight Ego and eight Superego pairings yields a neurocognitively plausible 8 × 8 = 64-state matrix, each corresponding to a distinct pattern of lateralized prefrontal activity. The framework maps context length to hemispheric lateralization—left (short-context, Sensing) and right (long-context, Intuition)—and outlines neuroscientific predictions and applications for personality neuroscience, bridging Jungian function theory with modern neurocognitive models."
+  },
+  {
+    "src": "/pdfs/Meta-States-Empirical.pdf",
+    "link": "https://osf.io/y6zn9",
+    "title": "The 64 Meta-State System: Empirical MRI Validation of TRPI Function Pairings",
+    "description": "Provides the first empirical validation of the 64 Meta-State System within TRPI using Human Connectome Project MRI data (N > 1,100). Participants were assigned to meta-states using blended similarity metrics over prefrontal cortex profiles. Five-fold cross-validation yielded a label-match accuracy of 0.69 (p = 5.21 × 10⁻²⁰², Cohen’s d = 1.91) and an adjusted Rand index of 0.59, demonstrating robust brain-based discrimination. Trait concordance between brain-derived and self-reported Big Five was 0.57 (median 0.65). Hierarchical clustering naturally recovered the four TRPI 4F modes, with strong neuroanatomical separation. This work establishes TRPI as an empirically validated and theoretically integrated framework, bridging Jungian typology, Big Five traits, and modern neuroscience."
+  }
 ]
 ;
 

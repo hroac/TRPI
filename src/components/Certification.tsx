@@ -213,10 +213,10 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
   if (loading) {
     inner = (
       <Stack>
-        <Box display={'flex'} justifyContent={'center'} position={'relative'} bottom={200} mt={16}>
+        <Box display={'flex'} justifyContent={'center'} position={'relative'} bottom={140} mt={16}>
           <Typography variant="h6" gutterBottom>Generating questions...</Typography>
         </Box>
-        <Box display={'flex'} justifyContent={'center'} position={'relative'} bottom={120} mt={1}>
+        <Box display={'flex'} justifyContent={'center'} position={'relative'} bottom={80} mt={1}>
           <Tooltip title={'Be patient! Loading the questions can take a moment.'}>
             <CircularProgress />
           </Tooltip>
@@ -289,14 +289,11 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
 
   return (
     <Paper elevation={3} sx={{ p: 2, maxWidth: 700, mx: 'auto', mt: 10 }}>
-      {!summary && (
+      {!binId && (
         <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }} variant="scrollable" scrollButtons="auto" >
           {TAB_LABELS.map((l, i) => <Tab key={i} label={l} />)}
         </Tabs>
       )}
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3, minHeight: '50px' }}>
-        <Notification open={error !== ''} message={error} type="error" onClose={() => setError('')} />
-      </Box>
       {inner}
       <ArticleModal open={articleOpen} onClose={() => setArticleOpen(false)} />
       <SlugModal
@@ -304,6 +301,9 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
         onClose={() => setIsSlugModalOpen(false)}
         onSubmit={handleSlugSubmit}
       />
+       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginY: 3, minHeight: '50px' }}>
+        <Notification open={error !== ''} message={error} type="error" onClose={() => setError('')} />
+      </Box>
     </Paper>
   );
 };

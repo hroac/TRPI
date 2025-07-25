@@ -86,7 +86,7 @@ const Certification: React.FC<CertificationProps> = ({ userId, type: initialType
 
   const generateQuestionsForTopic = useCallback(async (topic: string, count: number): Promise<Question[]> => {
     try {
-      const API_URL = 'http://localhost:3001/api/generate-questions';
+      const API_URL = 'https://trpicert-production.up.railway.app/api/generate-questions';
       const response = await axios.post(API_URL, { topic, count });
       return response.data;
     } catch (err: any) {

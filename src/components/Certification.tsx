@@ -288,7 +288,7 @@ After inverting attitudes from EIII, what attitude does the dominant function as
   "options"        array of **exactly** 4 strings, each prefixed "A) "… "D) "  
   "correctAnswer"  string (repeat the full correct option incl. prefix)  
   "explanation"    ≤ 25 words  
-• Exactly one correct option per question.  
+• Exactly ONE correct option per question.  
 • All distractors must be plausible—no obvious throw-aways.  
 • No duplicate facts, phrasing, or answer keys.
 • Double check that the other options are not also valid answers, if so discard them and regenerate.  
@@ -467,7 +467,7 @@ ${output}
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'o3-2025-04-16',
+        model: 'o3-pro-2025-06-10',
         messages: [{role: 'system', content: TRPI},{ role: 'user', content: prompt }],
         temperature: 1,
       },
@@ -529,7 +529,7 @@ ${output}
       const response = await axios.post(
         'https://api.openai.com/v1/chat/completions',
         {
-          model: 'o3-2025-04-16',
+          model: 'o3-pro-2025-06-10',
           messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
           temperature: 1,
         },

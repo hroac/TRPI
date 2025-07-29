@@ -275,7 +275,7 @@ type Responses = Record<Trait, number[]>;
     { label: 'Tools' },
     { label: 'Big Five Input', path: '/input', parent: 'Tools' },
     { label: 'Type Comparator', path: '/compare', parent: 'Tools' },
-    { label: 'State Visualizer', path: '/meta', parent: 'Tools' },
+    { label: 'State Visualizer', path: '/state', parent: 'Tools' },
     { label: 'Certification', path: '/certification', parent: 'Tools' },
     { label: 'Resources' },
     { label: 'Sources', path: '/sources', parent: 'Resources' },
@@ -403,7 +403,7 @@ type Responses = Record<Trait, number[]>;
               <Route path="/certifications/:binId" element={<Connor userId={guid()} />} />
               <Route path="/oracle" element={<ChatTRPI apiPath="https://chattrpi-production.up.railway.app/api/trpi-chat" userId={guid()} />}/>
               <Route path="/admin" element={<AdminOverview />} />
-              <Route path="/meta" element={<StateVisualizer/>} />
+              <Route path="/state" element={<StateVisualizer/>} />
               <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
 

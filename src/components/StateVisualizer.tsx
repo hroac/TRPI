@@ -23,15 +23,12 @@ const darkTheme = createTheme({
 
 // --- Data for the Hypercube ---
 const nodeData = [
-    // Bottom Plane (ExxP / IxxJ)
+    // User-defined order
     { pos: new THREE.Vector3(1, 1, -1), name: "FiSe | TeNi" },
     { pos: new THREE.Vector3(-1, 1, -1), name: "TiSe | FeNi" },
     { pos: new THREE.Vector3(1, 1, 1), name: "FeSi | TiNe" },
     { pos: new THREE.Vector3(-1, 1, 1), name: "TeSi | FiNe" },
-
-    
-    // Top Plane (IxxP / ExxJ)
-    { pos: new THREE.Vector3(1, -1, 1), name: "SiFe | NeTi" },    
+    { pos: new THREE.Vector3(1, -1, 1), name: "SiFe | NeTi" },
     { pos: new THREE.Vector3(1, -1, -1), name: "SeFi | NiTe" },
     { pos: new THREE.Vector3(-1, -1, -1), name: "SeTi | NiFe" },
     { pos: new THREE.Vector3(-1, -1, 1), name: "SiTe | NeFi" },
@@ -57,16 +54,23 @@ const averageHexColors = (color1: string, color2: string): string => {
 // --- Type Definition for Legend Props ---
 interface LegendProps {
     onNodeClick: (index: number) => void;
+    selectedNodeIndex: number | null;
 }
 
 // --- Legend Component ---
-const Legend: React.FC<LegendProps> = ({ onNodeClick }) => (
+const Legend: React.FC<LegendProps> = ({ onNodeClick, selectedNodeIndex }) => (
     <Box sx={{ width: 280, p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Typography alignContent={'center'} variant="h6" component="h3" gutterBottom>Meta-State Visualizer</Typography>
         <List dense sx={{ overflowY: 'auto' }}>
             {nodeData.map((node, i) => (
                 <ListItem key={node.name} disablePadding>
-                    <ListItemButton onClick={() => onNodeClick(i)}>
+                    <ListItemButton 
+                        onClick={() => onNodeClick(i)}
+                        sx={{ 
+                            transition: 'opacity 0.3s ease-in-out',
+                            opacity: selectedNodeIndex === null || selectedNodeIndex === i ? 1 : 0.4 
+                        }}
+                    >
                         <ListItemIcon sx={{minWidth: '32px'}}>
                             <Box sx={{ width: 16, height: 16, borderRadius: '50%', backgroundColor: labelColors[i] }} />
                         </ListItemIcon>
@@ -252,7 +256,6 @@ const StateVisualizer: React.FC = () => {
             if (pressTimerRef.current) clearTimeout(pressTimerRef.current);
             if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
             if (currentMount) {
-                // Check if the children are still there before removing
                 if (renderer.domElement.parentNode === currentMount) {
                     currentMount.removeChild(renderer.domElement);
                 }
@@ -272,24 +275,23 @@ const StateVisualizer: React.FC = () => {
 
     return (
         <Card sx={{ mt: 10, ml: isMobile ? 4: 8.75, borderRadius: '8px', display: 'flex', height: '90vh', width: isMobile ? '85vw' :'90vw', flexDirection: 'row', position: 'relative' }}>
-            
             {isMobile ? (
                 <>
-                 <Box sx={{ display: 'flex', alignItems: 'center', position: 'absolute', top: 8, left: 8, zIndex: 1 }}>
-                <IconButton onClick={() => setIsLegendOpen(true)}>
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" component="h3" sx={{ ml: 1 }}>
-                    Meta-State Visualizer
-                </Typography>
-            </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', position: 'absolute', top: 8, left: 8, zIndex: 1 }}>
+                        <IconButton onClick={() => setIsLegendOpen(true)}>
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" component="h3" sx={{ ml: 1 }}>
+                            Meta-State Visualizer
+                        </Typography>
+                    </Box>
                     <Drawer anchor="left" open={isLegendOpen} onClose={() => setIsLegendOpen(false)}>
-                        <Legend onNodeClick={handleNodeClick} />
+                        <Legend onNodeClick={handleNodeClick} selectedNodeIndex={selectedNodeIndex} />
                     </Drawer>
                 </>
             ) : (
                 <Box sx={{ borderRight: '1px solid grey.800' }}>
-                    <Legend onNodeClick={handleNodeClick} />
+                    <Legend onNodeClick={handleNodeClick} selectedNodeIndex={selectedNodeIndex} />
                 </Box>
             )}
             <Box ref={mountRef} sx={{ flexGrow: 1, position: 'relative', cursor: 'grab' }} />
@@ -297,6 +299,4 @@ const StateVisualizer: React.FC = () => {
     );
 };
 
-
-
-export default StateVisualizer;
+export default StateVisualizer

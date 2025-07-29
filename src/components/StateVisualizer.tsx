@@ -34,9 +34,16 @@ const nodeData = [
     { pos: new THREE.Vector3(-1, -1, 1), name: "SiTe | NeFi" },
 ];
 
+
 const labelColors = [
-    '#1f77b4', '#d62728', '#9467bd', '#bcbd22',
-    '#ff7f0e', '#2ca02c', '#e377c2', '#17becf',
+    '#FF8A8A', // Soft Red
+    '#FFC28A', // Soft Orange
+    '#FFF28A', // Soft Yellow
+    '#99E6A9', // Soft Green
+    '#99CFFF', // Soft Blue
+    '#C7A9D9', // Soft Purple
+    '#FFA8C7', // Soft Pink
+    '#A0E7E5', // Soft Cyan
 ];
 
 // --- Helper function to average two hex colors ---

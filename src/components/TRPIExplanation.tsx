@@ -15,6 +15,9 @@ import {
   TableBody,
   Paper,
   Container,
+  Grid,
+  Chip,
+  Divider,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Matrix from './Matrix';
@@ -22,360 +25,464 @@ import ModeSelector from './ModeSelector';
 import { Helmet } from 'react-helmet';
 import { functionPairings } from '../utils/mbtiMapping';
 import TypeSelector from './TypeSelector';
+
+// ---------- Data ----------
+const anteriorMapping = [
+  { region: 'Left lateral (aPFC)', fn: 'Se', label: 'Extraverted Sensing' },
+  { region: 'Left medial (aPFC)', fn: 'Si', label: 'Introverted Sensing' },
+  { region: 'Right lateral (aPFC)', fn: 'Ne', label: 'Extraverted Intuition' },
+  { region: 'Right medial (aPFC)', fn: 'Ni', label: 'Introverted Intuition' },
+];
+
+const posteriorMapping = [
+  { region: 'Ventrolateral PFC (bilateral)', fn: 'Te', label: 'Extraverted Thinking' },
+  { region: 'Dorsolateral PFC (bilateral)', fn: 'Ti', label: 'Introverted Thinking' },
+  { region: 'Ventromedial PFC (bilateral)', fn: 'Fi', label: 'Introverted Feeling' },
+  { region: 'Dorsomedial PFC (bilateral)', fn: 'Fe', label: 'Extraverted Feeling' },
+];
+
+const modulationLines = [
+  'Se < Fi/Ti = Si',
+  'Si < Te/Fe = Se',
+  'Ni < Te/Fe = Se',
+  'Ne < Ti/Fi = Si',
+];
+
+const bigFive4F = [
+  { trait: 'Openness (O)', mapping: 'S / N', mode: '—', note: 'High: N (abstract); Low: S (concrete)' },
+  { trait: 'Conscientiousness (C)', mapping: 'Si/Ni + Te', mode: 'Freeze', note: '' },
+  { trait: 'Extraversion (E)', mapping: 'Se/Ne + Ti', mode: 'Fight', note: '' },
+  { trait: 'Agreeableness (A)', mapping: 'Si/Ni + Fe', mode: 'Fawn', note: '' },
+  { trait: 'Neuroticism (N)', mapping: 'Se/Ne + Fi', mode: 'Flight', note: '' },
+];
+
+const structuralMap = [
+  { name: 'Id', mapping: 'Se / Ne', desc: 'Raw perception & impulse' },
+  { name: 'Superid', mapping: 'Si / Ni', desc: 'Stored memory & foresight' },
+  { name: 'Ego', mapping: 'Ti / Fi', desc: 'Individual logic & values' },
+  { name: 'Superego', mapping: 'Te / Fe', desc: 'Collective logic & values' },
+];
+
+// ---------- Utilities ----------
 const TRPIHelmet: React.FC = () => (
   <Helmet>
     <title>Understanding Personality with TRPI</title>
     <meta
       name="description"
-      content="The Trait Response Personality Indicator (TRPI) combines the MBTI, Big Five traits, and 4F trauma responses to help you understand how personality and trauma interact. Explore your unique personality profile today on traitindicator.com!"
+      content="The Trait Response Personality Indicator (TRPI) combines Jung, Freud, Big Five traits, and 4F trauma responses to map dynamic personality."
     />
-    <meta
-      property="og:title"
-      content="Understanding Personality with TRPI"
-    />
+    <meta property="og:title" content="Understanding Personality with TRPI" />
     <meta
       property="og:description"
-      content="Learn how trauma shapes personality with the TRPI framework. Integrating MBTI, Big Five traits, and 4F responses, TRPI provides unique insights into personality development. Visit traitindicator.com to explore."
+      content="Learn how cognition, stress responses, and traits interact in the TRPI framework."
     />
     <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="https://traitindicator.com/#/explanation"
-    />
-    <meta
-      property="og:image"
-      content="https://traitindicator.com/logo.png"
-    />
+    <meta property="og:url" content="https://traitindicator.com/#/explanation" />
+    <meta property="og:image" content="https://traitindicator.com/logo.png" />
   </Helmet>
 );
-const TRPIExplanation: React.FC = () => {
 
-  
+const FunctionChip: React.FC<{ code: string; label?: string }> = ({ code, label }) => {
+  const color =
+    code.startsWith('S') ? 'default' :
+    code.startsWith('N') ? 'secondary' :
+    code.startsWith('T') ? 'primary' :
+    'success';
   return (
-    <Container sx={{marginTop: '100px'}}>
-                <Paper elevation={3} sx={{ padding: '20px', borderRadius: '10px' }}>
-      
-      <TRPIHelmet/>
-    <Box sx={{maxWidth: '800px', margin: '0 auto' }}>
-      <Typography variant="h4" gutterBottom>
-        Trait Response Personality Indicator (TRPI)
-      </Typography>
+    <Chip
+      label={label ? `${code} — ${label}` : code}
+      color={color as any}
+      size="small"
+      sx={{ mr: 1, mb: 1, fontWeight: 600 }}
+    />
+  );
+};
 
-      <Typography variant="body1" paragraph>
-      The Trait Response Personality Indicator (TRPI) blends Jungian cognitive functions, Freudian structure, and the 4F trauma response system to map how personality forms and adapts under pressure. It reframes traditional typology by showing that personality is not fixed but shaped by the brain’s response to stress, experience, and environment.
-      </Typography>
+const KeyValue: React.FC<{ k: React.ReactNode; v: React.ReactNode }> = ({ k, v }) => (
+  <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.75 }}>
+    <Typography variant="body2" sx={{ opacity: 0.7 }}>{k}</Typography>
+    <Typography variant="body2" sx={{ fontWeight: 600 }}>{v}</Typography>
+  </Box>
+);
 
-      {/* <iframe src="https://mfr.de-1.osf.io/render?url=https%3A%2F%2Fosf.io%2Fdownload%2Fzrq4v%2F%3Fdirect%26mode%3Drender"
-    width="100%"
-    scrolling="yes"
-    height="677px"
-    marginheight="0"
-    frameborder="0"
-    allowfullscreen
-    webkitallowfullscreen
-/> */}
-      
-      <Box justifyContent={'center'}>
-        <ModeSelector/>
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          marginBottom: '50px'
-        }}
-      >
-      <Box sx={{ width: '100%', maxWidth: 420,  }}>
-              <Matrix width={'100px'} />
-              </Box>
-              </Box>
-        <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          marginBottom: '50px'
-        }}
-      >
-        
-             <TypeSelector/>
-            </Box>
-      <Accordion>
-  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-    <Typography variant="h6">Big Five Traits and 4F Trauma Responses</Typography>
-  </AccordionSummary>
-  <AccordionDetails>
-    <Typography variant="body2" paragraph>
-      The TRPI framework integrates the Big Five personality traits with the 4F trauma responses to provide a deeper understanding of how stress and trauma shape personality. Here’s how they connect:
-    </Typography>
-    <Typography variant="body2" paragraph>
-      <strong>Openness:</strong> Represents the preference for new (Intuition) vs. familiar (Sensing) information. 
-      - High Openness aligns with abstract thinking and exploration (<em>Intuition</em>).
-      - Low Openness corresponds to concrete thinking and practicality (<em>Sensing</em>).
-    </Typography>
-    <Typography variant="body2" paragraph>
-      <strong>Conscientiousness:</strong> Linked to the <em>Freeze</em> response, it reflects self-discipline and planning. 
-      - High Conscientiousness individuals often use structured and logical processes (<em>Te</em>).
-    </Typography>
-    <Typography variant="body2" paragraph>
-      <strong>Extraversion:</strong> Tied to the <em>Fight</em> response, Extraversion drives assertiveness and action.
-      - High Extraversion correlates with internal logic and rapid problem-solving (<em>Ti</em>).
-    </Typography>
-    <Typography variant="body2" paragraph>
-      <strong>Agreeableness:</strong> Related to the <em>Fawn</em> response, it emphasizes social harmony and collaboration.
-      - High Agreeableness involves prioritizing relationships and others' emotions (<em>Fe</em>).
-    </Typography>
-    <Typography variant="body2" paragraph>
-      <strong>Neuroticism:</strong> Linked to the <em>Flight</em> response, it reflects emotional sensitivity and avoidance.
-      - High Neuroticism is associated with heightened awareness of personal values and emotional depth (<em>Fi</em>).
-    </Typography>
-    <Typography variant="body2" paragraph>
-      By combining these traits with the 4F responses, TRPI offers a holistic view of personality, highlighting the dynamic interplay between natural tendencies and adaptive stress responses.
-    </Typography>
-  </AccordionDetails>
-</Accordion>
+// ---------- Component ----------
+const TRPIExplanation: React.FC = () => {
+  return (
+    <Container sx={{ mt: '100px' }}>
+      <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
+        <TRPIHelmet />
 
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6">Id &amp; Superid and Ego &amp; Superego</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Typography variant="body2" paragraph>
-          TRPI weaves Freud’s structure with Jung’s functions to show who steers when:
-        </Typography>
-        <Box component="ul" sx={{ pl: 3 }}>
-          <li>
-            <Typography variant="body2"><strong>Id</strong>: Raw perception &amp; impulse (Se / Ne).</Typography>
-          </li>
-          <li>
-            <Typography variant="body2"><strong>Superid</strong>: Stored memory &amp; foresight (Si / Ni).</Typography>
-          </li>
-          <li>
-            <Typography variant="body2"><strong>Ego</strong>: Personal logic &amp; values (Ti / Fi).</Typography>
-          </li>
-          <li>
-            <Typography variant="body2"><strong>Superego</strong>: Shared rules &amp; norms (Te / Fe).</Typography>
-          </li>
-        </Box>
-        <Typography variant="body2">
-          Only <em>one</em> perceiving mode and <em>one</em> judging mode are conscious at a
-          time. When the dominant flips attitude, the whole psyche reorganises.
-        </Typography>
-      </AccordionDetails>
-    </Accordion>
-      
-      {/* <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">Trauma, Brain Hemispheres, and Cognitive Shifts</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography variant="body2" paragraph>
-            Trauma can significantly impact cognitive functions and processing within the brain:
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Early Trauma and Hemispheric Switching</strong>
-          </Typography>
-          <Typography variant="body2" paragraph>
-            When individuals experience trauma at a young age, significant shifts in brain processing can occur:
-          </Typography>
-          <Box component="ul" sx={{ paddingLeft: '20px' }}>
-            <li>
-              <Typography variant="body2">
-                <strong>Switching Hemispheres:</strong> The inability of sensing functions (Se, Si) to process traumatic experiences may lead to reliance on intuitive functions (Ne, Ni).
-              </Typography>
-            </li>
-            <li>
-              <Typography variant="body2">
-                <strong>Driven by Feelings (Fi):</strong> This shift is often guided by internal feelings, seeking new ways to make sense of trauma.
-              </Typography>
-            </li>
-          </Box>
-          <Typography variant="body2" paragraph>
-            <strong>Impact on Empathy:</strong> Without utilizing sensing functions, individuals may struggle with empathy rooted in shared experiences. They might need to consciously engage intuitive functions to develop empathy, requiring active effort. Some may never fully engage these functions, leading to lifelong challenges with empathy.
+        <Box sx={{ maxWidth: 1100, mx: 'auto' }}>
+          <Typography variant="h4" gutterBottom>
+            Trait Response Personality Indicator (TRPI)
           </Typography>
 
-          <Typography variant="body2" paragraph>
-            <strong>Trauma and Personality Development</strong>
-          </Typography>
-          <Typography variant="body2" paragraph>
-            Some individuals may close off from the world instead of processing trauma through their Superego. This avoidance can lead to a dominant reliance on judgment functions, focusing on structure and decision-making to maintain control.
-          </Typography>
-        </AccordionDetails>
-      </Accordion> */}
-
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">The Inversion of the Dominant Function Under Stress</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography variant="body2" paragraph>
-            Under stress or trauma, our natural way of interacting with the world can invert, causing reliance on less effective cognitive processes.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Adaptive Mechanism:</strong> This inversion represents a shift from concrete values and abstract logic to abstract values and concrete logic and vice versa.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Perception Shift:</strong> Involves shifts between Sensing and Intuition functions (Se ↔ Si, Ne ↔ Ni), altering how we perceive information.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            <strong>Judging Shift:</strong> Involves shifts between Thinking and Feeling functions (Te ↔ Ti, Fe ↔ Fi, Te ↔ Fi, Fe ↔ Ti), affecting decision-making processes.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            In stress, individuals may shift from their dominant pairing to their tertiary pairing, leading to rigid or maladaptive behaviors due to underdevelopment.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h6">TRPI Function Pairings</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography variant="body2" paragraph>
-            Understanding how trauma influences cognitive functions requires examining the shifts between dominant and tertiary function pairings. This involves analyzing the dynamics across different personality types, incorporating the concepts of Id, Ego, and Superego.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            In this framework, cognitive functions are grouped into pairings that emphasize dynamic relationships rather than individual functions alone. This pairing structure allows for more nuanced personality profiles and facilitates adaptability across situations.
-          </Typography>
-          <Typography variant="body2" paragraph>
-            The inversion of dominant functions under stress represents a shift from proactive engagement to a defensive stance. This can involve shifts in perception (Sensing ↔ Intuition) and judging functions (Thinking ↔ Feeling), leading to reliance on less effective cognitive processes.
-          </Typography>
-          <TableContainer component={Paper}>
-          <Table>
-           <TableHead>
-      <TableRow>
-        <TableCell><strong>Type</strong></TableCell>
-        <TableCell><strong>4F</strong></TableCell>
-        <TableCell><strong>Grant Stack</strong></TableCell>
-        <TableCell><strong>Dominant Pairing</strong></TableCell>
-        <TableCell><strong>Auxiliary Pairing</strong></TableCell>
-        <TableCell><strong>Tertiary Pairing</strong></TableCell>
-        <TableCell><strong>Inferior Pairing</strong></TableCell>
-        <TableCell><strong>Opposite</strong></TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {functionPairings.map((pairing: any, index: number) => (
-        <TableRow key={index}>
-          <TableCell>{pairing.type}</TableCell>
-          <TableCell>{pairing.f4}</TableCell>
-          <TableCell width={300}>{pairing.stack}</TableCell>
-          <TableCell width={150}>{pairing.dominant}</TableCell>
-          <TableCell width={150}>{pairing.auxiliary}</TableCell>
-          <TableCell width={150}>{pairing.tertiary}</TableCell>
-          <TableCell width={150}>{pairing.inferior}</TableCell>
-          <TableCell width={150}>{pairing.opposite}</TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-          </TableContainer>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6">TRPI 64‑State Reference</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Box mb={2}>
-          <Typography variant="subtitle1"><strong>1. Type System</strong></Typography>
-          <Typography paragraph>
-            All 16 MBTI types operate from either the Ego or Superego by default. Judging types (ending in J) are Superego‑based; Perceiving types (ending in P) are Ego‑based. A two‑letter suffix (ST, SF, NT, NF) indicates the currently active alternate control system.
-          </Typography>
-        </Box>
-        <Box mb={2}>
-          <Typography variant="subtitle1"><strong>2. Control System Logic</strong></Typography>
-          <Typography paragraph>
-            For J types, the suffix shows the <strong>Ego</strong> pairing (Fight or Flight). For P types, the suffix shows the <strong>Superego</strong> pairing (Freeze or Fawn).
-          </Typography>
-        </Box>
-        <Box mb={2}>
-          <Typography variant="subtitle1"><strong>3. Function Pairing Rules</strong></Typography>
-          <Typography paragraph>
-            Each suffix pairs one perceiving and one judging function with opposite attitudes within the same hemisphere:
-          </Typography>
-          <Typography component="ul">
-            <li><strong>ST:</strong> Sensing + Thinking</li>
-            <li><strong>SF:</strong> Sensing + Feeling</li>
-            <li><strong>NT:</strong> Intuition + Thinking</li>
-            <li><strong>NF:</strong> Intuition + Feeling</li>
-          </Typography>
-        </Box>
-        <Box mb={2}>
-          <Typography variant="subtitle1"><strong>4. 4F Response Mapping</strong></Typography>
-          <Typography paragraph>
-            Responses under stress map to the 4F survival modes based on control system base:
-          </Typography>
-          <Typography component="ul">
-            <li><strong>Superego base (J types):</strong> ST/NT → Fight; SF/NF → Flight</li>
-            <li><strong>Ego base (P types):</strong> ST/NT → Freeze; SF/NF → Fawn</li>
-          </Typography>
-        </Box>
-        <Box mb={2}>
-          <Typography variant="subtitle1"><strong>5. Example Shifts</strong></Typography>
-          <Typography component="ul">
-            <li><strong>ENTJ–ST:</strong> TiSe — Fight</li>
-            <li><strong>ENTJ–SF:</strong> FiSe — Flight</li>
-            <li><strong>ISTP–ST:</strong> TeSi — Freeze</li>
-            <li><strong>ISTP–SF:</strong> FeSi — Fawn</li>
-          </Typography>
-        </Box>
-        <Box>
-          <Typography variant="subtitle1"><strong>6. System Summary</strong></Typography>
-          <Typography paragraph>
-            There are 64 distinct states (16 types × 4 suffixes). Each suffix reveals the active function pairing, the engaged control system, and the resulting 4F response, capturing real‑time shifts in cognition and stress adaptation.
-          </Typography>
-        </Box>
-      </AccordionDetails>
-    </Accordion>
- <Accordion>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6">Individuation Road‑Map</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Typography variant="body2" paragraph>
-          Growth is sequential: each default response must integrate its opposite in
-          turn.
-        </Typography>
-        <Box component="ul" sx={{ pl: 3 }}>
-          <li>
-            <Typography variant="body2"><strong>Fight</strong> → Fawn → Freeze → Flight</Typography>
-          </li>
-          <li>
-            <Typography variant="body2"><strong>Freeze</strong> → Flight → Fight → Fawn</Typography>
-          </li>
-          <li>
-            <Typography variant="body2"><strong>Fawn</strong> → Fight → Flight → Freeze</Typography>
-          </li>
-          <li>
-            <Typography variant="body2"><strong>Flight</strong> → Freeze → Fawn → Fight</Typography>
-          </li>
-        </Box>
-        <Typography variant="body2">
-          Mastery means cycling all four—switching gears on purpose rather than being
-          yanked by circumstance.
-        </Typography>
-      </AccordionDetails>
-    </Accordion>
-      <Card sx={{ marginBottom: '20px' }}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Our Mission
-          </Typography>
           <Typography variant="body1" paragraph>
-            TRPI’s mission is to empower individuals with a deeper understanding of themselves and their responses to
-            the world. By recognizing how trauma responses shape personality, TRPI helps people embrace their unique
-            traits, improve interpersonal relationships, and navigate their lives with clarity and purpose.
+            TRPI blends Jungian functions, a Freudian structure, Big Five traits, and the 4F survival modes into a
+            single, dynamic map of how people perceive, decide, and adapt under pressure. The emphasis is on
+            <em> pairings</em> and <em>state shifts</em> rather than isolated functions.
           </Typography>
-        </CardContent>
-      </Card>
-    </Box>
-    </Paper>
-    </Container>
 
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+            <ModeSelector />
+          </Box>
+
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 6 }}>
+            <Box sx={{ width: '100%', maxWidth: 520 }}>
+              <Matrix width={'100px'} />
+            </Box>
+          </Box>
+
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+            <TypeSelector />
+          </Box>
+
+          {/* CORTICAL MAP */}
+          <Accordion defaultExpanded>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">Cortical Map: aPFC Perception & Bilateral Judging Hubs</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Card variant="outlined" sx={{ height: '100%' }}>
+                    <CardContent>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Anterior PFC — Perceiving (S/N)
+                      </Typography>
+                      <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell><strong>Region</strong></TableCell>
+                              <TableCell><strong>Function</strong></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {anteriorMapping.map((r) => (
+                              <TableRow key={r.region}>
+                                <TableCell>{r.region}</TableCell>
+                                <TableCell>
+                                  <FunctionChip code={r.fn} label={r.label} />
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                      <Box sx={{ mt: 1.5 }}>
+                        <Typography variant="caption" sx={{ opacity: 0.8 }}>
+                          Left = concrete/retrospective bias (S); Right = abstract/prospective bias (N).
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Card variant="outlined" sx={{ height: '100%' }}>
+                    <CardContent>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Posterior/Medial-Lateral Hubs — Judging (T/F)
+                      </Typography>
+                      <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
+                        <Table size="small">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell><strong>Region</strong></TableCell>
+                              <TableCell><strong>Function</strong></TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {posteriorMapping.map((r) => (
+                              <TableRow key={r.region}>
+                                <TableCell>{r.region}</TableCell>
+                                <TableCell>
+                                  <FunctionChip code={r.fn} label={r.label} />
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                      <Box sx={{ mt: 1.5 }}>
+                        <Typography variant="caption" sx={{ opacity: 0.8 }}>
+                          These judging systems are bilateral and work with the aPFC perceiving hubs.
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+
+              <Divider sx={{ my: 3 }} />
+
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Perceiving–Judging Modulation
+                      </Typography>
+                      <Box sx={{ bgcolor: 'action.hover', p: 2, borderRadius: 2 }}>
+                        {modulationLines.map((line) => (
+                          <Typography key={line} variant="body2" sx={{ fontFamily: 'monospace', mb: 0.5 }}>
+                            {line}
+                          </Typography>
+                        ))}
+                        <Typography variant="caption" sx={{ opacity: 0.8 }}>
+                          {'<'} denotes modulation (extension/contraction); {'='} denotes equilibration.
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Attitude & Context Window
+                      </Typography>
+                      <KeyValue k={<strong>Introvert</strong>} v={<>subjective → long-context processing</>} />
+                      <KeyValue k={<strong>Extraversion</strong>} v={<>objective → short-context processing</>} />
+                      <Box sx={{ mt: 1.5 }}>
+                        <Typography variant="caption" sx={{ opacity: 0.8 }}>
+                          Context length is a processing orientation applied across functions.
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+
+          {/* BIG FIVE & 4F */}
+          <Accordion defaultExpanded>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">Big Five Traits ↔ 4F Responses</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body2" paragraph>
+                Mapping traits to survival modes clarifies how temperament becomes behavior under stress.
+              </Typography>
+              <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell><strong>Trait</strong></TableCell>
+                      <TableCell><strong>Function Basis</strong></TableCell>
+                      <TableCell><strong>4F Mode</strong></TableCell>
+                      <TableCell><strong>Notes</strong></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {bigFive4F.map((row) => (
+                      <TableRow key={row.trait}>
+                        <TableCell>{row.trait}</TableCell>
+                        <TableCell>{row.mapping}</TableCell>
+                        <TableCell>{row.mode}</TableCell>
+                        <TableCell>{row.note}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </AccordionDetails>
+          </Accordion>
+
+          {/* STRUCTURE */}
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">Id, Superid, Ego, Superego — Functional Roles</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container spacing={2}>
+                {structuralMap.map((s) => (
+                  <Grid item xs={12} md={6} key={s.name}>
+                    <Card variant="outlined">
+                      <CardContent>
+                        <Typography variant="subtitle1" gutterBottom>{s.name}</Typography>
+                        <Box sx={{ mb: 1 }}>
+                          {s.mapping.split('/').map((code) => (
+                            <FunctionChip key={code.trim()} code={code.trim()} />
+                          ))}
+                        </Box>
+                        <Typography variant="body2" sx={{ opacity: 0.8 }}>{s.desc}</Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+
+          {/* INVERSION */}
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">Inversion of the Dominant Under Stress</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body2" paragraph>
+                Under sustained stress, the dominant attitude can flip, forcing the psyche to rely on less efficient
+                pairings. Two things shift: perception (Sensing ↔ Intuition) and judgment (Thinking ↔ Feeling), often
+                crossing attitudes (e.g., Te ↔ Fi, Fe ↔ Ti) and producing rigid or over‑accommodating behavior until
+                equilibrium is restored.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+
+          {/* FUNCTION PAIRINGS TABLE */}
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">TRPI Function Pairings</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body2" paragraph>
+                Pairings emphasize how a perceiving function couples with a judging function (opposite attitudes within
+                the same hemisphere) and how stacks shift across Dominant, Auxiliary, Tertiary, and Inferior modes.
+              </Typography>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell><strong>Type</strong></TableCell>
+                      <TableCell><strong>4F</strong></TableCell>
+                      <TableCell width={300}><strong>Grant Stack</strong></TableCell>
+                      <TableCell width={160}><strong>Dominant Pairing</strong></TableCell>
+                      <TableCell width={160}><strong>Auxiliary Pairing</strong></TableCell>
+                      <TableCell width={160}><strong>Tertiary Pairing</strong></TableCell>
+                      <TableCell width={160}><strong>Inferior Pairing</strong></TableCell>
+                      <TableCell width={160}><strong>Opposite</strong></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {functionPairings.map((pairing: any, index: number) => (
+                      <TableRow key={index}>
+                        <TableCell>{pairing.type}</TableCell>
+                        <TableCell>{pairing.f4}</TableCell>
+                        <TableCell width={300}>{pairing.stack}</TableCell>
+                        <TableCell width={160}>{pairing.dominant}</TableCell>
+                        <TableCell width={160}>{pairing.auxiliary}</TableCell>
+                        <TableCell width={160}>{pairing.tertiary}</TableCell>
+                        <TableCell width={160}>{pairing.inferior}</TableCell>
+                        <TableCell width={160}>{pairing.opposite}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </AccordionDetails>
+          </Accordion>
+
+          {/* 64-STATE REFERENCE */}
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">TRPI 64‑State Reference</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box mb={2}>
+                <Typography variant="subtitle1"><strong>1. Type System</strong></Typography>
+                <Typography paragraph>
+                  All 16 MBTI types operate from either the Ego or Superego by default. Judging types (J) are
+                  Superego‑based; Perceiving types (P) are Ego‑based. A two‑letter suffix (ST, SF, NT, NF) indicates the
+                  currently active alternate control system.
+                </Typography>
+              </Box>
+              <Box mb={2}>
+                <Typography variant="subtitle1"><strong>2. Control System Logic</strong></Typography>
+                <Typography paragraph>
+                  For J types, the suffix shows the <strong>Ego</strong> pairing (Fight or Flight). For P types, the suffix shows
+                  the <strong>Superego</strong> pairing (Freeze or Fawn).
+                </Typography>
+              </Box>
+              <Box mb={2}>
+                <Typography variant="subtitle1"><strong>3. Function Pairing Rules</strong></Typography>
+                <Typography paragraph>
+                  Each suffix pairs one perceiving and one judging function with opposite attitudes within the same
+                  hemisphere:
+                </Typography>
+                <Typography component="ul">
+                  <li><strong>ST:</strong> Sensing + Thinking</li>
+                  <li><strong>SF:</strong> Sensing + Feeling</li>
+                  <li><strong>NT:</strong> Intuition + Thinking</li>
+                  <li><strong>NF:</strong> Intuition + Feeling</li>
+                </Typography>
+              </Box>
+              <Box mb={2}>
+                <Typography variant="subtitle1"><strong>4. 4F Response Mapping</strong></Typography>
+                <Typography paragraph>
+                  Responses under stress map to 4F survival modes based on control‑system base:
+                </Typography>
+                <Typography component="ul">
+                  <li><strong>Superego base (J types):</strong> ST/NT → Fight; SF/NF → Flight</li>
+                  <li><strong>Ego base (P types):</strong> ST/NT → Freeze; SF/NF → Fawn</li>
+                </Typography>
+              </Box>
+              <Box mb={2}>
+                <Typography variant="subtitle1"><strong>5. Example Shifts</strong></Typography>
+                <Typography component="ul">
+                  <li><strong>ENTJ–ST:</strong> TiSe — Fight</li>
+                  <li><strong>ENTJ–SF:</strong> FiSe — Flight</li>
+                  <li><strong>ISTP–ST:</strong> TeSi — Freeze</li>
+                  <li><strong>ISTP–SF:</strong> FeSi — Fawn</li>
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="subtitle1"><strong>6. System Summary</strong></Typography>
+                <Typography paragraph>
+                  64 distinct states (16×4). Each suffix reveals the active function pairing, the engaged control system,
+                  and the resulting 4F response, capturing real‑time shifts in cognition and stress adaptation.
+                </Typography>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+
+          {/* INDIVIDUATION */}
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">Individuation Road‑Map</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography variant="body2" paragraph>
+                Growth is sequential: each default response integrates its opposite in turn.
+              </Typography>
+              <Box component="ul" sx={{ pl: 3 }}>
+                <li>
+                  <Typography variant="body2"><strong>Fight</strong> → Fawn → Freeze → Flight</Typography>
+                </li>
+                <li>
+                  <Typography variant="body2"><strong>Freeze</strong> → Flight → Fight → Fawn</Typography>
+                </li>
+                <li>
+                  <Typography variant="body2"><strong>Fawn</strong> → Fight → Flight → Freeze</Typography>
+                </li>
+                <li>
+                  <Typography variant="body2"><strong>Flight</strong> → Freeze → Fawn → Fight</Typography>
+                </li>
+              </Box>
+              <Typography variant="body2">
+                Mastery means cycling all four—switching gears by choice rather than being yanked by circumstance.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+
+          {/* MISSION */}
+          <Card sx={{ mt: 3 }}>
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+                Our Mission
+              </Typography>
+              <Typography variant="body1" paragraph>
+                TRPI’s mission is to equip people with a precise mental model of their perception, judgment, and stress
+                responses—so they can intervene intelligently. Recognizing the pairings at play (and when they invert)
+                helps improve relationships, decision‑making, and long‑term development.
+              </Typography>
+            </CardContent>
+          </Card>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 

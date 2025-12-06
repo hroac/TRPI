@@ -1,42 +1,25 @@
 import React from 'react';
 import {
-  Typography,
   Box,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Card,
-  CardContent,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Paper,
-  Container,
-  Grid,
   Chip,
+  Container,
   Divider,
+  Grid,
   Stack,
-  List,
-  ListItem,
-  ListItemText,
+  Typography,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
+import { alpha, useTheme } from '@mui/material/styles';
 import Matrix from './Matrix';
 import ModeSelector from './ModeSelector';
+import TypeSelector from './TypeSelector';
 import { Helmet } from 'react-helmet';
 import { functionPairings } from '../utils/mbtiMapping';
-import TypeSelector from './TypeSelector';
 
-// ---------- Data ----------
 const anteriorMapping = [
-  { region: 'Left lateral (aPFC)', fn: 'Se', label: 'Extraverted Sensing' },
-  { region: 'Left medial (aPFC)', fn: 'Si', label: 'Introverted Sensing' },
-  { region: 'Right lateral (aPFC)', fn: 'Ne', label: 'Extraverted Intuition' },
-  { region: 'Right medial (aPFC)', fn: 'Ni', label: 'Introverted Intuition' },
+  { region: 'Left lateral aPFC', fn: 'Se', label: 'Extraverted Sensing' },
+  { region: 'Left medial aPFC', fn: 'Si', label: 'Introverted Sensing' },
+  { region: 'Right lateral aPFC', fn: 'Ne', label: 'Extraverted Intuition' },
+  { region: 'Right medial aPFC', fn: 'Ni', label: 'Introverted Intuition' },
 ];
 
 const posteriorMapping = [
@@ -46,32 +29,21 @@ const posteriorMapping = [
   { region: 'Dorsomedial PFC (bilateral)', fn: 'Fe', label: 'Extraverted Feeling' },
 ];
 
-const modulationLines = [
-  'Se < Fi/Ti = Si',
-  'Si < Te/Fe = Se',
-  'Ni < Te/Fe = Se',
-  'Ne < Ti/Fi = Si',
-];
+const modulationLines = ['Se < Fi/Ti = Si', 'Si < Te/Fe = Se', 'Ni < Te/Fe = Se', 'Ne < Ti/Fi = Si'];
 
 const bigFive4F = [
-  { trait: 'Openness (O)', mapping: 'S / N', mode: '—', note: 'High: N (abstract); Low: S (concrete)' },
-  { trait: 'Conscientiousness (C)', mapping: 'Si/Ni + Te', mode: 'Freeze', note: 'Focus on standards and predictability.' },
-  { trait: 'Extraversion (E)', mapping: 'Se/Ne + Ti', mode: 'Fight', note: 'Fast, decisive action and exploration.' },
-  { trait: 'Agreeableness (A)', mapping: 'Si/Ni + Fe', mode: 'Fawn', note: 'Harmonizing, affiliative adaptation.' },
-  { trait: 'Neuroticism (N)', mapping: 'Se/Ne + Fi', mode: 'Flight', note: 'Vigilance, avoidance, emotional charge.' },
+  { trait: 'Openness (O)', mapping: 'S / N', mode: '—', note: 'High → N (abstract) · Low → S (concrete)' },
+  { trait: 'Conscientiousness (C)', mapping: 'Si/Ni + Te', mode: 'Freeze', note: 'Prediction, standards, routines' },
+  { trait: 'Extraversion (E)', mapping: 'Se/Ne + Ti', mode: 'Fight', note: 'Action bias, improvise, compete' },
+  { trait: 'Agreeableness (A)', mapping: 'Si/Ni + Fe', mode: 'Fawn', note: 'Affiliation, harmonizing, conform' },
+  { trait: 'Neuroticism (N)', mapping: 'Se/Ne + Fi', mode: 'Flight', note: 'Vigilance, withdraw, protect values' },
 ];
 
 const structuralMap = [
   { name: 'Id', mapping: 'Se / Ne', desc: 'Raw perception & impulse' },
+  { name: 'Ego', mapping: 'Ti / Fi', desc: 'Personal logic & values' },
   { name: 'Superid', mapping: 'Si / Ni', desc: 'Stored memory & foresight' },
-  { name: 'Ego', mapping: 'Ti / Fi', desc: 'Individual logic & values' },
   { name: 'Superego', mapping: 'Te / Fe', desc: 'Collective logic & values' },
-];
-
-const pairingPrinciples = [
-  'Perceiving hubs sit in the anterior PFC; judging hubs are bilateral and extend into medial-lateral networks.',
-  'Healthy states balance one perceiving code with one judging code across opposite attitudes.',
-  'Modulation (<) stretches or compresses the perceptual window; equilibration (=) anchors the pair.',
 ];
 
 const survivalMap = [
@@ -81,18 +53,17 @@ const survivalMap = [
   { label: 'Flight', combo: 'Se/Ne + Fi', action: 'scan, retreat, protect values' },
 ];
 
-// ---------- Utilities ----------
 const TRPIHelmet: React.FC = () => (
   <Helmet>
-    <title>Understanding Personality with TRPI</title>
+    <title>TRPI — 64 Meta‑State Neural Map</title>
     <meta
       name="description"
-      content="The Trait Response Personality Indicator (TRPI) combines Jung, Freud, Big Five traits, and 4F trauma responses to map dynamic personality."
+      content="Anterior perceiving hubs (S/N) modulate bilateral judging hubs (T/F) to yield 64 hypercube meta‑states."
     />
-    <meta property="og:title" content="Understanding Personality with TRPI" />
+    <meta property="og:title" content="TRPI — 64 Meta‑State Neural Map" />
     <meta
       property="og:description"
-      content="Learn how cognition, stress responses, and traits interact in the TRPI framework."
+      content="See how Se/Si/Ne/Ni pair with Te/Ti/Fe/Fi to generate the 8×8 cognitive hypercube across models."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://traitindicator.com/#/explanation" />
@@ -100,629 +71,412 @@ const TRPIHelmet: React.FC = () => (
   </Helmet>
 );
 
-const FunctionChip: React.FC<{ code: string; label?: string }> = ({ code, label }) => {
-  const color =
-    code.startsWith('S') ? 'default' : code.startsWith('N') ? 'secondary' : code.startsWith('T') ? 'primary' : 'success';
+const RibbonPill: React.FC<{ label: string }> = ({ label }) => (
+  <Chip
+    size="small"
+    label={label}
+    sx={{
+      px: 1.4,
+      py: 0.4,
+      borderRadius: 999,
+      fontWeight: 700,
+      letterSpacing: 0.4,
+      background: 'linear-gradient(120deg, #0ea5e9, #6366f1)',
+      color: 'white',
+      boxShadow: '0 10px 30px rgba(99,102,241,0.35)',
+    }}
+  />
+);
+
+const FrostedCard: React.FC<{
+  title: string;
+  eyebrow?: string;
+  accent?: string;
+  children: React.ReactNode;
+}> = ({ title, eyebrow, accent, children }) => {
+  const theme = useTheme();
   return (
-    <Chip
-      label={label ? `${code} — ${label}` : code}
-      color={color as any}
-      size="small"
-      sx={{ mr: 1, mb: 1, fontWeight: 600 }}
-    />
+    <Box
+      sx={{
+        position: 'relative',
+        p: { xs: 2.5, sm: 3 },
+        borderRadius: 4,
+        bgcolor: alpha(theme.palette.background.paper, theme.palette.mode === 'dark' ? 0.45 : 0.75),
+        border: `1px solid ${alpha(accent || theme.palette.primary.main, 0.2)}`,
+        boxShadow: '0 25px 80px rgba(0,0,0,0.25)',
+        overflow: 'hidden',
+      }}
+    >
+      {accent && (
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: '-45% auto auto -45%',
+            width: 260,
+            height: 260,
+            background: `radial-gradient(circle at 35% 35%, ${alpha(accent, 0.32)}, transparent 60%)`,
+            filter: 'blur(8px)',
+            opacity: 0.8,
+            pointerEvents: 'none',
+          }}
+        />
+      )}
+      <Stack spacing={0.5} sx={{ position: 'relative' }}>
+        {eyebrow && (
+          <Typography variant="overline" sx={{ letterSpacing: 1.2, color: 'text.secondary' }}>
+            {eyebrow}
+          </Typography>
+        )}
+        <Typography variant="h6" fontWeight={800} gutterBottom>
+          {title}
+        </Typography>
+      </Stack>
+      <Box sx={{ position: 'relative' }}>{children}</Box>
+    </Box>
   );
 };
 
-const KeyValue: React.FC<{ k: React.ReactNode; v: React.ReactNode }> = ({ k, v }) => (
-  <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.75 }}>
-    <Typography variant="body2" sx={{ opacity: 0.7 }}>
-      {k}
-    </Typography>
-    <Typography variant="body2" sx={{ fontWeight: 600 }}>
-      {v}
-    </Typography>
-  </Box>
-);
-
-const GradientPanel: React.FC<{ title: string; subtitle?: string; children?: React.ReactNode }> = ({
-  title,
-  subtitle,
-  children,
+const MapRow: React.FC<{ primary: string; secondary: string; detail: string; tone: string }> = ({
+  primary,
+  secondary,
+  detail,
+  tone,
 }) => (
   <Box
     sx={{
-      background: 'linear-gradient(135deg, #111827, #1f2937 45%, #0ea5e9)',
-      color: 'white',
-      p: { xs: 3, sm: 4 },
+      p: 1.5,
       borderRadius: 3,
-      boxShadow: 6,
-      mb: 4,
+      bgcolor: alpha(tone, 0.08),
+      border: `1px solid ${alpha(tone, 0.25)}`,
+      display: 'grid',
+      gap: 0.3,
     }}
   >
-    <Typography variant="h4" fontWeight={700} gutterBottom>
-      {title}
+    <Typography variant="subtitle1" fontWeight={800}>
+      {primary}
     </Typography>
-    {subtitle && (
-      <Typography variant="subtitle1" sx={{ opacity: 0.85 }} gutterBottom>
-        {subtitle}
-      </Typography>
-    )}
-    {children}
+    <Typography variant="body2" sx={{ opacity: 0.85 }}>
+      {secondary}
+    </Typography>
+    <Typography variant="caption" sx={{ opacity: 0.8 }}>
+      {detail}
+    </Typography>
   </Box>
 );
 
-// ---------- Component ----------
-const TRPIExplanation: React.FC = () => {
+const ModulationChip: React.FC<{ line: string }> = ({ line }) => {
+  const theme = useTheme();
   return (
-    <Container sx={{ mt: '100px', mb: 6 }}>
-      <TRPIHelmet />
+    <Box
+      sx={{
+        px: 1.6,
+        py: 0.85,
+        borderRadius: 999,
+        fontFamily: 'JetBrains Mono, monospace',
+        background: alpha(theme.palette.primary.main, 0.1),
+        border: `1px dashed ${alpha(theme.palette.primary.main, 0.4)}`,
+        fontSize: 13,
+      }}
+    >
+      {line}
+    </Box>
+  );
+};
 
-      <GradientPanel
-        title="Trait Response Personality Indicator"
-        subtitle="A unified map connecting cognition, motivation, and stress adaptation."
+const TRPIExplanation: React.FC = () => {
+  const theme = useTheme();
+
+  return (
+    <Container sx={{ mt: '96px', mb: 10 }}>
+      <TRPIHelmet />
+      <Box
+        sx={{
+          position: 'relative',
+          overflow: 'hidden',
+          p: { xs: 3, md: 4 },
+          borderRadius: 5,
+          bgcolor:
+            theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, rgba(13,22,37,0.9), rgba(28,32,58,0.9))'
+              : 'linear-gradient(135deg, rgba(236,244,255,0.9), rgba(224,231,255,0.9))',
+          boxShadow: '0 30px 120px rgba(0,0,0,0.35)',
+        }}
       >
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} md={7}>
-            <Typography variant="body1" paragraph>
-              TRPI blends Jungian functions, Freudian structure, Big Five temperaments, and the 4F survival modes into a
-              single operational model. It focuses on how perceiving hubs (S/N) and judging hubs (T/F) pair, modulate,
-              and invert under pressure to produce real-time behavior.
-            </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
-              <Card sx={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <CardContent>
-                  <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                    Dynamic snapshots
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'radial-gradient(circle at 12% 20%, rgba(99,102,241,0.18), transparent 30%),\
+               radial-gradient(circle at 85% 18%, rgba(14,165,233,0.18), transparent 35%),\
+               radial-gradient(circle at 70% 80%, rgba(16,185,129,0.16), transparent 38%)',
+            pointerEvents: 'none',
+          }}
+        />
+        <Grid container spacing={4} alignItems="center" sx={{ position: 'relative' }}>
+          <Grid item xs={12} md={7} lg={7}>
+            <Stack spacing={2.5}>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                <RibbonPill label="Anterior perception" />
+                <RibbonPill label="Bilateral judgment" />
+                <RibbonPill label="64 meta‑states" />
+              </Stack>
+              <Typography variant="h3" fontWeight={900} sx={{ letterSpacing: -0.4 }}>
+                Trait Response Personality Indicator
+              </Typography>
+              <Typography variant="body1" sx={{ maxWidth: 820, opacity: 0.9, lineHeight: 1.7 }}>
+                Every anterior S/N hub (Se, Si, Ne, Ni) modulates the context window, while bilateral T/F hubs (Te, Ti, Fe, Fi)
+                evaluate and steer. Pairing them produces the 8×8 meta‑state hypercube that aligns Freud/Jung structures, the Big
+                Five, and the 4F survival gears into one operating map.
+              </Typography>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} flexWrap="wrap" useFlexGap>
+                <Box
+                  sx={{
+                    px: 2,
+                    py: 1.25,
+                    borderRadius: 3,
+                    bgcolor: alpha(theme.palette.primary.main, 0.12),
+                    border: `1px solid ${alpha(theme.palette.primary.main, 0.35)}`,
+                    minWidth: 240,
+                  }}
+                >
+                  <Typography variant="subtitle2" fontWeight={800} gutterBottom>
+                    Modulation syntax
                   </Typography>
                   <Typography variant="body2" sx={{ opacity: 0.85 }}>
-                    64 states (16×4) capture type, pairing, and 4F mode—useful for coaching, therapy, and product design.
+                    {'<'} extends perception around judgment · {'='} equilibrates with the judging anchor.
                   </Typography>
-                </CardContent>
-              </Card>
-              <Card sx={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <CardContent>
-                  <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                    Neurology first
-                  </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.85 }}>
-                    Anchored in anterior PFC perceiving hubs and bilateral judging hubs to mirror cortical flow.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Stack>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <Card sx={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <CardContent>
-                  <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                    Context aware
+                </Box>
+                <Box
+                  sx={{
+                    px: 2,
+                    py: 1.25,
+                    borderRadius: 3,
+                    bgcolor: alpha(theme.palette.success.main, 0.12),
+                    border: `1px solid ${alpha(theme.palette.success.main, 0.35)}`,
+                    minWidth: 240,
+                  }}
+                >
+                  <Typography variant="subtitle2" fontWeight={800} gutterBottom>
+                    Context pacing
                   </Typography>
                   <Typography variant="body2" sx={{ opacity: 0.85 }}>
-                    Introversion favors longer processing windows; extraversion favors rapid, objective updating.
+                    Introvert = subjective, long context · Extraversion = objective, rapid refresh.
                   </Typography>
-                </CardContent>
-              </Card>
-              <Card sx={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <CardContent>
-                  <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                    Actionable pairings
-                  </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.85 }}>
-                    Track which perceiving–judging pair is online to predict decisions, conflicts, and resilience.
-                  </Typography>
-                </CardContent>
-              </Card>
+                </Box>
+              </Stack>
             </Stack>
           </Grid>
-          <Grid item xs={12} md={5}>
-            <Box sx={{ maxWidth: 520, mx: 'auto', textAlign: 'center' }}>
-              <Matrix width={'100%'} />
-              <Box sx={{ mt: 2 }}>
+          <Grid item xs={12} md={5} lg={5}>
+            <Box
+              sx={{
+                p: 2.5,
+                borderRadius: 4,
+                bgcolor: alpha(theme.palette.background.paper, theme.palette.mode === 'dark' ? 0.55 : 0.8),
+                border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`,
+                boxShadow: '0 25px 70px rgba(0,0,0,0.35)',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <Stack spacing={2}>
+                <Typography variant="overline" sx={{ letterSpacing: 1.6, color: 'text.secondary' }}>
+                  Live state surface
+                </Typography>
+                <Matrix width="100%" />
                 <ModeSelector />
-              </Box>
-              <Box sx={{ mt: 2 }}>
                 <TypeSelector />
-              </Box>
+              </Stack>
             </Box>
           </Grid>
         </Grid>
-      </GradientPanel>
+      </Box>
 
-      <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3 }}>
-        <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
-          <Stack spacing={3}>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  How TRPI is organized
+      <Grid container spacing={3} sx={{ mt: 4 }}>
+        <Grid item xs={12} lg={7}>
+          <FrostedCard title="Cortical topology" eyebrow="Anterior S/N · Bilateral T/F" accent={theme.palette.info.main}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.7 }} gutterBottom>
+                  Perceiving hubs (anterior)
                 </Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <List dense>
-                      <ListItem>
-                        <ListItemText primary="Architecture" secondary="Perceiving (S/N) lives in the anterior PFC; judging (T/F) runs bilaterally." />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText primary="State logic" secondary="Each state pairs one perceiving and one judging code in opposite attitudes." />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText primary="Context window" secondary="Introverted codes run longer, subjective context; extraverted codes run short, objective updates." />
-                      </ListItem>
-                    </List>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <List dense>
-                      <ListItem>
-                        <ListItemText primary="Stress behavior" secondary="4F survival modes show which control system (Ego or Superego) is steering." />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText primary="Integration" secondary="Growth cycles through all four modes—choosing the right gear instead of being pulled into it." />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText primary="Use cases" secondary="Performance coaching, therapy, team design, product personalization, conflict mapping." />
-                      </ListItem>
-                    </List>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-
-            <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">Neurocognitive map</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Card variant="outlined" sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="subtitle1" gutterBottom>
-                          Anterior PFC — Perceiving (S/N)
-                        </Typography>
-                        <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
-                          <Table size="small">
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>
-                                  <strong>Region</strong>
-                                </TableCell>
-                                <TableCell>
-                                  <strong>Function</strong>
-                                </TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {anteriorMapping.map((r) => (
-                                <TableRow key={r.region}>
-                                  <TableCell>{r.region}</TableCell>
-                                  <TableCell>
-                                    <FunctionChip code={r.fn} label={r.label} />
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                        <Box sx={{ mt: 1.5 }}>
-                          <Typography variant="caption" sx={{ opacity: 0.8 }}>
-                            Left = concrete/retrospective bias (S); Right = abstract/prospective bias (N).
-                          </Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-
-                  <Grid item xs={12} md={6}>
-                    <Card variant="outlined" sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="subtitle1" gutterBottom>
-                          Posterior/Medial-Lateral Hubs — Judging (T/F)
-                        </Typography>
-                        <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
-                          <Table size="small">
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>
-                                  <strong>Region</strong>
-                                </TableCell>
-                                <TableCell>
-                                  <strong>Function</strong>
-                                </TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {posteriorMapping.map((r) => (
-                                <TableRow key={r.region}>
-                                  <TableCell>{r.region}</TableCell>
-                                  <TableCell>
-                                    <FunctionChip code={r.fn} label={r.label} />
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                        <Box sx={{ mt: 1.5 }}>
-                          <Typography variant="caption" sx={{ opacity: 0.8 }}>
-                            These judging systems are bilateral and work with the aPFC perceiving hubs.
-                          </Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-
-                <Divider sx={{ my: 3 }} />
-
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Card variant="outlined">
-                      <CardContent>
-                        <Typography variant="subtitle1" gutterBottom>
-                          Perceiving–Judging modulation
-                        </Typography>
-                        <Box sx={{ bgcolor: 'action.hover', p: 2, borderRadius: 2 }}>
-                          {modulationLines.map((line) => (
-                            <Typography key={line} variant="body2" sx={{ fontFamily: 'monospace', mb: 0.5 }}>
-                              {line}
-                            </Typography>
-                          ))}
-                          <Typography variant="caption" sx={{ opacity: 0.8 }}>
-                            {'<'} denotes modulation (extension/contraction); {'='} denotes equilibration.
-                          </Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Card variant="outlined">
-                      <CardContent>
-                        <Typography variant="subtitle1" gutterBottom>
-                          Attitude & context window
-                        </Typography>
-                        <KeyValue k={<strong>Introvert</strong>} v={<>subjective → long-context processing</>} />
-                        <KeyValue k={<strong>Extraversion</strong>} v={<>objective → short-context processing</>} />
-                        <Box sx={{ mt: 1.5 }}>
-                          <Typography variant="caption" sx={{ opacity: 0.8 }}>
-                            Context length is a processing orientation applied across functions.
-                          </Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">Big Five traits ↔ 4F responses</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography variant="body2" paragraph>
-                  Traits express differently when the nervous system shifts into a survival pattern. Pairings make the
-                  shift explicit so you can intervene earlier.
+                <Stack spacing={1.1}>
+                  {anteriorMapping.map((row) => (
+                    <MapRow
+                      key={row.region}
+                      primary={row.fn}
+                      secondary={row.region}
+                      detail={row.label}
+                      tone={theme.palette.info.main}
+                    />
+                  ))}
+                </Stack>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.7 }} gutterBottom>
+                  Judging hubs (bilateral)
                 </Typography>
-                <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>
-                          <strong>Trait</strong>
-                        </TableCell>
-                        <TableCell>
-                          <strong>Function Basis</strong>
-                        </TableCell>
-                        <TableCell>
-                          <strong>4F Mode</strong>
-                        </TableCell>
-                        <TableCell>
-                          <strong>Notes</strong>
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {bigFive4F.map((row) => (
-                        <TableRow key={row.trait}>
-                          <TableCell>{row.trait}</TableCell>
-                          <TableCell>{row.mapping}</TableCell>
-                          <TableCell>{row.mode}</TableCell>
-                          <TableCell>{row.note}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                <Stack spacing={1.1}>
+                  {posteriorMapping.map((row) => (
+                    <MapRow
+                      key={row.region}
+                      primary={row.fn}
+                      secondary={row.region}
+                      detail={row.label}
+                      tone={theme.palette.secondary.main}
+                    />
+                  ))}
+                </Stack>
+              </Grid>
+            </Grid>
+            <Divider sx={{ my: 2 }} />
+            <Stack spacing={1}>
+              <Typography variant="subtitle2" fontWeight={800}>
+                Modulation ledger
+              </Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                {modulationLines.map((line) => (
+                  <ModulationChip key={line} line={line} />
+                ))}
+              </Stack>
+            </Stack>
+          </FrostedCard>
+        </Grid>
 
-                <Grid container spacing={2} sx={{ mt: 2 }}>
-                  {survivalMap.map((item) => (
-                    <Grid item xs={12} sm={6} md={3} key={item.label}>
-                      <Card variant="outlined" sx={{ height: '100%' }}>
-                        <CardContent>
-                          <Typography variant="subtitle2" sx={{ textTransform: 'uppercase', letterSpacing: 0.3 }} gutterBottom>
-                            {item.label}
-                          </Typography>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            {item.combo}
-                          </Typography>
-                          <Typography variant="body2" sx={{ opacity: 0.85 }}>
-                            {item.action}
-                          </Typography>
-                        </CardContent>
-                      </Card>
+        <Grid item xs={12} lg={5}>
+          <FrostedCard title="Psycho‑structural stack" eyebrow="Freud · Jung alignment" accent={theme.palette.success.main}>
+            <Stack spacing={1.2}>
+              {structuralMap.map((item) => (
+                <MapRow
+                  key={item.name}
+                  primary={item.name}
+                  secondary={item.mapping}
+                  detail={item.desc}
+                  tone={theme.palette.success.main}
+                />
+              ))}
+            </Stack>
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="body2" sx={{ opacity: 0.9 }}>
+              Id (Se/Ne) brings raw intake, Superid (Si/Ni) stores and forecasts, Ego (Ti/Fi) personalizes meaning, and Superego
+              (Te/Fe) enforces collective order. Stability emerges by pairing one perceiving code with one judging code across
+              attitudes.
+            </Typography>
+          </FrostedCard>
+        </Grid>
+
+        <Grid item xs={12} md={7}>
+          <FrostedCard title="Trait overlays" eyebrow="Big Five × 4F" accent={theme.palette.primary.main}>
+            <Grid container spacing={2}>
+              {bigFive4F.map((row) => (
+                <Grid item xs={12} sm={6} key={row.trait}>
+                  <Box
+                    sx={{
+                      p: 1.6,
+                      borderRadius: 3,
+                      bgcolor: alpha(theme.palette.primary.main, 0.08),
+                      border: `1px solid ${alpha(theme.palette.primary.main, 0.25)}`,
+                      display: 'grid',
+                      gap: 0.35,
+                      height: '100%',
+                    }}
+                  >
+                    <Typography variant="subtitle1" fontWeight={800}>
+                      {row.trait}
+                    </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.85 }}>
+                      Basis: {row.mapping}
+                    </Typography>
+                    <Typography variant="body2" fontWeight={700}>
+                      Mode: {row.mode}
+                    </Typography>
+                    <Typography variant="caption" sx={{ opacity: 0.85 }}>
+                      {row.note}
+                    </Typography>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </FrostedCard>
+        </Grid>
+
+        <Grid item xs={12} md={5}>
+          <FrostedCard title="Survival gears" eyebrow="4F responses" accent={theme.palette.warning.main}>
+            <Stack spacing={1.1}>
+              {survivalMap.map((item) => (
+                <MapRow
+                  key={item.label}
+                  primary={item.label}
+                  secondary={item.combo}
+                  detail={item.action}
+                  tone={theme.palette.warning.main}
+                />
+              ))}
+            </Stack>
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="caption" sx={{ opacity: 0.8 }}>
+              Fight / Flight / Freeze / Fawn are contextual gears that emerge from which judging hub (Ego vs. Superego) is paired
+              to which perceiving hub (Id vs. Superid) under pressure.
+            </Typography>
+          </FrostedCard>
+        </Grid>
+
+        <Grid item xs={12}>
+          <FrostedCard title="64 meta‑state hypercube" eyebrow="8 perceiving × 8 judging" accent={theme.palette.secondary.main}>
+            <Grid container spacing={3} alignItems="stretch">
+              <Grid item xs={12} md={7}>
+                <Typography variant="body1" sx={{ opacity: 0.9 }} gutterBottom>
+                  Each anterior perceiving hub pairs with each bilateral judging hub to form the 8×8 grid. The MBTI suffix reveals
+                  which perceiving–judging dyad is active, and every dyad can stretch ({'<'} modulation) or equilibrate (=) the
+                  context window. The cube therefore expresses 16 types across 4 pairings → 64 live meta‑states.
+                </Typography>
+                <Grid container spacing={1.5}>
+                  {Object.entries(functionPairings).map(([suffix, desc]) => (
+                    <Grid item xs={12} sm={6} key={suffix}>
+                      <Box
+                        sx={{
+                          p: 1.4,
+                          borderRadius: 3,
+                          bgcolor: alpha(theme.palette.secondary.main, 0.08),
+                          border: `1px solid ${alpha(theme.palette.secondary.main, 0.25)}`,
+                        }}
+                      >
+                        <Typography variant="subtitle2" fontWeight={800}>
+                          {suffix}
+                        </Typography>
+                        <Typography variant="caption" sx={{ opacity: 0.85 }}>
+                          {desc}
+                        </Typography>
+                      </Box>
                     </Grid>
                   ))}
                 </Grid>
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">Id, Superid, Ego, Superego — functional roles</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container spacing={2}>
-                  {structuralMap.map((s) => (
-                    <Grid item xs={12} md={6} key={s.name}>
-                      <Card variant="outlined">
-                        <CardContent>
-                          <Typography variant="subtitle1" gutterBottom>
-                            {s.name}
-                          </Typography>
-                          <Box sx={{ mb: 1 }}>
-                            {s.mapping.split('/').map((code) => (
-                              <FunctionChip key={code.trim()} code={code.trim()} />
-                            ))}
-                          </Box>
-                          <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                            {s.desc}
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">Inversion of the dominant under stress</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={7}>
-                    <Typography variant="body2" paragraph>
-                      Under sustained stress, the dominant attitude can flip, forcing the psyche to rely on less
-                      efficient pairings. Two things shift: perception (Sensing ↔ Intuition) and judgment (Thinking ↔
-                      Feeling), often crossing attitudes (e.g., Te ↔ Fi, Fe ↔ Ti) and producing rigid or over-
-                      accommodating behavior until equilibrium is restored.
-                    </Typography>
-                    <List dense>
-                      {pairingPrinciples.map((principle) => (
-                        <ListItem key={principle}>
-                          <ArrowOutwardIcon fontSize="small" sx={{ mr: 1, color: 'primary.main' }} />
-                          <ListItemText primary={principle} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Grid>
-                  <Grid item xs={12} md={5}>
-                    <Card variant="outlined" sx={{ height: '100%' }}>
-                      <CardContent>
-                        <Typography variant="subtitle1" gutterBottom>
-                          Survival pairing quick map
-                        </Typography>
-                        <List dense>
-                          {survivalMap.map((item) => (
-                            <ListItem key={item.label}>
-                              <ListItemText
-                                primary={`${item.label}: ${item.combo}`}
-                                secondary={`Tendency to ${item.action}`}
-                              />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">TRPI function pairings</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography variant="body2" paragraph>
-                  Pairings emphasize how a perceiving function couples with a judging function (opposite attitudes within
-                  the same hemisphere) to drive decisions. Track the top row for the state you are in, then note how the
-                  tertiary, inferior, and opposite pairings show up as pressure or support.
-                </Typography>
-                <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>
-                          <strong>Dominant</strong>
-                        </TableCell>
-                        <TableCell width={180}>
-                          <strong>Auxiliary</strong>
-                        </TableCell>
-                        <TableCell width={160}>
-                          <strong>Tertiary</strong>
-                        </TableCell>
-                        <TableCell width={160}>
-                          <strong>Inferior</strong>
-                        </TableCell>
-                        <TableCell width={160}>
-                          <strong>Opposite</strong>
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {functionPairings.map((pairing) => (
-                        <TableRow key={`${pairing.dominant}-${pairing.auxiliary}`}>
-                          <TableCell>
-                            <FunctionChip code={pairing.dominant} />
-                          </TableCell>
-                          <TableCell width={180}>{pairing.auxiliary}</TableCell>
-                          <TableCell width={160}>{pairing.tertiary}</TableCell>
-                          <TableCell width={160}>{pairing.inferior}</TableCell>
-                          <TableCell width={160}>{pairing.opposite}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">TRPI 64‑state reference</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box mb={2}>
-                  <Typography variant="subtitle1">
-                    <strong>1. Type system</strong>
+              </Grid>
+              <Grid item xs={12} md={5}>
+                <Box
+                  sx={{
+                    p: 2,
+                    borderRadius: 4,
+                    bgcolor: alpha(theme.palette.secondary.main, 0.08),
+                    border: `1px solid ${alpha(theme.palette.secondary.main, 0.25)}`,
+                    height: '100%',
+                    display: 'grid',
+                    gap: 0.6,
+                  }}
+                >
+                  <Typography variant="subtitle1" fontWeight={900} gutterBottom>
+                    Quick decode
                   </Typography>
-                  <Typography paragraph>
-                    All 16 MBTI types operate from either the Ego or Superego by default. Judging types (J) are
-                    Superego‑based; Perceiving types (P) are Ego‑based. A two‑letter suffix (ST, SF, NT, NF) indicates
-                    the currently active alternate control system.
-                  </Typography>
+                  <Typography variant="body2">Id: Se/Ne · Superid: Si/Ni</Typography>
+                  <Typography variant="body2">Ego: Ti/Fi · Superego: Te/Fe</Typography>
+                  <Typography variant="body2">Introvert = long context · Extravert = rapid refresh</Typography>
+                  <Typography variant="body2">64 states = 16 types × 4 function pairings</Typography>
+                  <Typography variant="body2">4F overlay selects the survival gear based on the pairing</Typography>
                 </Box>
-                <Box mb={2}>
-                  <Typography variant="subtitle1">
-                    <strong>2. Control system logic</strong>
-                  </Typography>
-                  <Typography paragraph>
-                    For J types, the suffix shows the <strong>Ego</strong> pairing (Fight or Flight). For P types, the suffix shows the
-                    <strong> Superego</strong> pairing (Freeze or Fawn).
-                  </Typography>
-                </Box>
-                <Box mb={2}>
-                  <Typography variant="subtitle1">
-                    <strong>3. Function pairing rules</strong>
-                  </Typography>
-                  <Typography paragraph>
-                    Each suffix pairs one perceiving and one judging function with opposite attitudes within the same
-                    hemisphere:
-                  </Typography>
-                  <Typography component="ul">
-                    <li>
-                      <strong>ST:</strong> Sensing + Thinking
-                    </li>
-                    <li>
-                      <strong>SF:</strong> Sensing + Feeling
-                    </li>
-                    <li>
-                      <strong>NT:</strong> Intuition + Thinking
-                    </li>
-                    <li>
-                      <strong>NF:</strong> Intuition + Feeling
-                    </li>
-                  </Typography>
-                </Box>
-                <Box mb={2}>
-                  <Typography variant="subtitle1">
-                    <strong>4. 4F response mapping</strong>
-                  </Typography>
-                  <Typography paragraph>
-                    Responses under stress map to 4F survival modes based on control‑system base:
-                  </Typography>
-                  <Typography component="ul">
-                    <li>
-                      <strong>Superego base (J types):</strong> ST/NT → Fight; SF/NF → Flight
-                    </li>
-                    <li>
-                      <strong>Ego base (P types):</strong> ST/NT → Freeze; SF/NF → Fawn
-                    </li>
-                  </Typography>
-                </Box>
-                <Box mb={2}>
-                  <Typography variant="subtitle1">
-                    <strong>5. Example shifts</strong>
-                  </Typography>
-                  <Typography component="ul">
-                    <li>
-                      <strong>ENTJ–ST:</strong> TiSe — Fight
-                    </li>
-                    <li>
-                      <strong>ENTJ–SF:</strong> FiSe — Flight
-                    </li>
-                    <li>
-                      <strong>ISTP–ST:</strong> TeSi — Freeze
-                    </li>
-                    <li>
-                      <strong>ISTP–SF:</strong> FeSi — Fawn
-                    </li>
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="subtitle1">
-                    <strong>6. System summary</strong>
-                  </Typography>
-                  <Typography paragraph>
-                    64 distinct states (16×4). Each suffix reveals the active function pairing, the engaged control
-                    system, and the resulting 4F response, capturing real‑time shifts in cognition and stress adaptation.
-                  </Typography>
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">Individuation road‑map</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography variant="body2" paragraph>
-                  Growth is sequential: each default response integrates its opposite in turn.
-                </Typography>
-                <Box component="ul" sx={{ pl: 3 }}>
-                  <li>
-                    <Typography variant="body2">
-                      <strong>Fight</strong> → Fawn → Freeze → Flight
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography variant="body2">
-                      <strong>Freeze</strong> → Flight → Fight → Fawn
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography variant="body2">
-                      <strong>Fawn</strong> → Fight → Flight → Freeze
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography variant="body2">
-                      <strong>Flight</strong> → Freeze → Fawn → Fight
-                    </Typography>
-                  </li>
-                </Box>
-                <Typography variant="body2">
-                  Mastery means cycling all four—switching gears by choice rather than being yanked by circumstance.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-
-            <Card sx={{ mt: 1 }}>
-              <CardContent>
-                <Typography variant="h5" gutterBottom>
-                  Our mission
-                </Typography>
-                <Typography variant="body1" paragraph>
-                  TRPI’s mission is to equip people with a precise mental model of their perception, judgment, and stress
-                  responses—so they can intervene intelligently. Recognizing the pairings at play (and when they invert)
-                  helps improve relationships, decision‑making, and long‑term development.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Stack>
-        </Box>
-      </Paper>
+              </Grid>
+            </Grid>
+          </FrostedCard>
+        </Grid>
+      </Grid>
     </Container>
   );
 };

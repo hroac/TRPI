@@ -93,7 +93,7 @@ const FrostedCard: React.FC<{
   eyebrow?: string;
   accent?: string;
   children: React.ReactNode;
-}> = ({ title, eyebrow, accent, children }) => {
+}> = ({ title, eyebrow, accent, children }: any) => {
   const theme = useTheme();
   return (
     <Box
@@ -141,7 +141,7 @@ const MapRow: React.FC<{ primary: string; secondary: string; detail: string; ton
   secondary,
   detail,
   tone,
-}) => (
+}: any) => (
   <Box
     sx={{
       p: 1.5,
@@ -164,7 +164,7 @@ const MapRow: React.FC<{ primary: string; secondary: string; detail: string; ton
   </Box>
 );
 
-const ModulationChip: React.FC<{ line: string }> = ({ line }) => {
+const ModulationChip: React.FC<{ line: string }> = ({ line }: any) => {
   const theme = useTheme();
   return (
     <Box

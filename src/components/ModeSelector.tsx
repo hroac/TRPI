@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Grid, Typography, Card, ListItem, List } from "@mui/material";
+import { Box, Grid, Typography, Card, CardContent } from "@mui/material";
 
 const ModeSelector = () => {
   const [selectedMode, setSelectedMode] = useState<string | null>(null);
@@ -7,22 +7,22 @@ const ModeSelector = () => {
   const modes = [
     {
       name: "Fight",
-      color: "#ff0000",
+      color: "#ef4444", // Red
       description: "You are assertive and proactive, often facing challenges head-on. This mode is characterized by a readiness to take action, a strong drive to overcome obstacles, and confidence in leadership roles."
     },
     {
       name: "Fawn",
-      color: "#a855f7",
+      color: "#a855f7", // Purple
       description: "You are empathetic and accommodating, often striving to maintain harmony in relationships. This mode emphasizes collaboration, emotional connection, and finding ways to support others while navigating challenges together."
     },
     {
       name: "Freeze",
-      color: "#3b82f6",
+      color: "#3b82f6", // Blue
       description: "You are analytical and observant, preferring to take a step back and evaluate situations before acting. This mode often involves processing information carefully, maintaining a calm demeanor, and excelling in logical problem-solving."
     },
     {
       name: "Flight",
-      color: "#22c55e",
+      color: "#22c55e", // Green
       description: "You are creative and adaptive, focusing on finding innovative ways to navigate challenges. This mode often involves exploring new possibilities, embracing change, and seeking freedom to achieve your goals."
     }
   ];
@@ -32,30 +32,37 @@ const ModeSelector = () => {
   };
 
   return (
-    <Box sx={{ p: 4, textAlign: "center" }}>
-          <Typography variant="body1" paragraph>
-            The 4F trauma responses are fundamental to the TRPI framework, each representing
-            different approaches to managing stress:
-          </Typography>
-      <Grid container spacing={4} justifyContent="center">
+    <Box sx={{ p: { xs: 2, md: 4 }, textAlign: "center" }}>
+      <Typography variant="body1" paragraph color="text.secondary">
+        The 4F trauma responses are fundamental to the TRPI framework, each representing
+        different approaches to managing stress:
+      </Typography>
+      <Grid container spacing={2} justifyContent="center" alignItems="stretch">
         {modes.map((mode) => (
-          <Grid item xs={12} sm={6} md={3} key={mode.name}>
+          <Grid item xs={6} md={3} key={mode.name} sx={{ display: 'flex' }}>
             <Card
               onClick={() => handleSelect(mode.name)}
+              elevation={selectedMode === mode.name ? 8 : 2}
               sx={{
-                p: 3,
+                width: '100%',
                 backgroundColor: mode.color,
                 color: "white",
-                textAlign: "center",
                 cursor: "pointer",
                 borderRadius: "12px",
-                boxShadow: selectedMode === mode.name ? "0px 4px 20px rgba(0, 0, 0, 0.2)" : "0px 2px 10px rgba(0, 0, 0, 0.1)",
-                transform: selectedMode === mode.name ? "scale(1.1)" : "scale(1)",
+                transform: selectedMode === mode.name ? "scale(1.05)" : "scale(1)",
                 transition: "all 0.3s ease-in-out",
-                "&:hover": { transform: "scale(1.1)", boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)" },
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: 80,
+                "&:hover": { transform: "scale(1.05)", boxShadow: 6 },
               }}
             >
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>{mode.name}</Typography>
+              <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+                  {mode.name}
+                </Typography>
+              </CardContent>
             </Card>
           </Grid>
         ))}
@@ -97,28 +104,30 @@ const ResultDisplay: React.FC<ResultProps> = ({ selectedMode }) => {
 
   return (
     <Card
+      elevation={0}
       sx={{
         mt: 4,
-        p: 4,
+        p: 3,
         textAlign: "center",
         backgroundColor: "#f9f9f9",
         borderRadius: "12px",
-        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+        border: '1px solid #e0e0e0'
       }}
     >
-      <Typography variant="h2" sx={{ fontWeight: "bold", color: "#555" }}>
+      <Typography variant="h4" sx={{ fontWeight: "bold", color: "#444" }}>
         {selectedMode} Mode
       </Typography>
-      <Typography sx={{ mt: 2, fontSize: "1.1rem", color: "#666" }}>
+      <Typography sx={{ mt: 2, fontSize: "1rem", color: "#666", lineHeight: 1.6 }}>
         {details.description}
       </Typography>
-      <Typography sx={{ mt: 2, fontStyle: "italic", color: "#888" }}>
-        Linked functions: {details.functions}
-      </Typography>
-      <Typography sx={{ mt: 2, fontStyle: "italic", color: "#888" }}>
-        Linked MBTI Types: {details.mbti.join(", ")}
-      </Typography>
-
+      <Box mt={2}>
+        <Typography variant="body2" sx={{ fontStyle: "italic", color: "#888" }}>
+          Linked functions: <strong>{details.functions}</strong>
+        </Typography>
+        <Typography variant="body2" sx={{ fontStyle: "italic", color: "#888", mt: 0.5 }}>
+          MBTI: {details.mbti.join(", ")}
+        </Typography>
+      </Box>
     </Card>
   );
 };

@@ -71,37 +71,18 @@ const TypeSelector: React.FC = () => {
   };
 
   return (
-    <Box >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2 }}>
+    <Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2, flexWrap: 'wrap', justifyContent: 'center' }}>
         {mbtiLetters.map((ltr, idx) => (
-          <Box
-            key={`mbti-${idx}`}
-            sx={{
-              fontSize: isMobile ? '1rem' : '3rem',
-              width: isMobile ? 30 : 60,
-              height: isMobile ? 40 : 60,
-            }}
-          >
+          <Box key={`mbti-${idx}`}>
             <FlipLetter isMobile={isMobile} letter={ltr} onClick={() => toggleMbti(idx)} />
           </Box>
         ))}
 
-        <Typography
-          variant="h2"
-          sx={{ fontSize: isMobile ? '2rem' : '3rem', mx: isMobile ? 0.5 : 1 }}
-        >
-          
-        </Typography>
+        <Box sx={{ minWidth: isMobile ? 10 : 30 }} />
 
         {suffixLetters.map((ltr, idx) => (
-          <Box
-            key={`suffix-${idx}`}
-            sx={{
-              fontSize: isMobile ? '2rem' : '3rem',
-              width: isMobile ? 40 : 60,
-              height: isMobile ? 40 : 60,
-            }}
-          >
+          <Box key={`suffix-${idx}`}>
             <FlipLetter isMobile={isMobile} letter={ltr} onClick={() => toggleSuffix(idx)} />
           </Box>
         ))}
@@ -113,10 +94,10 @@ const TypeSelector: React.FC = () => {
             mt: 4,
             p: 3,
             bgcolor: 'background.paper',
-            borderRadius: 1,
-            boxShadow: 1,
+            borderRadius: 2,
+            boxShadow: 2,
             width: '100%',
-            maxWidth: 480,
+            maxWidth: 600,
             mx: 'auto',
           }}
         >

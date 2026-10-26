@@ -236,7 +236,7 @@ const TypeMatrix = () => {
       </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Box sx={{ display: 'inline-block' }}>
-          <Matrix width="100px" />
+          <Matrix />
         </Box>
       </Box>
     </Box>

@@ -254,7 +254,7 @@ const TRPIExplanation: React.FC = () => {
                 The complete matrix of all potential meta-states.
               </Typography>
               <Box display="flex" justifyContent="center">
-                <Matrix width="100%" />
+                <Matrix />
               </Box>
             </Paper>
           </Grid>

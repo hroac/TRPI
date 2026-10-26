@@ -24,14 +24,14 @@ const darkTheme = createTheme({
 // --- Data for the Hypercube ---
 const nodeData = [
     // User-defined order
-    { pos: new THREE.Vector3(1, 1, -1), name: "FiSe | TeNi" },
-    { pos: new THREE.Vector3(-1, 1, -1), name: "TiSe | FeNi" },
-    { pos: new THREE.Vector3(1, 1, 1), name: "FeSi | TiNe" },
-    { pos: new THREE.Vector3(-1, 1, 1), name: "TeSi | FiNe" },
-    { pos: new THREE.Vector3(1, -1, 1), name: "SiFe | NeTi" },
-    { pos: new THREE.Vector3(1, -1, -1), name: "SeFi | NiTe" },
-    { pos: new THREE.Vector3(-1, -1, -1), name: "SeTi | NiFe" },
-    { pos: new THREE.Vector3(-1, -1, 1), name: "SiTe | NeFi" },
+    { pos: new THREE.Vector3(1, 1, -1), name: "FiSe | NiTe" },
+    { pos: new THREE.Vector3(-1, 1, -1), name: "TiSe | NiFe" },
+    { pos: new THREE.Vector3(1, 1, 1), name: "FeSi | NeTi" },
+    { pos: new THREE.Vector3(-1, 1, 1), name: "TeSi | NeFi" },
+    { pos: new THREE.Vector3(1, -1, 1), name: "SiFe | TiNe" },
+    { pos: new THREE.Vector3(1, -1, -1), name: "SeFi | TeNi" },
+    { pos: new THREE.Vector3(-1, -1, -1), name: "SeTi | FeNi" },
+    { pos: new THREE.Vector3(-1, -1, 1), name: "SiTe | FiNe" },
 ];
 
 
